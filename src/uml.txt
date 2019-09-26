@@ -1,0 +1,82 @@
+class Quoridor
+{
+}
+
+class Board
+{
+}
+
+class Game
+{
+  int currentTurn;
+  GameMode mode;
+}
+
+class Player
+{
+  int wallsInStock;
+}
+
+class Pawn
+{
+  StartingPosition startPosition;
+}
+
+class Tile
+{
+  int x;
+  int y;
+}
+
+class Move
+{
+
+}
+
+class PawnMove
+{
+  isA Move;
+}
+
+class WallMove
+{
+  isA Move;
+  Orientation orientation;
+}
+
+class Wall
+{ 
+  Orientation orientation;
+}
+
+class User 
+{
+ username; 
+}
+
+
+enum Orientation{vertical,horizontal}
+enum StartingPosition{top,bot,left,right}
+enum GameMode{versus, replay};
+
+  
+association {  
+  0..1 Move -> 1 Tile;  
+  0..1 Pawn -> 1 Tile;  
+  0..1 Wall -> 1 Tile;  
+  
+  
+  1 Game <@>-  0..20 Wall walls;  
+  1 Game <@>-  2 Pawn pawns;  
+  1 Game <@>-  * Move moves;  
+  
+  
+  1 Quoridor <@>- 0..1 Game;
+  1 Quoridor <@>- 0..1 Board;
+  1 Quoridor <@>- * User;
+  
+  1 Board -- 81 Tile;
+  
+  1 Player -- 1 User;
+  1 Player -- 1 Pawn;
+}  
