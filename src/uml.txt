@@ -9,12 +9,14 @@ class Board
 class Game
 {
   int currentTurn;
+  int totalGameTime;
   GameMode mode;
 }
 
 class Player
 {
-  int wallsInStock;
+  int time_thinking;
+  Color color;
 }
 
 class Pawn
@@ -46,7 +48,6 @@ class WallMove
 
 class Wall
 { 
-  Orientation orientation;
 }
 
 class User 
@@ -58,25 +59,31 @@ class User
 enum Orientation{vertical,horizontal}
 enum StartingPosition{top,bot,left,right}
 enum GameMode{versus, replay};
+  enum Color{black,white};
 
   
 association {  
   0..1 Move -> 1 Tile;  
-  0..1 Pawn -> 1 Tile;  
-  0..1 Wall -> 1 Tile;  
+  0..1 Pawn -> 1 Tile;   
   
   
   1 Game <@>-  0..20 Wall walls;  
   1 Game <@>-  2 Pawn pawns;  
   1 Game <@>-  * Move moves;  
+  1 Game <@>-  2 Player player;  
   
   
   1 Quoridor <@>- 0..1 Game;
   1 Quoridor <@>- 0..1 Board;
   1 Quoridor <@>- * User;
   
-  1 Board -- 81 Tile;
+  1 Board <@>- 81 Tile;
   
-  1 Player -- 1 User;
+  0..1 Player -> 1 User;
   1 Player -- 1 Pawn;
+  
+  1 Wall -- 0..1 WallMove;
+  0..10 Wall stockWalls -- 1 Player owner;
+  0..10 Wall playedWalls -- 1 Player playedBy;
+  
 }  
