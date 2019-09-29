@@ -3,8 +3,8 @@
 
 package -;
 
-// line 53 "../Quorridor.ump"
-// line 148 "../Quorridor.ump"
+// line 52 "../Quorridor.ump"
+// line 147 "../Quorridor.ump"
 public class User
 {
 

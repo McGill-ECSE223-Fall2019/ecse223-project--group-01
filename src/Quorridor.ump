@@ -21,7 +21,6 @@ class Player
 
 class Pawn
 {
-  StartingPosition startPosition;
 }
 
 class Tile

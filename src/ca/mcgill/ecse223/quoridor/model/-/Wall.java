@@ -3,8 +3,8 @@
 
 package -;
 
-// line 49 "../Quorridor.ump"
-// line 143 "../Quorridor.ump"
+// line 48 "../Quorridor.ump"
+// line 142 "../Quorridor.ump"
 public class Wall
 {
 

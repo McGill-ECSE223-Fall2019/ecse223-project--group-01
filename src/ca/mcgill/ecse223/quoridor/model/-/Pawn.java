@@ -4,22 +4,13 @@
 package -;
 
 // line 22 "../Quorridor.ump"
-// line 115 "../Quorridor.ump"
+// line 114 "../Quorridor.ump"
 public class Pawn
 {
 
   //------------------------
-  // ENUMERATIONS
-  //------------------------
-
-  public enum StartingPosition { Top, Bot, Left, Right }
-
-  //------------------------
   // MEMBER VARIABLES
   //------------------------
-
-  //Pawn Attributes
-  private StartingPosition startPosition;
 
   //Pawn Associations
   private Tile tile;
@@ -30,9 +21,8 @@ public class Pawn
   // CONSTRUCTOR
   //------------------------
 
-  public Pawn(StartingPosition aStartPosition, Tile aTile, Game aGame, Player aPlayer)
+  public Pawn(Tile aTile, Game aGame, Player aPlayer)
   {
-    startPosition = aStartPosition;
     if (!setTile(aTile))
     {
       throw new RuntimeException("Unable to create Pawn due to aTile");
@@ -49,9 +39,8 @@ public class Pawn
     player = aPlayer;
   }
 
-  public Pawn(StartingPosition aStartPosition, Tile aTile, Game aGame, int aTime_thinkingForPlayer, Color aColorForPlayer, Game aGameForPlayer, User aUserForPlayer)
+  public Pawn(Tile aTile, Game aGame, int aTime_thinkingForPlayer, Color aColorForPlayer, Game aGameForPlayer, User aUserForPlayer)
   {
-    startPosition = aStartPosition;
     boolean didAddTile = setTile(aTile);
     if (!didAddTile)
     {
@@ -68,19 +57,6 @@ public class Pawn
   //------------------------
   // INTERFACE
   //------------------------
-
-  public boolean setStartPosition(StartingPosition aStartPosition)
-  {
-    boolean wasSet = false;
-    startPosition = aStartPosition;
-    wasSet = true;
-    return wasSet;
-  }
-
-  public StartingPosition getStartPosition()
-  {
-    return startPosition;
-  }
   /* Code from template association_GetOne */
   public Tile getTile()
   {
@@ -156,13 +132,4 @@ public class Pawn
     }
   }
 
-
-  public String toString()
-  {
-    return super.toString() + "["+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "startPosition" + "=" + (getStartPosition() != null ? !getStartPosition().equals(this)  ? getStartPosition().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
-            "  " + "tile = "+(getTile()!=null?Integer.toHexString(System.identityHashCode(getTile())):"null") + System.getProperties().getProperty("line.separator") +
-            "  " + "game = "+(getGame()!=null?Integer.toHexString(System.identityHashCode(getGame())):"null") + System.getProperties().getProperty("line.separator") +
-            "  " + "player = "+(getPlayer()!=null?Integer.toHexString(System.identityHashCode(getPlayer())):"null");
-  }
 }

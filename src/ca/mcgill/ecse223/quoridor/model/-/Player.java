@@ -5,7 +5,7 @@ package -;
 import java.util.*;
 
 // line 16 "../Quorridor.ump"
-// line 109 "../Quorridor.ump"
+// line 108 "../Quorridor.ump"
 public class Player
 {
 
@@ -56,7 +56,7 @@ public class Player
     playedWalls = new ArrayList<Wall>();
   }
 
-  public Player(int aTime_thinking, Color aColor, Game aGame, User aUser, StartingPosition aStartPositionForPawn, Tile aTileForPawn, Game aGameForPawn)
+  public Player(int aTime_thinking, Color aColor, Game aGame, User aUser, Tile aTileForPawn, Game aGameForPawn)
   {
     time_thinking = aTime_thinking;
     color = aColor;
@@ -70,7 +70,7 @@ public class Player
     {
       throw new RuntimeException("Unable to create player due to user");
     }
-    pawn = new Pawn(aStartPositionForPawn, aTileForPawn, aGameForPawn, this);
+    pawn = new Pawn(aTileForPawn, aGameForPawn, this);
     stockWalls = new ArrayList<Wall>();
     playedWalls = new ArrayList<Wall>();
   }

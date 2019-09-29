@@ -3,8 +3,8 @@
 
 package -;
 
-// line 38 "../Quorridor.ump"
-// line 133 "../Quorridor.ump"
+// line 37 "../Quorridor.ump"
+// line 132 "../Quorridor.ump"
 public class PawnMove extends Move
 {
 

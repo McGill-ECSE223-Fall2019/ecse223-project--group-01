@@ -5,7 +5,7 @@ package -;
 import java.util.*;
 
 // line 5 "../Quorridor.ump"
-// line 100 "../Quorridor.ump"
+// line 99 "../Quorridor.ump"
 public class Board
 {
 

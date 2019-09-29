@@ -5,7 +5,7 @@ package -;
 import java.util.*;
 
 // line 1 "../Quorridor.ump"
-// line 95 "../Quorridor.ump"
+// line 94 "../Quorridor.ump"
 public class Quoridor
 {
 

@@ -3,8 +3,8 @@
 
 package -;
 
-// line 43 "../Quorridor.ump"
-// line 138 "../Quorridor.ump"
+// line 42 "../Quorridor.ump"
+// line 137 "../Quorridor.ump"
 public class WallMove extends Move
 {
 

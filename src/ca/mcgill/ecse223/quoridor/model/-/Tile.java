@@ -3,8 +3,8 @@
 
 package -;
 
-// line 27 "../Quorridor.ump"
-// line 122 "../Quorridor.ump"
+// line 26 "../Quorridor.ump"
+// line 121 "../Quorridor.ump"
 public class Tile
 {
 

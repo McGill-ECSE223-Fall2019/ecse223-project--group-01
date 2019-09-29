@@ -3,8 +3,8 @@
 
 package -;
 
-// line 33 "../Quorridor.ump"
-// line 127 "../Quorridor.ump"
+// line 32 "../Quorridor.ump"
+// line 126 "../Quorridor.ump"
 public class Move
 {
 

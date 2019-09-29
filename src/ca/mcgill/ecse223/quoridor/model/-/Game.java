@@ -5,7 +5,7 @@ package -;
 import java.util.*;
 
 // line 9 "../Quorridor.ump"
-// line 153 "../Quorridor.ump"
+// line 152 "../Quorridor.ump"
 public class Game
 {
 
@@ -13,7 +13,6 @@ public class Game
   // ENUMERATIONS
   //------------------------
 
-  public enum StartingPosition { Top, Bot, Left, Right }
   public enum GameMode { Versus, Replay }
   public enum Color { Black, White }
 
@@ -331,7 +330,7 @@ public class Game
     return 2;
   }
   /* Code from template association_AddMNToOnlyOne */
-  public Pawn addPawn(StartingPosition aStartPosition, Tile aTile, Player aPlayer)
+  public Pawn addPawn(Tile aTile, Player aPlayer)
   {
     if (numberOfPawns() >= maximumNumberOfPawns())
     {
@@ -339,7 +338,7 @@ public class Game
     }
     else
     {
-      return new Pawn(aStartPosition, aTile, this, aPlayer);
+      return new Pawn(aTile, this, aPlayer);
     }
   }
 
