@@ -1,0 +1,156 @@
+class Quoridor
+{
+}
+
+class Board
+{
+}
+
+class Game
+{
+  int currentTurn;
+  int totalGameTime;
+  GameMode mode;
+}
+
+class Player
+{
+  int time_thinking;
+  Color color;
+}
+
+class Pawn
+{
+  StartingPosition startPosition;
+}
+
+class Tile
+{
+  int x;
+  int y;
+}
+
+class Move
+{
+
+}
+
+class PawnMove
+{
+  isA Move;
+}
+
+class WallMove
+{
+  isA Move;
+  Orientation orientation;
+}
+
+class Wall
+{
+}
+
+class User
+{
+ username;
+}
+
+
+enum Orientation{vertical,horizontal}
+enum StartingPosition{top,bot,left,right}
+enum GameMode{versus, replay};
+  enum Color{black,white};
+
+
+association {
+  0..1 Move -> 1 Tile;
+  0..1 Pawn -> 1 Tile;
+
+
+  1 Game <@>-  0..20 Wall walls;
+  1 Game <@>-  2 Pawn pawns;
+  1 Game <@>-  * Move moves;
+  1 Game <@>-  2 Player player;
+
+
+  1 Quoridor <@>- 0..1 Game;
+  1 Quoridor <@>- 0..1 Board;
+  1 Quoridor <@>- * User;
+
+  1 Board <@>- 81 Tile;
+
+  0..1 Player -> 1 User;
+  1 Player -- 1 Pawn;
+
+  1 Wall -- 0..1 WallMove;
+  0..10 Wall stockWalls -- 1 Player owner;
+  0..10 Wall playedWalls -- 1 Player playedBy;
+
+}
+//$?[End_of_model]$?
+
+namespace -;
+
+
+class Quoridor
+{
+  position 634 104 109 40;
+}
+
+class Board
+{
+  position 633 211 109 40;
+  position.association Board__Pawn 100,40 3,0;
+  position.association Board__Wall 103,40 0,9;
+  position.association Board__Tile 32,40 70,0;
+  position.association Board__Quoridor 30,0 109,35;
+}
+
+class Player
+{
+  position 911 395 117 56;
+  position.association Player__Quoridor 0,37 110,2;
+}
+
+class Pawn
+{
+  position 633 520 196 56;
+    position.association Pawn__Position 63,40 84,19;
+  position.association Pawn__Position 51,40 64,0;
+}
+
+class Tile
+{
+  position 630 291 109 72;
+}
+
+class Move
+{
+  position 156 399 109 40;
+  position.association Move__Position 109,22 0,20;
+}
+
+class PawnMove
+{
+  position 71 493 109 40;
+}
+
+class WallMove
+{
+  position 228 492 157 56;
+}
+
+class Wall
+{
+  position 402 480 157 56;
+}
+
+class User
+{
+  position 893 106 123 56;
+}
+
+class Game
+{
+  position 373 107 132 72;
+}
