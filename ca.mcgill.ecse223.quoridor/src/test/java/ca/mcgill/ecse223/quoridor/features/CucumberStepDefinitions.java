@@ -21,6 +21,7 @@ import ca.mcgill.ecse223.quoridor.model.WallMove;
 import io.cucumber.java.After;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
+import io.cucumber.java.en.When;
 
 public class CucumberStepDefinitions {
 
@@ -201,4 +202,7 @@ public class CucumberStepDefinitions {
 		game.setCurrentPosition(gamePosition);
 	}
 
+    @When("The board is initialized")
+    public void theBoardIsInitialized() {
+    }
 }
