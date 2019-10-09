@@ -18,9 +18,16 @@ import ca.mcgill.ecse223.quoridor.model.Tile;
 import ca.mcgill.ecse223.quoridor.model.User;
 import ca.mcgill.ecse223.quoridor.model.Wall;
 import ca.mcgill.ecse223.quoridor.model.WallMove;
+import ca.mcgill.ecse223.quoridor.Controllers.PositionController;
+import cucumber.api.Pending;
+import cucumber.api.PendingException;
+import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
 import io.cucumber.java.After;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
+import org.junit.Assert;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class CucumberStepDefinitions {
 
@@ -30,6 +37,8 @@ public class CucumberStepDefinitions {
 	private Player player2;
 	private Player currentPlayer;
 	private Game game;
+	private boolean fileInSystem;
+	private boolean fileChanged;
 
 	// ***********************************************
 	// Background step definitions
@@ -105,13 +114,62 @@ public class CucumberStepDefinitions {
 	// Scenario and scenario outline step definitions
 	// ***********************************************
 
-	/*
-	 * TODO Insert your missing step definitions here
-	 * 
-	 * Call the methods of the controller that will manipulate the model once they
-	 * are implemented
-	 * 
-	 */
+	//Scenario Outline: Save Position
+	@cucumber.api.java.en.Given("No file {word} exists in the filesystem")
+	public void noFileFilenameExistsInTheFilesystem(String filename) {
+		//Can't potentially create file in filesystem
+		fileInSystem = false;
+	}
+
+	@When("The user initiates to save the game with name {word}")
+	public void theUserInitiatesToSaveTheGameWithNameFilename(String filename) {
+		try {
+			PositionController.saveGame(filename, game.getCurrentPosition());
+		} catch(NotImplementedException e){
+			throw new PendingException();
+		}
+
+	}
+
+	@Then("A file with {word} is created in the filesystem")
+	public void aFileWithFilenameIsCreatedInTheFilesystem(String filename) {
+		Assert.assertEquals(true, fileInSystem);
+	}
+
+	//Scenario Outline: Save position with existing file name
+	@cucumber.api.java.en.Given("File {word} exists in the filesystem")
+	public void fileFilenameExistsInTheFilesystem(String filename) {
+		//Can't potentially search file in filesystem
+		fileInSystem = true;
+	}
+
+
+
+	@cucumber.api.java.en.And("The user confirms to overwrite existing file")
+	public void theUserConfirmsToOverwriteExistingFile() {
+		//.This is an User Interface feature
+		//.Confirmed to overwrite to existing file
+		fileChanged = true;
+	}
+
+	@Then("File with {word} is updated in the filesystem")
+	public void fileWithFilenameIsUpdatedInTheFilesystem(String filename) {
+		Assert.assertEquals(true, fileChanged);
+	}
+
+	//Scenario Outline: Save position cancelled due to existing file name
+
+	@cucumber.api.java.en.And("The user cancels to overwrite existing file")
+	public void theUserCancelsToOverwriteExistingFile() {
+		//.This is an User Interface feature
+		//.Do not overwrite Existing file
+		fileChanged = false;
+	}
+
+	@Then("File {word} is not changed in the filesystem")
+	public void fileFilenameIsNotChangedInTheFilesystem(String filename) {
+		Assert.assertEquals(false, fileChanged);
+	}
 
 	// ***********************************************
 	// Clean up
@@ -201,4 +259,52 @@ public class CucumberStepDefinitions {
 		game.setCurrentPosition(gamePosition);
 	}
 
+	@When("I initiate to load a saved game <filename>")
+	public void iInitiateToLoadASavedGameFilename() {
+
+	}
+
+	@cucumber.api.java.en.And("The position is valid")
+	public void thePositionIsValid() {
+
+	}
+
+	@Then("It is <player>'s turn")
+	public void itIsPlayerSTurn() {
+
+	}
+
+	@cucumber.api.java.en.And("<player> is at <p_row>:<p_col>")
+	public void playerIsAtP_row() {
+
+	}
+
+	@cucumber.api.java.en.And("<opponent> is at <o_row>:<o_col>")
+	public void opponentIsAtO_row() {
+
+	}
+
+	@cucumber.api.java.en.And("<player> has a <pw_orientation> wall at <pw_row>:<pw_col>")
+	public void playerHasAPw_orientationWallAtPw_row() {
+
+	}
+
+	@cucumber.api.java.en.And("<opponent> has a <ow_orientation> wall at <ow_row>:<ow_col>")
+	public void opponentHasAOw_orientationWallAtOw_row() {
+
+	}
+
+	@cucumber.api.java.en.And("Both players have <remaining_walls> in their stacks")
+	public void bothPlayersHaveRemaining_wallsInTheirStacks() {
+
+	}
+
+	@cucumber.api.java.en.And("The position is invalid")
+	public void thePositionIsInvalid() {
+
+	}
+
+	@Then("The load returns <result>")
+	public void theLoadReturnsResult() {
+	}
 }
