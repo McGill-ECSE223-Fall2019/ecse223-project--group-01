@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
+import ca.mcgill.ecse223.quoridor.controllers.WallController;
 import ca.mcgill.ecse223.quoridor.model.Board;
 import ca.mcgill.ecse223.quoridor.model.Direction;
 import ca.mcgill.ecse223.quoridor.model.Game;
@@ -18,9 +19,15 @@ import ca.mcgill.ecse223.quoridor.model.Tile;
 import ca.mcgill.ecse223.quoridor.model.User;
 import ca.mcgill.ecse223.quoridor.model.Wall;
 import ca.mcgill.ecse223.quoridor.model.WallMove;
+import cucumber.api.PendingException;
 import io.cucumber.java.After;
+
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+
+import static junit.framework.TestCase.assertEquals;
 
 public class CucumberStepDefinitions {
 
@@ -206,4 +213,106 @@ public class CucumberStepDefinitions {
 		game.setCurrentPosition(gamePosition);
 	}
 
+	@And("I have a wall in my hand over the board")
+	public void iHaveAWallInMyHand() {
+//		TODO GUI step
+	}
+
+	@And("It is not my turn to move")
+	public void itIsNotMyTurnToMove() {
+		assertEquals(game.getCurrentPosition().getPlayerToMove(), player2);
+	}
+
+	// MOVE WALL FEATURE
+
+	@Given("A wall move candidate exists with {word} at position \\({int}, {int})")
+	public void aWallMoveCandidateExistsWithDirAtPositionRowCol(String dir, Integer row, Integer col) {
+		Direction direction = this.stringToDirection(dir);
+		Wall wall = player1.getWall(0);
+		WallMove move = new WallMove(0, 1, player1, board.getTile((row - 1) * 9 + col - 1), game, direction, wall);
+		game.setWallMoveCandidate(move);
+	}
+
+	@And("The wall candidate is not at the {word} edge of the board")
+	public void theWallCandidateIsNotAtTheSideEdgeOfTheBoard(String side) {
+		switch(side){
+			case "left":{
+				assert game.getWallMoveCandidate().getTargetTile().getColumn() != 1;
+			}
+			case "right":{
+				assert game.getWallMoveCandidate().getTargetTile().getColumn() != 9;
+			}
+			case "up":{
+				assert game.getWallMoveCandidate().getTargetTile().getRow() != 9;
+			}
+			case "down":{
+				assert game.getWallMoveCandidate().getTargetTile().getRow() != 1;
+			}
+		}
+	}
+
+	@When("I try to move the wall {word}")
+	public void iTryToMoveTheWallSide(String side) {
+		// TODO add controller method here
+		WallMove move = game.getWallMoveCandidate();
+		try {
+			WallController.shiftWall(side, move);
+		} catch (UnsupportedOperationException e) {
+			throw new PendingException();
+		}
+	}
+
+	@Then("The wall shall be moved over the board to position \\({int}, {int})")
+	public void theWallShallBeMovedOverTheBoardToPositionNrowNcol(int nrow, int ncol) {
+		//	TODO GUI step
+	}
+
+	@And("A wall move candidate shall exist with {word} at position \\({int}, {int})")
+	public void aWallMoveCandidateShallExistWithDirAtPositionNrowNcol(String direction, int nrow, int ncol) {
+		Direction dir = this.stringToDirection(direction);
+
+		assertEquals(game.getWallMoveCandidate().getTargetTile().getRow(), nrow);
+		assertEquals(game.getWallMoveCandidate().getTargetTile().getColumn(), ncol);
+		assertEquals(game.getWallMoveCandidate().getWallDirection(), dir);
+	}
+
+
+//	Invalid move
+
+	@And("The wall candidate is at the {word} edge of the board")
+	public void theWallCandidateIsAtTheSideEdgeOfTheBoard(String side) {
+		switch(side){
+			case "left":{
+				assert game.getWallMoveCandidate().getTargetTile().getColumn() == 1;
+			}
+			case "right":{
+				assert game.getWallMoveCandidate().getTargetTile().getColumn() == 9;
+			}
+			case "up":{
+				assert game.getWallMoveCandidate().getTargetTile().getRow() == 9;
+			}
+			case "down":{
+				assert game.getWallMoveCandidate().getTargetTile().getRow() == 1;
+			}
+		}
+	}
+
+	@Then("I should be notified that my move is illegal")
+	public void iShouldBeNotifiedThatMyMoveIsIllegal() {
+	}
+
+
+	private Direction stringToDirection(String direction){
+		switch (direction){
+			case "horizontal":{
+				return Direction.Horizontal;
+			}
+			case "vertical":{
+				return Direction.Vertical;
+			}
+			default:{
+				return null;
+			}
+		}
+	}
 }
