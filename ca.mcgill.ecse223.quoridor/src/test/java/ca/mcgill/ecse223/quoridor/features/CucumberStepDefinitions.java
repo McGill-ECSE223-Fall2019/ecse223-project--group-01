@@ -6,26 +6,13 @@ import java.util.Map;
 
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 import ca.mcgill.ecse223.quoridor.controllers.WallController;
-import ca.mcgill.ecse223.quoridor.model.Board;
-import ca.mcgill.ecse223.quoridor.model.Direction;
-import ca.mcgill.ecse223.quoridor.model.Game;
+import ca.mcgill.ecse223.quoridor.model.*;
 import ca.mcgill.ecse223.quoridor.model.Game.GameStatus;
 import ca.mcgill.ecse223.quoridor.model.Game.MoveMode;
-import ca.mcgill.ecse223.quoridor.model.GamePosition;
-import ca.mcgill.ecse223.quoridor.model.Player;
-import ca.mcgill.ecse223.quoridor.model.PlayerPosition;
-import ca.mcgill.ecse223.quoridor.model.Quoridor;
-import ca.mcgill.ecse223.quoridor.model.Tile;
-import ca.mcgill.ecse223.quoridor.model.User;
-import ca.mcgill.ecse223.quoridor.model.Wall;
-import ca.mcgill.ecse223.quoridor.model.WallMove;
 import cucumber.api.PendingException;
 import io.cucumber.java.After;
 
-import io.cucumber.java.en.And;
-import io.cucumber.java.en.Given;
-import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
+import io.cucumber.java.en.*;
 
 import static junit.framework.TestCase.assertEquals;
 
@@ -253,8 +240,7 @@ public class CucumberStepDefinitions {
 
 	@When("I try to move the wall {word}")
 	public void iTryToMoveTheWallSide(String side) {
-		// TODO add controller method here
-		WallMove move = game.getWallMoveCandidate();
+			WallMove move = game.getWallMoveCandidate();
 		try {
 			WallController.shiftWall(side, move);
 		} catch (UnsupportedOperationException e) {
@@ -299,6 +285,7 @@ public class CucumberStepDefinitions {
 
 	@Then("I should be notified that my move is illegal")
 	public void iShouldBeNotifiedThatMyMoveIsIllegal() {
+//		TODO GUI step
 	}
 
 
@@ -315,4 +302,58 @@ public class CucumberStepDefinitions {
 			}
 		}
 	}
+
+	@When("I release the wall in my hand")
+	public void iReleaseTheWallInMyHand() {
+		// TODO controller
+	}
+
+	@But("A wall move is registered with {word} at position \\({int}, {int})")
+	public void aWallMoveIsRegisteredWithDirAtPositionRowCol(String direction, int row, int col) {
+		Direction dir = this.stringToDirection(direction);
+		int move_size = game.getMoves().size();
+		Move move = game.getMoves().get(move_size);
+
+		assert move instanceof WallMove;
+		WallMove wall_move = (WallMove) move;
+
+		assertEquals(wall_move.getWallDirection(),dir);
+		assertEquals(wall_move.getTargetTile().getColumn(), col);
+		assertEquals(wall_move.getTargetTile().getRow(), row);
+	}
+
+	@And("My move is completed")
+	public void myMoveIsCompleted() {
+		assert game.getWallMoveCandidate() == null;
+		assertEquals(game.getCurrentPosition().getWhiteWallsOnBoard().size(), 2);
+	}
+
+	@Given("The wall move candidate with {word} at position \\({int}, {int}) is valid")
+	public void theWallMoveCandidateWithDirAtPositionRowColIsValid(String dir, int row, int col) {
+		Direction direction = this.stringToDirection(dir);
+		Wall wall = player1.getWall(3);
+		WallMove move = new WallMove(0, 1, player1, board.getTile((row - 1) * 9 + col - 1), game, direction, wall);
+		game.setWallMoveCandidate(move);
+	}
+
+	@Given("The wall move candidate with {word} at position \\({int}, {int}) is invalid")
+	public void theWallMoveCandidateWithDirAtPositionRowColIsInvalid(String dir, int row, int col) {
+		Direction direction = this.stringToDirection(dir);
+		Wall wall = player1.getWall(3);
+		WallMove move = new WallMove(0, 1, player1, board.getTile((row - 1) * 9 + col - 1), game, direction, wall);
+		game.setWallMoveCandidate(move);
+	}
+
+	@Then("I shall be notified that my wall move is invalid")
+	public void iShallBeNotifiedThatMyWallMoveIsInvalid() {
+		// TODO GUI step
+	}
+
+	@But("No wall move is registered with <dir> at position \\(<row>, <col>)")
+	public void noWallMoveIsRegisteredWithDirAtPositionRowCol() {
+	}
+
+	// DROP WALL FEATURE
+
+
 }

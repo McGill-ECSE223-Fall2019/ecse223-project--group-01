@@ -25,7 +25,11 @@ public class WallController {
      * @return
      * @throws UnsupportedOperationException
      */
-    public static Boolean shiftWall(String side, WallMove move)throws UnsupportedOperationException {
+    public static Boolean shiftWall(String side, WallMove move) throws UnsupportedOperationException {
+        throw new UnsupportedOperationException();
+    }
+
+    public static Boolean dropWall(WallMove move) throws UnsupportedOperationException{
         throw new UnsupportedOperationException();
     }
 
