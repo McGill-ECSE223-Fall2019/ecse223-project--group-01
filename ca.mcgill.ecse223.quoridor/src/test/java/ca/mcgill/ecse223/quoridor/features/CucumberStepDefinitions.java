@@ -19,11 +19,14 @@ import ca.mcgill.ecse223.quoridor.model.Tile;
 import ca.mcgill.ecse223.quoridor.model.User;
 import ca.mcgill.ecse223.quoridor.model.Wall;
 import ca.mcgill.ecse223.quoridor.model.WallMove;
+import cucumber.api.PendingException;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import io.cucumber.java.After;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
+import ca.mcgill.ecse223.quoridor.Controllers.PositionController;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class CucumberStepDefinitions {
 
@@ -110,35 +113,47 @@ public class CucumberStepDefinitions {
 	// Scenario and scenario outline step definitions
 	// ***********************************************
 
-	@When("I initiate to load a saved game {word}")
+	@When(" I initiate to load a saved game {string}")
 	public void iInitiateToLoadASavedGameFilename(String filename) {
+		try {
+			PositionController.loadGame(filename);
+		}catch(NotImplementedException e){
+			throw new PendingException();
+		}
 	}
 
 	@And("The position is valid")
 	public void thePositionIsValid() {
-
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+		GamePosition gameposition = quoridor.getCurrentGame().getCurrentPosition();
+		try {
+			PositionController.validatePosition(gameposition); //Dont forget to put inputs
+		} catch(NotImplementedException e){
+			throw new PendingException();
+		}
 	}
 
-	@Then("It is {word}'s turn")
+	@Then("It is {string}'s turn")
 	public void itIsPlayerSTurn(String player) {
+
 	}
 
-	@And("{word} is at {int}:{int}}")
+	@And("{string} is at {int}:{int}}")
 	public void playerIsAtP_row(String player, int p_row, int p_col) {
 
 	}
 
-	@And("{word} is at {int}:{int}}")
+	@And("{string} is at {int}:{int}}")
 	public void opponentIsAtO_row(String opponent, int o_row, int o_col) {
 
 	}
 
-	@And("{word} has a {int} wall at {int}")
+	@And("{string} has a {int} wall at {int}")
 	public void playerHasAPw_orientationWallAtPw_row(String player, int pw_orientation, int pw_row) {
 
 	}
 
-	@And("{word} has a {int} wall at {int}")
+	@And("{string} has a {int} wall at {int}")
 	public void opponentHasAOw_orientationWallAtOw_row(String opponent, int ow_orientation, int ow_row) {
 
 	}
@@ -150,10 +165,16 @@ public class CucumberStepDefinitions {
 
 	@And("The position is invalid")
 	public void thePositionIsInvalid() {
-
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+		GamePosition gameposition = quoridor.getCurrentGame().getCurrentPosition();
+		try {
+			PositionController.validatePosition(gameposition);
+		} catch(NotImplementedException e){
+			throw new PendingException();
+		}
 	}
 
-	@Then("The load returns {word}")
+	@Then("The load returns {string}")
 	public void theLoadReturnsResult(String result) {
 	}
 
