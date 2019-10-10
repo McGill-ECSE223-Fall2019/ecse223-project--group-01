@@ -122,8 +122,8 @@ public class CucumberStepDefinitions {
 		}
 	}
 
-	@And("The position is valid")
-	public void thePositionIsValid() {
+	@And("The position to load is valid")
+	public void thePositionToLoadisValid() {
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
 		GamePosition gameposition = quoridor.getCurrentGame().getCurrentPosition();
 		try {
@@ -133,38 +133,38 @@ public class CucumberStepDefinitions {
 		}
 	}
 
-	@Then("It is {string}'s turn")
-	public void itIsPlayerSTurn(String player) {
+	@Then("It shall be {string}'s turn")
+	public void ItShallBePlayerTurn(String player) {
 
 	}
 
-	@And("{string} is at {int}:{int}}")
-	public void playerIsAtP_row(String player, int p_row, int p_col) {
+	@And("{string} shall be at {int}:{int}}")
+	public void playerShallBeAtP_rowP_col(String player, int p_row, int p_col) {
 
 	}
 
-	@And("{string} is at {int}:{int}}")
-	public void opponentIsAtO_row(String opponent, int o_row, int o_col) {
+	@And("{string} shall be at {int}:{int}}")
+	public void opponentShallBeAtO_rowO_col(String opponent, int o_row, int o_col) {
 
 	}
 
-	@And("{string} has a {int} wall at {int}")
-	public void playerHasAPw_orientationWallAtPw_row(String player, int pw_orientation, int pw_row) {
+	@And("{string} shall have a {int} wall at {int}")
+	public void playerShallHaveAPw_rowPw_col(String player, int pw_row, int pw_col) {
 
 	}
 
-	@And("{string} has a {int} wall at {int}")
-	public void opponentHasAOw_orientationWallAtOw_row(String opponent, int ow_orientation, int ow_row) {
+	@And("{string} shall have a {int} wall at {int}")
+	public void opponentShallHaveAOw_rowWallAtOw_col(String opponent, int ow_row, int ow_col) {
 
 	}
 
-	@And("Both players have {int} in their stacks")
-	public void bothPlayersHaveRemaining_wallsInTheirStacks(int remaining_walls) {
+	@And("Both players shall have {int} in their stacks")
+	public void bothPlayersShallhaveRemaining_wallsInTheirStacks(int remaining_walls) {
 
 	}
 
-	@And("The position is invalid")
-	public void thePositionIsInvalid() {
+	@And("The position to load is invalid")
+	public void thePositionToLoadIsInvalid() {
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
 		GamePosition gameposition = quoridor.getCurrentGame().getCurrentPosition();
 		try {
@@ -174,8 +174,8 @@ public class CucumberStepDefinitions {
 		}
 	}
 
-	@Then("The load returns {string}")
-	public void theLoadReturnsResult(String result) {
+	@Then("The load shall return an error")
+	public void theLoadShallReturnAnError() {
 	}
 
 	// ***********************************************
