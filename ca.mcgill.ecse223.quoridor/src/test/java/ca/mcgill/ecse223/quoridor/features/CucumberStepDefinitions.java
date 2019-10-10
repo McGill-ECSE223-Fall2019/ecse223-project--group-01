@@ -18,6 +18,8 @@ import ca.mcgill.ecse223.quoridor.model.Tile;
 import ca.mcgill.ecse223.quoridor.model.User;
 import ca.mcgill.ecse223.quoridor.model.Wall;
 import ca.mcgill.ecse223.quoridor.model.WallMove;
+import cucumber.api.java.en.Then;
+import cucumber.api.java.en.When;
 import io.cucumber.java.After;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -105,13 +107,52 @@ public class CucumberStepDefinitions {
 	// Scenario and scenario outline step definitions
 	// ***********************************************
 
-	/*
-	 * TODO Insert your missing step definitions here
-	 * 
-	 * Call the methods of the controller that will manipulate the model once they
-	 * are implemented
-	 * 
-	 */
+	@When("I initiate to load a saved game {word}")
+	public void iInitiateToLoadASavedGameFilename(String filename) {
+	}
+
+	@And("The position is valid")
+	public void thePositionIsValid() {
+
+	}
+
+	@Then("It is {word}'s turn")
+	public void itIsPlayerSTurn(String player) {
+	}
+
+	@And("{word} is at {int}:{int}}")
+	public void playerIsAtP_row(String player, int p_row, int p_col) {
+
+	}
+
+	@And("{word} is at {int}:{int}}")
+	public void opponentIsAtO_row(String opponent, int o_row, int o_col) {
+
+	}
+
+	@And("{word} has a {int} wall at {int}")
+	public void playerHasAPw_orientationWallAtPw_row(String player, int pw_orientation, int pw_row) {
+
+	}
+
+	@And("{word} has a {int} wall at {int}")
+	public void opponentHasAOw_orientationWallAtOw_row(String opponent, int ow_orientation, int ow_row) {
+
+	}
+
+	@And("Both players have {int} in their stacks")
+	public void bothPlayersHaveRemaining_wallsInTheirStacks(int remaining_walls) {
+
+	}
+
+	@And("The position is invalid")
+	public void thePositionIsInvalid() {
+
+	}
+
+	@Then("The load returns {word}")
+	public void theLoadReturnsResult(String result) {
+	}
 
 	// ***********************************************
 	// Clean up
@@ -200,5 +241,4 @@ public class CucumberStepDefinitions {
 
 		game.setCurrentPosition(gamePosition);
 	}
-
 }
