@@ -130,7 +130,7 @@ public class CucumberStepDefinitions {
 		GamePosition gameposition = quoridor.getCurrentGame().getCurrentPosition();
 		try {
 			PositionController.saveGame(filename, gameposition);
-		} catch(NotImplementedException e){
+		} catch(java.lang.UnsupportedOperationException e){
 			throw new PendingException();
 		}
 
@@ -152,7 +152,7 @@ public class CucumberStepDefinitions {
 
 	@And("The user confirms to overwrite existing file")
 	public void theUserConfirmsToOverwriteExistingFile() {
-		//.This is an User Interface feature
+		// GUI-related feature -- TODO for later
 		//.Confirmed to overwrite to existing file
 		fileChanged = true;
 	}
@@ -166,7 +166,7 @@ public class CucumberStepDefinitions {
 
 	@And("The user cancels to overwrite existing file")
 	public void theUserCancelsToOverwriteExistingFile() {
-		//.This is an User Interface feature
+		// GUI-related feature -- TODO for later
 		//.Do not overwrite Existing file
 		fileChanged = false;
 	}
