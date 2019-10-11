@@ -1,5 +1,7 @@
 package ca.mcgill.ecse223.quoridor.features;
 
+import static org.junit.Assert.assertEquals;
+
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +24,10 @@ import ca.mcgill.ecse223.quoridor.model.WallMove;
 import io.cucumber.java.After;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+
+import ca.mcgill.ecse223.quoridor.controller.ValidatePositionController;
 
 public class CucumberStepDefinitions {
 
@@ -115,6 +121,66 @@ public class CucumberStepDefinitions {
 	 * are implemented
 	 * 
 	 */
+	
+	private int row;
+	private int col;
+	private boolean valid;
+	private Direction dir;
+	
+	@Given("A game position is supplied with pawn coordinate {int}:{int}")
+	public void gamePositionSuppliedPawnCoordinates(int row, int col) {
+		this.row = row;
+		this.col = col;
+	}
+	
+	@When("Validation of the position is initiated")
+	public void validationPawnPositionInitiated() {
+		valid = ValidatePositionController.validatePawnPosition(row,col);
+	}
+	
+	@Then("The position shall be \"([^\"]*)\"")
+	public void returnPawnPositionValidity(String result) {
+		if (valid) 
+		{	
+			assertEquals("ok",result);
+		}
+		else 
+		{
+			assertEquals("error",result);
+		}
+		
+	}
+	
+	@Given("A game position is supplied with wall coordinate {int}:{int}-\"([^\"]*)\"")
+	public void gamePositionSuppliedWallCoordinates(int row, int col, String direct) {
+		this.row = row;
+		this.col = col;
+		if (direct == "horizontal") {
+			this.dir = Direction.Horizontal;
+		}
+		else if (direct == "vertical") {
+			this.dir = Direction.Vertical;
+		}
+	}
+	
+	@When("Validation of the position is initiated")
+	public void validationWallPositionInitiated() {
+		valid = ValidatePositionController.validateWallPosition(row,col,dir);
+	}
+	
+	@Then("The position shall be \"([^\"]*)\"")
+	public void returnWallPositionValidity(String result) {
+		if (valid) 
+		{	
+			assertEquals("ok",result);
+		}
+		else 
+		{
+			assertEquals("error",result);
+		}
+		
+	}
+	
 
 	// ***********************************************
 	// Clean up
