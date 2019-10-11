@@ -6,7 +6,13 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 
 public class BoardController {
-    public static boolean initialBoard(Quoridor quoridor)throws NotImplementedException{
+    /**
+     *
+     * @param quoridor
+     * @return
+     * @throws NotImplementedException
+     */
+    public static boolean initializeBoard(Quoridor quoridor)throws NotImplementedException{
         throw new NotImplementedException();
     }
 }

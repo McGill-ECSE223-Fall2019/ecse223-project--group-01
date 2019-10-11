@@ -5,11 +5,11 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 public class UserController {
 
 
-    public static boolean existingUsername(String username)throws UnsupportedOperationException {
+    public static boolean newUsername(String username)throws UnsupportedOperationException {
         throw new UnsupportedOperationException();
     }
 
-    public static boolean createNewplayer(String username)throws UnsupportedOperationException{
+    public static boolean existingUserplayer(String username)throws UnsupportedOperationException{
         throw new UnsupportedOperationException();
 
     }
