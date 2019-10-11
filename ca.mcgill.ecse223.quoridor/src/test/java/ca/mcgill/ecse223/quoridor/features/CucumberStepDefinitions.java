@@ -19,7 +19,10 @@ import ca.mcgill.ecse223.quoridor.model.Wall;
 import ca.mcgill.ecse223.quoridor.model.WallMove;
 import io.cucumber.java.After;
 import io.cucumber.java.en.And;
+import io.cucumber.java.en.But;
 import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 
 public class CucumberStepDefinitions {
 
@@ -111,7 +114,66 @@ public class CucumberStepDefinitions {
 	 * are implemented
 	 * 
 	 */
+	//grab wall
+	/**
+	 * @author Kate Ward
+	 */
+	@Given("I have more walls on stock")
+	public void iHaveMoreWallsOnStock() {
+		if (currentPlayer.equals(game.getBlackPlayer()))
+		
+		if (currentPlayer.getWalls().size()==0) {
+			
+		}
+	}
+	
+	/**
+	 * @author Kate Ward
+	 */
+	@When("I try to grab a wall from my stock")
+	public void iTryToGrabAWallFromMyStock() {
+		
+	}
 
+	
+	/**
+	 * @author Kate Ward
+	 */
+	@And("The wall in my hand should disappear from my stock")
+	public void theWallInMyHandShouldDisappearFromMyStock() {
+		
+	}
+	
+	/**
+	 * @author Kate Ward
+	 */
+	@And("A wall move candidate shall be created at initial position")
+	public void aWallMoveCandidateShallBeCreatedAtInitialPosition() {
+		
+	}
+	
+	//rotate wall
+	/**
+	 * @author Kate Ward
+	 */
+	@Given("I have no more walls on stock")
+	public void iHaveNoMoreWallsOnStock() {
+		
+	}
+	
+	/**
+	 * @author Kate Ward
+	 */
+	@Then("I should be notified that I have no more walls")
+	public void iShouldBeNotifiedThatIHaveNoMoreWalls() {
+		
+	}
+	
+	@But("I do not have a wall in my hand")
+	public void iDoNotHaveAWallInMyHand() {
+		
+	}
+	
 	// ***********************************************
 	// Clean up
 	// ***********************************************
