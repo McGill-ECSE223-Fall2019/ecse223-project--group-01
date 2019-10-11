@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/ca.mcgill.ecse223.quoridor.iml" filepath="$PROJECT_DIR$/ca.mcgill.ecse223.quoridor.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ca.mcgill.ecse223.quoridor.main.iml" filepath="$PROJECT_DIR$/.idea/modules/ca.mcgill.ecse223.quoridor.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/ca.mcgill.ecse223.quoridor.test.iml" filepath="$PROJECT_DIR$/.idea/modules/ca.mcgill.ecse223.quoridor.test.iml" />
+    </modules>
+  </component>
+</project>
