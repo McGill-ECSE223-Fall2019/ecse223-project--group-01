@@ -125,17 +125,23 @@ public class CucumberStepDefinitions {
 	private int row;
 	private int col;
 	private boolean valid;
+	private boolean pawnPos;
 	private Direction dir;
 	
 	@Given("A game position is supplied with pawn coordinate {int}:{int}")
 	public void gamePositionSuppliedPawnCoordinates(int row, int col) {
 		this.row = row;
 		this.col = col;
+		pawnPos=true;
 	}
 	
 	@When("Validation of the position is initiated")
 	public void validationPawnPositionInitiated() {
-		valid = ValidatePositionController.validatePawnPosition(row,col);
+		if (pawnPos) {
+			valid = ValidatePositionController.validatePawnPosition(row,col);			
+		} else {
+			valid = ValidatePositionController.validateWallPosition(row,col,dir);	
+		}
 	}
 	
 	@Then("The position shall be \"([^\"]*)\"")
@@ -151,7 +157,7 @@ public class CucumberStepDefinitions {
 		
 	}
 	
-	@Given("A game position is supplied with wall coordinate {int}:{int}-\"([^\"]*)\"")
+	@Given("A game position is supplied with wall coordinate {int}:{int}-{string}")
 	public void gamePositionSuppliedWallCoordinates(int row, int col, String direct) {
 		this.row = row;
 		this.col = col;
@@ -161,26 +167,20 @@ public class CucumberStepDefinitions {
 		else if (direct == "vertical") {
 			this.dir = Direction.Vertical;
 		}
+		pawnPos=false;
 	}
 	
-	@When("Validation of the position is initiated")
-	public void validationWallPositionInitiated() {
-		valid = ValidatePositionController.validateWallPosition(row,col,dir);
+	@Then("The position shall be valid")
+	public void positionValid() {
+		assertEquals(valid,true);
 	}
 	
-	@Then("The position shall be \"([^\"]*)\"")
-	public void returnWallPositionValidity(String result) {
-		if (valid) 
-		{	
-			assertEquals("ok",result);
-		}
-		else 
-		{
-			assertEquals("error",result);
-		}
-		
+	@Then("The position shall be invalid")
+	public void positionInvalid() {
+		assertEquals(valid,false);
 	}
 	
+
 
 	// ***********************************************
 	// Clean up
