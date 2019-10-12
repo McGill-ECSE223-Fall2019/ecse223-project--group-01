@@ -8,3 +8,5 @@ ca.mcgill.ecse223.quoridor/
 #IDE settings
 .idea
 .settings
+.project
+.classpath
