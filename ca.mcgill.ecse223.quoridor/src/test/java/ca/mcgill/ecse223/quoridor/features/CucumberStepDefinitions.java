@@ -10,12 +10,13 @@ import ca.mcgill.ecse223.quoridor.controllers.WallController;
 import ca.mcgill.ecse223.quoridor.model.*;
 import ca.mcgill.ecse223.quoridor.model.Game.GameStatus;
 import ca.mcgill.ecse223.quoridor.model.Game.MoveMode;
+import ca.mcgill.ecse223.quoridor.controllers.QueryController;
 import cucumber.api.PendingException;
 import io.cucumber.java.After;
 
 import io.cucumber.java.en.*;
 
-import static junit.framework.TestCase.assertEquals;
+import static org.junit.Assert.*;
 
 public class CucumberStepDefinitions {
 
@@ -109,6 +110,174 @@ public class CucumberStepDefinitions {
 	 * are implemented
 	 * 
 	 */
+
+	// Move wall
+
+	@Given("A wall move candidate exists with {string} at position \\({int}, {int})")
+	public void aWallMoveCandidateExistsWithDirAtPositionRowCol(String dir, Integer row, Integer col) {
+		Direction direction = this.stringToDirection(dir);
+		setupWallMoveCandidates(row, col, direction);
+	}
+
+	@And("The wall candidate is not at the {string} edge of the board")
+	public void theWallCandidateIsNotAtTheSideEdgeOfTheBoard(String side) {
+		Game game = QueryController.getCurrentGame();
+		switch(side){
+			case "left":{
+				assert game.getWallMoveCandidate().getTargetTile().getColumn() != 1;
+			}
+			case "right":{
+				assert game.getWallMoveCandidate().getTargetTile().getColumn() != 9;
+			}
+			case "up":{
+				assert game.getWallMoveCandidate().getTargetTile().getRow() != 9;
+			}
+			case "down":{
+				assert game.getWallMoveCandidate().getTargetTile().getRow() != 1;
+			}
+		}
+	}
+
+	@When("I try to move the wall {string}")
+	public void iTryToMoveTheWallSide(String side) {
+		Game game = QueryController.getCurrentGame();
+		WallMove move = game.getWallMoveCandidate();
+		try {
+			WallController.shiftWall(side, move);
+		} catch (UnsupportedOperationException e) {
+			throw new PendingException();
+		}
+	}
+
+	@Then("The wall shall be moved over the board to position \\({int}, {int})")
+	public void theWallShallBeMovedOverTheBoardToPositionNrowNcol(int nrow, int ncol) {
+		//	TODO GUI step
+	}
+
+	@And("A wall move candidate shall exist with {string} at position \\({int}, {int})")
+	public void aWallMoveCandidateShallExistWithDirAtPositionNrowNcol(String direction, int nrow, int ncol) {
+		Game game = QueryController.getCurrentGame();
+
+		Direction dir = this.stringToDirection(direction);
+
+		assertEquals(game.getWallMoveCandidate().getTargetTile().getRow(), nrow);
+		assertEquals(game.getWallMoveCandidate().getTargetTile().getColumn(), ncol);
+		assertEquals(game.getWallMoveCandidate().getWallDirection(), dir);
+	}
+
+	//	Invalid move
+	@Then("I should be notified that my move is illegal")
+	public void iShouldBeNotifiedThatMyMoveIsIllegal() {
+//		TODO GUI step
+	}
+
+	@And("The wall candidate is at the {string} edge of the board")
+	public void theWallCandidateIsAtTheSideEdgeOfTheBoard(String side) {
+		Game game = QueryController.getCurrentGame();
+		switch(side){
+			case "left":{
+				assert game.getWallMoveCandidate().getTargetTile().getColumn() == 1;
+			}
+			case "right":{
+				assert game.getWallMoveCandidate().getTargetTile().getColumn() == 9;
+			}
+			case "up":{
+				assert game.getWallMoveCandidate().getTargetTile().getRow() == 9;
+			}
+			case "down":{
+				assert game.getWallMoveCandidate().getTargetTile().getRow() == 1;
+			}
+		}
+	}
+
+	// Drop wall
+
+	@Given("The wall move candidate with {string} at position \\({int}, {int}) is valid")
+	public void theWallMoveCandidateWithDirAtPositionRowColIsValid(String dir, int row, int col) {
+		Direction direction = this.stringToDirection(dir);
+		setupWallMoveCandidates(row, col, direction);
+	}
+
+	@When("I release the wall in my hand")
+	public void iReleaseTheWallInMyHand() {
+		WallMove move = QueryController.getWallMoveCandidate();
+		try{
+			WallController.dropWall(move);
+		} catch (UnsupportedOperationException e) {
+			throw new PendingException();
+		}
+	}
+
+	@Then("A wall move shall be registered with {string} at position \\({int}, {int})")
+	public void aWallMoveIsRegisteredWithDirAtPositionRowCol(String direction, int row, int col) {
+		Game game = QueryController.getCurrentGame();
+		Direction dir = this.stringToDirection(direction);
+		int move_size = game.getMoves().size();
+
+//		Check if at least one move has been registered
+		assertTrue( move_size > 0);
+		Move move = game.getMoves().get(move_size-1);
+
+//		Check if the most recent move was a wall move
+		assert move instanceof WallMove;
+		WallMove wall_move = (WallMove) move;
+
+//		Verify that the wall move is the same as the one just played
+		assertEquals(wall_move.getWallDirection(),dir);
+		assertEquals(wall_move.getTargetTile().getColumn(), col);
+		assertEquals(wall_move.getTargetTile().getRow(), row);
+	}
+
+	@And("My move shall be completed")
+	public void myMoveIsCompleted() {
+		Game game = QueryController.getCurrentGame();
+		assert game.getWallMoveCandidate() == null;
+		assertEquals(game.getCurrentPosition().getWhiteWallsOnBoard().size(), 2);
+	}
+
+	@And("I shall not have a wall in my hand")
+	public void iShallNotHaveAWallInMyHand() {
+		// TODO GUI
+	}
+
+	// Invalid drop wall
+
+	@Given("The wall move candidate with {string} at position \\({int}, {int}) is invalid")
+	public void theWallMoveCandidateWithDirAtPositionRowColIsInvalid(String dir, int row, int col) {
+		Direction direction = this.stringToDirection(dir);
+		setupWallMoveCandidates(row, col, direction);
+	}
+
+	@Then("I shall be notified that my move is illegal")
+	public void iShallBeNotifiedThatMyWallMoveIsInvalid() {
+		// TODO GUI step
+	}
+
+	@Then("No wall move shall be registered with {string} at position \\({int}, {int})")
+	public void noWallMoveIsRegisteredWithDirAtPositionRowCol(String direction, int row, int col) {
+		List moves = QueryController.getMoves();
+		// Setup added no moves so there should still be no moves in the move list.
+		assertEquals(moves.size(), 0);
+	}
+
+	@And("I shall have a wall in my hand over the board")
+	public void iShallHaveAWallInMyHandOverTheBoard() {
+		// TODO GUI
+	}
+
+	@And("It shall not be my turn to move")
+	public void itIsNotMyTurnToMove() {
+		Game game = QueryController.getCurrentGame();
+		Player player2 = QueryController.getBlackPlayer();
+		assertEquals(game.getCurrentPosition().getPlayerToMove(), player2);
+	}
+
+	@And("It shall be my turn to move")
+	public void itShallBeMyTurnToMove() {
+		Game game = QueryController.getCurrentGame();
+		Player player2 = QueryController.getWhitePlayer();
+		assertEquals(game.getCurrentPosition().getPlayerToMove(), player2);
+	}
 
 	// ***********************************************
 	// Clean up
@@ -217,94 +386,6 @@ public class CucumberStepDefinitions {
 		game.setCurrentPosition(gamePosition);
 	}
 
-	@And("I have a wall in my hand over the board")
-	public void iHaveAWallInMyHand() {
-//		TODO GUI step
-	}
-
-	@And("It is not my turn to move")
-	public void itIsNotMyTurnToMove() {
-		assertEquals(game.getCurrentPosition().getPlayerToMove(), player2);
-	}
-
-	// MOVE WALL FEATURE
-
-	@Given("A wall move candidate exists with {word} at position \\({int}, {int})")
-	public void aWallMoveCandidateExistsWithDirAtPositionRowCol(String dir, Integer row, Integer col) {
-		Direction direction = this.stringToDirection(dir);
-		Wall wall = player1.getWall(0);
-		WallMove move = new WallMove(0, 1, player1, board.getTile((row - 1) * 9 + col - 1), game, direction, wall);
-		game.setWallMoveCandidate(move);
-	}
-
-	@And("The wall candidate is not at the {word} edge of the board")
-	public void theWallCandidateIsNotAtTheSideEdgeOfTheBoard(String side) {
-		switch(side){
-			case "left":{
-				assert game.getWallMoveCandidate().getTargetTile().getColumn() != 1;
-			}
-			case "right":{
-				assert game.getWallMoveCandidate().getTargetTile().getColumn() != 9;
-			}
-			case "up":{
-				assert game.getWallMoveCandidate().getTargetTile().getRow() != 9;
-			}
-			case "down":{
-				assert game.getWallMoveCandidate().getTargetTile().getRow() != 1;
-			}
-		}
-	}
-
-	@When("I try to move the wall {word}")
-	public void iTryToMoveTheWallSide(String side) {
-			WallMove move = game.getWallMoveCandidate();
-		try {
-			WallController.shiftWall(side, move);
-		} catch (UnsupportedOperationException e) {
-			throw new PendingException();
-		}
-	}
-
-	@Then("The wall shall be moved over the board to position \\({int}, {int})")
-	public void theWallShallBeMovedOverTheBoardToPositionNrowNcol(int nrow, int ncol) {
-		//	TODO GUI step
-	}
-
-	@And("A wall move candidate shall exist with {word} at position \\({int}, {int})")
-	public void aWallMoveCandidateShallExistWithDirAtPositionNrowNcol(String direction, int nrow, int ncol) {
-		Direction dir = this.stringToDirection(direction);
-
-		assertEquals(game.getWallMoveCandidate().getTargetTile().getRow(), nrow);
-		assertEquals(game.getWallMoveCandidate().getTargetTile().getColumn(), ncol);
-		assertEquals(game.getWallMoveCandidate().getWallDirection(), dir);
-	}
-
-
-//	Invalid move
-
-	@And("The wall candidate is at the {word} edge of the board")
-	public void theWallCandidateIsAtTheSideEdgeOfTheBoard(String side) {
-		switch(side){
-			case "left":{
-				assert game.getWallMoveCandidate().getTargetTile().getColumn() == 1;
-			}
-			case "right":{
-				assert game.getWallMoveCandidate().getTargetTile().getColumn() == 9;
-			}
-			case "up":{
-				assert game.getWallMoveCandidate().getTargetTile().getRow() == 9;
-			}
-			case "down":{
-				assert game.getWallMoveCandidate().getTargetTile().getRow() == 1;
-			}
-		}
-	}
-
-	@Then("I should be notified that my move is illegal")
-	public void iShouldBeNotifiedThatMyMoveIsIllegal() {
-//		TODO GUI step
-	}
-
 
 	private Direction stringToDirection(String direction){
 		switch (direction){
@@ -320,57 +401,13 @@ public class CucumberStepDefinitions {
 		}
 	}
 
-	@When("I release the wall in my hand")
-	public void iReleaseTheWallInMyHand() {
-		// TODO controller
-	}
-
-	@But("A wall move is registered with {word} at position \\({int}, {int})")
-	public void aWallMoveIsRegisteredWithDirAtPositionRowCol(String direction, int row, int col) {
-		Direction dir = this.stringToDirection(direction);
-		int move_size = game.getMoves().size();
-		Move move = game.getMoves().get(move_size);
-
-		assert move instanceof WallMove;
-		WallMove wall_move = (WallMove) move;
-
-		assertEquals(wall_move.getWallDirection(),dir);
-		assertEquals(wall_move.getTargetTile().getColumn(), col);
-		assertEquals(wall_move.getTargetTile().getRow(), row);
-	}
-
-	@And("My move is completed")
-	public void myMoveIsCompleted() {
-		assert game.getWallMoveCandidate() == null;
-		assertEquals(game.getCurrentPosition().getWhiteWallsOnBoard().size(), 2);
-	}
-
-	@Given("The wall move candidate with {word} at position \\({int}, {int}) is valid")
-	public void theWallMoveCandidateWithDirAtPositionRowColIsValid(String dir, int row, int col) {
-		Direction direction = this.stringToDirection(dir);
+	private void setupWallMoveCandidates(int row, int col, Direction direction) {
+		Player player1 = QueryController.getWhitePlayer();
+		Board board = QueryController.getBoard();
+		Game game = QueryController.getCurrentGame();
 		Wall wall = player1.getWall(3);
+
 		WallMove move = new WallMove(0, 1, player1, board.getTile((row - 1) * 9 + col - 1), game, direction, wall);
 		game.setWallMoveCandidate(move);
 	}
-
-	@Given("The wall move candidate with {word} at position \\({int}, {int}) is invalid")
-	public void theWallMoveCandidateWithDirAtPositionRowColIsInvalid(String dir, int row, int col) {
-		Direction direction = this.stringToDirection(dir);
-		Wall wall = player1.getWall(3);
-		WallMove move = new WallMove(0, 1, player1, board.getTile((row - 1) * 9 + col - 1), game, direction, wall);
-		game.setWallMoveCandidate(move);
-	}
-
-	@Then("I shall be notified that my wall move is invalid")
-	public void iShallBeNotifiedThatMyWallMoveIsInvalid() {
-		// TODO GUI step
-	}
-
-	@But("No wall move is registered with <dir> at position \\(<row>, <col>)")
-	public void noWallMoveIsRegisteredWithDirAtPositionRowCol() {
-	}
-
-	// DROP WALL FEATURE
-
-
 }
