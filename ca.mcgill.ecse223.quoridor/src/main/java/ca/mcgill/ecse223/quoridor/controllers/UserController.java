@@ -9,7 +9,7 @@ public class UserController {
         throw new UnsupportedOperationException();
     }
 
-    public static boolean existingUserplayer(String username)throws UnsupportedOperationException{
+    public static boolean selectExistingUsername(String username)throws UnsupportedOperationException{
         throw new UnsupportedOperationException();
 
     }

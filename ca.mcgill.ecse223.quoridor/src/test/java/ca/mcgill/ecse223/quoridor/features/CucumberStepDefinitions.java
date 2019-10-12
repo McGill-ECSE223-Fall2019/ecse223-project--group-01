@@ -234,7 +234,6 @@ public class CucumberStepDefinitions {
 	@When("The initialization of the board is initiated")
 	public void theInitializationOfTheBoardIsInitiated() {
 
-		Quoridor quoridor = QuoridorApplication.getQuoridor();
 		BoardController.initializeBoard();
 
 	}
@@ -244,7 +243,6 @@ public class CucumberStepDefinitions {
 
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
 		assertEquals(quoridor.getCurrentGame().getCurrentPosition().getPlayerToMove(), quoridor.getCurrentGame().getWhitePlayer());
-
 	}
 
 	@And("White's pawn shall be in its initial position")
@@ -267,7 +265,7 @@ public class CucumberStepDefinitions {
 	public void allOfWhiteSWallsShallBeInStock() {
 
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
-		assertEquals(10,quoridor.getCurrentGame().getWhitePlayer().getWalls());
+		assertEquals(10,quoridor.getCurrentGame().getWhitePlayer().getWalls().size());
 
 	}
 
@@ -275,7 +273,7 @@ public class CucumberStepDefinitions {
 	public void allOfBlackSWallsShallBeInStock() {
 
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
-		assertEquals(10,quoridor.getCurrentGame().getBlackPlayer().getWalls());
+		assertEquals(10,quoridor.getCurrentGame().getBlackPlayer().getWalls().size());
 	}
 
 	@And("White's clock shall be counting down")
@@ -292,61 +290,70 @@ public class CucumberStepDefinitions {
 	public void itShallBeShownThatThisIsWhiteSTurn() {
 
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
-		assertEquals(quoridor.getCurrentGame().getWhitePlayer(),quoridor.getCurrentGame().getCurrentPosition().getPlayerToMove());
-
-
+		assertEquals(quoridor.getCurrentGame().getWhitePlayer(), quoridor.getCurrentGame().getCurrentPosition().getPlayerToMove());
 	}
 
 	@Given("A new game is initializing")
-	public void aNewGameIsInitializing() {
+	public void aNewGameIsInitializing(){
 
-
+		game = GameController.startnewgame();
 	}
 
 	@Given("Next player to set user name is {string}")
 	public void nextPlayerToSetUserNameIs(String arg0) {
 
-		Quoridor quoridor = QuoridorApplication.getQuoridor();
-		quoridor.addUser(arg0);
+		if(arg0 == "white"){
 
+			nextplayer = game.getWhitePlayer();
+			nextplayer.setName(arg0);
+		}
+
+		if(arg0 == "black"){
+
+			nextplayer = game.getBlackPlayer();
+			nextplayer.setName(arg0);
+		}
 	}
 
 	@And("There is existing user {string}")
 	public void thereIsExistingUser(String arg0) {
 
-        //Quoridor quoridor = QuoridorApplication.getQuoridor();
-		// User user = new User(arg0, quoridor);
-		//if(!usersByName.containsKey(arg0)) {
-        User currentUser = usersByName.get(arg0);
-
-
-
+		User.hasWithName(arg0);
 	}
 
 	@When("The player selects existing {string}")
 	public void thePlayerSelectsExisting(String arg0) {
+
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
-		UserController.existingUserplayer(arg0);
-
-
+		UserController.selectExistingUsername(arg0);
 	}
 
 	@Then("The name of player {string} in the new game shall be {string}")
 	public void theNameOfPlayerInTheNewGameShallBe(String arg0, String arg1) {
-        Quoridor quoridor = QuoridorApplication.getQuoridor();
 
-        assertEquals(arg1, );
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+
+		if( arg0 == "white"){
+
+			assertEquals(arg1, quoridor.getCurrentGame().getWhitePlayer().getUser().getName());
+		}
+
+		else if( arg0 == "black"){
+
+			assertEquals(arg1, quoridor.getCurrentGame().getBlackPlayer().getUser().getName());
+		}
+
+
     }
 	@And("There is no existing user {string}")
 	public void thereIsNoExistingUser(String arg0) {
 
-        Quoridor quoridor = QuoridorApplication.getQuoridor();
-        User user= User.getWithName(arg0);
-	    assertEquals(false,   User.getWithName(arg0) );
+	    assertEquals(false, User.hasWithName(arg0));
 	}
 
 	@When("The player provides new user name: {string}")
 	public void thePlayerProvidesNewUserName(String arg0) {
+
 	    UserController.newUsername(argo);
         }
 
@@ -354,12 +361,22 @@ public class CucumberStepDefinitions {
 	@Then("The player shall be warned that {string} already exists")
 	public void thePlayerShallBeWarnedThatAlreadyExists(String arg0) {
 
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+		username = User.hasWithName(arg0);
+
+		if(username) {
+
+			System.out.println("The username " + arg0 + " already exists");
+		}
+
+
+
 	}
 
 	@And("Next player to set user name shall be {string}")
 	public void nextPlayerToSetUserNameShallBe(String arg0) {
+
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
-		User user =
-		quoridor.getUser(
+		quoridor.getCurrentGame().getBlackPlayer();
 	}
 }

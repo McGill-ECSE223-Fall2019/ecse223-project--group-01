@@ -2,7 +2,7 @@ Feature: Provide Or Select User Name
   As a prospective player, I wish to use my unique user name when a new game starts, 
   or create a new user name if the designated user name does not exist yet.
 
-  Background: 
+  Background:
     Given A new game is initializing
 
   Scenario Outline: Select existing user name
@@ -37,5 +37,5 @@ Feature: Provide Or Select User Name
     Examples: 
       | color | username |
       | white | Daniel   |
-      | black | Marton   |
+      | black | Marton   |m
       
