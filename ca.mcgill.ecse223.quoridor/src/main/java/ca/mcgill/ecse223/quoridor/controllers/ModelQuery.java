@@ -4,7 +4,7 @@ import ca.mcgill.ecse223.quoridor.model.*;
 
 import java.util.List;
 
-public class QueryController {
+public class ModelQuery {
 
     public static Game getCurrentGame(){
         return QuoridorApplication.getQuoridor().getCurrentGame();

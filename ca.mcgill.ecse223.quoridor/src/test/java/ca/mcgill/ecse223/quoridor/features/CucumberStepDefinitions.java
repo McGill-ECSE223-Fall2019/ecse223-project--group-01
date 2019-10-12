@@ -10,7 +10,7 @@ import ca.mcgill.ecse223.quoridor.controllers.WallController;
 import ca.mcgill.ecse223.quoridor.model.*;
 import ca.mcgill.ecse223.quoridor.model.Game.GameStatus;
 import ca.mcgill.ecse223.quoridor.model.Game.MoveMode;
-import ca.mcgill.ecse223.quoridor.controllers.QueryController;
+import ca.mcgill.ecse223.quoridor.controllers.ModelQuery;
 import cucumber.api.PendingException;
 import io.cucumber.java.After;
 
@@ -121,26 +121,12 @@ public class CucumberStepDefinitions {
 
 	@And("The wall candidate is not at the {string} edge of the board")
 	public void theWallCandidateIsNotAtTheSideEdgeOfTheBoard(String side) {
-		Game game = QueryController.getCurrentGame();
-		switch(side){
-			case "left":{
-				assert game.getWallMoveCandidate().getTargetTile().getColumn() != 1;
-			}
-			case "right":{
-				assert game.getWallMoveCandidate().getTargetTile().getColumn() != 9;
-			}
-			case "up":{
-				assert game.getWallMoveCandidate().getTargetTile().getRow() != 9;
-			}
-			case "down":{
-				assert game.getWallMoveCandidate().getTargetTile().getRow() != 1;
-			}
-		}
+        assertFalse(this.isWallMoveCandidateAtEdge(side));
 	}
 
 	@When("I try to move the wall {string}")
 	public void iTryToMoveTheWallSide(String side) {
-		Game game = QueryController.getCurrentGame();
+		Game game = ModelQuery.getCurrentGame();
 		WallMove move = game.getWallMoveCandidate();
 		try {
 			WallController.shiftWall(side, move);
@@ -156,7 +142,7 @@ public class CucumberStepDefinitions {
 
 	@And("A wall move candidate shall exist with {string} at position \\({int}, {int})")
 	public void aWallMoveCandidateShallExistWithDirAtPositionNrowNcol(String direction, int nrow, int ncol) {
-		Game game = QueryController.getCurrentGame();
+		Game game = ModelQuery.getCurrentGame();
 
 		Direction dir = this.stringToDirection(direction);
 
@@ -173,21 +159,8 @@ public class CucumberStepDefinitions {
 
 	@And("The wall candidate is at the {string} edge of the board")
 	public void theWallCandidateIsAtTheSideEdgeOfTheBoard(String side) {
-		Game game = QueryController.getCurrentGame();
-		switch(side){
-			case "left":{
-				assert game.getWallMoveCandidate().getTargetTile().getColumn() == 1;
-			}
-			case "right":{
-				assert game.getWallMoveCandidate().getTargetTile().getColumn() == 9;
-			}
-			case "up":{
-				assert game.getWallMoveCandidate().getTargetTile().getRow() == 9;
-			}
-			case "down":{
-				assert game.getWallMoveCandidate().getTargetTile().getRow() == 1;
-			}
-		}
+		boolean isAtEdge =this.isWallMoveCandidateAtEdge(side) ;
+        assertTrue(isAtEdge);
 	}
 
 	// Drop wall
@@ -200,7 +173,7 @@ public class CucumberStepDefinitions {
 
 	@When("I release the wall in my hand")
 	public void iReleaseTheWallInMyHand() {
-		WallMove move = QueryController.getWallMoveCandidate();
+		WallMove move = ModelQuery.getWallMoveCandidate();
 		try{
 			WallController.dropWall(move);
 		} catch (UnsupportedOperationException e) {
@@ -210,7 +183,7 @@ public class CucumberStepDefinitions {
 
 	@Then("A wall move shall be registered with {string} at position \\({int}, {int})")
 	public void aWallMoveIsRegisteredWithDirAtPositionRowCol(String direction, int row, int col) {
-		Game game = QueryController.getCurrentGame();
+		Game game = ModelQuery.getCurrentGame();
 		Direction dir = this.stringToDirection(direction);
 		int move_size = game.getMoves().size();
 
@@ -230,9 +203,19 @@ public class CucumberStepDefinitions {
 
 	@And("My move shall be completed")
 	public void myMoveIsCompleted() {
-		Game game = QueryController.getCurrentGame();
-		assert game.getWallMoveCandidate() == null;
+
+		Game game = ModelQuery.getCurrentGame();
+
+		// The wallmove candidate should be gone
+		assertNull(game.getWallMoveCandidate());
+
+		// White should have more walls on board
 		assertEquals(game.getCurrentPosition().getWhiteWallsOnBoard().size(), 2);
+
+		// White should have less walls in stock
+        assertEquals(game.getCurrentPosition().getWhiteWallsInStock().size(), 8);
+        assertEquals(game.getWhitePlayer().getWalls().size(), 8);
+
 	}
 
 	@And("I shall not have a wall in my hand")
@@ -248,14 +231,14 @@ public class CucumberStepDefinitions {
 		setupWallMoveCandidates(row, col, direction);
 	}
 
-	@Then("I shall be notified that my move is illegal")
+	@Then("I shall be notified that my wall move is invalid")
 	public void iShallBeNotifiedThatMyWallMoveIsInvalid() {
 		// TODO GUI step
 	}
 
 	@Then("No wall move shall be registered with {string} at position \\({int}, {int})")
 	public void noWallMoveIsRegisteredWithDirAtPositionRowCol(String direction, int row, int col) {
-		List moves = QueryController.getMoves();
+		List moves = ModelQuery.getMoves();
 		// Setup added no moves so there should still be no moves in the move list.
 		assertEquals(moves.size(), 0);
 	}
@@ -267,16 +250,18 @@ public class CucumberStepDefinitions {
 
 	@And("It shall not be my turn to move")
 	public void itIsNotMyTurnToMove() {
-		Game game = QueryController.getCurrentGame();
-		Player player2 = QueryController.getBlackPlayer();
-		assertEquals(game.getCurrentPosition().getPlayerToMove(), player2);
+	    // operating under the assumption that is was white's turn to move
+		Player player1 = ModelQuery.getBlackPlayer();
+		Player playerToMove = ModelQuery.getPlayerToMove();
+		assertEquals(playerToMove, player1);
 	}
 
 	@And("It shall be my turn to move")
 	public void itShallBeMyTurnToMove() {
-		Game game = QueryController.getCurrentGame();
-		Player player2 = QueryController.getWhitePlayer();
-		assertEquals(game.getCurrentPosition().getPlayerToMove(), player2);
+        // operating under the assumption that is was white's turn to move
+        Player player1 = ModelQuery.getWhitePlayer();
+        Player playerToMove = ModelQuery.getPlayerToMove();
+        assertEquals(playerToMove, player1);
 	}
 
 	// ***********************************************
@@ -401,10 +386,29 @@ public class CucumberStepDefinitions {
 		}
 	}
 
+	private boolean isWallMoveCandidateAtEdge(String side){
+	    Game game = ModelQuery.getCurrentGame();
+        switch(side){
+            case "left":{
+            	return game.getWallMoveCandidate().getTargetTile().getColumn() == 1;
+            }
+            case "right":{
+                return game.getWallMoveCandidate().getTargetTile().getColumn() == 8;
+            }
+            case "up":{
+                return game.getWallMoveCandidate().getTargetTile().getRow() == 1;
+            }
+            case "down":{
+                return game.getWallMoveCandidate().getTargetTile().getRow() == 8;
+            }
+        }
+        return false;
+    }
+
 	private void setupWallMoveCandidates(int row, int col, Direction direction) {
-		Player player1 = QueryController.getWhitePlayer();
-		Board board = QueryController.getBoard();
-		Game game = QueryController.getCurrentGame();
+		Player player1 = ModelQuery.getWhitePlayer();
+		Board board = ModelQuery.getBoard();
+		Game game = ModelQuery.getCurrentGame();
 		Wall wall = player1.getWall(3);
 
 		WallMove move = new WallMove(0, 1, player1, board.getTile((row - 1) * 9 + col - 1), game, direction, wall);
