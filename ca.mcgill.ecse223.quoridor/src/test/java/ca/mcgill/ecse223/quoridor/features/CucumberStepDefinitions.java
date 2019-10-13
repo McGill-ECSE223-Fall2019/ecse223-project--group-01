@@ -118,12 +118,19 @@ public class CucumberStepDefinitions {
 
 
 	//Scenario Outline: Save Position
+
+    /**
+     * @author Kevin Li
+     */
 	@Given("No file {string} exists in the filesystem")
 	public void noFileFilenameExistsInTheFilesystem(String filename) {
 		//Can't potentially create file in filesystem
 		fileInSystem = false;
 	}
 
+    /**
+     * @author Kevin Li
+     */
 	@When("The user initiates to save the game with name {string}")
 	public void theUserInitiatesToSaveTheGameWithNameFilename(String filename) {
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
@@ -136,12 +143,18 @@ public class CucumberStepDefinitions {
 
 	}
 
+    /**
+     * @author Kevin Li
+     */
 	@Then("A file with {string} shall be created in the filesystem")
 	public void aFileWithFilenameIsCreatedInTheFilesystem(String filename) {
 		Assert.assertEquals(true, fileInSystem);
 	}
 
 	//Scenario Outline: Save position with existing file name
+    /**
+     * @author Kevin Li
+     */
 	@Given("File {string} exists in the filesystem")
 	public void fileFilenameExistsInTheFilesystem(String filename) {
 		//Can't potentially search file in filesystem
@@ -149,7 +162,9 @@ public class CucumberStepDefinitions {
 	}
 
 
-
+    /**
+     * @author Kevin Li
+     */
 	@And("The user confirms to overwrite existing file")
 	public void theUserConfirmsToOverwriteExistingFile() {
 		// GUI-related feature -- TODO for later
@@ -157,6 +172,9 @@ public class CucumberStepDefinitions {
 		fileChanged = true;
 	}
 
+    /**
+     * @author Kevin Li
+     */
 	@Then("File with {string} shall be updated in the filesystem")
 	public void fileWithFilenameIsUpdatedInTheFilesystem(String filename) {
 		Assert.assertEquals(true, fileChanged);
@@ -164,6 +182,9 @@ public class CucumberStepDefinitions {
 
 	//Scenario Outline: Save position cancelled due to existing file name
 
+    /**
+     * @author Kevin Li
+     */
 	@And("The user cancels to overwrite existing file")
 	public void theUserCancelsToOverwriteExistingFile() {
 		// GUI-related feature -- TODO for later
@@ -171,6 +192,9 @@ public class CucumberStepDefinitions {
 		fileChanged = false;
 	}
 
+    /**
+     * @author Kevin Li
+     */
 	@Then("File {string} shall not be changed in the filesystem")
 	public void fileFilenameIsNotChangedInTheFilesystem(String filename) {
 		Assert.assertEquals(false, fileChanged);
