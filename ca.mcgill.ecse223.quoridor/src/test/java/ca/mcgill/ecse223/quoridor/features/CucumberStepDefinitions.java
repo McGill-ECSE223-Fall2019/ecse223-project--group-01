@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
+import ca.mcgill.ecse223.quoridor.controllers.ComputerController;
 import ca.mcgill.ecse223.quoridor.controllers.WallController;
 import ca.mcgill.ecse223.quoridor.model.*;
 import ca.mcgill.ecse223.quoridor.model.Game.GameStatus;
@@ -262,6 +263,53 @@ public class CucumberStepDefinitions {
         Player player1 = ModelQuery.getWhitePlayer();
         Player playerToMove = ModelQuery.getPlayerToMove();
         assertEquals(playerToMove, player1);
+	}
+	
+	// Computer Control
+	@Given("It is not my turn to move")
+	public void itIsNotMyTurn() {
+		Player currentPlayer = ModelQuery.getBlackPlayer();
+		QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().setPlayerToMove(currentPlayer);
+	}
+
+	@When("The computer computes a move")
+	public void theComputerComputesAMove() {
+		Player player = ModelQuery.getBlackPlayer();
+		try{
+			ComputerController.computeMove(player);
+		} catch (UnsupportedOperationException e) {
+			throw new PendingException();
+		}
+	}
+
+	@Then("The move is registered")
+	public void theMoveIsValid() {
+		Game game = ModelQuery.getCurrentGame();
+		Player computer = ModelQuery.getBlackPlayer();
+		int move_size = game.getMoves().size();
+
+//		Check if at least one move has been registered
+		assertTrue( move_size > 0);
+		Move move = game.getMoves().get(move_size-1);
+
+//		Check if the most recent move was a wall move
+		assertEquals(computer, move.getPlayer());
+	}
+
+//  Move hint
+	@When("I ask for a move suggestion")
+	public void iAskForAMoveSuggestion() {
+		Player human_player = ModelQuery.getWhitePlayer();
+		try{
+			ComputerController.computeMove(human_player);
+		} catch (UnsupportedOperationException e) {
+			throw new PendingException();
+		}
+	}
+
+	@Then("I am notified of a possible move")
+	public void iAmNotifiedOfAPossibleMove() {
+		// TODO GUI step
 	}
 
 	// ***********************************************
