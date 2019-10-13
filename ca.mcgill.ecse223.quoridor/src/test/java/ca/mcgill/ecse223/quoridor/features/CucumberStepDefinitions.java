@@ -2,20 +2,28 @@ package ca.mcgill.ecse223.quoridor.features;
 
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 import ca.mcgill.ecse223.quoridor.controllers.ComputerController;
 import ca.mcgill.ecse223.quoridor.controllers.WallController;
+import ca.mcgill.ecse223.quoridor.controllers.StartNewGameController;
 import ca.mcgill.ecse223.quoridor.model.*;
 import ca.mcgill.ecse223.quoridor.model.Game.GameStatus;
 import ca.mcgill.ecse223.quoridor.model.Game.MoveMode;
 import ca.mcgill.ecse223.quoridor.controllers.ModelQuery;
+import cucumber.api.Pending;
 import cucumber.api.PendingException;
 import io.cucumber.java.After;
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 
-import io.cucumber.java.en.*;
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import static org.junit.Assert.*;
 
@@ -94,26 +102,130 @@ public class CucumberStepDefinitions {
 	public void iDoNotHaveAWallInMyHand() {
 		// GUI-related feature -- TODO for later
 	}
-	
+
 	@And("^I have a wall in my hand over the board$")
 	public void iHaveAWallInMyHandOverTheBoard() throws Throwable {
 		// GUI-related feature -- TODO for later
 	}
-	
+
 	// ***********************************************
 	// Scenario and scenario outline step definitions
 	// ***********************************************
 
 	/*
 	 * TODO Insert your missing step definitions here
-	 * 
+	 *
 	 * Call the methods of the controller that will manipulate the model once they
 	 * are implemented
-	 * 
+	 *
 	 */
 
-	// Move wall
 
+
+	/*scenario:Initiate a new game*/
+	@When("A new game is being initialized")
+	public void aNewGameIsBeingInitialized() {
+		try{
+			StartNewGameController.initializeGame();
+		} catch (UnsupportedOperationException e) {
+			throw new PendingException();
+		}
+	}
+
+	@And("White player chooses a username")
+	public void whitePlayerChoosesAUsername() {
+		try {
+			StartNewGameController.whitePlayerChoosesAUsername();
+		} catch (UnsupportedOperationException e) {
+			throw new PendingException();
+		}
+
+	}
+
+	@And("Black player chooses a username")
+	public void blackPlayerChoosesAUsername() {
+		try {
+			StartNewGameController.blackPlayerChooseAUsername();
+		} catch (UnsupportedOperationException e) {
+			throw new PendingException();
+		}
+	}
+
+	@And("Total thinking time is set")
+	public void totalThinkingTimeIsSet() {
+		try {
+			StartNewGameController.setTotalThinkingTime();
+		} catch (UnsupportedOperationException e) {
+			throw new PendingException();
+		}
+	}
+
+	@Then("The game shall become ready to start")
+	public void theGameShallBecomeReadyToStart() {
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+		assertEquals(GameStatus.ReadyToStart, quoridor.getCurrentGame().getGameStatus());
+
+	}
+
+	/*Scenario: Start clock */
+	@Given("The game is ready to start")
+	public void theGameIsReadyToStart() {
+		createAndReadyToStartGame();
+	}
+
+	@When("I start the clock")
+	public void iStartTheClock() {
+		try {
+			StartNewGameController.startTheClock();
+		} catch (UnsupportedOperationException e) {
+			throw new PendingException();
+		}
+	}
+
+	@Then("The game shall be running")
+	public void theGameShallBeRunning() {
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+		assertEquals(GameStatus.Running, quoridor.getCurrentGame().getGameStatus());
+	}
+
+	@And("The board shall be initialized")
+	public void theBoardShallBeInitialized() {
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+		assertEquals(true, quoridor.getBoard().hasTiles());
+	}
+
+	/*set TotalThinkingTime*/
+	@Given("A new game is initializing")
+	public void aNewGameIsInitializing() {
+		initQuoridorAndBoard();
+		ArrayList<Player> createUsersAndPlayers = createUsersAndPlayers("user1", "user2");
+		createAndInitializeGame(createUsersAndPlayers);
+	}
+
+	@When("{int}:{int} is set as the thinking time")
+	public void minSecIsSetAsTheThinkingTime(int minutes, int seconds) {
+		try {
+			StartNewGameController.setTotalThinkingTime(minutes, seconds);
+		} catch (UnsupportedOperationException e) {
+			throw new PendingException();
+		}
+
+	}
+
+	@Then("Both players shall have {int}:{int} remaining time left")
+	public void bothPlayersShallHaveMinSecRemainingTimeLeft(int minutes, int seconds)  {
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+		long millis = minutes * 60 * 1000 + seconds * 1000;
+		Date date = new Date();
+		long currentMillis = date.getTime();
+		Time time = new Time(millis+currentMillis);
+		assertEquals(time, quoridor.getCurrentGame().getBlackPlayer().getRemainingTime().getTime());
+		assertEquals(time, quoridor.getCurrentGame().getWhitePlayer().getRemainingTime().getTime());
+
+	}
+
+
+	// Move wall
 	@Given("A wall move candidate exists with {string} at position \\({int}, {int})")
 	public void aWallMoveCandidateExistsWithDirAtPositionRowCol(String dir, Integer row, Integer col) {
 		Direction direction = this.stringToDirection(dir);
@@ -264,7 +376,7 @@ public class CucumberStepDefinitions {
         Player playerToMove = ModelQuery.getPlayerToMove();
         assertEquals(playerToMove, player1);
 	}
-	
+
 	// Computer Control
 	@Given("It is not my turn to move")
 	public void itIsNotMyTurn() {
@@ -368,7 +480,7 @@ public class CucumberStepDefinitions {
 		 * |x->    <-x|
 		 * |          |
 		 * |__________|
-		 * 
+		 *
 		 */
 		//@formatter:on
 		Player player1 = new Player(new Time(thinkingTime), user1, 9, Direction.Horizontal);
@@ -383,13 +495,29 @@ public class CucumberStepDefinitions {
 				new Wall(i * 10 + j, players[i]);
 			}
 		}
-		
+
 		ArrayList<Player> playersList = new ArrayList<Player>();
 		playersList.add(player1);
 		playersList.add(player2);
-		
+
 		return playersList;
 	}
+
+	private void createAndInitializeGame(ArrayList<Player> players ) {
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+		Game game = new Game(GameStatus.Initializing, MoveMode.PlayerMove, players.get(0), players.get(1), quoridor);
+	}
+
+	private void createAndReadyToStartGame() {
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+		User user1 = quoridor.addUser("userWhite");
+		User user2 = quoridor.addUser("userBlack");
+		int totalThinkingTime = 180;
+		Player player1 = new Player(new Time(totalThinkingTime), user1, 9, Direction.Horizontal);
+		Player player2 = new Player(new Time(totalThinkingTime), user2, 1, Direction.Horizontal);
+		Game game = new Game(GameStatus.ReadyToStart, MoveMode.PlayerMove, player1, player2, quoridor);
+	}
+
 
 	private void createAndStartGame(ArrayList<Player> players) {
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
@@ -398,7 +526,7 @@ public class CucumberStepDefinitions {
 		// positions
 		Tile player1StartPos = quoridor.getBoard().getTile(36);
 		Tile player2StartPos = quoridor.getBoard().getTile(44);
-		
+
 		Game game = new Game(GameStatus.Running, MoveMode.PlayerMove, players.get(0), players.get(1), quoridor);
 
 		PlayerPosition player1Position = new PlayerPosition(quoridor.getCurrentGame().getWhitePlayer(), player1StartPos);
@@ -418,7 +546,6 @@ public class CucumberStepDefinitions {
 
 		game.setCurrentPosition(gamePosition);
 	}
-
 
 	private Direction stringToDirection(String direction){
 		switch (direction){
@@ -462,4 +589,5 @@ public class CucumberStepDefinitions {
 		WallMove move = new WallMove(0, 1, player1, board.getTile((row - 1) * 9 + col - 1), game, direction, wall);
 		game.setWallMoveCandidate(move);
 	}
+
 }
