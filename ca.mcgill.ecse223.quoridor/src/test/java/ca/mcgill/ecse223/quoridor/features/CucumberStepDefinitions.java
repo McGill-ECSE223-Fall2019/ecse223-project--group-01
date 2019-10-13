@@ -1,5 +1,7 @@
 package ca.mcgill.ecse223.quoridor.features;
 
+import static org.junit.Assert.assertEquals;
+
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
@@ -11,32 +13,41 @@ import ca.mcgill.ecse223.quoridor.controllers.BoardController;
 import ca.mcgill.ecse223.quoridor.controllers.UserController;
 import ca.mcgill.ecse223.quoridor.controllers.StartNewGameController;
 import ca.mcgill.ecse223.quoridor.controllers.PositionController;
+import ca.mcgill.ecse223.quoridor.model.*;
 import ca.mcgill.ecse223.quoridor.model.Board;
 import ca.mcgill.ecse223.quoridor.model.Direction;
 import ca.mcgill.ecse223.quoridor.model.Game;
-import ca.mcgill.ecse223.quoridor.controllers.WallController;
-import ca.mcgill.ecse223.quoridor.model.*;
 import ca.mcgill.ecse223.quoridor.model.Game.GameStatus;
 import ca.mcgill.ecse223.quoridor.model.Game.MoveMode;
-import ca.mcgill.ecse223.quoridor.controllers.ModelQuery;
+
+import ca.mcgill.ecse223.quoridor.model.GamePosition;
+import ca.mcgill.ecse223.quoridor.model.Player;
+import ca.mcgill.ecse223.quoridor.model.PlayerPosition;
+import ca.mcgill.ecse223.quoridor.model.Quoridor;
+import ca.mcgill.ecse223.quoridor.model.Tile;
+import ca.mcgill.ecse223.quoridor.model.User;
+import ca.mcgill.ecse223.quoridor.model.Wall;
+import ca.mcgill.ecse223.quoridor.model.WallMove;
+
 import cucumber.api.Pending;
 import cucumber.api.PendingException;
+
+import org.junit.Assert;
 import io.cucumber.java.After;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
-import org.junit.Assert;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.java.lv.Un;
 
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import static org.junit.Assert.*;
 
+import ca.mcgill.ecse223.quoridor.controllers.ModelQuery;
+import ca.mcgill.ecse223.quoridor.controllers.WallController;
+import ca.mcgill.ecse223.quoridor.controller.ValidatePositionController;
 
 public class CucumberStepDefinitions {
 
@@ -197,7 +208,7 @@ public class CucumberStepDefinitions {
 	/**
 	 * @author Kevin Li
 	 */
-	@And("{string} shall have a {string} wall at {int}:{int}")
+  @And("{string} shall have a {string} wall at {int}:{int}")
 	public void shallHaveAWallAt(String player, String orientation, int row, int col) {
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
 
@@ -608,6 +619,77 @@ public class CucumberStepDefinitions {
         Player player1 = ModelQuery.getWhitePlayer();
         Player playerToMove = ModelQuery.getPlayerToMove();
         assertEquals(playerToMove, player1);
+	}
+
+  
+  //VerifyPosition
+  /**
+  *@author: Mark Zhu
+  */
+	private int row;
+	private int col;
+	private boolean valid;
+	private boolean pawnPos; //true if validating position of pawn, false if wall
+	private Direction dir;
+	
+	@Given("A game position is supplied with pawn coordinate {int}:{int}")
+	public void gamePositionSuppliedPawnCoordinates(int row, int col) {
+		this.row = row;
+		this.col = col;
+		pawnPos=true;
+	}
+	
+	@When("Validation of the position is initiated")
+	public void validationPositionInitiated() {
+		if (pawnPos) {
+			try {
+				valid = ValidatePositionController.validatePawnPosition(row,col);		
+			} catch (UnsupportedOperationException e) {
+				throw new PendingException();
+			}
+		} else {
+			try {
+				valid = ValidatePositionController.validateWallPosition(row,col,dir);	
+			} catch (UnsupportedOperationException e) {
+				throw new PendingException();
+			}
+		}
+	}
+	
+	@Then("The position shall be {string}")
+	public void returnPawnPositionValidity(String result) {
+		if (valid) 
+		{	
+			assertEquals("ok",result);
+		}
+		else 
+		{
+			assertEquals("error",result);
+		}
+		
+	}
+	
+	@Given("A game position is supplied with wall coordinate {int}:{int}-{string}")
+	public void gamePositionSuppliedWallCoordinates(int row, int col, String direct) {
+		this.row = row;
+		this.col = col;
+		if (direct == "horizontal") {
+			this.dir = Direction.Horizontal;
+		}
+		else if (direct == "vertical") {
+			this.dir = Direction.Vertical;
+		}
+		pawnPos=false;
+	}
+	
+	@Then("The position shall be valid")
+	public void positionValid() {
+		assertEquals(valid,true);
+	}
+	
+	@Then("The position shall be invalid")
+	public void positionInvalid() {
+		assertEquals(valid,false);
 	}
 
 	// ***********************************************
