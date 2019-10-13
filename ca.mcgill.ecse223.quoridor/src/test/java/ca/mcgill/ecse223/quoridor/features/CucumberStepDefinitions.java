@@ -21,6 +21,7 @@ import ca.mcgill.ecse223.quoridor.model.Tile;
 import ca.mcgill.ecse223.quoridor.model.User;
 import ca.mcgill.ecse223.quoridor.model.Wall;
 import ca.mcgill.ecse223.quoridor.model.WallMove;
+import cucumber.api.PendingException;
 import io.cucumber.java.After;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -125,7 +126,7 @@ public class CucumberStepDefinitions {
 	private int row;
 	private int col;
 	private boolean valid;
-	private boolean pawnPos;
+	private boolean pawnPos; //true if validating position of pawn, false if wall
 	private Direction dir;
 	
 	@Given("A game position is supplied with pawn coordinate {int}:{int}")
@@ -136,15 +137,23 @@ public class CucumberStepDefinitions {
 	}
 	
 	@When("Validation of the position is initiated")
-	public void validationPawnPositionInitiated() {
+	public void validationPositionInitiated() {
 		if (pawnPos) {
-			valid = ValidatePositionController.validatePawnPosition(row,col);			
+			try {
+				valid = ValidatePositionController.validatePawnPosition(row,col);		
+			} catch (UnsupportedOperationException e) {
+				throw new PendingException();
+			}
 		} else {
-			valid = ValidatePositionController.validateWallPosition(row,col,dir);	
+			try {
+				valid = ValidatePositionController.validateWallPosition(row,col,dir);	
+			} catch (UnsupportedOperationException e) {
+				throw new PendingException();
+			}
 		}
 	}
 	
-	@Then("The position shall be \"([^\"]*)\"")
+	@Then("The position shall be {string}")
 	public void returnPawnPositionValidity(String result) {
 		if (valid) 
 		{	
