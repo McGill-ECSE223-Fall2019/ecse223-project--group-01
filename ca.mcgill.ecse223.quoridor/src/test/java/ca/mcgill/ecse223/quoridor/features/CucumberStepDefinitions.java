@@ -11,6 +11,7 @@ import ca.mcgill.ecse223.quoridor.model.*;
 import ca.mcgill.ecse223.quoridor.model.Game.GameStatus;
 import ca.mcgill.ecse223.quoridor.model.Game.MoveMode;
 import ca.mcgill.ecse223.quoridor.controllers.ModelQuery;
+import ca.mcgill.ecse223.quoridor.controllers.SwitchPlayerController;
 import cucumber.api.PendingException;
 import io.cucumber.java.After;
 
@@ -264,6 +265,61 @@ public class CucumberStepDefinitions {
         assertEquals(playerToMove, player1);
 	}
 
+	
+	
+	//Switch Player
+	
+	String originalPlayerColor;
+	String nextPlayerColor;
+	
+	@Given("The player to move is {string}")
+	public void thePlayerToMoveIs(String playerColor) {
+		originalPlayerColor = playerColor;
+	}
+	
+	@And("The clock of {string} is running")
+	public void currentClockRunning(String playerColor) {
+		//TODO: GUI step
+	}
+	
+	@And("The clock of {string} is stopped")
+	public void nextClockStopped(String playerColor) {
+		//TODO: GUI step
+	}
+	
+	@When("Player {string} completes his move")
+	public void playerMoveCompleted(String playerColor) {
+		try {
+			nextPlayerColor = SwitchPlayerController.SwitchActivePlayer(playerColor);
+		} catch (UnsupportedOperationException e) {
+			throw new PendingException();
+		}
+	}
+	
+	@Then("The user interface shall be showing it is {string} turn")
+	public void displayWhoseTurn(String playerColor) {
+		//TODO: GUI step
+	}
+	
+	@And("The clock of {string} shall be stopped")
+	public void selfClockStop(String playerColor) {
+		//TODO: GUI step
+	}
+	
+	@And("The clock of {string} shall be running")
+	public void nextClockRun(String playerColor) {
+		//TODO: GUI step
+	}
+	
+	@And("The next player to move shall be {string}")
+	public void checkActivePlayer(String playerColor) {
+		if (originalPlayerColor == "white") {
+			assertEquals(nextPlayerColor,"black");
+		} else {
+			assertEquals(nextPlayerColor,"white");
+		}
+	}
+	
 	// ***********************************************
 	// Clean up
 	// ***********************************************
