@@ -157,7 +157,7 @@ public class CucumberStepDefinitions {
 	public void theGameIsReadyToStart() {
 		initQuoridorAndBoard();
 		ArrayList<Player> createUsersAndPlayers = createUsersAndPlayers("user1", "user2");
-		readyToStartGame(createUsersAndPlayers);
+		createAndReadyToStartGame(createUsersAndPlayers);
 	}
 
 	@When("I start the clock")
@@ -182,7 +182,7 @@ public class CucumberStepDefinitions {
 	public void aNewGameIsInitializing() {
 		initQuoridorAndBoard();
 		ArrayList<Player> createUsersAndPlayers = createUsersAndPlayers("user1", "user2");
-		createGame(createUsersAndPlayers);
+		createAndInitializeGame(createUsersAndPlayers);
 	}
 
 	@When("{int}:{int} is set as the thinking time")
@@ -282,38 +282,14 @@ public class CucumberStepDefinitions {
 		return playersList;
 	}
 
-	private void createGame(ArrayList<Player> players ) {
+	private void createAndInitializeGame(ArrayList<Player> players ) {
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
-
 		Game game = new Game(GameStatus.Initializing, MoveMode.PlayerMove, players.get(0), players.get(1), quoridor);
 	}
 
-	private void readyToStartGame(ArrayList<Player> players) {
+	private void createAndReadyToStartGame(ArrayList<Player> players) {
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
-		// There are total 36 tiles in the first four rows and
-		// indexing starts from 0 -> tiles with indices 36 and 36+8=44 are the starting
-		// positions
-		Tile player1StartPos = quoridor.getBoard().getTile(36);
-		Tile player2StartPos = quoridor.getBoard().getTile(44);
-
 		Game game = new Game(GameStatus.ReadyToStart, MoveMode.PlayerMove, players.get(0), players.get(1), quoridor);
-
-		PlayerPosition player1Position = new PlayerPosition(quoridor.getCurrentGame().getWhitePlayer(), player1StartPos);
-		PlayerPosition player2Position = new PlayerPosition(quoridor.getCurrentGame().getBlackPlayer(), player2StartPos);
-
-		GamePosition gamePosition = new GamePosition(0, player1Position, player2Position, players.get(0), game);
-
-		// Add the walls as in stock for the players
-		for (int j = 0; j < 10; j++) {
-			Wall wall = Wall.getWithId(j);
-			gamePosition.addWhiteWallsInStock(wall);
-		}
-		for (int j = 0; j < 10; j++) {
-			Wall wall = Wall.getWithId(j + 10);
-			gamePosition.addBlackWallsInStock(wall);
-		}
-
-		game.setCurrentPosition(gamePosition);
 	}
 
 	private void createAndStartGame(ArrayList<Player> players) {
