@@ -1,4 +1,4 @@
-package ca.mcgill.ecse223.quoridor.controller;
+package ca.mcgill.ecse223.quoridor.controllers;
 
 public class StartNewGameController {
 
