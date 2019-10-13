@@ -16,7 +16,7 @@ public class BoardController {
      *
      * @author: Jason Lau
      */
-    public static boolean initializeBoard()throws NotImplementedException{
-        throw new NotImplementedException();
+    public static boolean initializeBoard()throws UnsupportedOperationException{
+        throw new UnsupportedOperationException();
     }
 }
