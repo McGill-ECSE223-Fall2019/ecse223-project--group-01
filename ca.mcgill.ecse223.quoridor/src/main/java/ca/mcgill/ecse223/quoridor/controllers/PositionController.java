@@ -1,6 +1,5 @@
-package ca.mcgill.ecse223.quoridor.Controllers;
+package ca.mcgill.ecse223.quoridor.controllers;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import ca.mcgill.ecse223.quoridor.model.*;
 
 /**
