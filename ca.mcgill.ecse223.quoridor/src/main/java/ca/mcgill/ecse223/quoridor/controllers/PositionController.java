@@ -36,4 +36,15 @@ public class PositionController {
     public static boolean loadGame(String filename) throws java.lang.UnsupportedOperationException{
         throw new java.lang.UnsupportedOperationException();
     }
+
+    /**
+     * Validates the positions loaded.
+     * @param position  the positions that will be loaded
+     * @return true     the positions are valid
+     *         false    the positions are invalid
+     * @throws java.lang.UnsupportedOperationException
+     */
+    public static boolean validatePosition(GamePosition position) throws java.lang.UnsupportedOperationException{
+        throw new java.lang.UnsupportedOperationException();
+    }
 }
