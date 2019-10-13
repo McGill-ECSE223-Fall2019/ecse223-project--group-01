@@ -1,1 +1,1 @@
-### This is our ECSE 223 project Quoridor
+### THis is our ECSE 223 project Quoridor
