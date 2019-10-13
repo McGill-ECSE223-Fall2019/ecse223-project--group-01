@@ -7,12 +7,16 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class BoardController {
     /**
+     *This controller method is responsible for initializing the board when quoridor is initialized
+     * Returns true if it is successfully initialized
      *
-     * @param quoridor
-     * @return
+     *
+     * @return  outcome of operation
      * @throws NotImplementedException
+     *
+     * @author: Jason Lau
      */
-    public static boolean initializeBoard(Quoridor quoridor)throws NotImplementedException{
+    public static boolean initializeBoard()throws NotImplementedException{
         throw new NotImplementedException();
     }
 }

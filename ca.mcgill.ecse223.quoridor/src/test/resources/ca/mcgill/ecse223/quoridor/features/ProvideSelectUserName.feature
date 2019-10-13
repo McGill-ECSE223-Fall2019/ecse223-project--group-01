@@ -37,5 +37,5 @@ Feature: Provide Or Select User Name
     Examples: 
       | color | username |
       | white | Daniel   |
-      | black | Marton   |m
+      | black | Marton   |
       
