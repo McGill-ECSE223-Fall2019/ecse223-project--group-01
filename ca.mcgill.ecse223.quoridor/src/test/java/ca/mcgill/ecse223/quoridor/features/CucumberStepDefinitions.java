@@ -166,7 +166,7 @@ public class CucumberStepDefinitions {
 	/**
 	 * @author Kevin Li
 	 */
-	@And("{string} shall be at {int}:{int}}")
+	@And("{string} shall be at {int}:{int}")
 	public void ShallBeAt(String player, int row, int col) {
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
 		GamePosition position = quoridor.getCurrentGame().getCurrentPosition();
