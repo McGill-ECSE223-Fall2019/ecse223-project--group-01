@@ -577,7 +577,7 @@ public class CucumberStepDefinitions {
 		setupWallMoveCandidates(row, col, direction);
 	}
 
-	@Then("I shall be notified that my wall move is invalid")
+	@Then("I shall be notified that my move is illegal")
 	public void iShallBeNotifiedThatMyWallMoveIsInvalid() {
 		// TODO GUI step
 	}
