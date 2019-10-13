@@ -26,9 +26,11 @@ import io.cucumber.java.After;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import ca.mcgill.ecse223.quoridor.Controllers.PositionController;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import org.junit.Assert;
 
 public class CucumberStepDefinitions {
+
+	private boolean displayError;
 
 	// ***********************************************
 	// Background step definitions
@@ -103,79 +105,142 @@ public class CucumberStepDefinitions {
 	public void iDoNotHaveAWallInMyHand() {
 		// GUI-related feature -- TODO for later
 	}
-	
+
 	@And("^I have a wall in my hand over the board$")
 	public void iHaveAWallInMyHandOverTheBoard() throws Throwable {
 		// GUI-related feature -- TODO for later
 	}
-	
+
 	// ***********************************************
 	// Scenario and scenario outline step definitions
 	// ***********************************************
 
-	@When(" I initiate to load a saved game {string}")
+	/**
+	 * @author Kevin Li
+	 */
+	@When("I initiate to load a saved game {string}")
 	public void iInitiateToLoadASavedGameFilename(String filename) {
 		try {
 			PositionController.loadGame(filename);
-		}catch(NotImplementedException e){
+		}catch(java.lang.UnsupportedOperationException e){
 			throw new PendingException();
 		}
 	}
 
+	/**
+	 * @author Kevin Li
+	 */
 	@And("The position to load is valid")
-	public void thePositionToLoadisValid() {
+	public void thePositionToLoadIsValid() {
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
 		GamePosition gameposition = quoridor.getCurrentGame().getCurrentPosition();
 		try {
-			PositionController.validatePosition(gameposition); //Dont forget to put inputs
-		} catch(NotImplementedException e){
+			boolean isPositionValid = PositionController.validatePosition(gameposition);
+		} catch(java.lang.UnsupportedOperationException e){
 			throw new PendingException();
 		}
 	}
 
+	/**
+	 * @author Kevin Li
+	 */
 	@Then("It shall be {string}'s turn")
-	public void ItShallBePlayerTurn(String player) {
-
+	public void itShallBe(String player) {
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+		Player expectedPlayer = quoridor.getCurrentGame().getBlackPlayer();
+		Assert.assertEquals(player,expectedPlayer.getUser().getName());
 	}
 
+	/**
+	 * @author Kevin Li
+	 */
 	@And("{string} shall be at {int}:{int}}")
-	public void playerShallBeAtP_rowP_col(String player, int p_row, int p_col) {
+	public void ShallBeAt(String player, int row, int col) {
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+		GamePosition position = quoridor.getCurrentGame().getCurrentPosition();
 
+		if(player.equals("player"))
+		{
+			int p_row = position.getWhitePosition().getTile().getRow();
+			int p_col = position.getWhitePosition().getTile().getColumn();
+			Assert.assertEquals(row, p_row);
+			Assert.assertEquals(col, p_col);
+		}
+
+		else if(player.equals("opponent"))
+		{
+			int o_row = position.getBlackPosition().getTile().getRow();
+			int o_col = position.getWhitePosition().getTile().getColumn();
+			Assert.assertEquals(row, o_row);
+			Assert.assertEquals(col, o_col);
+		}
 	}
 
-	@And("{string} shall be at {int}:{int}}")
-	public void opponentShallBeAtO_rowO_col(String opponent, int o_row, int o_col) {
+	/**
+	 * @author Kevin Li
+	 */
+	@And("{string} shall have a {string} wall at {int}:{int}")
+	public void shallHaveAWallAt(String player, String orientation, int row, int col) {
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
 
+		Player currentPlayer;
+		Direction ExpectedDir;
+
+		if(player.equals("player")){
+			currentPlayer = quoridor.getCurrentGame().getWhitePlayer();
+			ExpectedDir= Direction.valueOf(orientation);
+
+			Assert.assertEquals(player, currentPlayer);
+		}
+
+		else{ //If player is an opponent
+			currentPlayer = quoridor.getCurrentGame().getBlackPlayer();
+			ExpectedDir= Direction.valueOf(orientation);
+
+			Assert.assertEquals(player, currentPlayer);
+		}
+		for (Wall wall : currentPlayer.getWalls()){
+			Assert.assertEquals(ExpectedDir, wall.getMove().getWallDirection());
+			Assert.assertEquals(row, wall.getMove().getTargetTile().getColumn());
+			Assert.assertEquals(col, wall.getMove().getTargetTile().getRow());
+		}
 	}
 
-	@And("{string} shall have a {int} wall at {int}")
-	public void playerShallHaveAPw_rowPw_col(String player, int pw_row, int pw_col) {
-
-	}
-
-	@And("{string} shall have a {int} wall at {int}")
-	public void opponentShallHaveAOw_rowWallAtOw_col(String opponent, int ow_row, int ow_col) {
-
-	}
-
+	/**
+	 * @author Kevin Li
+	 */
 	@And("Both players shall have {int} in their stacks")
-	public void bothPlayersShallhaveRemaining_wallsInTheirStacks(int remaining_walls) {
+	public void bothPlayersShallHaveInTheirStacks(int remaining_walls) {
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+		int blackWallsLeft = quoridor.getCurrentGame().getBlackPlayer().numberOfWalls();
+		int whiteWallsLeft = quoridor.getCurrentGame().getWhitePlayer().numberOfWalls();
 
+		Assert.assertEquals(remaining_walls,blackWallsLeft);
+		Assert.assertEquals(remaining_walls,whiteWallsLeft);
 	}
 
+	/**
+	 * @author Kevin Li
+	 */
 	@And("The position to load is invalid")
 	public void thePositionToLoadIsInvalid() {
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
 		GamePosition gameposition = quoridor.getCurrentGame().getCurrentPosition();
 		try {
-			PositionController.validatePosition(gameposition);
-		} catch(NotImplementedException e){
+			boolean positionIsNotValid = PositionController.validatePosition(gameposition);
+		} catch(java.lang.UnsupportedOperationException e){
 			throw new PendingException();
 		}
+
+		displayError = true;
 	}
 
+	/**
+	 * @author Kevin Li
+	 */
 	@Then("The load shall return an error")
 	public void theLoadShallReturnAnError() {
+		Assert.assertEquals(true, displayError);
 	}
 
 	// ***********************************************
