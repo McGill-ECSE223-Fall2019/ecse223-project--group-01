@@ -2,6 +2,7 @@ package ca.mcgill.ecse223.quoridor.features;
 
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +16,7 @@ import ca.mcgill.ecse223.quoridor.model.*;
 import ca.mcgill.ecse223.quoridor.model.Game.GameStatus;
 import ca.mcgill.ecse223.quoridor.model.Game.MoveMode;
 import ca.mcgill.ecse223.quoridor.controllers.ModelQuery;
+import cucumber.api.Pending;
 import cucumber.api.PendingException;
 import io.cucumber.java.After;
 import io.cucumber.java.en.And;
@@ -125,22 +127,39 @@ public class CucumberStepDefinitions {
 	/*scenario:Initiate a new game*/
 	@When("A new game is being initialized")
 	public void aNewGameIsBeingInitialized() {
-		StartNewGameController.initializeGame();
+		try{
+			StartNewGameController.initializeGame();
+		} catch (UnsupportedOperationException e) {
+			throw new PendingException();
+		}
 	}
 
 	@And("White player chooses a username")
 	public void whitePlayerChoosesAUsername() {
-		StartNewGameController.whitePlayerChoosesAUsername();
+		try {
+			StartNewGameController.whitePlayerChoosesAUsername();
+		} catch (UnsupportedOperationException e) {
+			throw new PendingException();
+		}
+
 	}
 
 	@And("Black player chooses a username")
 	public void blackPlayerChoosesAUsername() {
-		StartNewGameController.blackPlayerChooseAUsername();
+		try {
+			StartNewGameController.blackPlayerChooseAUsername();
+		} catch (UnsupportedOperationException e) {
+			throw new PendingException();
+		}
 	}
 
 	@And("Total thinking time is set")
 	public void totalThinkingTimeIsSet() {
-		StartNewGameController.setTotalThinkingTime();
+		try {
+			StartNewGameController.setTotalThinkingTime();
+		} catch (UnsupportedOperationException e) {
+			throw new PendingException();
+		}
 	}
 
 	@Then("The game shall become ready to start")
@@ -153,14 +172,16 @@ public class CucumberStepDefinitions {
 	/*Scenario: Start clock */
 	@Given("The game is ready to start")
 	public void theGameIsReadyToStart() {
-		initQuoridorAndBoard();
-		ArrayList<Player> createUsersAndPlayers = createUsersAndPlayers("user1", "user2");
-		createAndReadyToStartGame(createUsersAndPlayers);
+		createAndReadyToStartGame();
 	}
 
 	@When("I start the clock")
 	public void iStartTheClock() {
-		StartNewGameController.startTheClock();
+		try {
+			StartNewGameController.startTheClock();
+		} catch (UnsupportedOperationException e) {
+			throw new PendingException();
+		}
 	}
 
 	@Then("The game shall be running")
@@ -185,16 +206,23 @@ public class CucumberStepDefinitions {
 
 	@When("{int}:{int} is set as the thinking time")
 	public void minSecIsSetAsTheThinkingTime(int minutes, int seconds) {
-		StartNewGameController.setTotalThinkingTime(minutes, seconds);
+		try {
+			StartNewGameController.setTotalThinkingTime(minutes, seconds);
+		} catch (UnsupportedOperationException e) {
+			throw new PendingException();
+		}
+
 	}
 
 	@Then("Both players shall have {int}:{int} remaining time left")
 	public void bothPlayersShallHaveMinSecRemainingTimeLeft(int minutes, int seconds)  {
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
-		assertEquals(minutes, quoridor.getCurrentGame().getBlackPlayer().getRemainingTime().getMinutes());
-		assertEquals(seconds, quoridor.getCurrentGame().getBlackPlayer().getRemainingTime().getSeconds());
-		assertEquals(minutes, quoridor.getCurrentGame().getWhitePlayer().getRemainingTime().getMinutes());
-		assertEquals(seconds, quoridor.getCurrentGame().getWhitePlayer().getRemainingTime().getSeconds());
+		long millis = minutes * 60 * 1000 + seconds * 1000;
+		Date date = new Date();
+		long currentMillis = date.getTime();
+		Time time = new Time(millis+currentMillis);
+		assertEquals(time, quoridor.getCurrentGame().getBlackPlayer().getRemainingTime().getTime());
+		assertEquals(time, quoridor.getCurrentGame().getWhitePlayer().getRemainingTime().getTime());
 
 	}
 
@@ -435,9 +463,14 @@ public class CucumberStepDefinitions {
 		Game game = new Game(GameStatus.Initializing, MoveMode.PlayerMove, players.get(0), players.get(1), quoridor);
 	}
 
-	private void createAndReadyToStartGame(ArrayList<Player> players) {
+	private void createAndReadyToStartGame() {
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
-		Game game = new Game(GameStatus.ReadyToStart, MoveMode.PlayerMove, players.get(0), players.get(1), quoridor);
+		User user1 = quoridor.addUser("userWhite");
+		User user2 = quoridor.addUser("userBlack");
+		int totalThinkingTime = 180;
+		Player player1 = new Player(new Time(totalThinkingTime), user1, 9, Direction.Horizontal);
+		Player player2 = new Player(new Time(totalThinkingTime), user2, 1, Direction.Horizontal);
+		Game game = new Game(GameStatus.ReadyToStart, MoveMode.PlayerMove, player1, player2, quoridor);
 	}
 
 
