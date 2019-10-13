@@ -8,6 +8,7 @@ import java.util.Map;
 
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 import ca.mcgill.ecse223.quoridor.controllers.StartNewGameController;
+import ca.mcgill.ecse223.quoridor.controllers.PositionController;
 import ca.mcgill.ecse223.quoridor.model.Board;
 import ca.mcgill.ecse223.quoridor.model.Direction;
 import ca.mcgill.ecse223.quoridor.model.Game;
@@ -16,14 +17,15 @@ import ca.mcgill.ecse223.quoridor.model.*;
 import ca.mcgill.ecse223.quoridor.model.Game.GameStatus;
 import ca.mcgill.ecse223.quoridor.model.Game.MoveMode;
 import ca.mcgill.ecse223.quoridor.controllers.ModelQuery;
+import cucumber.api.Pending;
 import cucumber.api.PendingException;
 import io.cucumber.java.After;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
-import ca.mcgill.ecse223.quoridor.controllers.PositionController;
 import org.junit.Assert;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.junit.Assert;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -32,6 +34,8 @@ import static org.junit.Assert.*;
 
 public class CucumberStepDefinitions {
 
+	private boolean fileInSystem;
+	private boolean fileChanged;
 	private boolean displayError;
 
 	// ***********************************************
@@ -207,11 +211,18 @@ public class CucumberStepDefinitions {
 
 			Assert.assertEquals(player, currentPlayer);
 		}
+
+		boolean wallFound = false;
+
 		for (Wall wall : currentPlayer.getWalls()){
-			Assert.assertEquals(ExpectedDir, wall.getMove().getWallDirection());
-			Assert.assertEquals(row, wall.getMove().getTargetTile().getColumn());
-			Assert.assertEquals(col, wall.getMove().getTargetTile().getRow());
+			Direction wallDirection = wall.getMove().getWallDirection();
+			int wallRow = wall.getMove().getTargetTile().getRow();
+			int wallCol = wall.getMove().getTargetTile().getColumn();
+			if( wallDirection == ExpectedDir && wallRow == row && wallCol == col)
+				wallFound = true;
 		}
+
+		Assert.assertEquals(true ,wallFound);
 	}
 
 	/**
@@ -250,6 +261,90 @@ public class CucumberStepDefinitions {
 	public void theLoadShallReturnAnError() {
 		Assert.assertEquals(true, displayError);
 	}
+
+	//Scenario Outline: Save Position
+
+    /**
+     * @author Kevin Li
+     */
+	@Given("No file {string} exists in the filesystem")
+	public void noFileFilenameExistsInTheFilesystem(String filename) {
+		//Can't potentially create file in filesystem
+		fileInSystem = false;
+	}
+
+    /**
+     * @author Kevin Li
+     */
+	@When("The user initiates to save the game with name {string}")
+	public void theUserInitiatesToSaveTheGameWithNameFilename(String filename) {
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+		GamePosition gameposition = quoridor.getCurrentGame().getCurrentPosition();
+		try {
+			PositionController.saveGame(filename, gameposition);
+		} catch(java.lang.UnsupportedOperationException e){
+			throw new PendingException();
+		}
+
+	}
+
+    /**
+     * @author Kevin Li
+     */
+	@Then("A file with {string} shall be created in the filesystem")
+	public void aFileWithFilenameIsCreatedInTheFilesystem(String filename) {
+		Assert.assertEquals(true, fileInSystem);
+	}
+
+	//Scenario Outline: Save position with existing file name
+    /**
+     * @author Kevin Li
+     */
+	@Given("File {string} exists in the filesystem")
+	public void fileFilenameExistsInTheFilesystem(String filename) {
+		//Can't potentially search file in filesystem
+		fileInSystem = true;
+	}
+
+
+    /**
+     * @author Kevin Li
+     */
+	@And("The user confirms to overwrite existing file")
+	public void theUserConfirmsToOverwriteExistingFile() {
+		// GUI-related feature -- TODO for later
+		//.Confirmed to overwrite to existing file
+		fileChanged = true;
+	}
+
+    /**
+     * @author Kevin Li
+     */
+	@Then("File with {string} shall be updated in the filesystem")
+	public void fileWithFilenameIsUpdatedInTheFilesystem(String filename) {
+		Assert.assertEquals(true, fileChanged);
+	}
+
+	//Scenario Outline: Save position cancelled due to existing file name
+
+    /**
+     * @author Kevin Li
+     */
+	@And("The user cancels to overwrite existing file")
+	public void theUserCancelsToOverwriteExistingFile() {
+		// GUI-related feature -- TODO for later
+		//.Do not overwrite Existing file
+		fileChanged = false;
+	}
+
+    /**
+     * @author Kevin Li
+     */
+	@Then("File {string} shall not be changed in the filesystem")
+	public void fileFilenameIsNotChangedInTheFilesystem(String filename) {
+		Assert.assertEquals(false, fileChanged);
+	}
+
 
 
 
