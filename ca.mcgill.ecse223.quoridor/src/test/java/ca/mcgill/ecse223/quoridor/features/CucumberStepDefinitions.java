@@ -14,7 +14,6 @@ import ca.mcgill.ecse223.quoridor.model.*;
 import ca.mcgill.ecse223.quoridor.model.Game.GameStatus;
 import ca.mcgill.ecse223.quoridor.model.Game.MoveMode;
 import ca.mcgill.ecse223.quoridor.controllers.ModelQuery;
-import cucumber.api.Pending;
 import cucumber.api.PendingException;
 import io.cucumber.java.After;
 import io.cucumber.java.en.And;
