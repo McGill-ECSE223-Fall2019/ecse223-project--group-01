@@ -35,11 +35,9 @@ import io.cucumber.java.en.When;
 import io.cucumber.java.lv.Un;
 
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import static org.junit.Assert.*;
 
 
@@ -126,13 +124,6 @@ public class CucumberStepDefinitions {
 	@And("^I have a wall in my hand over the board$")
 	public void iHaveAWallInMyHandOverTheBoard() throws Throwable {
 		// GUI-related feature -- TODO for later
-	}
-
-	@Given("^A new game is initializing$")
-	public void aNewGameIsInitializing() throws Throwable {
-		initQuoridorAndBoard();
-		ArrayList<Player> players = createUsersAndPlayers("user1", "user2");
-		new Game(GameStatus.Initializing, MoveMode.PlayerMove, players.get(0), players.get(1), QuoridorApplication.getQuoridor());
 	}
 
 
@@ -602,11 +593,6 @@ public class CucumberStepDefinitions {
 		assertEquals(moves.size(), 0);
 	}
 
-	@And("I shall have a wall in my hand over the board")
-	public void iShallHaveAWallInMyHandOverTheBoard() {
-		// TODO GUI
-	}
-
 	@And("It shall not be my turn to move")
 	public void itIsNotMyTurnToMove() {
 	    // operating under the assumption that is was white's turn to move
@@ -673,7 +659,7 @@ public class CucumberStepDefinitions {
 	}
 
 	/**
-	 * @author Kate Ward
+	 * @author Kate Ward, Tritin Truong
 	 */
 	@And("I shall have a wall in my hand over the board")
 	public void iShallHaveAWallInMyHandOverTheBoard() {
@@ -748,7 +734,7 @@ public class CucumberStepDefinitions {
 		}
 	}
 
-	@Then("The wall shall be rotated over the board to \"<newdir>\"")
+	@Then("The wall shall be rotated over the board to {string}")
 	public void theWallShallBeRotatedOverTheBoardToNewDir() {
 		//GUI TODO later
 		throw new PendingException();
