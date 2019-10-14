@@ -21,20 +21,13 @@ import ca.mcgill.ecse223.quoridor.model.*;
 import ca.mcgill.ecse223.quoridor.model.Game.GameStatus;
 import ca.mcgill.ecse223.quoridor.model.Game.MoveMode;
 import ca.mcgill.ecse223.quoridor.controllers.ModelQuery;
-import cucumber.api.Pending;
 import cucumber.api.PendingException;
-import controller.GrabWallController;
-import controller.RotateWallController;
 import io.cucumber.java.After;
 import io.cucumber.java.en.And;
-import io.cucumber.java.en.But;
 import io.cucumber.java.en.Given;
 import org.junit.Assert;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.java.lv.Un;
-
-
 
 
 import static org.junit.Assert.assertTrue;
@@ -643,7 +636,7 @@ public class CucumberStepDefinitions {
 	@When("I try to grab a wall from my stock")
 	public void iTryToGrabAWallFromMyStock() {
 		try {
-			GrabWallController.grabWall();
+			WallController.grabWall();
 		} catch (UnsupportedOperationException e) {
 			throw new PendingException();
 		}
@@ -728,7 +721,7 @@ public class CucumberStepDefinitions {
 	@When("I try to flip the wall")
 	public void iTrytoFlipTheWall() {
 		try {
-			RotateWallController.rotateWall();
+			WallController.rotateWall();
 		} catch (UnsupportedOperationException e) {
 			throw new PendingException();
 		}
