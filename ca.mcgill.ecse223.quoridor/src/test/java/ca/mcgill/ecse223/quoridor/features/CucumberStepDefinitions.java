@@ -352,6 +352,9 @@ public class CucumberStepDefinitions {
 
 
 	/*scenario:Initiate a new game*/
+	/**
+	 * @author Fulin Huang
+	 */
 	@When("A new game is being initialized")
 	public void aNewGameIsBeingInitialized() {
 		try{
@@ -361,6 +364,9 @@ public class CucumberStepDefinitions {
 		}
 	}
 
+	/**
+	 * @author Fulin Huang
+	 */
 	@And("White player chooses a username")
 	public void whitePlayerChoosesAUsername() {
 		try {
@@ -372,6 +378,9 @@ public class CucumberStepDefinitions {
 
 	}
 
+	/**
+	 * @author Fulin Huang
+	 */
 	@And("Black player chooses a username")
 	public void blackPlayerChoosesAUsername() {
 		try {
@@ -381,6 +390,9 @@ public class CucumberStepDefinitions {
 		}
 	}
 
+	/**
+	 * @author Fulin Huang
+	 */
 	@And("Total thinking time is set")
 	public void totalThinkingTimeIsSet() {
 		try {
@@ -390,6 +402,9 @@ public class CucumberStepDefinitions {
 		}
 	}
 
+	/**
+	 * @author Fulin Huang
+	 */
 	@Then("The game shall become ready to start")
 	public void theGameShallBecomeReadyToStart() {
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
@@ -398,11 +413,18 @@ public class CucumberStepDefinitions {
 	}
 
 	/*Scenario: Start clock */
+
+	/**
+	 * @author Fulin Huang
+	 */
 	@Given("The game is ready to start")
 	public void theGameIsReadyToStart() {
 		createAndReadyToStartGame();
 	}
 
+	/**
+	 * @author Fulin Huang
+	 */
 	@When("I start the clock")
 	public void iStartTheClock() {
 		try {
@@ -412,12 +434,18 @@ public class CucumberStepDefinitions {
 		}
 	}
 
+	/**
+	 * @author Fulin Huang
+	 */
 	@Then("The game shall be running")
 	public void theGameShallBeRunning() {
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
 		assertEquals(GameStatus.Running, quoridor.getCurrentGame().getGameStatus());
 	}
 
+	/**
+	 * @author Fulin Huang
+	 */
 	@And("The board shall be initialized")
 	public void theBoardShallBeInitialized() {
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
@@ -425,6 +453,11 @@ public class CucumberStepDefinitions {
 	}
 
 	/*set TotalThinkingTime*/
+
+
+	/**
+	 * @author Fulin Huang
+	 */
 	@Given("A new game is initializing")
 	public void aNewGameIsInitializing() {
 		initQuoridorAndBoard();
@@ -432,6 +465,9 @@ public class CucumberStepDefinitions {
 		createAndInitializeGame(createUsersAndPlayers);
 	}
 
+	/**
+	 * @author Fulin Huang
+	 */
 	@When("{int}:{int} is set as the thinking time")
 	public void minSecIsSetAsTheThinkingTime(int minutes, int seconds) {
 		try {
@@ -442,6 +478,9 @@ public class CucumberStepDefinitions {
 
 	}
 
+	/**
+	 * @author Fulin Huang
+	 */
 	@Then("Both players shall have {int}:{int} remaining time left")
 	public void bothPlayersShallHaveMinSecRemainingTimeLeft(int minutes, int seconds)  {
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
@@ -456,17 +495,27 @@ public class CucumberStepDefinitions {
 
 
 	// Move wall
+
+	/**
+	 * @author Tritin Truong
+	 */
 	@Given("A wall move candidate exists with {string} at position \\({int}, {int})")
 	public void aWallMoveCandidateExistsWithDirAtPositionRowCol(String dir, Integer row, Integer col) {
 		Direction direction = this.stringToDirection(dir);
 		setupWallMoveCandidates(row, col, direction);
 	}
 
+	/**
+	 * @author Tritin Truong
+	 */
 	@And("The wall candidate is not at the {string} edge of the board")
 	public void theWallCandidateIsNotAtTheSideEdgeOfTheBoard(String side) {
         assertFalse(this.isWallMoveCandidateAtEdge(side));
 	}
 
+	/**
+	 * @author Tritin Truong
+	 */
 	@When("I try to move the wall {string}")
 	public void iTryToMoveTheWallSide(String side) {
 		Game game = ModelQuery.getCurrentGame();
@@ -478,11 +527,17 @@ public class CucumberStepDefinitions {
 		}
 	}
 
+	/**
+	 * @author Tritin Truong
+	 */
 	@Then("The wall shall be moved over the board to position \\({int}, {int})")
 	public void theWallShallBeMovedOverTheBoardToPositionNrowNcol(int nrow, int ncol) {
 		//	TODO GUI step
 	}
 
+	/**
+	 * @author Tritin Truong
+	 */
 	@And("A wall move candidate shall exist with {string} at position \\({int}, {int})")
 	public void aWallMoveCandidateShallExistWithDirAtPositionNrowNcol(String direction, int nrow, int ncol) {
 		Game game = ModelQuery.getCurrentGame();
@@ -495,11 +550,18 @@ public class CucumberStepDefinitions {
 	}
 
 	//	Invalid move
+
+	/**
+	 * @author Tritin Truong
+	 */
 	@Then("I should be notified that my move is illegal")
 	public void iShouldBeNotifiedThatMyMoveIsIllegal() {
 //		TODO GUI step
 	}
 
+	/**
+	 * @author Tritin Truong
+	 */
 	@And("The wall candidate is at the {string} edge of the board")
 	public void theWallCandidateIsAtTheSideEdgeOfTheBoard(String side) {
 		boolean isAtEdge =this.isWallMoveCandidateAtEdge(side) ;
@@ -508,12 +570,18 @@ public class CucumberStepDefinitions {
 
 	// Drop wall
 
+	/**
+	 * @author Tritin Truong
+	 */
 	@Given("The wall move candidate with {string} at position \\({int}, {int}) is valid")
 	public void theWallMoveCandidateWithDirAtPositionRowColIsValid(String dir, int row, int col) {
 		Direction direction = this.stringToDirection(dir);
 		setupWallMoveCandidates(row, col, direction);
 	}
 
+	/**
+	 * @author Tritin Truong
+	 */
 	@When("I release the wall in my hand")
 	public void iReleaseTheWallInMyHand() {
 		WallMove move = ModelQuery.getWallMoveCandidate();
@@ -524,6 +592,9 @@ public class CucumberStepDefinitions {
 		}
 	}
 
+	/**
+	 * @author Tritin Truong
+	 */
 	@Then("A wall move shall be registered with {string} at position \\({int}, {int})")
 	public void aWallMoveIsRegisteredWithDirAtPositionRowCol(String direction, int row, int col) {
 		Game game = ModelQuery.getCurrentGame();
@@ -544,6 +615,9 @@ public class CucumberStepDefinitions {
 		assertEquals(wall_move.getTargetTile().getRow(), row);
 	}
 
+	/**
+	 * @author Tritin Truong
+	 */
 	@And("My move shall be completed")
 	public void myMoveIsCompleted() {
 
@@ -561,6 +635,9 @@ public class CucumberStepDefinitions {
 
 	}
 
+	/**
+	 * @author Tritin Truong
+	 */
 	@And("I shall not have a wall in my hand")
 	public void iShallNotHaveAWallInMyHand() {
 		// TODO GUI
@@ -568,17 +645,26 @@ public class CucumberStepDefinitions {
 
 	// Invalid drop wall
 
+	/**
+	 * @author Tritin Truong
+	 */
 	@Given("The wall move candidate with {string} at position \\({int}, {int}) is invalid")
 	public void theWallMoveCandidateWithDirAtPositionRowColIsInvalid(String dir, int row, int col) {
 		Direction direction = this.stringToDirection(dir);
 		setupWallMoveCandidates(row, col, direction);
 	}
 
+	/**
+	 * @author Tritin Truong
+	 */
 	@Then("I shall be notified that my move is illegal")
 	public void iShallBeNotifiedThatMyWallMoveIsInvalid() {
 		// TODO GUI step
 	}
 
+	/**
+	 * @author Tritin Truong
+	 */
 	@Then("No wall move shall be registered with {string} at position \\({int}, {int})")
 	public void noWallMoveIsRegisteredWithDirAtPositionRowCol(String direction, int row, int col) {
 		List moves = ModelQuery.getMoves();
@@ -586,6 +672,9 @@ public class CucumberStepDefinitions {
 		assertEquals(moves.size(), 0);
 	}
 
+	/**
+	 * @author Tritin Truong
+	 */
 	@And("It shall not be my turn to move")
 	public void itIsNotMyTurnToMove() {
 	    // operating under the assumption that is was white's turn to move
@@ -594,6 +683,9 @@ public class CucumberStepDefinitions {
 		assertEquals(playerToMove, player1);
 	}
 
+	/**
+	 * @author Tritin Truong
+	 */
 	@And("It shall be my turn to move")
 	public void itShallBeMyTurnToMove() {
         // operating under the assumption that is was white's turn to move
@@ -859,7 +951,9 @@ public class CucumberStepDefinitions {
 
 // Feature 4  Initialize Board
 
-
+	/**
+	 * @author Jason Lau
+	 */
 	@When("The initialization of the board is initiated")
 	public void theInitializationOfTheBoardIsInitiated() {
 		try {
@@ -870,6 +964,9 @@ public class CucumberStepDefinitions {
 		}
 	}
 
+	/**
+	 * @author Jason Lau
+	 */
 	@Then("It shall be white player to move")
 	public void itShallBeWhitePlayerToMove() {
 
@@ -877,6 +974,10 @@ public class CucumberStepDefinitions {
 		assertEquals(quoridor.getCurrentGame().getCurrentPosition().getPlayerToMove(), quoridor.getCurrentGame().getWhitePlayer());
 	}
 
+
+	/**
+	 * @author Jason Lau
+	 */
 	@And("White's pawn shall be in its initial position")
 	public void whiteSPawnShallBeInItsInitialPosition() {
 
@@ -887,6 +988,9 @@ public class CucumberStepDefinitions {
 
 	}
 
+	/**
+	 * @author Jason Lau
+	 */
 	@And("Black's pawn shall be in its initial position")
 	public void blackSPawnShallBeInItsInitialPosition() {
 
@@ -898,6 +1002,9 @@ public class CucumberStepDefinitions {
 
 	}
 
+	/**
+	 * @author Jason Lau
+	 */
 	@And("All of White's walls shall be in stock")
 	public void allOfWhiteSWallsShallBeInStock() {
 
@@ -907,6 +1014,9 @@ public class CucumberStepDefinitions {
 
 	}
 
+	/**
+	 * @author Jason Lau
+	 */
 	@And("All of Black's walls shall be in stock")
 	public void allOfBlackSWallsShallBeInStock() {
 
@@ -914,6 +1024,9 @@ public class CucumberStepDefinitions {
 		assertEquals(10,quoridor.getCurrentGame().getBlackPlayer().getWalls().size());
 	}
 
+	/**
+	 * @author Jason Lau
+	 */
 	@And("White's clock shall be counting down")
 	public void whiteSClockShallBeCountingDown() {
 
@@ -922,6 +1035,9 @@ public class CucumberStepDefinitions {
 		// TODO GUI FEATURE
 	}
 
+	/**
+	 * @author Jason Lau
+	 */
 	@And("It shall be shown that this is White's turn")
 	public void itShallBeShownThatThisIsWhiteSTurn() {
 
@@ -933,6 +1049,9 @@ public class CucumberStepDefinitions {
 
 	private Player playertoselect;
 
+	/**
+	 * @author Jason Lau
+	 */
 	@Given("Next player to set user name is {string}")
 	public void nextPlayerToSetUserNameIs(String arg0) {
 
@@ -950,12 +1069,18 @@ public class CucumberStepDefinitions {
 		}
 	}
 
+	/**
+	 * @author Jason Lau
+	 */
 	@And("There is existing user {string}")
 	public void thereIsExistingUser(String arg0) {
 
 		User.hasWithName(arg0);
 	}
 
+	/**
+	 * @author Jason Lau
+	 */
 	@When("The player selects existing {string}")
 	public void thePlayerSelectsExisting(String arg0) {
 		try {
@@ -969,6 +1094,9 @@ public class CucumberStepDefinitions {
 		}
 	}
 
+	/**
+	 * @author Jason Lau
+	 */
 	@Then("The name of player {string} in the new game shall be {string}")
 	public void theNameOfPlayerInTheNewGameShallBe(String arg0, String arg1) {
 
@@ -986,12 +1114,19 @@ public class CucumberStepDefinitions {
 
 
     }
+
+	/**
+	 * @author Jason Lau
+	 */
 	@And("There is no existing user {string}")
 	public void thereIsNoExistingUser(String arg0) {
 
 	    assertEquals(false, User.hasWithName(arg0));
 	}
 
+	/**
+	 * @author Jason Lau
+	 */
 	@When("The player provides new user name: {string}")
 	public void thePlayerProvidesNewUserName(String arg0) {
 
@@ -1004,7 +1139,9 @@ public class CucumberStepDefinitions {
 			}
 	}
 
-
+	/**
+	 * @author Jason Lau
+	 */
 	@Then("The player shall be warned that {string} already exists")
 	public void thePlayerShallBeWarnedThatAlreadyExists(String arg0) {
 
@@ -1021,6 +1158,9 @@ public class CucumberStepDefinitions {
 
 	}
 
+	/**
+	 * @author Jason Lau
+	 */
 	@And("Next player to set user name shall be {string}")
 	public void nextPlayerToSetUserNameShallBe(String arg0) {
 
