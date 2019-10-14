@@ -681,6 +681,73 @@ public class CucumberStepDefinitions {
         assertEquals(playerToMove, player1);
 	}
 
+	// Computer Control
+
+	/**
+	 * @author Tritin Truong
+	 */
+	@Given("It is not my turn to move")
+	public void itIsNotMyTurn() {
+		Player currentPlayer = ModelQuery.getBlackPlayer();
+		QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().setPlayerToMove(currentPlayer);
+	}
+
+
+	/**
+	 * @author Tritin Truong
+	 */
+	@When("The computer computes a move")
+	public void theComputerComputesAMove() {
+		Player player = ModelQuery.getBlackPlayer();
+		try{
+			ComputerController.computeMove(player);
+		} catch (UnsupportedOperationException e) {
+			throw new PendingException();
+		}
+	}
+
+
+	/**
+	 * @author Tritin Truong
+	 */
+	@Then("The move is registered")
+	public void theMoveIsValid() {
+		Game game = ModelQuery.getCurrentGame();
+		Player computer = ModelQuery.getBlackPlayer();
+		int move_size = game.getMoves().size();
+
+//		Check if at least one move has been registered
+		assertTrue( move_size > 0);
+		Move move = game.getMoves().get(move_size-1);
+
+//		Check if the most recent move was a wall move
+		assertEquals(computer, move.getPlayer());
+	}
+
+//  Move hint
+
+	/**
+	 * @author Tritin Truong
+	 */
+	@When("I ask for a move suggestion")
+	public void iAskForAMoveSuggestion() {
+		Player human_player = ModelQuery.getWhitePlayer();
+		try{
+			ComputerController.computeMove(human_player);
+		} catch (UnsupportedOperationException e) {
+			throw new PendingException();
+		}
+	}
+
+
+	/**
+	 * @author Tritin Truong
+	 */
+	@Then("I am notified of a possible move")
+	public void iAmNotifiedOfAPossibleMove() {
+		// TODO GUI step
+	}
+
 	//grab wall
 	//scenario start wall placement
 	/**
