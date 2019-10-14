@@ -507,8 +507,9 @@ public class CucumberStepDefinitions {
 	public void iTryToMoveTheWallSide(String side) {
 		Game game = ModelQuery.getCurrentGame();
 		WallMove move = game.getWallMoveCandidate();
+		boolean outcome;
 		try {
-			WallController.shiftWall(side, move);
+			outcome = WallController.shiftWall(side, move);
 		} catch (UnsupportedOperationException e) {
 			throw new PendingException();
 		}
@@ -530,7 +531,6 @@ public class CucumberStepDefinitions {
 		Game game = ModelQuery.getCurrentGame();
 
 		Direction dir = this.stringToDirection(direction);
-
 		assertEquals(game.getWallMoveCandidate().getTargetTile().getRow(), nrow);
 		assertEquals(game.getWallMoveCandidate().getTargetTile().getColumn(), ncol);
 		assertEquals(game.getWallMoveCandidate().getWallDirection(), dir);
@@ -644,9 +644,14 @@ public class CucumberStepDefinitions {
 	/**
 	 * @author Tritin Truong
 	 */
+	@Then("I shall be notified that my move is illegal")
+	public void iShallBeNotifiedThatMyWallMoveIsIllegal() {
+		// TODO GUI step
+	}
+
+
 	@Then("I shall be notified that my wall move is invalid")
 	public void iShallBeNotifiedThatMyWallMoveIsInvalid() {
-		// TODO GUI step
 	}
 
 	/**

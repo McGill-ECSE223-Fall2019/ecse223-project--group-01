@@ -1,5 +1,8 @@
 package ca.mcgill.ecse223.quoridor.controllers;
 import ca.mcgill.ecse223.quoridor.model.*;
+
+import java.util.List;
+
 public class WallController {
 
     /**
@@ -14,7 +17,14 @@ public class WallController {
      * @throws UnsupportedOperationException
      */
     public static Boolean moveWall(WallMove move, int row, int col) throws UnsupportedOperationException{
-        throw new UnsupportedOperationException();
+
+        if(row<1 || row > 8 || col < 1 || col > 8){
+            return false;
+        }
+        List tiles = ModelQuery.getTiles();
+        Tile target = ModelQuery.getTile(row,col);
+        move.setTargetTile(target);
+        return true;
     }
 
     /**
@@ -28,7 +38,27 @@ public class WallController {
      * @throws UnsupportedOperationException
      */
     public static Boolean shiftWall(String side, WallMove move) throws UnsupportedOperationException {
-        throw new UnsupportedOperationException();
+        int row = move.getTargetTile().getRow();
+        int col = move.getTargetTile().getColumn();
+        switch(side){
+            case "left":{
+                col-=1;
+                break;
+            }
+            case "right":{
+                col+=1;
+                break;
+            }
+            case "up": {
+                row-=1;
+                break;
+            }
+            case "down":{
+                row+=1;
+                break;
+            }
+        }
+        return WallController.moveWall(move,row,col);
     }
 
     /**

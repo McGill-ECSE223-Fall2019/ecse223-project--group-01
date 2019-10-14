@@ -33,4 +33,13 @@ public class ModelQuery {
     public static WallMove getWallMoveCandidate(){
         return QuoridorApplication.getQuoridor().getCurrentGame().getWallMoveCandidate();
     }
+
+    public static List<Tile> getTiles(){
+        return QuoridorApplication.getQuoridor().getBoard().getTiles();
+    }
+
+    public static Tile getTile(int row,int col){
+        int index = (row - 1) * 9 + col - 1;
+        return QuoridorApplication.getQuoridor().getBoard().getTile(index);
+    }
 }
