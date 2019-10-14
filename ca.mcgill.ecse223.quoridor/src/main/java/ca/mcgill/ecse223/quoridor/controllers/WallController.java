@@ -44,4 +44,29 @@ public class WallController {
     public static Boolean dropWall(WallMove move) throws UnsupportedOperationException{
         throw new UnsupportedOperationException();
     }
+
+    /**
+     * @author Kate Ward
+     * Attempts to rotate wall in hand
+     *
+     * @return outcome of operation
+     * @throws UnsupportedOperationException
+     */
+    public static boolean rotateWall() {
+        throw new UnsupportedOperationException();
+
+    }
+
+    /**
+     * @author Kate Ward
+     * Attempts to grab wall from stock and hold it in hand above board
+     * returns true if successful
+     *
+     * @return outcome of operation
+     * @throws UnsupportedOperationException
+     */
+    public static boolean grabWall() {
+        throw new UnsupportedOperationException();
+
+    }
 }

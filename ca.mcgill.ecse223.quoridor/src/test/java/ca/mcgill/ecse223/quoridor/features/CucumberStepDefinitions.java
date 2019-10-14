@@ -1,5 +1,7 @@
 package ca.mcgill.ecse223.quoridor.features;
 
+import static org.junit.Assert.assertEquals;
+
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,7 +21,6 @@ import ca.mcgill.ecse223.quoridor.model.*;
 import ca.mcgill.ecse223.quoridor.model.Game.GameStatus;
 import ca.mcgill.ecse223.quoridor.model.Game.MoveMode;
 import ca.mcgill.ecse223.quoridor.controllers.ModelQuery;
-import cucumber.api.Pending;
 import cucumber.api.PendingException;
 import io.cucumber.java.After;
 import io.cucumber.java.en.And;
@@ -27,14 +28,9 @@ import io.cucumber.java.en.Given;
 import org.junit.Assert;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import io.cucumber.java.lv.Un;
 
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import static org.junit.Assert.*;
 
 
@@ -122,6 +118,7 @@ public class CucumberStepDefinitions {
 	public void iHaveAWallInMyHandOverTheBoard() throws Throwable {
 		// GUI-related feature -- TODO for later
 	}
+
 
 	// ***********************************************
 	// Scenario and scenario outline step definitions
@@ -589,11 +586,6 @@ public class CucumberStepDefinitions {
 		assertEquals(moves.size(), 0);
 	}
 
-	@And("I shall have a wall in my hand over the board")
-	public void iShallHaveAWallInMyHandOverTheBoard() {
-		// TODO GUI
-	}
-
 	@And("It shall not be my turn to move")
 	public void itIsNotMyTurnToMove() {
 	    // operating under the assumption that is was white's turn to move
@@ -609,6 +601,138 @@ public class CucumberStepDefinitions {
         Player playerToMove = ModelQuery.getPlayerToMove();
         assertEquals(playerToMove, player1);
 	}
+
+	//grab wall
+	//scenario start wall placement
+	/**
+	 * @author Kate Ward
+	 */
+	@Given("I have more walls on stock")
+	public void iHaveMoreWallsOnStock() {
+		Game game = QuoridorApplication.getQuoridor().getCurrentGame();
+		Player currentPlayer = game.getCurrentPosition().getPlayerToMove();
+		//check which is current player and then add a wall to stock from board if none left
+		if (currentPlayer.equals(game.getBlackPlayer())) {
+			int numWalls = game.getCurrentPosition().getBlackWallsInStock().size();
+			if (numWalls == 0) {
+				Wall placedWall = (Wall) game.getCurrentPosition().getBlackWallsOnBoard();
+				game.getCurrentPosition().addBlackWallsInStock(placedWall);
+			}
+
+		}
+		else {
+			int numWalls = game.getCurrentPosition().getWhiteWallsInStock().size();
+			if (numWalls == 0) {
+				Wall placedWall = (Wall) game.getCurrentPosition().getWhiteWallsOnBoard();
+				game.getCurrentPosition().addWhiteWallsInStock(placedWall);
+			}
+		}
+
+	}
+
+	/**
+	 * @author Kate Ward
+	 */
+	@When("I try to grab a wall from my stock")
+	public void iTryToGrabAWallFromMyStock() {
+		try {
+			WallController.grabWall();
+		} catch (UnsupportedOperationException e) {
+			throw new PendingException();
+		}
+	}
+
+	/**
+	 * @author Kate Ward
+	 */
+	@Then("A wall move candidate shall be created at initial position")
+	public void aWallMoveCandidateShallBeCreatedAtInitialPosition() {
+		Game game = QuoridorApplication.getQuoridor().getCurrentGame();
+		assertEquals(true, game.hasWallMoveCandidate());
+	}
+
+	/**
+	 * @author Kate Ward, Tritin Truong
+	 */
+	@And("I shall have a wall in my hand over the board")
+	public void iShallHaveAWallInMyHandOverTheBoard() {
+		//GUI TODO later
+		throw new PendingException();
+	}
+
+	/**
+	 * @author Kate Ward
+	 */
+	@And("The wall in my hand shall disappear from my stock")
+	public void theWallInMyHandShouldDisappearFromMyStock() {
+		//GUI
+		throw new PendingException();
+	}
+
+	//scenario no more walls in stock
+	/**
+	 * @author Kate Ward
+	 */
+	@Given("I have no more walls on stock")
+	public void iHaveNoMoreWallsOnStock() {
+		Game game = QuoridorApplication.getQuoridor().getCurrentGame();
+		Player currentPlayer = game.getCurrentPosition().getPlayerToMove();
+
+		if (currentPlayer.equals(game.getBlackPlayer())) {
+			for (Wall wall: game.getCurrentPosition().getBlackWallsInStock()){
+				if (wall!=null) {
+					game.getCurrentPosition().addBlackWallsOnBoard(wall);
+				}
+			}
+		}
+		else {
+			for (Wall wall: game.getCurrentPosition().getWhiteWallsInStock()){
+				if (wall!=null) {
+					game.getCurrentPosition().addWhiteWallsOnBoard(wall);
+				}
+			}
+		}
+
+	}
+
+	/**
+	 * @author Kate Ward
+	 */
+	@Then("I shall be notified that I have no more walls")
+	public void iShallBeNotifiedThatIHaveNoMoreWalls() {
+		//GUI TODO later
+		throw new PendingException();
+	}
+
+	/**
+	 * @author Kate Ward
+	 */
+	@And("I shall have no walls in my hand")
+	public void iShallHaveNoWallsInMyHand() {
+		//GUI TODO later
+		throw new PendingException();
+	}
+
+	//rotate wall
+
+	/**
+	 * @author Kate Ward
+	 */
+	@When("I try to flip the wall")
+	public void iTrytoFlipTheWall() {
+		try {
+			WallController.rotateWall();
+		} catch (UnsupportedOperationException e) {
+			throw new PendingException();
+		}
+	}
+
+	@Then("The wall shall be rotated over the board to {string}")
+	public void theWallShallBeRotatedOverTheBoardToNewDir() {
+		//GUI TODO later
+		throw new PendingException();
+	}
+
 
 	// ***********************************************
 	// Clean up
