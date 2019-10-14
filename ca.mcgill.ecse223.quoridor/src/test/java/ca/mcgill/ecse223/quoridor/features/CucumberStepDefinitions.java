@@ -682,12 +682,20 @@ public class CucumberStepDefinitions {
 	}
 
 	// Computer Control
+
+	/**
+	 * @author Tritin Truong
+	 */
 	@Given("It is not my turn to move")
 	public void itIsNotMyTurn() {
 		Player currentPlayer = ModelQuery.getBlackPlayer();
 		QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().setPlayerToMove(currentPlayer);
 	}
 
+
+	/**
+	 * @author Tritin Truong
+	 */
 	@When("The computer computes a move")
 	public void theComputerComputesAMove() {
 		Player player = ModelQuery.getBlackPlayer();
@@ -698,6 +706,10 @@ public class CucumberStepDefinitions {
 		}
 	}
 
+
+	/**
+	 * @author Tritin Truong
+	 */
 	@Then("The move is registered")
 	public void theMoveIsValid() {
 		Game game = ModelQuery.getCurrentGame();
@@ -713,6 +725,10 @@ public class CucumberStepDefinitions {
 	}
 
 //  Move hint
+
+	/**
+	 * @author Tritin Truong
+	 */
 	@When("I ask for a move suggestion")
 	public void iAskForAMoveSuggestion() {
 		Player human_player = ModelQuery.getWhitePlayer();
@@ -723,6 +739,10 @@ public class CucumberStepDefinitions {
 		}
 	}
 
+
+	/**
+	 * @author Tritin Truong
+	 */
 	@Then("I am notified of a possible move")
 	public void iAmNotifiedOfAPossibleMove() {
 		// TODO GUI step
