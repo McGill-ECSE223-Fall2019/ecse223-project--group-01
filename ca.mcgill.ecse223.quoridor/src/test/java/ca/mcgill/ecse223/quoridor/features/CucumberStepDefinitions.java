@@ -9,18 +9,13 @@ import java.util.List;
 import java.util.Map;
 
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
-import ca.mcgill.ecse223.quoridor.controllers.BoardController;
-import ca.mcgill.ecse223.quoridor.controllers.UserController;
-import ca.mcgill.ecse223.quoridor.controllers.StartNewGameController;
-import ca.mcgill.ecse223.quoridor.controllers.PositionController;
+import ca.mcgill.ecse223.quoridor.controllers.*;
 import ca.mcgill.ecse223.quoridor.model.Board;
 import ca.mcgill.ecse223.quoridor.model.Direction;
 import ca.mcgill.ecse223.quoridor.model.Game;
-import ca.mcgill.ecse223.quoridor.controllers.WallController;
 import ca.mcgill.ecse223.quoridor.model.*;
 import ca.mcgill.ecse223.quoridor.model.Game.GameStatus;
 import ca.mcgill.ecse223.quoridor.model.Game.MoveMode;
-import ca.mcgill.ecse223.quoridor.controllers.ModelQuery;
 import cucumber.api.PendingException;
 import io.cucumber.java.After;
 import io.cucumber.java.en.And;
@@ -819,10 +814,88 @@ public class CucumberStepDefinitions {
 		}
 	}
 
+	/**
+	 * @author Kate Ward
+	 */
 	@Then("The wall shall be rotated over the board to {string}")
 	public void theWallShallBeRotatedOverTheBoardToNewDir() {
 		//GUI TODO later
 		throw new PendingException();
+	}
+	/**
+	 * @author: Mark Zhu
+	 * Validate Position feature
+	 */
+	private int row;
+	private int col;
+	private boolean valid;
+	private boolean pawnPos; //true if validating position of pawn, false if wall
+	private Direction dir;
+
+	//@author: Mark Zhu
+	@Given("A game position is supplied with pawn coordinate {int}:{int}")
+	public void gamePositionSuppliedPawnCoordinates(int row, int col) {
+		this.row = row;
+		this.col = col;
+		pawnPos=true;
+	}
+
+	//@author: Mark Zhu
+	@When("Validation of the position is initiated")
+	public void validationPositionInitiated() {
+		if (pawnPos) {
+			try {
+				valid = ValidatePositionController.validatePawnPosition(row,col);
+			} catch (UnsupportedOperationException e) {
+				throw new PendingException();
+			}
+		} else {
+			try {
+				valid = ValidatePositionController.validateWallPosition(row,col,dir);
+			} catch (UnsupportedOperationException e) {
+				throw new PendingException();
+			}
+		}
+	}
+
+	//@author: Mark Zhu
+	@Then("The position shall be {string}")
+	public void returnPawnPositionValidity(String result) {
+		if (valid)
+		{
+			assertEquals("ok",result);
+		}
+		else
+		{
+			assertEquals("error",result);
+		}
+
+	}
+
+	//@author: Mark Zhu
+	@Given("A game position is supplied with wall coordinate {int}:{int}-{string}")
+	public void gamePositionSuppliedWallCoordinates(int row, int col, String direct) {
+		this.row = row;
+		this.col = col;
+		if (direct == "horizontal") {
+			this.dir = Direction.Horizontal;
+		}
+		else if (direct == "vertical") {
+			this.dir = Direction.Vertical;
+		}
+		pawnPos=false;
+	}
+
+	//@author: Mark Zhu
+	@Then("The position shall be valid")
+	public void positionValid() {
+		assertEquals(valid,true);
+	}
+
+	//@author: Mark Zhu
+	@Then("The position shall be invalid")
+	public void positionInvalid() {
+		assertEquals(valid,false);
 	}
 
 
