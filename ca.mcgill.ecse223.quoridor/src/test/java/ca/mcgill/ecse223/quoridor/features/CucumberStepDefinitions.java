@@ -1,27 +1,52 @@
 package ca.mcgill.ecse223.quoridor.features;
 
-import static org.junit.Assert.assertEquals;
-
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
+
+import ca.mcgill.ecse223.quoridor.model.Board;
+import ca.mcgill.ecse223.quoridor.model.Direction;
+import ca.mcgill.ecse223.quoridor.model.Game;
 import ca.mcgill.ecse223.quoridor.model.*;
 import ca.mcgill.ecse223.quoridor.model.Game.GameStatus;
 import ca.mcgill.ecse223.quoridor.model.Game.MoveMode;
+import ca.mcgill.ecse223.quoridor.controllers.ModelQuery;
+import cucumber.api.Pending;
+
 import cucumber.api.PendingException;
 import io.cucumber.java.After;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
+import org.junit.Assert;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.cucumber.java.lv.Un;
 
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import static org.junit.Assert.*;
+
+import ca.mcgill.ecse223.quoridor.controllers.WallController;
+import ca.mcgill.ecse223.quoridor.controllers.BoardController;
+import ca.mcgill.ecse223.quoridor.controllers.UserController;
+import ca.mcgill.ecse223.quoridor.controllers.StartNewGameController;
+import ca.mcgill.ecse223.quoridor.controllers.PositionController;
 import ca.mcgill.ecse223.quoridor.controllers.ValidatePositionController;
 
 
 public class CucumberStepDefinitions {
+
+	private boolean fileInSystem;
+	private boolean fileChanged;
+	private boolean displayError;
 
 	// ***********************************************
 	// Background step definitions
@@ -96,27 +121,505 @@ public class CucumberStepDefinitions {
 	public void iDoNotHaveAWallInMyHand() {
 		// GUI-related feature -- TODO for later
 	}
-	
+
 	@And("^I have a wall in my hand over the board$")
 	public void iHaveAWallInMyHandOverTheBoard() throws Throwable {
 		// GUI-related feature -- TODO for later
 	}
-	
+
 	// ***********************************************
 	// Scenario and scenario outline step definitions
 	// ***********************************************
 
 	/*
 	 * TODO Insert your missing step definitions here
-	 * 
+	 *
 	 * Call the methods of the controller that will manipulate the model once they
 	 * are implemented
-	 * 
+	 *
+	/**
+	 * @author Kevin Li
 	 */
-	
-	
-	
-	//@author: Mark Zhu
+	@When("I initiate to load a saved game {string}")
+	public void iInitiateToLoadASavedGameFilename(String filename) {
+		try {
+			PositionController.loadGame(filename);
+		}catch(java.lang.UnsupportedOperationException e){
+			throw new PendingException();
+		}
+	}
+
+	/**
+	 * @author Kevin Li
+	 */
+	@And("The position to load is valid")
+	public void thePositionToLoadIsValid() {
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+		GamePosition gameposition = quoridor.getCurrentGame().getCurrentPosition();
+		try {
+			boolean isPositionValid = PositionController.validatePosition(gameposition);
+		} catch(java.lang.UnsupportedOperationException e){
+			throw new PendingException();
+		}
+	}
+
+	/**
+	 * @author Kevin Li
+	 */
+	@Then("It shall be {string}'s turn")
+	public void itShallBe(String player) {
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+		Player expectedPlayer = quoridor.getCurrentGame().getBlackPlayer();
+		Assert.assertEquals(player,expectedPlayer.getUser().getName());
+	}
+
+	/**
+	 * @author Kevin Li
+	 */
+	@And("{string} shall be at {int}:{int}")
+	public void ShallBeAt(String player, int row, int col) {
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+		GamePosition position = quoridor.getCurrentGame().getCurrentPosition();
+
+		if(player.equals("player"))
+		{
+			int p_row = position.getWhitePosition().getTile().getRow();
+			int p_col = position.getWhitePosition().getTile().getColumn();
+			Assert.assertEquals(row, p_row);
+			Assert.assertEquals(col, p_col);
+		}
+
+		else if(player.equals("opponent"))
+		{
+			int o_row = position.getBlackPosition().getTile().getRow();
+			int o_col = position.getWhitePosition().getTile().getColumn();
+			Assert.assertEquals(row, o_row);
+			Assert.assertEquals(col, o_col);
+		}
+	}
+
+	/**
+	 * @author Kevin Li
+	 */
+	@And("{string} shall have a {string} wall at {int}:{int}")
+	public void shallHaveAWallAt(String player, String orientation, int row, int col) {
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+
+		Player currentPlayer;
+		Direction ExpectedDir;
+
+		if(player.equals("player")){
+			currentPlayer = quoridor.getCurrentGame().getWhitePlayer();
+			ExpectedDir= Direction.valueOf(orientation);
+
+			Assert.assertEquals(player, currentPlayer);
+		}
+
+		else{ //If player is an opponent
+			currentPlayer = quoridor.getCurrentGame().getBlackPlayer();
+			ExpectedDir= Direction.valueOf(orientation);
+
+			Assert.assertEquals(player, currentPlayer);
+		}
+
+		boolean wallFound = false;
+
+		for (Wall wall : currentPlayer.getWalls()){
+			Direction wallDirection = wall.getMove().getWallDirection();
+			int wallRow = wall.getMove().getTargetTile().getRow();
+			int wallCol = wall.getMove().getTargetTile().getColumn();
+			if( wallDirection == ExpectedDir && wallRow == row && wallCol == col)
+				wallFound = true;
+		}
+
+		Assert.assertEquals(true ,wallFound);
+	}
+
+	/**
+	 * @author Kevin Li
+	 */
+	@And("Both players shall have {int} in their stacks")
+	public void bothPlayersShallHaveInTheirStacks(int remaining_walls) {
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+		int blackWallsLeft = quoridor.getCurrentGame().getBlackPlayer().numberOfWalls();
+		int whiteWallsLeft = quoridor.getCurrentGame().getWhitePlayer().numberOfWalls();
+
+		Assert.assertEquals(remaining_walls,blackWallsLeft);
+		Assert.assertEquals(remaining_walls,whiteWallsLeft);
+	}
+
+	/**
+	 * @author Kevin Li
+	 */
+	@And("The position to load is invalid")
+	public void thePositionToLoadIsInvalid() {
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+		GamePosition gameposition = quoridor.getCurrentGame().getCurrentPosition();
+		try {
+			boolean positionIsNotValid = PositionController.validatePosition(gameposition);
+		} catch(java.lang.UnsupportedOperationException e){
+			throw new PendingException();
+		}
+
+		displayError = true;
+	}
+
+	/**
+	 * @author Kevin Li
+	 */
+	@Then("The load shall return an error")
+	public void theLoadShallReturnAnError() {
+		Assert.assertEquals(true, displayError);
+	}
+
+	//Scenario Outline: Save Position
+
+    /**
+     * @author Kevin Li
+     */
+	@Given("No file {string} exists in the filesystem")
+	public void noFileFilenameExistsInTheFilesystem(String filename) {
+		//Can't potentially create file in filesystem
+		fileInSystem = false;
+	}
+
+    /**
+     * @author Kevin Li
+     */
+	@When("The user initiates to save the game with name {string}")
+	public void theUserInitiatesToSaveTheGameWithNameFilename(String filename) {
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+		GamePosition gameposition = quoridor.getCurrentGame().getCurrentPosition();
+		try {
+			PositionController.saveGame(filename, gameposition);
+		} catch(java.lang.UnsupportedOperationException e){
+			throw new PendingException();
+		}
+
+	}
+
+    /**
+     * @author Kevin Li
+     */
+	@Then("A file with {string} shall be created in the filesystem")
+	public void aFileWithFilenameIsCreatedInTheFilesystem(String filename) {
+		assertEquals(true, fileInSystem);
+	}
+
+	//Scenario Outline: Save position with existing file name
+    /**
+     * @author Kevin Li
+     */
+	@Given("File {string} exists in the filesystem")
+	public void fileFilenameExistsInTheFilesystem(String filename) {
+		//Can't potentially search file in filesystem
+		fileInSystem = true;
+	}
+
+
+    /**
+     * @author Kevin Li
+     */
+	@And("The user confirms to overwrite existing file")
+	public void theUserConfirmsToOverwriteExistingFile() {
+		// GUI-related feature -- TODO for later
+		//.Confirmed to overwrite to existing file
+		fileChanged = true;
+	}
+
+    /**
+     * @author Kevin Li
+     */
+	@Then("File with {string} shall be updated in the filesystem")
+	public void fileWithFilenameIsUpdatedInTheFilesystem(String filename) {
+		assertEquals(true, fileChanged);
+	}
+
+	//Scenario Outline: Save position cancelled due to existing file name
+
+    /**
+     * @author Kevin Li
+     */
+	@And("The user cancels to overwrite existing file")
+	public void theUserCancelsToOverwriteExistingFile() {
+		// GUI-related feature -- TODO for later
+		//.Do not overwrite Existing file
+		fileChanged = false;
+	}
+
+    /**
+     * @author Kevin Li
+     */
+	@Then("File {string} shall not be changed in the filesystem")
+	public void fileFilenameIsNotChangedInTheFilesystem(String filename) {
+		assertEquals(false, fileChanged);
+	}
+
+
+
+
+	/*scenario:Initiate a new game*/
+	@When("A new game is being initialized")
+	public void aNewGameIsBeingInitialized() {
+		try{
+			StartNewGameController.initializeGame();
+		} catch (UnsupportedOperationException e) {
+			throw new PendingException();
+		}
+	}
+
+	@And("White player chooses a username")
+	public void whitePlayerChoosesAUsername() {
+		try {
+			StartNewGameController.whitePlayerChoosesAUsername();
+
+		} catch (UnsupportedOperationException e) {
+			throw new PendingException();
+		}
+
+	}
+
+	@And("Black player chooses a username")
+	public void blackPlayerChoosesAUsername() {
+		try {
+			StartNewGameController.blackPlayerChooseAUsername();
+		} catch (UnsupportedOperationException e) {
+			throw new PendingException();
+		}
+	}
+
+	@And("Total thinking time is set")
+	public void totalThinkingTimeIsSet() {
+		try {
+			StartNewGameController.setTotalThinkingTime();
+		} catch (UnsupportedOperationException e) {
+			throw new PendingException();
+		}
+	}
+
+	@Then("The game shall become ready to start")
+	public void theGameShallBecomeReadyToStart() {
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+		assertEquals(GameStatus.ReadyToStart, quoridor.getCurrentGame().getGameStatus());
+
+	}
+
+	/*Scenario: Start clock */
+	@Given("The game is ready to start")
+	public void theGameIsReadyToStart() {
+		createAndReadyToStartGame();
+	}
+
+	@When("I start the clock")
+	public void iStartTheClock() {
+		try {
+			StartNewGameController.startTheClock();
+		} catch (UnsupportedOperationException e) {
+			throw new PendingException();
+		}
+	}
+
+	@Then("The game shall be running")
+	public void theGameShallBeRunning() {
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+		assertEquals(GameStatus.Running, quoridor.getCurrentGame().getGameStatus());
+	}
+
+	@And("The board shall be initialized")
+	public void theBoardShallBeInitialized() {
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+		assertEquals(true, quoridor.getBoard().hasTiles());
+	}
+
+	/*set TotalThinkingTime*/
+	@Given("A new game is initializing")
+	public void aNewGameIsInitializing() {
+		initQuoridorAndBoard();
+		ArrayList<Player> createUsersAndPlayers = createUsersAndPlayers("user1", "user2");
+		createAndInitializeGame(createUsersAndPlayers);
+	}
+
+	@When("{int}:{int} is set as the thinking time")
+	public void minSecIsSetAsTheThinkingTime(int minutes, int seconds) {
+		try {
+			StartNewGameController.setTotalThinkingTime(minutes, seconds);
+		} catch (UnsupportedOperationException e) {
+			throw new PendingException();
+		}
+
+	}
+
+	@Then("Both players shall have {int}:{int} remaining time left")
+	public void bothPlayersShallHaveMinSecRemainingTimeLeft(int minutes, int seconds)  {
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+		long millis = minutes * 60 * 1000 + seconds * 1000;
+		Date date = new Date();
+		long currentMillis = date.getTime();
+		Time time = new Time(millis+currentMillis);
+		assertEquals(time, quoridor.getCurrentGame().getBlackPlayer().getRemainingTime().getTime());
+		assertEquals(time, quoridor.getCurrentGame().getWhitePlayer().getRemainingTime().getTime());
+
+	}
+
+
+	// Move wall
+	@Given("A wall move candidate exists with {string} at position \\({int}, {int})")
+	public void aWallMoveCandidateExistsWithDirAtPositionRowCol(String dir, Integer row, Integer col) {
+		Direction direction = this.stringToDirection(dir);
+		setupWallMoveCandidates(row, col, direction);
+	}
+
+	@And("The wall candidate is not at the {string} edge of the board")
+	public void theWallCandidateIsNotAtTheSideEdgeOfTheBoard(String side) {
+        assertFalse(this.isWallMoveCandidateAtEdge(side));
+	}
+
+	@When("I try to move the wall {string}")
+	public void iTryToMoveTheWallSide(String side) {
+		Game game = ModelQuery.getCurrentGame();
+		WallMove move = game.getWallMoveCandidate();
+		try {
+			WallController.shiftWall(side, move);
+		} catch (UnsupportedOperationException e) {
+			throw new PendingException();
+		}
+	}
+
+	@Then("The wall shall be moved over the board to position \\({int}, {int})")
+	public void theWallShallBeMovedOverTheBoardToPositionNrowNcol(int nrow, int ncol) {
+		//	TODO GUI step
+	}
+
+	@And("A wall move candidate shall exist with {string} at position \\({int}, {int})")
+	public void aWallMoveCandidateShallExistWithDirAtPositionNrowNcol(String direction, int nrow, int ncol) {
+		Game game = ModelQuery.getCurrentGame();
+
+		Direction dir = this.stringToDirection(direction);
+
+		assertEquals(game.getWallMoveCandidate().getTargetTile().getRow(), nrow);
+		assertEquals(game.getWallMoveCandidate().getTargetTile().getColumn(), ncol);
+		assertEquals(game.getWallMoveCandidate().getWallDirection(), dir);
+	}
+
+	//	Invalid move
+	@Then("I should be notified that my move is illegal")
+	public void iShouldBeNotifiedThatMyMoveIsIllegal() {
+//		TODO GUI step
+	}
+
+	@And("The wall candidate is at the {string} edge of the board")
+	public void theWallCandidateIsAtTheSideEdgeOfTheBoard(String side) {
+		boolean isAtEdge =this.isWallMoveCandidateAtEdge(side) ;
+        assertTrue(isAtEdge);
+	}
+
+	// Drop wall
+
+	@Given("The wall move candidate with {string} at position \\({int}, {int}) is valid")
+	public void theWallMoveCandidateWithDirAtPositionRowColIsValid(String dir, int row, int col) {
+		Direction direction = this.stringToDirection(dir);
+		setupWallMoveCandidates(row, col, direction);
+	}
+
+	@When("I release the wall in my hand")
+	public void iReleaseTheWallInMyHand() {
+		WallMove move = ModelQuery.getWallMoveCandidate();
+		try{
+			WallController.dropWall(move);
+		} catch (UnsupportedOperationException e) {
+			throw new PendingException();
+		}
+	}
+
+	@Then("A wall move shall be registered with {string} at position \\({int}, {int})")
+	public void aWallMoveIsRegisteredWithDirAtPositionRowCol(String direction, int row, int col) {
+		Game game = ModelQuery.getCurrentGame();
+		Direction dir = this.stringToDirection(direction);
+		int move_size = game.getMoves().size();
+
+//		Check if at least one move has been registered
+		assertTrue( move_size > 0);
+		Move move = game.getMoves().get(move_size-1);
+
+//		Check if the most recent move was a wall move
+		assert move instanceof WallMove;
+		WallMove wall_move = (WallMove) move;
+
+//		Verify that the wall move is the same as the one just played
+		assertEquals(wall_move.getWallDirection(),dir);
+		assertEquals(wall_move.getTargetTile().getColumn(), col);
+		assertEquals(wall_move.getTargetTile().getRow(), row);
+	}
+
+	@And("My move shall be completed")
+	public void myMoveIsCompleted() {
+
+		Game game = ModelQuery.getCurrentGame();
+
+		// The wallmove candidate should be gone
+		assertNull(game.getWallMoveCandidate());
+
+		// White should have more walls on board
+		assertEquals(game.getCurrentPosition().getWhiteWallsOnBoard().size(), 2);
+
+		// White should have less walls in stock
+        assertEquals(game.getCurrentPosition().getWhiteWallsInStock().size(), 8);
+        assertEquals(game.getWhitePlayer().getWalls().size(), 8);
+
+	}
+
+	@And("I shall not have a wall in my hand")
+	public void iShallNotHaveAWallInMyHand() {
+		// TODO GUI
+	}
+
+	// Invalid drop wall
+
+	@Given("The wall move candidate with {string} at position \\({int}, {int}) is invalid")
+	public void theWallMoveCandidateWithDirAtPositionRowColIsInvalid(String dir, int row, int col) {
+		Direction direction = this.stringToDirection(dir);
+		setupWallMoveCandidates(row, col, direction);
+	}
+
+	@Then("I shall be notified that my move is illegal")
+	public void iShallBeNotifiedThatMyWallMoveIsInvalid() {
+		// TODO GUI step
+	}
+
+	@Then("No wall move shall be registered with {string} at position \\({int}, {int})")
+	public void noWallMoveIsRegisteredWithDirAtPositionRowCol(String direction, int row, int col) {
+		List moves = ModelQuery.getMoves();
+		// Setup added no moves so there should still be no moves in the move list.
+		assertEquals(moves.size(), 0);
+	}
+
+	@And("I shall have a wall in my hand over the board")
+	public void iShallHaveAWallInMyHandOverTheBoard() {
+		// TODO GUI
+	}
+
+	@And("It shall not be my turn to move")
+	public void itIsNotMyTurnToMove() {
+	    // operating under the assumption that is was white's turn to move
+		Player player1 = ModelQuery.getBlackPlayer();
+		Player playerToMove = ModelQuery.getPlayerToMove();
+		assertEquals(playerToMove, player1);
+	}
+
+	@And("It shall be my turn to move")
+	public void itShallBeMyTurnToMove() {
+        // operating under the assumption that is was white's turn to move
+        Player player1 = ModelQuery.getWhitePlayer();
+        Player playerToMove = ModelQuery.getPlayerToMove();
+        assertEquals(playerToMove, player1);
+	}
+  
+  
+  
+ ////////////////////////////////////////////////////////
+  /** @author: Mark Zhu
+  *
+  */
 	private int row;
 	private int col;
 	private boolean valid;
@@ -144,46 +647,6 @@ public class CucumberStepDefinitions {
 			} catch (UnsupportedOperationException e) {
 				throw new PendingException();
 			}
-		}
-	}
-	
-	@Then("The position shall be {string}")
-	public void returnPawnPositionValidity(String result) {
-		if (valid) 
-		{	
-			assertEquals("ok",result);
-		}
-		else 
-		{
-			assertEquals("error",result);
-		}
-		
-	}
-	
-	@Given("A game position is supplied with wall coordinate {int}:{int}-{string}")
-	public void gamePositionSuppliedWallCoordinates(int row, int col, String direct) {
-		this.row = row;
-		this.col = col;
-		if (direct == "horizontal") {
-			this.dir = Direction.Horizontal;
-		}
-		else if (direct == "vertical") {
-			this.dir = Direction.Vertical;
-		}
-		pawnPos=false;
-	}
-	
-	@Then("The position shall be valid")
-	public void positionValid() {
-		assertEquals(valid,true);
-	}
-	
-	@Then("The position shall be invalid")
-	public void positionInvalid() {
-		assertEquals(valid,false);
-	}
-	
-
 
 	// ***********************************************
 	// Clean up
@@ -241,7 +704,7 @@ public class CucumberStepDefinitions {
 		 * |x->    <-x|
 		 * |          |
 		 * |__________|
-		 * 
+		 *
 		 */
 		//@formatter:on
 		Player player1 = new Player(new Time(thinkingTime), user1, 9, Direction.Horizontal);
@@ -256,13 +719,29 @@ public class CucumberStepDefinitions {
 				new Wall(i * 10 + j, players[i]);
 			}
 		}
-		
+
 		ArrayList<Player> playersList = new ArrayList<Player>();
 		playersList.add(player1);
 		playersList.add(player2);
-		
+
 		return playersList;
 	}
+
+	private void createAndInitializeGame(ArrayList<Player> players ) {
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+		Game game = new Game(GameStatus.Initializing, MoveMode.PlayerMove, players.get(0), players.get(1), quoridor);
+	}
+
+	private void createAndReadyToStartGame() {
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+		User user1 = quoridor.addUser("userWhite");
+		User user2 = quoridor.addUser("userBlack");
+		int totalThinkingTime = 180;
+		Player player1 = new Player(new Time(totalThinkingTime), user1, 9, Direction.Horizontal);
+		Player player2 = new Player(new Time(totalThinkingTime), user2, 1, Direction.Horizontal);
+		Game game = new Game(GameStatus.ReadyToStart, MoveMode.PlayerMove, player1, player2, quoridor);
+	}
+
 
 	private void createAndStartGame(ArrayList<Player> players) {
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
@@ -271,7 +750,7 @@ public class CucumberStepDefinitions {
 		// positions
 		Tile player1StartPos = quoridor.getBoard().getTile(36);
 		Tile player2StartPos = quoridor.getBoard().getTile(44);
-		
+
 		Game game = new Game(GameStatus.Running, MoveMode.PlayerMove, players.get(0), players.get(1), quoridor);
 
 		PlayerPosition player1Position = new PlayerPosition(quoridor.getCurrentGame().getWhitePlayer(), player1StartPos);
@@ -291,5 +770,231 @@ public class CucumberStepDefinitions {
 
 		game.setCurrentPosition(gamePosition);
 	}
+
+// Feature 4  Initialize Board
+
+
+	@When("The initialization of the board is initiated")
+	public void theInitializationOfTheBoardIsInitiated() {
+		try {
+			BoardController.initializeBoard();
+		}
+		catch(UnsupportedOperationException e){
+			throw new PendingException();
+		}
+	}
+
+	@Then("It shall be white player to move")
+	public void itShallBeWhitePlayerToMove() {
+
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+		assertEquals(quoridor.getCurrentGame().getCurrentPosition().getPlayerToMove(), quoridor.getCurrentGame().getWhitePlayer());
+	}
+
+	@And("White's pawn shall be in its initial position")
+	public void whiteSPawnShallBeInItsInitialPosition() {
+
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+		PlayerPosition whitePlayerPos =  new PlayerPosition(quoridor.getCurrentGame().getWhitePlayer(), quoridor.getBoard().getTile(36));
+
+		assertEquals(whitePlayerPos, quoridor.getCurrentGame().getCurrentPosition().getWhitePosition());
+
+	}
+
+	@And("Black's pawn shall be in its initial position")
+	public void blackSPawnShallBeInItsInitialPosition() {
+
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+		PlayerPosition blackPlayerPos =  new PlayerPosition(quoridor.getCurrentGame().getBlackPlayer(), quoridor.getBoard().getTile(44));
+
+		assertEquals(blackPlayerPos, quoridor.getCurrentGame().getCurrentPosition().getBlackPosition());
+
+
+	}
+
+	@And("All of White's walls shall be in stock")
+	public void allOfWhiteSWallsShallBeInStock() {
+
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+
+		assertEquals(10,quoridor.getCurrentGame().getWhitePlayer().getWalls().size());
+
+	}
+
+	@And("All of Black's walls shall be in stock")
+	public void allOfBlackSWallsShallBeInStock() {
+
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+		assertEquals(10,quoridor.getCurrentGame().getBlackPlayer().getWalls().size());
+	}
+
+	@And("White's clock shall be counting down")
+	public void whiteSClockShallBeCountingDown() {
+
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+
+		// TODO GUI FEATURE
+	}
+
+	@And("It shall be shown that this is White's turn")
+	public void itShallBeShownThatThisIsWhiteSTurn() {
+
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+		assertEquals(quoridor.getCurrentGame().getWhitePlayer(), quoridor.getCurrentGame().getCurrentPosition().getPlayerToMove());
+	}
+
+// Feature 2 Provide or select user name
+
+	private Player playertoselect;
+
+	@Given("Next player to set user name is {string}")
+	public void nextPlayerToSetUserNameIs(String arg0) {
+
+
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+
+		if(arg0.equals("white")){
+
+			playertoselect = quoridor.getCurrentGame().getWhitePlayer();
+		}
+
+		else if(arg0.equals("black")){
+
+			playertoselect = quoridor.getCurrentGame().getBlackPlayer();
+		}
+	}
+
+	@And("There is existing user {string}")
+	public void thereIsExistingUser(String arg0) {
+
+		User.hasWithName(arg0);
+	}
+
+	@When("The player selects existing {string}")
+	public void thePlayerSelectsExisting(String arg0) {
+		try {
+
+			Quoridor quoridor = QuoridorApplication.getQuoridor();
+			UserController.selectExistingUsername(playertoselect, arg0);
+
+		}catch(UnsupportedOperationException e){
+			throw new PendingException();
+
+		}
+	}
+
+	@Then("The name of player {string} in the new game shall be {string}")
+	public void theNameOfPlayerInTheNewGameShallBe(String arg0, String arg1) {
+
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+
+		if( arg0.equals("white")){
+
+			assertEquals(arg1, quoridor.getCurrentGame().getWhitePlayer().getUser().getName());
+		}
+
+		else if( arg0.equals("black")){
+
+			assertEquals(arg1, quoridor.getCurrentGame().getBlackPlayer().getUser().getName());
+		}
+
+
+    }
+	@And("There is no existing user {string}")
+	public void thereIsNoExistingUser(String arg0) {
+
+	    assertEquals(false, User.hasWithName(arg0));
+	}
+
+	@When("The player provides new user name: {string}")
+	public void thePlayerProvidesNewUserName(String arg0) {
+
+			try{
+			UserController.newUsername(playertoselect,arg0);
+
+			}catch(UnsupportedOperationException e){
+
+			throw new PendingException();
+			}
+	}
+
+
+	@Then("The player shall be warned that {string} already exists")
+	public void thePlayerShallBeWarnedThatAlreadyExists(String arg0) {
+
+		/*Quoridor quoridor = QuoridorApplication.getQuoridor();
+		username = User.hasWithName(arg0);
+
+		if(username) {
+
+			System.out.println("The username " + arg0 + " already exists");
+		}
+        */
+
+		//TODO GUI FEATURE
+
+	}
+
+	@And("Next player to set user name shall be {string}")
+	public void nextPlayerToSetUserNameShallBe(String arg0) {
+
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+
+		if(arg0.equals("white")) {
+
+			assertEquals(quoridor.getCurrentGame().getWhitePlayer(), playertoselect.getNextPlayer());
+
+		}
+
+		else if(arg0.equals("black")){
+
+			assertEquals(quoridor.getCurrentGame().getBlackPlayer(), playertoselect.getNextPlayer());
+		}
+
+	}
+
+	private Direction stringToDirection(String direction){
+		switch (direction){
+			case "horizontal":{
+				return Direction.Horizontal;
+			}
+			case "vertical":{
+				return Direction.Vertical;
+			}
+			default:{
+				return null;
+			}
+		}
+	}
+
+	private boolean isWallMoveCandidateAtEdge(String side){
+	    Game game = ModelQuery.getCurrentGame();
+        switch(side){
+            case "left":{
+            	return game.getWallMoveCandidate().getTargetTile().getColumn() == 1;
+            }
+            case "right":{
+                return game.getWallMoveCandidate().getTargetTile().getColumn() == 8;
+            }
+            case "up":{
+                return game.getWallMoveCandidate().getTargetTile().getRow() == 1;
+            }
+            case "down":{
+                return game.getWallMoveCandidate().getTargetTile().getRow() == 8;
+            }
+        }
+        return false;
+    }
+
+	private void setupWallMoveCandidates(int row, int col, Direction direction) {
+		Player player1 = ModelQuery.getWhitePlayer();
+		Board board = ModelQuery.getBoard();
+		Game game = ModelQuery.getCurrentGame();
+		Wall wall = player1.getWall(3);
+
+		WallMove move = new WallMove(0, 1, player1, board.getTile((row - 1) * 9 + col - 1), game, direction, wall);
+		game.setWallMoveCandidate(move);
+	}
+
 
 }
