@@ -1,5 +1,4 @@
 package ca.mcgill.ecse223.quoridor.controllers;
-import ca.mcgill.ecse223.quoridor.WallGraph;
 import ca.mcgill.ecse223.quoridor.model.*;
 import java.util.*;
 
