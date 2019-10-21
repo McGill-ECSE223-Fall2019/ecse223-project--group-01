@@ -136,4 +136,68 @@ public class WallController {
         throw new UnsupportedOperationException();
 
     }
+
+    private static void initGraph(){
+        List<Wall> placedWalls = ModelQuery.getAllWallsOnBoard();
+
+        WallGraph graph = new WallGraph();
+        // create graph
+        for(int i =0 ; i<81; i++){
+            List<Integer> neighbors = getNeighbhors(i);
+            for( int neighbor: neighbors) {
+                graph.addEdge(i, neighbor);
+            }
+        }
+        // add cuts
+        for (Wall wall: placedWalls){
+            int[][] cuts = getWallCuts(wall);
+            graph.cutEdge(cuts[0][0],cuts[0][1]);
+            graph.cutEdge(cuts[1][0],cuts[1][1]);
+        }
+    }
+
+    private static List<Integer> getNeighbhors(int tile_index){
+        int row = Math.floorDiv(tile_index, 9);
+        int col = tile_index % 9;
+
+        ArrayList<Integer> neighbhors = new ArrayList();
+        if(row>0){
+            neighbhors.add(9*(row-1)+col);
+        }
+        if(row<8){
+            neighbhors.add(9*(row+1)+col);
+        }
+        if(col>0){
+            neighbhors.add(9*row + col-1);
+        }
+        if(col<8){
+            neighbhors.add(9*row + col+1);
+        }
+        return neighbhors;
+    }
+
+    private  static int[][] getWallCuts(Wall wall){
+        int[][] cuts= new int[2][2];
+        WallMove move = wall.getMove();
+        int row = move.getTargetTile().getRow() - 1;
+        int col = move.getTargetTile().getColumn() - 1;
+        Direction dir = wall.getMove().getWallDirection();
+
+        if(dir == Direction.Vertical){
+            cuts[0][0] = 9*(row+1)+col;
+            cuts[0][1] = 9*(row+1)+col+1;
+
+            cuts[1][0] = 9*(row+2)+col;
+            cuts[1][1] = 9*(row+2)+col+1;
+        }
+        else{
+            cuts[0][0] = 9*(row)+col+1;
+            cuts[0][1] = 9*(row+1)+col+1;
+
+            cuts[1][0] = 9*(row)+col+2;
+            cuts[1][1] = 9*(row+1)+col+2;
+        }
+
+        return cuts;
+    }
 }
