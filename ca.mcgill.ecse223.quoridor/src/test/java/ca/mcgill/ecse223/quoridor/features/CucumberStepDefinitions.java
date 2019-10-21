@@ -572,8 +572,9 @@ public class CucumberStepDefinitions {
 	@When("I release the wall in my hand")
 	public void iReleaseTheWallInMyHand() {
 		WallMove move = ModelQuery.getWallMoveCandidate();
+		Player player = ModelQuery.getWhitePlayer();
 		try{
-			WallController.dropWall(move);
+			WallController.dropWall(move, player);
 		} catch (UnsupportedOperationException e) {
 			throw new PendingException();
 		}
@@ -617,8 +618,7 @@ public class CucumberStepDefinitions {
 		assertEquals(game.getCurrentPosition().getWhiteWallsOnBoard().size(), 2);
 
 		// White should have less walls in stock
-        assertEquals(game.getCurrentPosition().getWhiteWallsInStock().size(), 8);
-        assertEquals(game.getWhitePlayer().getWalls().size(), 8);
+        assertEquals(9, game.getCurrentPosition().getWhiteWallsInStock().size());
 
 	}
 

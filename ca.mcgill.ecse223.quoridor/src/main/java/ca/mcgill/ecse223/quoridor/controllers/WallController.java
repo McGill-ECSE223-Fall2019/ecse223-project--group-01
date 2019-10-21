@@ -1,7 +1,7 @@
 package ca.mcgill.ecse223.quoridor.controllers;
+import ca.mcgill.ecse223.quoridor.WallGraph;
 import ca.mcgill.ecse223.quoridor.model.*;
-
-import java.util.List;
+import java.util.*;
 
 public class WallController {
 
@@ -21,7 +21,6 @@ public class WallController {
         if(row<1 || row > 8 || col < 1 || col > 8){
             return false;
         }
-        List tiles = ModelQuery.getTiles();
         Tile target = ModelQuery.getTile(row,col);
         move.setTargetTile(target);
         return true;
@@ -71,8 +70,46 @@ public class WallController {
      * @return outcome of operation
      * @throws UnsupportedOperationException
      */
-    public static Boolean dropWall(WallMove move) throws UnsupportedOperationException{
-        throw new UnsupportedOperationException();
+    public static Boolean dropWall(WallMove move, Player player) throws UnsupportedOperationException{
+        List<Wall> placedWalls = ModelQuery.getAllWallsOnBoard();
+
+        // validate no overlap
+        for (Wall wall: placedWalls){
+            if(compareWalls(move,wall.getMove())){
+                return false;
+            }
+        }
+
+        ModelQuery.getCurrentGame().addMove(move);
+        ModelQuery.getCurrentGame().setWallMoveCandidate(null);
+
+        if(player.equals(ModelQuery.getWhitePlayer())) {
+            ModelQuery.getCurrentGame().getCurrentPosition().removeWhiteWallsInStock(move.getWallPlaced());
+            ModelQuery.getCurrentGame().getCurrentPosition().addWhiteWallsOnBoard(move.getWallPlaced());
+            SwitchPlayerController.SwitchActivePlayer("white");
+        }else{
+            ModelQuery.getCurrentGame().getCurrentPosition().removeBlackWallsInStock(move.getWallPlaced());
+            ModelQuery.getCurrentGame().getCurrentPosition().addBlackWallsOnBoard(move.getWallPlaced());
+            SwitchPlayerController.SwitchActivePlayer("black");
+        }
+
+        return true;
+    }
+
+    // Return true if the wall do not overlap
+    private static Boolean compareWalls(WallMove wall1, WallMove wall2){
+        if( wall1.getWallDirection() == Direction.Vertical && wall2.getWallDirection() == Direction.Vertical){
+            return Math.abs(wall1.getTargetTile().getRow() - wall2.getTargetTile().getRow()) > 1;
+        }
+        else if(wall1.getWallDirection() == Direction.Horizontal && wall2.getWallDirection() == Direction.Horizontal){
+            return Math.abs(wall1.getTargetTile().getColumn() - wall2.getTargetTile().getColumn()) > 1;
+        }
+        else if(wall1.getWallDirection() == Direction.Horizontal && wall2.getWallDirection() == Direction.Vertical){
+            return wall2.getTargetTile().getColumn() == wall1.getTargetTile().getColumn()-1 && wall2.getTargetTile().getRow() == wall1.getTargetTile().getRow()-1;
+        }
+        else{
+            return wall1.getTargetTile().getColumn() == wall2.getTargetTile().getColumn()+1 && wall1.getTargetTile().getRow() == wall2.getTargetTile().getRow()-1;
+        }
     }
 
     /**

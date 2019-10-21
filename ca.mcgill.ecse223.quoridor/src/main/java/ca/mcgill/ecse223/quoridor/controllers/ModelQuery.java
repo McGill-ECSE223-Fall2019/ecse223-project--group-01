@@ -2,6 +2,7 @@ package ca.mcgill.ecse223.quoridor.controllers;
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 import ca.mcgill.ecse223.quoridor.model.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ModelQuery {
@@ -42,4 +43,26 @@ public class ModelQuery {
         int index = (row - 1) * 9 + col - 1;
         return QuoridorApplication.getQuoridor().getBoard().getTile(index);
     }
+
+    public static List<Wall> getAllWallsOnBoard(){
+        List<Wall> whiteWalls = ModelQuery.getWhiteWallsOnBoard();
+        List<Wall> blackWalls = ModelQuery.getBlackWallsOnBoard();
+
+        List<Wall> placedWalls = new ArrayList<>();
+        placedWalls.addAll(whiteWalls);
+        placedWalls.addAll(blackWalls);
+
+        return placedWalls;
+    }
+
+    public static List<Wall> getWhiteWallsOnBoard(){
+        return QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getWhiteWallsOnBoard();
+    }
+
+    public static List<Wall> getBlackWallsOnBoard(){
+        return QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getBlackWallsOnBoard();
+    }
+
+
+
 }
