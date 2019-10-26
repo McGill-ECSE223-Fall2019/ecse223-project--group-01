@@ -11,6 +11,7 @@ import ca.mcgill.ecse223.quoridor.controllers.*;
 import ca.mcgill.ecse223.quoridor.model.*;
 import ca.mcgill.ecse223.quoridor.model.Game.GameStatus;
 import ca.mcgill.ecse223.quoridor.model.Game.MoveMode;
+import com.sun.tools.internal.xjc.model.Model;
 import cucumber.api.PendingException;
 import io.cucumber.java.After;
 import io.cucumber.java.en.And;
@@ -26,6 +27,9 @@ public class CucumberStepDefinitions {
 	private boolean fileInSystem;
 	private boolean fileChanged;
 	private boolean displayError;
+	private boolean whitePlayerChooseName;
+	private boolean blackPlayerChooseName;
+	private boolean totalTimeIsSet;
 
 	// ***********************************************
 	// Background step definitions
@@ -105,7 +109,13 @@ public class CucumberStepDefinitions {
 	public void iHaveAWallInMyHandOverTheBoard() throws Throwable {
 		// GUI-related feature -- TODO for later
 	}
-
+	
+	@Given("^A new game is initializing$")
+	public void aNewGameIsInitializing() throws Throwable {
+		initQuoridorAndBoard();
+		ArrayList<Player> players = createUsersAndPlayers("user1", "user2");
+		new Game(GameStatus.Initializing, MoveMode.PlayerMove, QuoridorApplication.getQuoridor());
+	}
 
 	// ***********************************************
 	// Scenario and scenario outline step definitions
@@ -344,25 +354,18 @@ public class CucumberStepDefinitions {
 	 */
 	@When("A new game is being initialized")
 	public void aNewGameIsBeingInitialized() {
-		try{
-			StartNewGameController.initializeGame();
-		} catch (UnsupportedOperationException e) {
-			throw new PendingException();
-		}
+		StartNewGameController.initializeGame();
 	}
 
 	/**
 	 * @author Fulin Huang
+	 *
 	 */
 	@And("White player chooses a username")
 	public void whitePlayerChoosesAUsername() {
-		try {
-			StartNewGameController.whitePlayerChoosesAUsername();
-
-		} catch (UnsupportedOperationException e) {
-			throw new PendingException();
-		}
-
+		String username = ModelQuery.getCurrentGame().getWhitePlayer().getUser().getName();
+		StartNewGameController.whitePlayerChoosesAUsername(username);
+		whitePlayerChooseName = true;
 	}
 
 	/**
@@ -370,23 +373,18 @@ public class CucumberStepDefinitions {
 	 */
 	@And("Black player chooses a username")
 	public void blackPlayerChoosesAUsername() {
-		try {
-			StartNewGameController.blackPlayerChooseAUsername();
-		} catch (UnsupportedOperationException e) {
-			throw new PendingException();
-		}
+		String username = ModelQuery.getCurrentGame().getBlackPlayer().getUser().getName();
+		StartNewGameController.blackPlayerChooseAUsername(username);
+		blackPlayerChooseName = true;
 	}
 
 	/**
 	 * @author Fulin Huang
 	 */
 	@And("Total thinking time is set")
-	public void totalThinkingTimeIsSet() {
-		try {
-			StartNewGameController.setTotalThinkingTime();
-		} catch (UnsupportedOperationException e) {
-			throw new PendingException();
-		}
+	public void totalThinkingTimeIsSet(int minutes, int seconds) {
+		StartNewGameController.setTotalThinkingTime(minutes, seconds);
+		totalTimeIsSet = true;
 	}
 
 	/**
@@ -395,8 +393,10 @@ public class CucumberStepDefinitions {
 	@Then("The game shall become ready to start")
 	public void theGameShallBecomeReadyToStart() {
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
+		assertEquals(true, whitePlayerChooseName);
+		assertEquals(true, blackPlayerChooseName);
+		assertEquals(true, totalTimeIsSet);
 		assertEquals(GameStatus.ReadyToStart, quoridor.getCurrentGame().getGameStatus());
-
 	}
 
 	/*Scenario: Start clock */
@@ -414,11 +414,7 @@ public class CucumberStepDefinitions {
 	 */
 	@When("I start the clock")
 	public void iStartTheClock() {
-		try {
-			StartNewGameController.startTheClock();
-		} catch (UnsupportedOperationException e) {
-			throw new PendingException();
-		}
+		StartNewGameController.startTheClock();
 	}
 
 	/**
@@ -441,28 +437,22 @@ public class CucumberStepDefinitions {
 
 	/*set TotalThinkingTime*/
 
-
 	/**
 	 * @author Fulin Huang
 	 */
-	@Given("A new game is initializing")
-	public void aNewGameIsInitializing() {
-		initQuoridorAndBoard();
-		ArrayList<Player> createUsersAndPlayers = createUsersAndPlayers("user1", "user2");
-		createAndInitializeGame(createUsersAndPlayers);
-	}
+//	@Given("A new game is initializing")
+//	public void aNewGameIsInitializing() {
+//		initQuoridorAndBoard();
+//		ArrayList<Player> createUsersAndPlayers = createUsersAndPlayers("user1", "user2");
+//		createAndInitializeGame(createUsersAndPlayers);
+//	}
 
 	/**
 	 * @author Fulin Huang
 	 */
 	@When("{int}:{int} is set as the thinking time")
 	public void minSecIsSetAsTheThinkingTime(int minutes, int seconds) {
-		try {
-			StartNewGameController.setTotalThinkingTime(minutes, seconds);
-		} catch (UnsupportedOperationException e) {
-			throw new PendingException();
-		}
-
+		StartNewGameController.setThinkingTime(minutes, seconds);
 	}
 
 	/**
@@ -1337,7 +1327,7 @@ public class CucumberStepDefinitions {
 
 	private void createAndInitializeGame(ArrayList<Player> players ) {
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
-		Game game = new Game(GameStatus.Initializing, MoveMode.PlayerMove, players.get(0), players.get(1), quoridor);
+		Game game = new Game(GameStatus.Initializing, MoveMode.PlayerMove, quoridor);
 	}
 
 	private void createAndReadyToStartGame() {
@@ -1347,7 +1337,7 @@ public class CucumberStepDefinitions {
 		int totalThinkingTime = 180;
 		Player player1 = new Player(new Time(totalThinkingTime), user1, 9, Direction.Horizontal);
 		Player player2 = new Player(new Time(totalThinkingTime), user2, 1, Direction.Horizontal);
-		Game game = new Game(GameStatus.ReadyToStart, MoveMode.PlayerMove, player1, player2, quoridor);
+		Game game = new Game(GameStatus.ReadyToStart, MoveMode.PlayerMove, quoridor);
 	}
 
 
@@ -1358,8 +1348,10 @@ public class CucumberStepDefinitions {
 		// positions
 		Tile player1StartPos = quoridor.getBoard().getTile(36);
 		Tile player2StartPos = quoridor.getBoard().getTile(44);
-
-		Game game = new Game(GameStatus.Running, MoveMode.PlayerMove, players.get(0), players.get(1), quoridor);
+		
+		Game game = new Game(GameStatus.Running, MoveMode.PlayerMove, quoridor);
+		game.setWhitePlayer(players.get(0));
+		game.setBlackPlayer(players.get(1));
 
 		PlayerPosition player1Position = new PlayerPosition(quoridor.getCurrentGame().getWhitePlayer(), player1StartPos);
 		PlayerPosition player2Position = new PlayerPosition(quoridor.getCurrentGame().getBlackPlayer(), player2StartPos);
