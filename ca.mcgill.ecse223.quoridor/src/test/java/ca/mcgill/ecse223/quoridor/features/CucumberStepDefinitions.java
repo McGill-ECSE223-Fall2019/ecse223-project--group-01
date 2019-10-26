@@ -105,13 +105,7 @@ public class CucumberStepDefinitions {
 	public void iHaveAWallInMyHandOverTheBoard() throws Throwable {
 		// GUI-related feature -- TODO for later
 	}
-	
-	@Given("^A new game is initializing$")
-	public void aNewGameIsInitializing() throws Throwable {
-		initQuoridorAndBoard();
-		ArrayList<Player> players = createUsersAndPlayers("user1", "user2");
-		new Game(GameStatus.Initializing, MoveMode.PlayerMove, QuoridorApplication.getQuoridor());
-	}
+
 
 	// ***********************************************
 	// Scenario and scenario outline step definitions
@@ -1343,7 +1337,7 @@ public class CucumberStepDefinitions {
 
 	private void createAndInitializeGame(ArrayList<Player> players ) {
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
-		Game game = new Game(GameStatus.Initializing, MoveMode.PlayerMove, players.get(0), players.get(1), quoridor);
+		Game game = new Game(GameStatus.Initializing, MoveMode.PlayerMove, quoridor);
 	}
 
 	private void createAndReadyToStartGame() {
@@ -1353,7 +1347,7 @@ public class CucumberStepDefinitions {
 		int totalThinkingTime = 180;
 		Player player1 = new Player(new Time(totalThinkingTime), user1, 9, Direction.Horizontal);
 		Player player2 = new Player(new Time(totalThinkingTime), user2, 1, Direction.Horizontal);
-		Game game = new Game(GameStatus.ReadyToStart, MoveMode.PlayerMove, player1, player2, quoridor);
+		Game game = new Game(GameStatus.ReadyToStart, MoveMode.PlayerMove, quoridor);
 	}
 
 
