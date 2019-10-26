@@ -1,3 +1,7 @@
+plugins{
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.0.8'
+}
 apply plugin: 'java'
 //apply plugin: 'junit-platform-gradle-plugin'
 sourceCompatibility = 8
@@ -20,6 +24,10 @@ dependencies {
     testRuntimeOnly "org.junit.vintage:junit-vintage-engine:5.5.0"
 }
 
+javafx {
+    version = "13"
+    modules = [ 'javafx.controls' ]
+}
 test {
     useJUnitPlatform()
 }
