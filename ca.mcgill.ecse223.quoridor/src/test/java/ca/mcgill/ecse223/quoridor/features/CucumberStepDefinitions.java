@@ -507,8 +507,9 @@ public class CucumberStepDefinitions {
 	public void iTryToMoveTheWallSide(String side) {
 		Game game = ModelQuery.getCurrentGame();
 		WallMove move = game.getWallMoveCandidate();
+		boolean outcome;
 		try {
-			WallController.shiftWall(side, move);
+			outcome = WallController.shiftWall(side, move);
 		} catch (UnsupportedOperationException e) {
 			throw new PendingException();
 		}
@@ -530,7 +531,6 @@ public class CucumberStepDefinitions {
 		Game game = ModelQuery.getCurrentGame();
 
 		Direction dir = this.stringToDirection(direction);
-
 		assertEquals(game.getWallMoveCandidate().getTargetTile().getRow(), nrow);
 		assertEquals(game.getWallMoveCandidate().getTargetTile().getColumn(), ncol);
 		assertEquals(game.getWallMoveCandidate().getWallDirection(), dir);
@@ -572,8 +572,9 @@ public class CucumberStepDefinitions {
 	@When("I release the wall in my hand")
 	public void iReleaseTheWallInMyHand() {
 		WallMove move = ModelQuery.getWallMoveCandidate();
+		Player player = ModelQuery.getWhitePlayer();
 		try{
-			WallController.dropWall(move);
+			WallController.dropWall(move, player);
 		} catch (UnsupportedOperationException e) {
 			throw new PendingException();
 		}
@@ -617,8 +618,7 @@ public class CucumberStepDefinitions {
 		assertEquals(game.getCurrentPosition().getWhiteWallsOnBoard().size(), 2);
 
 		// White should have less walls in stock
-        assertEquals(game.getCurrentPosition().getWhiteWallsInStock().size(), 8);
-        assertEquals(game.getWhitePlayer().getWalls().size(), 8);
+        assertEquals(9, game.getCurrentPosition().getWhiteWallsInStock().size());
 
 	}
 
@@ -644,9 +644,14 @@ public class CucumberStepDefinitions {
 	/**
 	 * @author Tritin Truong
 	 */
+	@Then("I shall be notified that my move is illegal")
+	public void iShallBeNotifiedThatMyWallMoveIsIllegal() {
+		// TODO GUI step
+	}
+
+
 	@Then("I shall be notified that my wall move is invalid")
 	public void iShallBeNotifiedThatMyWallMoveIsInvalid() {
-		// TODO GUI step
 	}
 
 	/**
@@ -1332,7 +1337,7 @@ public class CucumberStepDefinitions {
 
 	private void createAndInitializeGame(ArrayList<Player> players ) {
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
-		Game game = new Game(GameStatus.Initializing, MoveMode.PlayerMove, players.get(0), players.get(1), quoridor);
+		Game game = new Game(GameStatus.Initializing, MoveMode.PlayerMove, quoridor);
 	}
 
 	private void createAndReadyToStartGame() {
@@ -1342,7 +1347,7 @@ public class CucumberStepDefinitions {
 		int totalThinkingTime = 180;
 		Player player1 = new Player(new Time(totalThinkingTime), user1, 9, Direction.Horizontal);
 		Player player2 = new Player(new Time(totalThinkingTime), user2, 1, Direction.Horizontal);
-		Game game = new Game(GameStatus.ReadyToStart, MoveMode.PlayerMove, player1, player2, quoridor);
+		Game game = new Game(GameStatus.ReadyToStart, MoveMode.PlayerMove, quoridor);
 	}
 
 
@@ -1353,8 +1358,10 @@ public class CucumberStepDefinitions {
 		// positions
 		Tile player1StartPos = quoridor.getBoard().getTile(36);
 		Tile player2StartPos = quoridor.getBoard().getTile(44);
-
-		Game game = new Game(GameStatus.Running, MoveMode.PlayerMove, players.get(0), players.get(1), quoridor);
+		
+		Game game = new Game(GameStatus.Running, MoveMode.PlayerMove, quoridor);
+		game.setWhitePlayer(players.get(0));
+		game.setBlackPlayer(players.get(1));
 
 		PlayerPosition player1Position = new PlayerPosition(quoridor.getCurrentGame().getWhitePlayer(), player1StartPos);
 		PlayerPosition player2Position = new PlayerPosition(quoridor.getCurrentGame().getBlackPlayer(), player2StartPos);
