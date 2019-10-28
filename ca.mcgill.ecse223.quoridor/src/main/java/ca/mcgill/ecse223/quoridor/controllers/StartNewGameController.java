@@ -2,7 +2,7 @@ package ca.mcgill.ecse223.quoridor.controllers;
 
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 import ca.mcgill.ecse223.quoridor.model.*;
-import com.sun.tools.internal.xjc.model.Model;
+
 
 import java.sql.Time;
 import java.util.ArrayList;
@@ -67,7 +67,7 @@ public class StartNewGameController {
             black_user = UserController.selectExistingUsername(username);
             blackPlayerChooseName = true;
         } else {
-            black_user = new UserController(username);
+            black_user = UserController.newUsername(username);
             blackPlayerChooseName = true;
         }
         Player player = new Player(new Time(90), black_user, 1, Direction.Vertical);
