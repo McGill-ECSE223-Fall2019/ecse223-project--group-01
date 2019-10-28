@@ -49,7 +49,7 @@ public class StartNewGameController {
         }
         Player player = new Player(new Time(90), white_user, 9, Direction.Horizontal);
         ModelQuery.getCurrentGame().setWhitePlayer(player); //set White player
-        player.setUser(white_user);
+        ModelQuery.getWhitePlayer().setUser(white_user);
         isReadyToStart(); //check if white and black player chose name and if total thinking time is set
     }
 
@@ -72,7 +72,7 @@ public class StartNewGameController {
         }
         Player player = new Player(new Time(90), black_user, 1, Direction.Vertical);
         ModelQuery.getCurrentGame().setBlackPlayer(player);
-        player.setUser(black_user);
+        ModelQuery.getBlackPlayer().setUser(black_user);
         isReadyToStart();  //check if white and black player chose name and if total thinking time is set
     }
 
@@ -89,12 +89,10 @@ public class StartNewGameController {
     public static void setTotalThinkingTime (int minutes, int seconds) {
         //total thinking time is able to set only if players are existed
         if (whitePlayerChooseName && blackPlayerChooseName) {
-          Player whitePlayer = ModelQuery.getWhitePlayer();
-          Player blackPlayer = ModelQuery.getBlackPlayer();
 
           Time totalThinkingTime = setThinkingTime(minutes, seconds);   //set total thinking time
-          whitePlayer.setRemainingTime(totalThinkingTime);  //set total thinking time for the white player
-          blackPlayer.setRemainingTime(totalThinkingTime);  //set total thinking time for the black player
+          ModelQuery.getWhitePlayer().setRemainingTime(totalThinkingTime);  //set total thinking time for the white player
+          ModelQuery.getBlackPlayer().setRemainingTime(totalThinkingTime);  //set total thinking time for the black player
         }
 
         isReadyToStart();
