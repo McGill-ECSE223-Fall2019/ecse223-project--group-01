@@ -5,9 +5,8 @@ import ca.mcgill.ecse223.quoridor.model.*;
 
 
 import java.sql.Time;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class StartNewGameController {
 
@@ -15,6 +14,10 @@ public class StartNewGameController {
     private static boolean whitePlayerChooseName = false;
     private static boolean blackPlayerChooseName = false;
     private static boolean thinkingTimeIsSet = false;
+    private static long millis;
+    private static Timer timer;
+    private static long timeToSet;
+
 
     public StartNewGameController(){};
 
@@ -32,7 +35,7 @@ public class StartNewGameController {
      * @Author Fulin Huang
      *
      * White player chooses a username by either creating a new name or by choosing
-     * from a existing name
+     * from an existing name list
      *
      * @param username name of the white user
      */
@@ -47,9 +50,11 @@ public class StartNewGameController {
             white_user = UserController.newUsername(username);
             whitePlayerChooseName = true;
         }
-        Player player = new Player(new Time(90), white_user, 9, Direction.Horizontal);
+        int tempThinkingTime = 90;
+        Player player = new Player(new Time(tempThinkingTime), white_user, 9, Direction.Horizontal);
         ModelQuery.getCurrentGame().setWhitePlayer(player); //set White player
         ModelQuery.getWhitePlayer().setUser(white_user);
+
         isReadyToStart(); //check if white and black player chose name and if total thinking time is set
     }
 
@@ -57,7 +62,7 @@ public class StartNewGameController {
      * @Author Fulin Huang
      *
      * Black player chooses a username by either choosing creating a new game or
-     * by choosing from a existed name
+     * by choosing from an existing name list
      *
      * @param username name of the black user
      */
@@ -70,9 +75,11 @@ public class StartNewGameController {
             black_user = UserController.newUsername(username);
             blackPlayerChooseName = true;
         }
-        Player player = new Player(new Time(90), black_user, 1, Direction.Vertical);
+        int tempThinkingTime = 90;
+        Player player = new Player(new Time(tempThinkingTime), black_user, 1, Direction.Vertical);
         ModelQuery.getCurrentGame().setBlackPlayer(player);
         ModelQuery.getBlackPlayer().setUser(black_user);
+
         isReadyToStart();  //check if white and black player chose name and if total thinking time is set
     }
 
@@ -82,17 +89,14 @@ public class StartNewGameController {
      * Attempts to set total thinking time for each player to ensure
      * that a game does not last forever
      *
-     * @param minutes how much minutes that the player want to set
-     * @param seconds how much seconds that the player want to set
+     * @param minutes duration that the player wants to set
+     * @param seconds duration that the player wants to set
      *
      */
     public static void setTotalThinkingTime (int minutes, int seconds) {
         //total thinking time is able to set only if players are existed
         if (whitePlayerChooseName && blackPlayerChooseName) {
-
-          Time totalThinkingTime = setThinkingTime(minutes, seconds);   //set total thinking time
-          ModelQuery.getWhitePlayer().setRemainingTime(totalThinkingTime);  //set total thinking time for the white player
-          ModelQuery.getBlackPlayer().setRemainingTime(totalThinkingTime);  //set total thinking time for the black player
+            setThinkingTime(minutes, seconds);   //set total thinking time
         }
 
         isReadyToStart();
@@ -102,16 +106,29 @@ public class StartNewGameController {
      * @Author Fulin Huang
      *
      * Start the clock once the game is "ReadyToStart"
+     * Initialize board if the board is not yet been initialized
      * then set the game status to be "Running"
      *
      */
     public static void startTheClock() {
-        BoardController.initializeBoard();
+        //set up timer
+        int delay = 1000;
+        int period = 1000;
+        timer = new Timer();
+        timeToSet = millis / 1000;  //convert to seconds
+        timer.scheduleAtFixedRate(new TimerTask() {
+            public void run () {
+                setInterval(); //timer count down
+                long minutes = TimeUnit.MILLISECONDS.toMinutes(timeToSet); //show it on GUI
+                long seconds = TimeUnit.MILLISECONDS.toSeconds(timeToSet);  //show it on GUI
+            }
+        }, delay, period);
+        //initialize board
+        if (ModelQuery.getBoard()== null){
+            BoardController.initializeBoard();
+        }
+        //change game status
         ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.Running);
-        //HOW TO START THE CLOCK??
-        // TODO call board
-        // TODO set game status to running
-        // TODO start the clock
 
     }
 
@@ -124,20 +141,21 @@ public class StartNewGameController {
      * @param seconds how much seconds that the usr want to set
      */
     public static Time setThinkingTime (int minutes, int seconds) {
-        long millis = minutes * 60 * 1000 + seconds * 1000;
+        millis = minutes * 60 * 1000 + seconds * 1000;
         Date date = new Date();
         long currentMillis = date.getTime();
         Time totalThinkingTime = new Time(millis+currentMillis);
-
+        ModelQuery.getWhitePlayer().setRemainingTime(totalThinkingTime);
+        ModelQuery.getBlackPlayer().setRemainingTime(totalThinkingTime);
         return totalThinkingTime;
     }
 
     /**
      * @Author Fulin Huang
      *
-     * This method checks if white player choose name, black player chooose name,
+     * This method checks if white player choose name, black player choose name,
      * and total thinking time is set.
-     * If they all set, then the game state will change to "ReadyToStart"
+     * If they are all set, then the game state will update to "ReadyToStart"
      *
      */
     private static void isReadyToStart(){
@@ -148,10 +166,10 @@ public class StartNewGameController {
 
     /**
      * @Author Fulin Huang
-     * This method checks if the username exist
+     * This method checks if the username exists
      *
      * @param username name of a player
-     * @return a boolean to indicate if the username exist
+     * @return a boolean to indicate if the username exists
      *
      */
     private static boolean usernameExists(String username) {
@@ -163,6 +181,20 @@ public class StartNewGameController {
             }
         }
         return nameExist;
+    }
+
+    /**
+     * @Author Fulin Huang
+     *
+     * This method counts down the timer and stop the timer
+     * when it counts to zero
+     *
+     * @return The remaining time in seconds
+     */
+    private static final long setInterval() {
+        if (timeToSet == 0)
+            timer.cancel();
+        return --timeToSet;
     }
 
 }

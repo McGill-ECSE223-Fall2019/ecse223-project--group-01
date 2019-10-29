@@ -114,7 +114,9 @@ public class CucumberStepDefinitions {
 	public void aNewGameIsInitializing() throws Throwable {
 		initQuoridorAndBoard();
 		ArrayList<Player> players = createUsersAndPlayers("user1", "user2");
-		new Game(GameStatus.Initializing, MoveMode.PlayerMove, QuoridorApplication.getQuoridor());
+		Game game = new Game(GameStatus.Initializing, MoveMode.PlayerMove, QuoridorApplication.getQuoridor());
+		game.setWhitePlayer(players.get(0));
+		game.setBlackPlayer(players.get(1));
 	}
 
 	// ***********************************************
@@ -465,8 +467,8 @@ public class CucumberStepDefinitions {
 		Date date = new Date();
 		long currentMillis = date.getTime();
 		Time time = new Time(millis+currentMillis);
-		assertEquals(time, quoridor.getCurrentGame().getBlackPlayer().getRemainingTime().getTime());
-		assertEquals(time, quoridor.getCurrentGame().getWhitePlayer().getRemainingTime().getTime());
+		assertTrue(time.equals(quoridor.getCurrentGame().getBlackPlayer().getRemainingTime()));
+		assertTrue(time.equals(quoridor.getCurrentGame().getWhitePlayer().getRemainingTime()));
 
 	}
 
