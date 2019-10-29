@@ -270,8 +270,9 @@ public class CucumberStepDefinitions {
 	public void theUserInitiatesToSaveTheGameWithNameFilename(String filename) {
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
 		GamePosition gameposition = quoridor.getCurrentGame().getCurrentPosition();
+		Player currentplayer = quoridor.getCurrentGame().getWhitePlayer();
 		try {
-			PositionController.saveGame(filename, gameposition);
+			PositionController.saveGame(filename, currentplayer, gameposition);
 		} catch(java.lang.UnsupportedOperationException e){
 			throw new PendingException();
 		}

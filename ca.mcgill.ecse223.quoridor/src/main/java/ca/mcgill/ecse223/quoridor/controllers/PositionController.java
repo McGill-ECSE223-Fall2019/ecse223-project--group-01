@@ -2,7 +2,6 @@ package ca.mcgill.ecse223.quoridor.controllers;
 
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 import ca.mcgill.ecse223.quoridor.model.*;
-
 import java.io.*;
 import java.util.List;
 
@@ -22,14 +21,16 @@ public class PositionController {
     /**
      * Attempts to create or overwrite a savefile,
      * that will contain the positions of the current game, into a filesystem.
-     * @param filename  the name of the savefile
-     * @param position  the position of Pawns/Walls
-     * @return true     the game saved correctly
-     *         false    the game saved incorrectly.
+     * @param filename      the name of the savefile
+     * @param currentPlayer the current player when initializing the save feature
+     * @param position      the position of Pawns/Walls
+     * @return true         the game saved correctly
+     *         false        the game saved incorrectly.
      * @throws java.lang.UnsupportedOperationException
      */
-    public static boolean saveGame(String filename, GamePosition position) throws java.lang.UnsupportedOperationException {
+    public static boolean saveGame(String filename, Player currentPlayer, GamePosition position) throws java.lang.UnsupportedOperationException {
         File file = new File(saveLocation + filename);
+        Quoridor quoridor = QuoridorApplication.getQuoridor();
         PrintWriter output;
         if (file.exists() && !file.isDirectory()){ //If the save file exists and is not a directory
             try {
@@ -48,18 +49,41 @@ public class PositionController {
             }
         }
 
-        //.Get the list of moves
-        List<Move> listOfMoves = QuoridorApplication.getQuoridor().getCurrentGame().getMoves();
+        if(currentPlayer.equals(ModelQuery.getWhitePlayer())){
+            int column = ModelQuery.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getColumn();
+            int row = ModelQuery.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getRow();
 
-        //.*Not going into for loop, because there is nothing in listOfMoves
-        for(int i = 0; i < listOfMoves.size(); i++){
-            Move move = listOfMoves.get(i);
-            int moveNumber = move.getRoundNumber();
-            move.getNextMove();
-            //.****Not finished yet
-            output.append("\n");
+            String whitePosition = String.valueOf(column + 96) + Integer.toString(row);
+            String playerInfo = String.format("W: %s,", whitePosition);
 
+            //Walls
+            List<Wall> listOfWalls = ModelQuery.getWhitePlayer().getWalls();
+            for(int i = 0; i < listOfWalls.size(); i++){
+                Wall wall = listOfWalls.get(i);
+
+            }
+
+            //After writing, do BlackPlayer
         }
+
+        else if(currentPlayer.equals(ModelQuery.getBlackPlayer())){
+            int column = ModelQuery.getCurrentGame().getCurrentPosition().getBlackPosition().getTile().getColumn();
+            int row = ModelQuery.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getRow();
+
+            String blackPosition = String.valueOf(column + 96) + Integer.toString(row);
+            String playerInfo = String.format("B: %s,", blackPosition);
+
+            //Walls
+
+            //After writing, do WhitePlayer
+        }
+
+        else{ //Something went wrong
+            return false;
+        }
+
+
+        output.append("\n");
         output.close();
         return true;
        }
@@ -85,17 +109,15 @@ public class PositionController {
     public static boolean validatePosition(GamePosition position) throws java.lang.UnsupportedOperationException{
         throw new java.lang.UnsupportedOperationException();
     }
+
+    public static String convertWallDir(int direction){
+        switch(direction){
+            case 0:
+                return "h";
+            case 1:
+                return "v";
+            default:
+                return null;
+        }
+    }
 }
-
-
-//Able to create/append to a file
-
-//PlayerPosition, GamePosition, WallPosition?
-// format: (round#). (whitePosition/whiteWall) (blackPosition/blackWall)
-
-//Q: Do each move require a .getPosition?
-//Q: how to loop through each move and store them using formatting
-
-//Either append after each turn to the associated round#
-//Append using formatting after each round
-//  Must determine if player put wall or player moved
