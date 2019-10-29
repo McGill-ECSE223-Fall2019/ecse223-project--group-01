@@ -1,7 +1,6 @@
 package ca.mcgill.ecse223.quoridor.controllers;
 import ca.mcgill.ecse223.quoridor.model.*;
 import ca.mcgill.ecse223.quoridor.model.Quoridor;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 
 
@@ -12,7 +11,7 @@ public class BoardController {
      *
      *
      * @return  outcome of operation
-     * @throws NotImplementedException
+     * @throws UnsupportedOperationException
      *
      * @author: Jason Lau
      */

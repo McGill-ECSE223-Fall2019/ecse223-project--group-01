@@ -787,7 +787,7 @@ public class CucumberStepDefinitions {
 	@When("I try to grab a wall from my stock")
 	public void iTryToGrabAWallFromMyStock() {
 		try {
-			WallController.grabWall();
+			WallController.grabWall(ModelQuery.getPlayerToMove());
 		} catch (UnsupportedOperationException e) {
 			throw new PendingException();
 		}
@@ -882,9 +882,10 @@ public class CucumberStepDefinitions {
 	 * @author Kate Ward
 	 */
 	@Then("The wall shall be rotated over the board to {string}")
-	public void theWallShallBeRotatedOverTheBoardToNewDir() {
+	public void theWallShallBeRotatedOverTheBoardToNewDir(String direction) {
 		//GUI TODO later
-		throw new PendingException();
+		Direction target = this.stringToDirection(direction);
+		assertEquals(target, ModelQuery.getWallMoveCandidate().getWallDirection());
 	}
 	/**
 	 * @author: Mark Zhu

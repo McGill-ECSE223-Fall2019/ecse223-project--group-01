@@ -1,7 +1,6 @@
 package ca.mcgill.ecse223.quoridor.controllers;
 
 import ca.mcgill.ecse223.quoridor.model.Player;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class UserController {
 
