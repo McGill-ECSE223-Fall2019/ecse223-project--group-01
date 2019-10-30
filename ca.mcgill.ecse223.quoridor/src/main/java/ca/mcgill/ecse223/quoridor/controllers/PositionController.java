@@ -54,16 +54,29 @@ public class PositionController {
             int row = ModelQuery.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getRow();
 
             String whitePosition = String.valueOf(column + 96) + Integer.toString(row);
-            String playerInfo = String.format("W: %s,", whitePosition);
+            String playerInfo = String.format("W: %s", whitePosition);
+            output.append(playerInfo);
 
             //Walls
-            List<Wall> listOfWalls = ModelQuery.getWhitePlayer().getWalls();
+            List<Wall> listOfWalls = ModelQuery.getWhiteWallsOnBoard();
             for(int i = 0; i < listOfWalls.size(); i++){
-                Wall wall = listOfWalls.get(i);
-
+                String wallPosition = writeWallInfo(i, listOfWalls);
+                output.append(wallPosition);
             }
+            output.append("\n");
 
-            //After writing, do BlackPlayer
+            column = ModelQuery.getCurrentGame().getCurrentPosition().getBlackPosition().getTile().getColumn();
+            row = ModelQuery.getCurrentGame().getCurrentPosition().getBlackPosition().getTile().getRow();
+
+            String blackPosition = String.valueOf(column + 96) + Integer.toString(row);
+            playerInfo = String.format("B: %s", blackPosition);
+            output.append(playerInfo);
+
+            listOfWalls = ModelQuery.getBlackWallsOnBoard();
+            for(int i = 0; i < listOfWalls.size(); i++){
+               String wallPosition = writeWallInfo(i, listOfWalls);
+                output.append(wallPosition);
+            }
         }
 
         else if(currentPlayer.equals(ModelQuery.getBlackPlayer())){
@@ -72,10 +85,27 @@ public class PositionController {
 
             String blackPosition = String.valueOf(column + 96) + Integer.toString(row);
             String playerInfo = String.format("B: %s,", blackPosition);
+            output.append(playerInfo);
 
-            //Walls
+            List<Wall> listOfWalls = ModelQuery.getBlackWallsOnBoard();
+            for(int i = 0; i < listOfWalls.size(); i++){
+                String wallPosition = writeWallInfo(i, listOfWalls);
+                output.append(wallPosition);
+            }
+            output.append("\n");
 
-            //After writing, do WhitePlayer
+            column = ModelQuery.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getColumn();
+            row = ModelQuery.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getRow();
+
+            String whitePosition = String.valueOf(column + 96) + Integer.toString(row);
+            playerInfo = String.format("B: %s", whitePosition);
+            output.append(playerInfo);
+
+            listOfWalls = ModelQuery.getWhiteWallsOnBoard();
+            for(int i = 0; i < listOfWalls.size(); i++){
+                String wallPosition = writeWallInfo(i, listOfWalls);
+                output.append(wallPosition);
+            }
         }
 
         else{ //Something went wrong
@@ -99,25 +129,28 @@ public class PositionController {
         throw new java.lang.UnsupportedOperationException();
     }
 
-    /**
-     * Validates the positions loaded.
-     * @param position  the positions that will be loaded
-     * @return true     the positions are valid
-     *         false    the positions are invalid
-     * @throws java.lang.UnsupportedOperationException
-     */
-    public static boolean validatePosition(GamePosition position) throws java.lang.UnsupportedOperationException{
-        throw new java.lang.UnsupportedOperationException();
-    }
-
-    public static String convertWallDir(int direction){
+    //.helper methods
+    private static String convertWallDir(Direction direction){
         switch(direction){
-            case 0:
+            case Horizontal:
                 return "h";
-            case 1:
+            case Vertical:
                 return "v";
             default:
                 return null;
         }
     }
+
+    private static String writeWallInfo(int index, List<Wall> listOfWalls){
+        Wall wall = listOfWalls.get(index);
+        Tile wallTile = wall.getMove().getTargetTile(); //gets the coordinate of the wall
+        String orientation = convertWallDir(wall.getMove().getWallDirection()); //gets the orientation of the wall
+        int wallRow = wallTile.getRow();
+        int wallCol = wallTile.getColumn();
+
+        //Wall save: ColumnRowDirection
+        String wallPosition = ", " + String.valueOf(wallCol + 96) + Integer.toString(wallRow) + orientation;
+        return wallPosition;
+    }
+
 }
