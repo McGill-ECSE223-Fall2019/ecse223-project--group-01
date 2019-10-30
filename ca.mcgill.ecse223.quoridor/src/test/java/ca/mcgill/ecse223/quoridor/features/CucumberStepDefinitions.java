@@ -124,7 +124,9 @@ public class CucumberStepDefinitions {
 	public void iInitiateToLoadASavedGameFilename(String filename) {
 		try {
 			PositionController.loadGame(filename);
-		}catch(java.lang.UnsupportedOperationException e){
+		}catch(java.lang.UnsupportedOperationException e) {
+			throw new PendingException();
+		}catch(java.io.IOException e){
 			throw new PendingException();
 		}
 	}
