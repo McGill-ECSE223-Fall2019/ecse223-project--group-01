@@ -44,6 +44,10 @@ public class PositionController {
     public static boolean loadGame(String filename) throws java.lang.UnsupportedOperationException, IOException {
         File saveFile = new File(saveLocation + filename);
         Quoridor quoridor = QuoridorApplication.getQuoridor();
+
+        //Make game running
+        StartNewGameController.initializeGame();
+
         if(saveFile.exists()){
             try {
                 FileReader fileReader = new FileReader(saveLocation + filename);
@@ -65,13 +69,28 @@ public class PositionController {
                         }
                         //.Set Player Positions
                         int[] playerCoord = posToInt(positionInfo[0]);
+
+                        //Validate position here
+                        ValidatePositionController.validatePawnPosition(playerCoord[1],playerCoord[0]);
+
                         Tile pos = new Tile(playerCoord[1],playerCoord[0],quoridor.getBoard()); //using Position --> integer
                         PlayerPosition playerPosition = new PlayerPosition(quoridor.getCurrentGame().getWhitePlayer(),pos);
                         quoridor.getCurrentGame().getCurrentPosition().setWhitePosition(playerPosition);
 
                         //.Set Player Walls
                         for(int i = 1; i < (categorySplit.length - 1); i++){
-                            //TODO: drop all the walls on the board
+                            int[] wallCoord = posToInt(categorySplit[i]);
+
+                            int moveNum = 1;
+                            int roundNum = 1;
+                            Player whitePlayer = ModelQuery.getWhitePlayer();
+                            Tile wallTile = new Tile(wallCoord[1], wallCoord[0], ModelQuery.getBoard());
+                            Game currentGame = ModelQuery.getCurrentGame();
+                            Direction wallDir = convertToDir(wallCoord[2]);
+                            Wall dropWall = ModelQuery.getWhitePlayer().getWall(i);
+
+                            WallMove wallmove = new WallMove(moveNum, roundNum,whitePlayer, wallTile, currentGame, wallDir, dropWall);
+                            WallController.dropWall(wallmove,ModelQuery.getWhitePlayer());
                         }
 
                     }
@@ -81,6 +100,10 @@ public class PositionController {
                         }
                         //.Set Player Positions
                         int[] playerCoord = posToInt(positionInfo[0]);
+
+                        //validate position here
+                        ValidatePositionController.validatePawnPosition(playerCoord[1],playerCoord[0]);
+
                         Tile pos = new Tile(playerCoord[1],playerCoord[0],quoridor.getBoard()); //using Position --> integer
                         PlayerPosition playerPosition = new PlayerPosition(quoridor.getCurrentGame().getBlackPlayer(),pos);
                         quoridor.getCurrentGame().getCurrentPosition().setBlackPosition(playerPosition);
@@ -88,6 +111,18 @@ public class PositionController {
                         //Set Player Walls
                         for(int i = 1; i < (categorySplit.length - 1); i++){
                             //TODO: drop all the walls on the board
+                            int[] wallCoord = posToInt(categorySplit[i]);
+
+                            int moveNum = 1;
+                            int roundNum = 1;
+                            Player blackPlayer = ModelQuery.getBlackPlayer();
+                            Tile wallTile = new Tile(wallCoord[1], wallCoord[0], ModelQuery.getBoard());
+                            Game currentGame = ModelQuery.getCurrentGame();
+                            Direction wallDir = convertToDir(wallCoord[2]);
+                            Wall dropWall = ModelQuery.getBlackPlayer().getWall(i);
+
+                            WallMove wallmove = new WallMove(moveNum, roundNum,blackPlayer, wallTile, currentGame, wallDir, dropWall);
+                            WallController.dropWall(wallmove,ModelQuery.getBlackPlayer());
                         }
                     }
                     else { //Faulty savePosition file
@@ -130,6 +165,16 @@ public class PositionController {
         throw new java.lang.UnsupportedOperationException();
     }
 
+    public static Direction convertToDir(int direction){
+        switch(direction){
+            case 0:
+                return Direction.Horizontal;
+            case 1:
+                return Direction.Vertical;
+            default:
+                return null;
+        }
+    }
 
     /**
      * Converts position information obtained from the file into integers
@@ -141,7 +186,7 @@ public class PositionController {
         //.Note [0]: always a letter, [1]: always a number
         char[] char_arr = playerPosition.toCharArray();
 
-        //.Note [0]: Column, [1]: Row
+        //.Note [0]: Column, [1]: Row, [2]: Wall direction
         int[] positionInt = new int[char_arr.length];
 
         //.Converting Column letter into integer
@@ -154,9 +199,16 @@ public class PositionController {
         //.Converting Row string into integer
         positionInt[1] = (int)char_arr[1];
 
+        //.Converting string into Direction
+        if(char_arr.length > 2){
+            if(char_arr[2] == 'h'){ //if wall is vertical
+                positionInt[2] = 0;
+            }
+            else{ //if wall is horizontal
+                positionInt[2] = 1;
+            }
+        }
+
         return positionInt;
     }
 }
-
-//TODO: Validating positions
-//TODO: Dropping walls and decrementing wallStock
