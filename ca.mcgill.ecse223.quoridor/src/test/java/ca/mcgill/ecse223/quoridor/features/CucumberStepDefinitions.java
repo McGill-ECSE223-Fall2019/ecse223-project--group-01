@@ -1059,9 +1059,9 @@ public class CucumberStepDefinitions {
 	public void whiteSPawnShallBeInItsInitialPosition() {
 
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
-		PlayerPosition whitePlayerPos =  new PlayerPosition(quoridor.getCurrentGame().getWhitePlayer(), quoridor.getBoard().getTile(36));
 
-		assertEquals(whitePlayerPos, quoridor.getCurrentGame().getCurrentPosition().getWhitePosition());
+
+		assertEquals(quoridor.getBoard().getTile(36), quoridor.getCurrentGame().getCurrentPosition().getWhitePosition().getTile());
 
 	}
 
@@ -1072,9 +1072,9 @@ public class CucumberStepDefinitions {
 	public void blackSPawnShallBeInItsInitialPosition() {
 
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
-		PlayerPosition blackPlayerPos =  new PlayerPosition(quoridor.getCurrentGame().getBlackPlayer(), quoridor.getBoard().getTile(44));
 
-		assertEquals(blackPlayerPos, quoridor.getCurrentGame().getCurrentPosition().getBlackPosition());
+
+		assertEquals(quoridor.getBoard().getTile(44), quoridor.getCurrentGame().getCurrentPosition().getBlackPosition().getTile());
 
 
 	}
@@ -1124,7 +1124,7 @@ public class CucumberStepDefinitions {
 
 // Feature 2 Provide or select user name
 
-	private Player playertoselect;
+	private Player playerToSelect;
 
 	/**
 	 * @author Jason Lau
@@ -1132,17 +1132,20 @@ public class CucumberStepDefinitions {
 	@Given("Next player to set user name is {string}")
 	public void nextPlayerToSetUserNameIs(String arg0) {
 
-
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
 
 		if(arg0.equals("white")){
 
-			playertoselect = quoridor.getCurrentGame().getWhitePlayer();
+//			User user = quoridor.getCurrentGame().getWhitePlayer().getUser();
+
+//			quoridor.getCurrentGame().getWhitePlayer().setUser(0));
+			playerToSelect = quoridor.getCurrentGame().getWhitePlayer();
+			playerToSelect.setNextPlayer(quoridor.getCurrentGame().getBlackPlayer());
 		}
 
 		else if(arg0.equals("black")){
-
-			playertoselect = quoridor.getCurrentGame().getBlackPlayer();
+			playerToSelect = quoridor.getCurrentGame().getBlackPlayer();
+			playerToSelect.setNextPlayer(quoridor.getCurrentGame().getWhitePlayer());
 		}
 	}
 
@@ -1151,6 +1154,8 @@ public class CucumberStepDefinitions {
 	 */
 	@And("There is existing user {string}")
 	public void thereIsExistingUser(String arg0) {
+
+		User user = QuoridorApplication.getQuoridor().addUser(arg0);
 
 		User.hasWithName(arg0);
 	}
@@ -1161,9 +1166,12 @@ public class CucumberStepDefinitions {
 	@When("The player selects existing {string}")
 	public void thePlayerSelectsExisting(String arg0) {
 		try {
-
-			Quoridor quoridor = QuoridorApplication.getQuoridor();
-			UserController.selectExistingUsername(playertoselect, arg0);
+			User user = UserController.selectExistingUsername(arg0);
+			if(playerToSelect.equals(ModelQuery.getWhitePlayer())){
+				ModelQuery.getWhitePlayer().setUser(user);
+			}else {
+				ModelQuery.getBlackPlayer().setUser(user);
+			}
 
 		}catch(UnsupportedOperationException e){
 			throw new PendingException();
@@ -1179,7 +1187,7 @@ public class CucumberStepDefinitions {
 
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
 
-		if( arg0.equals("white")){
+		if(arg0.equals("white")){
 
 			assertEquals(arg1, quoridor.getCurrentGame().getWhitePlayer().getUser().getName());
 		}
@@ -1208,7 +1216,12 @@ public class CucumberStepDefinitions {
 	public void thePlayerProvidesNewUserName(String arg0) {
 
 		try{
-			UserController.newUsername(playertoselect,arg0);
+			User user = UserController.newUsername(arg0);
+			if(playerToSelect.equals(ModelQuery.getWhitePlayer())){
+				ModelQuery.getWhitePlayer().setUser(user);
+			}else {
+				ModelQuery.getBlackPlayer().setUser(user);
+			}
 
 		}catch(UnsupportedOperationException e){
 
@@ -1245,13 +1258,13 @@ public class CucumberStepDefinitions {
 
 		if(arg0.equals("white")) {
 
-			assertEquals(quoridor.getCurrentGame().getWhitePlayer(), playertoselect.getNextPlayer());
+			assertEquals(quoridor.getCurrentGame().getWhitePlayer(), playerToSelect);
 
 		}
 
 		else if(arg0.equals("black")){
 
-			assertEquals(quoridor.getCurrentGame().getBlackPlayer(), playertoselect.getNextPlayer());
+			assertEquals(quoridor.getCurrentGame().getBlackPlayer(), playerToSelect);
 		}
 
 	}
@@ -1270,6 +1283,7 @@ public class CucumberStepDefinitions {
 			quoridor.delete();
 			quoridor = null;
 		}
+
 		for (int i = 0; i < 20; i++) {
 			Wall wall = Wall.getWithId(i);
 			if(wall != null) {
@@ -1339,6 +1353,9 @@ public class CucumberStepDefinitions {
 	private void createAndInitializeGame(ArrayList<Player> players ) {
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
 		Game game = new Game(GameStatus.Initializing, MoveMode.PlayerMove, quoridor);
+		game.setWhitePlayer(players.get(0));
+		game.setBlackPlayer(players.get(1));
+
 	}
 
 	private void createAndReadyToStartGame() {
@@ -1349,6 +1366,8 @@ public class CucumberStepDefinitions {
 		Player player1 = new Player(new Time(totalThinkingTime), user1, 9, Direction.Horizontal);
 		Player player2 = new Player(new Time(totalThinkingTime), user2, 1, Direction.Horizontal);
 		Game game = new Game(GameStatus.ReadyToStart, MoveMode.PlayerMove, quoridor);
+		game.setBlackPlayer(player2);
+		game.setWhitePlayer(player1);
 	}
 
 
