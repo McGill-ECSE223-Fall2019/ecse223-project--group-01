@@ -2,6 +2,7 @@ package ca.mcgill.ecse223.quoridor.controllers;
 import ca.mcgill.ecse223.quoridor.model.*;
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import ca.mcgill.ecse223.quoridor.controllers.ModelQuery;
 
 import java.util.List;
 
