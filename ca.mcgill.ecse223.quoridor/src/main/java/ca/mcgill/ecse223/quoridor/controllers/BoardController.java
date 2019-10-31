@@ -44,10 +44,10 @@ public class BoardController {
         ModelQuery.getCurrentGame().getCurrentPosition().setWhitePosition(whitePlayerPos);
         ModelQuery.getCurrentGame().getCurrentPosition().setBlackPosition(blackPlayerPos);
 
-        for(int i =0; i < 10; i++){
+        for(int i =1; i <= 10; i++){
             ModelQuery.getCurrentGame().getWhitePlayer().addWall(i);
         }
-        for(int j = 10; j < 20; j++) {
+        for(int j = 11; j <= 20; j++) {
             ModelQuery.getCurrentGame().getBlackPlayer().addWall(j);
         }
 
