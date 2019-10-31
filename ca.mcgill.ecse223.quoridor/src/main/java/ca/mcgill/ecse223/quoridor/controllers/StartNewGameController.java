@@ -27,6 +27,8 @@ public class StartNewGameController {
      * Initialize game and set game status to be initializing
      */
     public static void initializeGame()  {
+        ModelQuery.getCurrentGame().delete(); //delete the previous game
+
         Quoridor quoridor = QuoridorApplication.getQuoridor();
         game = new Game(Game.GameStatus.Initializing, Game.MoveMode.PlayerMove, quoridor);
     }
@@ -36,7 +38,6 @@ public class StartNewGameController {
      *
      * White player chooses a username by either creating a new name or by choosing
      * from an existing name list.
-     * Add ten walls to the player.
      *
      * @param username name of the white user
      */
@@ -56,12 +57,6 @@ public class StartNewGameController {
         ModelQuery.getCurrentGame().setWhitePlayer(player); //set White player
         ModelQuery.getWhitePlayer().setUser(white_user);
 
-        //add ten walls to black player (wall 0 to 9)
-        for (int i = 0; i < player.maximumNumberOfWalls(); i++) {
-            Wall wall = new Wall(i, player);
-            player.addWall(wall);
-        }
-
         isReadyToStart(); //check if white and black player chose name and if total thinking time is set
     }
 
@@ -70,7 +65,6 @@ public class StartNewGameController {
      *
      * Black player chooses a username by either choosing creating a new game or
      * by choosing from an existing name list.
-     * Add ten walls to the player.
      *
      * @param username name of the black user
      */
@@ -87,12 +81,6 @@ public class StartNewGameController {
         Player player = new Player(new Time(tempThinkingTime), black_user, 1, Direction.Vertical);
         ModelQuery.getCurrentGame().setBlackPlayer(player);
         ModelQuery.getBlackPlayer().setUser(black_user);
-
-        //add ten walls to black player (wall 10 to 20)
-        for (int i = 0; i < player.maximumNumberOfWalls(); i++) {
-            Wall wall = new Wall(i + player.maximumNumberOfWalls(), player);
-            player.addWall(wall);
-        }
 
         isReadyToStart();  //check if white and black player chose name and if total thinking time is set
     }
