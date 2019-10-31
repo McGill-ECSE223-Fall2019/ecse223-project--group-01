@@ -22,7 +22,6 @@
          </font>
       </Text>
       <TextField layoutX="61.0" layoutY="112.0" promptText="Enter Name" style="-fx-background-color: #ffff;" />
-      <TextField layoutX="387.0" layoutY="112.0" promptText="Enter Name" style="-fx-background-color: #fffff;" />
       <Text layoutX="107.0" layoutY="174.0" strokeType="OUTSIDE" strokeWidth="0.0" text="OR" wrappingWidth="34.48443866455078">
          <font>
             <Font size="25.0" />
@@ -68,5 +67,7 @@
          </font>
       </Button>
       <Button layoutX="209.0" layoutY="344.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="73.0" text="Confirm" />
+      <Button layoutX="461.0" layoutY="344.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="90.0" text="Load Postion" />
+      <TextField layoutX="386.0" layoutY="112.0" promptText="Enter Name" style="-fx-background-color: #ffff;" />
    </children>
 </AnchorPane>

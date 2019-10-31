@@ -52,7 +52,7 @@
             <Font size="18.0" />
          </font>
       </Button>
-      <Button layoutX="451.0" layoutY="326.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="146.0" text="Back to Menu">
+      <Button layoutX="448.0" layoutY="319.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="146.0" text="Back to Menu">
          <font>
             <Font size="18.0" />
          </font>
@@ -160,7 +160,7 @@
             <Font size="15.0" />
          </font>
       </Label>
-      <Text layoutX="55.0" layoutY="478.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PLAYER 1" wrappingWidth="107.151118046875">
+      <Text layoutX="55.0" layoutY="478.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PLAYER 2" wrappingWidth="107.151118046875">
          <font>
             <Font size="20.0" />
          </font>

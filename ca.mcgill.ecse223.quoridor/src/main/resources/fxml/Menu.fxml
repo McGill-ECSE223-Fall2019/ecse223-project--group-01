@@ -22,7 +22,7 @@
                   <Font size="60.0" />
                </font>
             </Text>
-            <Button fx:id="Button1" layoutX="245.0" layoutY="191.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="149.0" text="New Game" />
+            <Button fx:id="Button1" layoutX="245.0" layoutY="191.0" mnemonicParsing="false" onAction="#newGameButton" prefHeight="38.0" prefWidth="149.0" text="New Game" />
             <Button fx:id="Button11" layoutX="245.0" layoutY="257.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="149.0" text="Load Game" />
             <Button fx:id="Button12" layoutX="245.0" layoutY="332.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="149.0" text="Quit Game" />
       </children>
