@@ -1,8 +1,6 @@
 package ca.mcgill.ecse223.quoridor.controllers;
 import ca.mcgill.ecse223.quoridor.model.*;
 
-import ca.mcgill.ecse223.quoridor.model.Quoridor;
-import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 
 
 import java.util.List;
