@@ -1,8 +1,9 @@
 package ca.mcgill.ecse223.quoridor.controllers;
-import ca.mcgill.ecse223.quoridor.model.*;
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-import ca.mcgill.ecse223.quoridor.controllers.ModelQuery;
+import ca.mcgill.ecse223.quoridor.model.Board;
+import ca.mcgill.ecse223.quoridor.model.GamePosition;
+import ca.mcgill.ecse223.quoridor.model.PlayerPosition;
+import ca.mcgill.ecse223.quoridor.model.Quoridor;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ public class BoardController {
      *
      *
      * @return  outcome of operation
-     * @throws NotImplementedException
+     * @throws UnsupportedOperationException
      *
      * @author: Jason Lau
      */
@@ -43,10 +44,10 @@ public class BoardController {
         ModelQuery.getCurrentGame().getCurrentPosition().setWhitePosition(whitePlayerPos);
         ModelQuery.getCurrentGame().getCurrentPosition().setBlackPosition(blackPlayerPos);
 
-        for(int i =0; i < 10; i++){
+        for(int i =1; i <= 10; i++){
             ModelQuery.getCurrentGame().getWhitePlayer().addWall(i);
         }
-        for(int j = 10; j < 20; j++) {
+        for(int j = 11; j <= 20; j++) {
             ModelQuery.getCurrentGame().getBlackPlayer().addWall(j);
         }
 
