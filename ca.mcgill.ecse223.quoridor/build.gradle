@@ -26,8 +26,9 @@ dependencies {
 
 javafx {
     version = "13"
-    modules = [ 'javafx.controls' ]
+    modules = [ 'javafx.controls', 'javafx.fxml' ,'javafx.graphics']
 }
 test {
     useJUnitPlatform()
 }
+mainClassName = 'ca.mcgill.ecse223.quoridor.view.Main'
