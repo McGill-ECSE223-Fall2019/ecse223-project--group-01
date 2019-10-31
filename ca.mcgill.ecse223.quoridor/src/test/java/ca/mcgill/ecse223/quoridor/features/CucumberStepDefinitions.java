@@ -1,12 +1,5 @@
 package ca.mcgill.ecse223.quoridor.features;
 
-import java.io.File;
-import java.sql.Time;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 import ca.mcgill.ecse223.quoridor.controllers.*;
 import ca.mcgill.ecse223.quoridor.model.*;
@@ -19,6 +12,13 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
+import java.io.File;
+import java.sql.Time;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
 import static org.junit.Assert.*;
 
 
@@ -27,7 +27,7 @@ public class CucumberStepDefinitions {
 	private boolean fileInSystem;
 	private boolean fileChanged;
 	private boolean displayError;
-
+	private static String saveLocation = ".\\src\\main\\resources\\";
 	File saveData = new File(".\\src\\main\\resources\\save_game_test.dat");
 
 	// ***********************************************
@@ -294,7 +294,7 @@ public class CucumberStepDefinitions {
 	@Given("No file {string} exists in the filesystem")
 	public void noFileFilenameExistsInTheFilesystem(String filename) {
 		//Can't potentially create file in filesystem
-		fileInSystem = saveData.exists();
+		fileInSystem = !saveData.exists();
 	}
 
     /**
@@ -303,10 +303,9 @@ public class CucumberStepDefinitions {
 	@When("The user initiates to save the game with name {string}")
 	public void theUserInitiatesToSaveTheGameWithNameFilename(String filename) {
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
-		GamePosition gameposition = quoridor.getCurrentGame().getCurrentPosition();
 		Player currentplayer = quoridor.getCurrentGame().getWhitePlayer();
 		try {
-			PositionController.saveGame(filename, currentplayer, gameposition);
+			PositionController.saveGame(filename, currentplayer);
 		} catch(java.lang.UnsupportedOperationException e){
 			throw new PendingException();
 		}
@@ -318,7 +317,7 @@ public class CucumberStepDefinitions {
      */
 	@Then("A file with {string} shall be created in the filesystem")
 	public void aFileWithFilenameIsCreatedInTheFilesystem(String filename) {
-		assertEquals(true, fileInSystem);
+		assertEquals(true, saveData.exists());
 	}
 
 	//Scenario Outline: Save position with existing file name
@@ -347,7 +346,7 @@ public class CucumberStepDefinitions {
      */
 	@Then("File with {string} shall be updated in the filesystem")
 	public void fileWithFilenameIsUpdatedInTheFilesystem(String filename) {
-		assertEquals(true, fileChanged);
+		assertEquals(true, saveData.exists());
 	}
 
 	//Scenario Outline: Save position cancelled due to existing file name
@@ -367,7 +366,7 @@ public class CucumberStepDefinitions {
      */
 	@Then("File {string} shall not be changed in the filesystem")
 	public void fileFilenameIsNotChangedInTheFilesystem(String filename) {
-		assertEquals(false, fileChanged);
+		assertEquals(false, saveData.exists());
 	}
 
 

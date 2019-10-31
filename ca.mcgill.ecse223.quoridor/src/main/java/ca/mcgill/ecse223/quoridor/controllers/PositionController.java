@@ -1,8 +1,14 @@
 package ca.mcgill.ecse223.quoridor.controllers;
 
-import ca.mcgill.ecse223.quoridor.QuoridorApplication;
-import ca.mcgill.ecse223.quoridor.model.*;
-import java.io.*;
+import ca.mcgill.ecse223.quoridor.model.Direction;
+import ca.mcgill.ecse223.quoridor.model.Player;
+import ca.mcgill.ecse223.quoridor.model.Tile;
+import ca.mcgill.ecse223.quoridor.model.Wall;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
 import java.util.List;
 
 /**
@@ -23,14 +29,12 @@ public class PositionController {
      * that will contain the positions of the current game, into a filesystem.
      * @param filename      the name of the savefile
      * @param currentPlayer the current player when initializing the save feature
-     * @param position      the position of Pawns/Walls
      * @return true         the game saved correctly
      *         false        the game saved incorrectly.
      * @throws java.lang.UnsupportedOperationException
      */
-    public static boolean saveGame(String filename, Player currentPlayer, GamePosition position) throws java.lang.UnsupportedOperationException {
+    public static boolean saveGame(String filename, Player currentPlayer) throws java.lang.UnsupportedOperationException {
         File file = new File(saveLocation + filename);
-        Quoridor quoridor = QuoridorApplication.getQuoridor();
         PrintWriter output;
         if (file.exists() && !file.isDirectory()){ //If the save file exists and is not a directory
             try {
@@ -111,8 +115,6 @@ public class PositionController {
         else{ //Something went wrong
             return false;
         }
-
-
         output.append("\n");
         output.close();
         return true;
