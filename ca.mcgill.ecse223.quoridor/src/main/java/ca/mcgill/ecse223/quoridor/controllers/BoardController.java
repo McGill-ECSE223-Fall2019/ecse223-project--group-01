@@ -1,7 +1,10 @@
 package ca.mcgill.ecse223.quoridor.controllers;
-import ca.mcgill.ecse223.quoridor.model.*;
 
-
+import ca.mcgill.ecse223.quoridor.QuoridorApplication;
+import ca.mcgill.ecse223.quoridor.model.Board;
+import ca.mcgill.ecse223.quoridor.model.GamePosition;
+import ca.mcgill.ecse223.quoridor.model.PlayerPosition;
+import ca.mcgill.ecse223.quoridor.model.Quoridor;
 
 import java.util.List;
 
