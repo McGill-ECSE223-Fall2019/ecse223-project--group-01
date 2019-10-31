@@ -35,7 +35,8 @@ public class StartNewGameController {
      * @Author Fulin Huang
      *
      * White player chooses a username by either creating a new name or by choosing
-     * from an existing name list
+     * from an existing name list.
+     * Add ten walls to the player.
      *
      * @param username name of the white user
      */
@@ -55,6 +56,12 @@ public class StartNewGameController {
         ModelQuery.getCurrentGame().setWhitePlayer(player); //set White player
         ModelQuery.getWhitePlayer().setUser(white_user);
 
+        //add ten walls to black player (wall 0 to 9)
+        for (int i = 0; i < player.maximumNumberOfWalls(); i++) {
+            Wall wall = new Wall(i, player);
+            player.addWall(wall);
+        }
+
         isReadyToStart(); //check if white and black player chose name and if total thinking time is set
     }
 
@@ -62,7 +69,8 @@ public class StartNewGameController {
      * @Author Fulin Huang
      *
      * Black player chooses a username by either choosing creating a new game or
-     * by choosing from an existing name list
+     * by choosing from an existing name list.
+     * Add ten walls to the player.
      *
      * @param username name of the black user
      */
@@ -79,6 +87,12 @@ public class StartNewGameController {
         Player player = new Player(new Time(tempThinkingTime), black_user, 1, Direction.Vertical);
         ModelQuery.getCurrentGame().setBlackPlayer(player);
         ModelQuery.getBlackPlayer().setUser(black_user);
+
+        //add ten walls to black player (wall 10 to 20)
+        for (int i = 0; i < player.maximumNumberOfWalls(); i++) {
+            Wall wall = new Wall(i + player.maximumNumberOfWalls(), player);
+            player.addWall(wall);
+        }
 
         isReadyToStart();  //check if white and black player chose name and if total thinking time is set
     }
@@ -115,13 +129,26 @@ public class StartNewGameController {
         int delay = 1000;
         int period = 1000;
         timer = new Timer();
-        timeToSet = millis / 1000;  //convert to seconds
+        timeToSet = millis;
         timer.scheduleAtFixedRate(new TimerTask() {
             public void run () {
-                setInterval(); //timer count down
-                long minutes = TimeUnit.MILLISECONDS.toMinutes(timeToSet); //show it on GUI
-                long seconds = TimeUnit.MILLISECONDS.toSeconds(timeToSet);  //show it on GUI
-            }
+
+                Player currentPlayer = ModelQuery.getPlayerToMove();
+                    try {
+                        if(timeToSet <= 0) {
+                            throw new Exception("00:00 time left!");
+                        } else {
+                            timeToSet = timeToSet - 1000; // time to set in milliseconds
+                            Date date = new Date();
+                            long currentMillis = date.getTime();
+                            Time newThinkingTime = new Time(timeToSet + currentMillis);
+                            currentPlayer.setRemainingTime(newThinkingTime);
+                        }
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                    }
+                }
+
         }, delay, period);
         //initialize board
         if (ModelQuery.getBoard()== null){
@@ -186,15 +213,25 @@ public class StartNewGameController {
     /**
      * @Author Fulin Huang
      *
-     * This method counts down the timer and stop the timer
-     * when it counts to zero
+     * Attempts to show remaining time on UI
      *
-     * @return The remaining time in seconds
+     * @return a string that indicates the remaining time
      */
-    private static final long setInterval() {
-        if (timeToSet == 0)
-            timer.cancel();
-        return --timeToSet;
+    public static String toTimeStr() {
+        long minutes = TimeUnit.MILLISECONDS.toMinutes(timeToSet);
+        long seconds = TimeUnit.MILLISECONDS.toSeconds(timeToSet);
+        StringBuilder sb = new StringBuilder();
+        if (minutes < 10) {
+            sb.append(0).append(minutes);
+        } else {
+            sb.append(minutes);
+        }
+        sb.append(":");
+        if (seconds < 10) {
+            sb.append(0).append(seconds);
+        } else {
+            sb.append(seconds);
+        }
+        return sb.toString();
     }
-
 }
