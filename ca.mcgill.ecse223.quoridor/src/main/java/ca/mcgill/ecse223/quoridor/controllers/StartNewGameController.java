@@ -27,8 +27,9 @@ public class StartNewGameController {
      * Initialize game and set game status to be initializing
      */
     public static void initializeGame()  {
-        ModelQuery.getCurrentGame().delete(); //delete the previous game
-
+        if (ModelQuery.getCurrentGame() != null) {
+            ModelQuery.getCurrentGame().delete(); //delete the previous game
+        }
         Quoridor quoridor = QuoridorApplication.getQuoridor();
         game = new Game(Game.GameStatus.Initializing, Game.MoveMode.PlayerMove, quoridor);
     }
@@ -99,6 +100,8 @@ public class StartNewGameController {
         //total thinking time is able to set only if players are existed
         if (whitePlayerChooseName && blackPlayerChooseName) {
             setThinkingTime(minutes, seconds);   //set total thinking time
+            thinkingTimeIsSet = true;
+
         }
 
         isReadyToStart();
@@ -221,5 +224,17 @@ public class StartNewGameController {
             sb.append(seconds);
         }
         return sb.toString();
+    }
+
+    public static boolean whitePlayerNameIsSet() {
+        return  whitePlayerChooseName;
+    }
+
+    public static boolean blackPlayerNameIsSet() {
+        return blackPlayerChooseName;
+    }
+
+    public static boolean totalTimeIsSet() {
+        return thinkingTimeIsSet;
     }
 }
