@@ -12,6 +12,12 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
+import java.sql.Time;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
 import java.io.File;
 import java.sql.Time;
 import java.util.ArrayList;
@@ -821,7 +827,7 @@ public class CucumberStepDefinitions {
 	@When("I try to grab a wall from my stock")
 	public void iTryToGrabAWallFromMyStock() {
 		try {
-			WallController.grabWall();
+			WallController.grabWall(ModelQuery.getPlayerToMove());
 		} catch (UnsupportedOperationException e) {
 			throw new PendingException();
 		}
@@ -916,9 +922,10 @@ public class CucumberStepDefinitions {
 	 * @author Kate Ward
 	 */
 	@Then("The wall shall be rotated over the board to {string}")
-	public void theWallShallBeRotatedOverTheBoardToNewDir() {
+	public void theWallShallBeRotatedOverTheBoardToNewDir(String direction) {
 		//GUI TODO later
-		throw new PendingException();
+		Direction target = this.stringToDirection(direction);
+		assertEquals(target, ModelQuery.getWallMoveCandidate().getWallDirection());
 	}
 	/**
 	 * @author: Mark Zhu
@@ -1317,7 +1324,7 @@ public class CucumberStepDefinitions {
 			quoridor = null;
 		}
 
-		for (int i = 0; i < 20; i++) {
+		for (int i = 1; i <= 20; i++) {
 			Wall wall = Wall.getWithId(i);
 			if(wall != null) {
 				wall.delete();
@@ -1371,7 +1378,7 @@ public class CucumberStepDefinitions {
 		// Create all walls. Walls with lower ID belong to player1,
 		// while the second half belongs to player 2
 		for (int i = 0; i < 2; i++) {
-			for (int j = 0; j < 10; j++) {
+			for (int j = 1; j <= 10; j++) {
 				new Wall(i * 10 + j, players[i]);
 			}
 		}
@@ -1422,11 +1429,11 @@ public class CucumberStepDefinitions {
 		GamePosition gamePosition = new GamePosition(0, player1Position, player2Position, players.get(0), game);
 
 		// Add the walls as in stock for the players
-		for (int j = 0; j < 10; j++) {
+		for (int j = 1; j <= 10; j++) {
 			Wall wall = Wall.getWithId(j);
 			gamePosition.addWhiteWallsInStock(wall);
 		}
-		for (int j = 0; j < 10; j++) {
+		for (int j = 1; j <= 10; j++) {
 			Wall wall = Wall.getWithId(j + 10);
 			gamePosition.addBlackWallsInStock(wall);
 		}
