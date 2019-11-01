@@ -6,6 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.awt.*;
 import java.net.URL;
 
 
@@ -16,16 +17,26 @@ public class Main extends Application{
         launch(args);
     }
 
+    private static Stage currentStage;
     @Override
     public void start(Stage stage) throws Exception {
         FXMLLoader loader = new FXMLLoader();
         URL location = getClass().getResource("");
 //        loader.setLocation(getClass().getResource("foo.fxml"));
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/InitializeBoard.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/fxml/menu.fxml"));
 //        Parent root = loader.load();
-        stage.setTitle("Hello");
+        stage.setTitle("Quoridor");
         stage.setScene(new Scene(root,600,500));
         stage.show();
+        currentStage = stage;
+    }
+
+    public static void setCurrentStage(Stage aStage) {
+        currentStage = aStage;
+    }
+
+    public static Stage getCurrentStage() {
+        return currentStage;
     }
 }
 /*

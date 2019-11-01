@@ -8,7 +8,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ca.mcgill.ecse223.quoridor.view.MainMenuController">
   <children>
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
       <children>
@@ -22,9 +22,9 @@
                   <Font size="60.0" />
                </font>
             </Text>
-            <Button fx:id="Button1" layoutX="245.0" layoutY="191.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="149.0" text="New Game" />
-            <Button fx:id="Button11" layoutX="245.0" layoutY="257.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="149.0" text="Load Game" />
-            <Button fx:id="Button12" layoutX="245.0" layoutY="332.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="149.0" text="Quit Game" />
+            <Button fx:id="Button1" layoutX="245.0" layoutY="191.0" mnemonicParsing="false" onAction="#handleNewGame" prefHeight="38.0" prefWidth="149.0" text="New Game" />
+            <Button fx:id="Button11" layoutX="245.0" layoutY="257.0" mnemonicParsing="false" onAction="#handleLoadGame" prefHeight="38.0" prefWidth="149.0" text="Load Game" />
+            <Button fx:id="Button12" layoutX="245.0" layoutY="320.0" mnemonicParsing="false" onAction="#handleQuitGame" prefHeight="38.0" prefWidth="149.0" text="Quit Game" />
       </children>
     </AnchorPane>
   </children>
