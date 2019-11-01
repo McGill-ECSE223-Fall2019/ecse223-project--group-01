@@ -1051,7 +1051,7 @@ public class CucumberStepDefinitions {
 		try {
 			activeEnd = Instant.now();
 			timeSpent = Duration.between(activeStart, activeEnd); //TODO: Timer
-			nextPlayerColor = SwitchPlayerController.SwitchActivePlayer(originalPlayerColor);
+			SwitchPlayerController.SwitchActivePlayer();
 		} catch (UnsupportedOperationException e) {
 			throw new PendingException();
 		}
@@ -1079,9 +1079,9 @@ public class CucumberStepDefinitions {
 	@And("The next player to move shall be {string}")
 	public void checkActivePlayer(String playerColor) {
 		if (originalPlayerColor.equals("white")) {
-			assertEquals(nextPlayerColor,"black");
+			assertEquals(ModelQuery.getBlackPlayer(),ModelQuery.getCurrentGame().getCurrentPosition().getPlayerToMove());
 		} else {
-			assertEquals(nextPlayerColor,"white");
+			assertEquals(ModelQuery.getWhitePlayer(),ModelQuery.getCurrentGame().getCurrentPosition().getPlayerToMove());
 		}
 	}
 	// Feature 4  Initialize Board

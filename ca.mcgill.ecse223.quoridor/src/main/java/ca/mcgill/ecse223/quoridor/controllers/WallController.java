@@ -86,10 +86,10 @@ public class WallController {
 
         if(player.equals(ModelQuery.getWhitePlayer())) {
             ModelQuery.getCurrentGame().getCurrentPosition().addWhiteWallsOnBoard(move.getWallPlaced());
-            SwitchPlayerController.SwitchActivePlayer("white");
+            SwitchPlayerController.SwitchActivePlayer();
         }else{
             ModelQuery.getCurrentGame().getCurrentPosition().addBlackWallsOnBoard(move.getWallPlaced());
-            SwitchPlayerController.SwitchActivePlayer("black");
+            SwitchPlayerController.SwitchActivePlayer();
         }
 
         return true;
