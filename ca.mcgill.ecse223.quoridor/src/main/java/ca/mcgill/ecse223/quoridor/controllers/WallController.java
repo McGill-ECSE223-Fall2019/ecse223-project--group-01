@@ -1,7 +1,8 @@
 package ca.mcgill.ecse223.quoridor.controllers;
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 import ca.mcgill.ecse223.quoridor.model.*;
-import java.util.*;
+
+import java.util.List;
 
 public class WallController {
 
@@ -10,14 +11,13 @@ public class WallController {
      * Set the tile of WallMove to a specific row and column
      * returns true if operation is successful
      *
-     * @param move The subject of the move
      * @param row The target row of the move
      * @param col The target column of the move
      * @return Outcome of operation either
      * @throws UnsupportedOperationException
      */
-    public static Boolean moveWall(WallMove move, int row, int col) throws UnsupportedOperationException{
-
+    public static Boolean moveWall(int row, int col) throws UnsupportedOperationException{
+        WallMove move = ModelQuery.getWallMoveCandidate();
         if(row<1 || row > 8 || col < 1 || col > 8){
             return false;
         }
@@ -31,12 +31,12 @@ public class WallController {
      * Shifts the position of a WallMove 1 tile left,right,up or down
      * returns true if the operation is successful
      *
-     * @param side Direction of the shift (left,right,down,up)
-     * @param move The subject of the shift
+     * @param side Direction of the shift (left,right,down,up
      * @return outcome of operation
      * @throws UnsupportedOperationException
      */
-    public static Boolean shiftWall(String side, WallMove move) throws UnsupportedOperationException {
+    public static Boolean shiftWall(String side) throws UnsupportedOperationException {
+        WallMove move = ModelQuery.getWallMoveCandidate();
         int row = move.getTargetTile().getRow();
         int col = move.getTargetTile().getColumn();
         switch(side){
@@ -57,7 +57,7 @@ public class WallController {
                 break;
             }
         }
-        return WallController.moveWall(move,row,col);
+        return WallController.moveWall(row,col);
     }
 
     /**
@@ -66,17 +66,19 @@ public class WallController {
      * Attempts to drop the wall at the current position
      * Also completes the moves
      *
-     * @param move The subject of the drop
      * @return outcome of operation
      * @throws UnsupportedOperationException
      */
-    public static Boolean dropWall(WallMove move, Player player) throws UnsupportedOperationException{
+    public static Boolean dropWall() throws UnsupportedOperationException{
+        WallMove move = ModelQuery.getWallMoveCandidate();
+
         List<Wall> placedWalls = ModelQuery.getAllWallsOnBoard();
+        Player player = ModelQuery.getPlayerToMove();
 
         // validate no overlap
         for (Wall wall: placedWalls){
             if(isWallOverlap(move,wall.getMove())){
-                cancelWallMove(player);
+                cancelWallMove();
                 return false;
             }
         }
@@ -113,7 +115,8 @@ public class WallController {
         }
     }
 
-    public static boolean cancelWallMove(Player player){
+    public static boolean cancelWallMove(){
+        Player player = ModelQuery.getPlayerToMove();
         WallMove move = ModelQuery.getWallMoveCandidate();
         if(move == null){
             return false;
@@ -158,7 +161,8 @@ public class WallController {
      * @return outcome of operation
      * @throws UnsupportedOperationException
      */
-    public static boolean grabWall(Player player) throws UnsupportedOperationException{
+    public static boolean grabWall() throws UnsupportedOperationException{
+        Player player = ModelQuery.getPlayerToMove();
         int movesSize = ModelQuery.getMoves().size();
         int moveNum;
         int roundNum;
