@@ -20,14 +20,13 @@ import java.util.List;
  */
 public class PositionController {
 
-    static String saveLocation = ".\\src\\main\\resources\\";
+    //static String saveLocation = ".\\src\\main\\resources\\";
+    static String saveLocation = "";
 
     /**
      * Empty constructor for PositionController, will be updated/completed in the future
      */
     public PositionController(){}
-
-    static String saveLocation = ".\\src\\main\\resources\\";
 
     /**
      * Attempts to create or overwrite a savefile,
@@ -43,7 +42,7 @@ public class PositionController {
         PrintWriter output;
         if (file.exists() && !file.isDirectory()){ //If the save file exists and is not a directory
             try {
-                output = new PrintWriter(new FileOutputStream(new File(saveLocation + filename), true));
+                output = new PrintWriter(new FileOutputStream(new File(saveLocation + filename)));
             } catch (FileNotFoundException e) { //Error check for writer
                 e.printStackTrace();
                 return false;
@@ -62,7 +61,8 @@ public class PositionController {
             int column = ModelQuery.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getColumn();
             int row = ModelQuery.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getRow();
 
-            String whitePosition = String.valueOf(column + 96) + Integer.toString(row);
+            char columnLetter = (char) (column + 96);
+            String whitePosition = Character.toString(columnLetter) + Integer.toString(row);
             String playerInfo = String.format("W: %s", whitePosition);
             output.append(playerInfo);
 
@@ -77,7 +77,8 @@ public class PositionController {
             column = ModelQuery.getCurrentGame().getCurrentPosition().getBlackPosition().getTile().getColumn();
             row = ModelQuery.getCurrentGame().getCurrentPosition().getBlackPosition().getTile().getRow();
 
-            String blackPosition = String.valueOf(column + 96) + Integer.toString(row);
+            columnLetter = (char) (column + 96);
+            String blackPosition = Character.toString(columnLetter) + Integer.toString(row);
             playerInfo = String.format("B: %s", blackPosition);
             output.append(playerInfo);
 
@@ -92,7 +93,8 @@ public class PositionController {
             int column = ModelQuery.getCurrentGame().getCurrentPosition().getBlackPosition().getTile().getColumn();
             int row = ModelQuery.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getRow();
 
-            String blackPosition = String.valueOf(column + 96) + Integer.toString(row);
+            char columnLetter = (char) (column + 96);
+            String blackPosition = String.valueOf(columnLetter) + Integer.toString(row);
             String playerInfo = String.format("B: %s,", blackPosition);
             output.append(playerInfo);
 
@@ -106,7 +108,8 @@ public class PositionController {
             column = ModelQuery.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getColumn();
             row = ModelQuery.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getRow();
 
-            String whitePosition = String.valueOf(column + 96) + Integer.toString(row);
+            columnLetter = (char) (column + 96);
+            String whitePosition = String.valueOf(columnLetter) + Integer.toString(row);
             playerInfo = String.format("B: %s", whitePosition);
             output.append(playerInfo);
 
@@ -132,12 +135,26 @@ public class PositionController {
      *         false    the game loads inccorectly
      * @throws java.lang.UnsupportedOperationException
      */
-    public static boolean loadGame(String filename) throws java.lang.UnsupportedOperationException, IOException {
+    public static boolean loadGame(String filename, String whiteUser, String blackUser) throws java.lang.UnsupportedOperationException, IOException {
         File saveFile = new File(saveLocation + filename);
         Quoridor quoridor = QuoridorApplication.getQuoridor();
 
         //Make game running
         StartNewGameController.initializeGame();
+
+        StartNewGameController.whitePlayerChoosesAUsername(whiteUser);
+        StartNewGameController.blackPlayerChooseAUsername(blackUser);
+
+        PlayerPosition whitePlayerPosition = null;
+        PlayerPosition blackPlayerPosition = null;
+        List<GamePosition> positions = ModelQuery.getCurrentGame().getPositions();
+
+
+//        BoardController.initializeBoard();
+
+        //Initialize GamePosition
+
+        //
 
         if(saveFile.exists()){
             try {
@@ -150,11 +167,11 @@ public class PositionController {
                 while((line = bufferedReader.readLine()) != null){
 
                     //.Set game stuff in order to load (place walls at locations and pawns at locations)
-                    String[] categorySplit = line.split(":"); //[0] White or Black, [1] PositionInfo
+                    String[] categorySplit = line.split(": "); //[0] White or Black, [1] PositionInfo
                     String playerInfo = categorySplit[0]; // Either white or black
-                    String[] positionInfo = categorySplit[1].split(" "); //[0] PlayerPosition, [1:] WallPosition
+                    String[] positionInfo = categorySplit[1].split(","); //[0] PlayerPosition, [1:] WallPosition
 
-                    if(playerInfo.contains("W:")){ //White Player information
+                    if(playerInfo.contains("W")){ //White Player information
                         if(currentTurn == 0){
                             playerTurn = "White";
                         }
@@ -162,11 +179,11 @@ public class PositionController {
                         int[] playerCoord = posToInt(positionInfo[0]);
 
                         //Validate position here
-                        ValidatePositionController.validatePawnPosition(playerCoord[1],playerCoord[0]);
+                        //.MARK: ValidatePositionController.validatePawnPosition(playerCoord[1],playerCoord[0]);
 
                         Tile pos = new Tile(playerCoord[1],playerCoord[0],quoridor.getBoard()); //using Position --> integer
-                        PlayerPosition playerPosition = new PlayerPosition(quoridor.getCurrentGame().getWhitePlayer(),pos);
-                        quoridor.getCurrentGame().getCurrentPosition().setWhitePosition(playerPosition);
+                        whitePlayerPosition = new PlayerPosition(quoridor.getCurrentGame().getWhitePlayer(),pos);
+
 
                         //.Set Player Walls
                         for(int i = 1; i < (categorySplit.length - 1); i++){
@@ -185,7 +202,7 @@ public class PositionController {
                         }
 
                     }
-                    else if(playerInfo.contains("B:")){ //Black Player information
+                    else if(playerInfo.contains("B")){ //Black Player information
                         if(currentTurn == 0){
                             playerTurn = "Black";
                         }
@@ -193,11 +210,11 @@ public class PositionController {
                         int[] playerCoord = posToInt(positionInfo[0]);
 
                         //validate position here
-                        ValidatePositionController.validatePawnPosition(playerCoord[1],playerCoord[0]);
+                        //.MARK: ValidatePositionController.validatePawnPosition(playerCoord[1],playerCoord[0]);
 
                         Tile pos = new Tile(playerCoord[1],playerCoord[0],quoridor.getBoard()); //using Position --> integer
-                        PlayerPosition playerPosition = new PlayerPosition(quoridor.getCurrentGame().getBlackPlayer(),pos);
-                        quoridor.getCurrentGame().getCurrentPosition().setBlackPosition(playerPosition);
+                        blackPlayerPosition = new PlayerPosition(quoridor.getCurrentGame().getBlackPlayer(),pos);
+
 
                         //Set Player Walls
                         for(int i = 1; i < (categorySplit.length - 1); i++){
@@ -223,12 +240,17 @@ public class PositionController {
                     currentTurn++;
                 }
 
+                GamePosition gameposition = new GamePosition(positions.size()+1, whitePlayerPosition, blackPlayerPosition, quoridor.getCurrentGame().getWhitePlayer(), quoridor.getCurrentGame());
+                quoridor.getCurrentGame().setCurrentPosition(gameposition);
+                quoridor.getCurrentGame().getCurrentPosition().setWhitePosition(whitePlayerPosition);
+                quoridor.getCurrentGame().getCurrentPosition().setBlackPosition(blackPlayerPosition);
+
                 if(playerTurn.isEmpty()){ //incase while loop was not executed
                     return false;
                 }
 
                 else{ //switch the current turn to the player
-                    SwitchPlayerController.SwitchActivePlayer(playerTurn);
+                    //.MARK: SwitchPlayerController.SwitchActivePlayer(playerTurn);
                 }
 
                 bufferedReader.close();
@@ -289,7 +311,7 @@ public class PositionController {
             positionInt[0] = (temp-temp_int); //will return the alphabetical index of the letters
 
         //.Converting Row string into integer
-        positionInt[1] = (int)char_arr[1];
+        positionInt[1] = Character.getNumericValue(char_arr[1]);
 
         //.Converting string into Direction
         if(char_arr.length > 2){
@@ -312,7 +334,8 @@ public class PositionController {
         int wallCol = wallTile.getColumn();
 
         //Wall save: ColumnRowDirection
-        String wallPosition = ", " + String.valueOf(wallCol + 96) + Integer.toString(wallRow) + orientation;
+        char columnLetter = (char) (wallCol + 96);
+        String wallPosition = ", " + String.valueOf(columnLetter) + Integer.toString(wallRow) + orientation;
         return wallPosition;
     }
 

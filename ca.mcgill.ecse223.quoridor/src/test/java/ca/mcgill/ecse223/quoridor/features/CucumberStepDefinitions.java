@@ -11,6 +11,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.junit.Assert;
 
 import java.sql.Time;
 import java.util.ArrayList;
@@ -32,7 +33,6 @@ import static org.junit.Assert.*;
 
 public class CucumberStepDefinitions {
 
-	private boolean fileInSystem;
 	private boolean fileChanged;
 	private boolean displayError;
 
@@ -144,7 +144,7 @@ public class CucumberStepDefinitions {
 	@When("I initiate to load a saved game {string}")
 	public void iInitiateToLoadASavedGameFilename(String filename) {
 		try {
-			PositionController.loadGame(filename);
+			PositionController.loadGame(filename, "user1", "user2");
 		}catch(java.lang.UnsupportedOperationException e) {
 			throw new PendingException();
 		}catch(java.io.IOException e){
@@ -177,6 +177,7 @@ public class CucumberStepDefinitions {
 			}
 
 			boolean isLoadValid = isWallValid && isPawnValid;
+			Assert.assertEquals(true, isLoadValid);
 		} catch(java.lang.UnsupportedOperationException e){
 			throw new PendingException();
 		}
@@ -400,8 +401,7 @@ public class CucumberStepDefinitions {
      */
 	@Then("File {string} shall not be changed in the filesystem")
 	public void fileFilenameIsNotChangedInTheFilesystem(String filename) {
-		File saveData = new File(saveLocation + filename);
-		assertEquals(false, saveData.exists());
+		assertEquals(false, fileChanged);
 	}
 
 
