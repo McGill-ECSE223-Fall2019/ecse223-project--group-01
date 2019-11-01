@@ -1,9 +1,10 @@
 package ca.mcgill.ecse223.quoridor.controllers;
 
 import ca.mcgill.ecse223.quoridor.model.Player;
+
 import ca.mcgill.ecse223.quoridor.model.User;
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
 
 import java.util.List;
 

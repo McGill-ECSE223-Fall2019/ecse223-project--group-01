@@ -20,7 +20,7 @@
          </font>
       </Text>
       <Button fx:id="Button1" layoutX="225.0" layoutY="192.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="149.0" text="Save" />
-      <Button fx:id="Button11" layoutX="225.0" layoutY="317.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="149.0" text="Meun" />
+      <Button fx:id="Button11" layoutX="225.0" layoutY="317.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="149.0" text="Menu" />
       <Button fx:id="Button12" layoutX="225.0" layoutY="252.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="149.0" text="Play Again" />
    </children>
 </AnchorPane>
