@@ -13,6 +13,8 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
@@ -28,7 +30,6 @@ public class CucumberStepDefinitions {
 	private boolean fileChanged;
 	private boolean displayError;
 	private static String saveLocation = ".\\src\\main\\resources\\";
-	File saveData = new File(".\\src\\main\\resources\\save_game_test.dat");
 
 	// ***********************************************
 	// Background step definitions
@@ -293,8 +294,11 @@ public class CucumberStepDefinitions {
      */
 	@Given("No file {string} exists in the filesystem")
 	public void noFileFilenameExistsInTheFilesystem(String filename) {
-		//Can't potentially create file in filesystem
-		fileInSystem = !saveData.exists();
+		//if the file exists in the system, remove it
+		File saveData = new File(saveLocation + filename);
+		if(saveData.exists()){
+			saveData.delete();
+		}
 	}
 
     /**
@@ -317,6 +321,7 @@ public class CucumberStepDefinitions {
      */
 	@Then("A file with {string} shall be created in the filesystem")
 	public void aFileWithFilenameIsCreatedInTheFilesystem(String filename) {
+		File saveData = new File(saveLocation + filename);
 		assertEquals(true, saveData.exists());
 	}
 
@@ -326,8 +331,16 @@ public class CucumberStepDefinitions {
      */
 	@Given("File {string} exists in the filesystem")
 	public void fileFilenameExistsInTheFilesystem(String filename) {
-		//Can't potentially search file in filesystem
-		fileInSystem = saveData.exists();
+		//check if file exists in the filesystem
+		File saveData = new File(saveLocation + filename);
+
+		if(!saveData.exists()){
+			try {
+				saveData.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 
@@ -346,7 +359,9 @@ public class CucumberStepDefinitions {
      */
 	@Then("File with {string} shall be updated in the filesystem")
 	public void fileWithFilenameIsUpdatedInTheFilesystem(String filename) {
+		File saveData = new File(saveLocation + filename);
 		assertEquals(true, saveData.exists());
+
 	}
 
 	//Scenario Outline: Save position cancelled due to existing file name
@@ -366,6 +381,7 @@ public class CucumberStepDefinitions {
      */
 	@Then("File {string} shall not be changed in the filesystem")
 	public void fileFilenameIsNotChangedInTheFilesystem(String filename) {
+		File saveData = new File(saveLocation + filename);
 		assertEquals(false, saveData.exists());
 	}
 
@@ -1411,7 +1427,7 @@ public class CucumberStepDefinitions {
 		// positions
 		Tile player1StartPos = quoridor.getBoard().getTile(36);
 		Tile player2StartPos = quoridor.getBoard().getTile(44);
-		
+
 		Game game = new Game(GameStatus.Running, MoveMode.PlayerMove, quoridor);
 		game.setWhitePlayer(players.get(0));
 		game.setBlackPlayer(players.get(1));
