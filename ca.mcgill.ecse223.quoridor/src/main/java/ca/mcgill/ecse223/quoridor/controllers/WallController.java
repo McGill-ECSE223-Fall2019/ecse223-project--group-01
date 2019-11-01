@@ -1,7 +1,8 @@
 package ca.mcgill.ecse223.quoridor.controllers;
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 import ca.mcgill.ecse223.quoridor.model.*;
-import java.util.*;
+
+import java.util.List;
 
 public class WallController {
 
@@ -160,7 +161,8 @@ public class WallController {
      * @return outcome of operation
      * @throws UnsupportedOperationException
      */
-    public static boolean grabWall(Player player) throws UnsupportedOperationException{
+    public static boolean grabWall() throws UnsupportedOperationException{
+        Player player = ModelQuery.getPlayerToMove();
         int movesSize = ModelQuery.getMoves().size();
         int moveNum;
         int roundNum;
