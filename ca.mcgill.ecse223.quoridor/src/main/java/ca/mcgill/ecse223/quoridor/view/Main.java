@@ -23,7 +23,7 @@ public class Main extends Application{
         FXMLLoader loader = new FXMLLoader();
         URL location = getClass().getResource("");
 //        loader.setLocation(getClass().getResource("foo.fxml"));
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/menu.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/fxml/SelectPlayerName.fxml"));
 //        Parent root = loader.load();
         stage.setTitle("Quoridor");
         stage.setScene(new Scene(root,600,400));
