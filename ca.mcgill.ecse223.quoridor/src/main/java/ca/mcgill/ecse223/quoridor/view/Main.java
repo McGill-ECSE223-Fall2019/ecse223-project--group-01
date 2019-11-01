@@ -26,7 +26,7 @@ public class Main extends Application{
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/menu.fxml"));
 //        Parent root = loader.load();
         stage.setTitle("Quoridor");
-        stage.setScene(new Scene(root,600,500));
+        stage.setScene(new Scene(root,600,400));
         stage.show();
         currentStage = stage;
     }
