@@ -30,6 +30,9 @@ public class StartNewGameController {
         if (ModelQuery.getCurrentGame() != null) {
             ModelQuery.getCurrentGame().delete(); //delete the previous game
         }
+        whitePlayerChooseName=false;
+        blackPlayerChooseName=false;
+        thinkingTimeIsSet=false;
         Quoridor quoridor = QuoridorApplication.getQuoridor();
         game = new Game(Game.GameStatus.Initializing, Game.MoveMode.PlayerMove, quoridor);
     }
@@ -181,7 +184,6 @@ public class StartNewGameController {
             ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.ReadyToStart);
             ModelQuery.getWhitePlayer().setNextPlayer(ModelQuery.getBlackPlayer());
             ModelQuery.getBlackPlayer().setNextPlayer(ModelQuery.getWhitePlayer());
-            ModelQuery.getCurrentGame().getCurrentPosition().setPlayerToMove(ModelQuery.getWhitePlayer());
         }
 
     }

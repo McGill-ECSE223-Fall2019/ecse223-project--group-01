@@ -1,16 +1,13 @@
 package ca.mcgill.ecse223.quoridor.view;
+
+import ca.mcgill.ecse223.quoridor.controllers.BoardController;
 import ca.mcgill.ecse223.quoridor.controllers.StartNewGameController;
-import javafx.event.EventHandler;
-import javafx.scene.control.SplitMenuButton;
 import ca.mcgill.ecse223.quoridor.model.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-
 import javafx.scene.control.*;
 import javafx.stage.Window;
 
-
-import java.awt.event.MouseEvent;
 import java.util.List;
 
 
@@ -19,41 +16,37 @@ public class NewGameMenuController extends ViewController {
     @FXML
     public TextField whitePlayerName;
     public TextField blackPlayerName;
-    public SplitMenuButton existedWhitePlayerList = new SplitMenuButton();
-    public SplitMenuButton existedBlackPlayerList = new SplitMenuButton();
     public TextField minutes;
     public TextField seconds;
     public Button confirm;
-    public static boolean alertFlagWhite = false;
-    public static boolean alertFlagBlack = false;
-    public static String message;
+    public ChoiceBox<String> existingBlackChoices;
+    public ChoiceBox<String> existingWhiteChoices;
 
 
     public void initialize() {
         StartNewGameController.initializeGame();
         List<User> existingUsers = StartNewGameController.existedUsers();
 
-        EventHandler<ActionEvent> event1 = new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent e)
-            {
-                System.out.println(((MenuItem)e.getSource()).getText() + " selected");
+        existingBlackChoices.setOnAction(e -> blackPlayerName.setText(""));
+
+        existingWhiteChoices.setOnAction(e -> whitePlayerName.setText(""));
+
+        whitePlayerName.textProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue!=null){
+                existingWhiteChoices.setValue(null);
             }
-        };
+        });
+
+        blackPlayerName.textProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue!=null){
+                existingBlackChoices.setValue(null);
+            }
+        });
 
         for (User user : existingUsers) {
-            MenuItem menuItem = new MenuItem(user.getName());
-            existedWhitePlayerList.getItems().add(menuItem);
-            existedBlackPlayerList.getItems().add(menuItem);
-            menuItem.setOnAction(event1);
+            existingBlackChoices.getItems().add(user.getName());
+            existingWhiteChoices.getItems().add(user.getName());
         }
-            MenuItem menuItem = new MenuItem("1");
-            MenuItem menuItem1 = new MenuItem("2");
-            existedWhitePlayerList.getItems().add(menuItem);
-            existedWhitePlayerList.getItems().add(menuItem1);
-
-            menuItem.setOnAction(event1);
-            menuItem1.setOnAction(event1);
-
     }
 
     public void backToMainMenu(ActionEvent actionEvent) {
@@ -63,74 +56,81 @@ public class NewGameMenuController extends ViewController {
     public void handleInitializeBoard(ActionEvent actionEvent) {
         // confirm button
         Window page = confirm.getScene().getWindow();
+        boolean readyTostart = true;
+        String error = "";
+        String whiteName;
+        String blackName;
 
-try {
-    if (whitePlayerName.getText() != null) {
-        if (StartNewGameController.usernameExists(whitePlayerName.getText())) {
-            message = "Player 1 name is already existed!";
-            alertFlagWhite = true;
-        } else {
-            StartNewGameController.whitePlayerChoosesAUsername(whitePlayerName.getText());
-            existedWhitePlayerList.setDisable(true);
+
+        // confirm that all fields have been set
+        // validate white player name
+
+        if (whitePlayerName.getText().equals("") && existingWhiteChoices.getValue() == null) {
+            error += "White name not set \n";
+            readyTostart = false;
+        } else if (!whitePlayerName.getText().equals("") && StartNewGameController.usernameExists(whitePlayerName.getText())) {
+            error += "White username already exists \n";
+            readyTostart = false;
         }
-    } else {
-        whitePlayerName.setDisable(true);
-        if (existedWhitePlayerList != null) {
-            StartNewGameController.whitePlayerChoosesAUsername(existedWhitePlayerList.getText());
-        } else {
-            message = "Please enter name for player 1!";
-            existedWhitePlayerList.setDisable(true);
-            alertFlagWhite = true;
+
+        //validate black player name
+        if (blackPlayerName.getText().equals("") && existingBlackChoices.getValue() == null) {
+            error += "Black player name not set \n";
+            readyTostart = false;
+        } else if (!blackPlayerName.getText().equals("") && StartNewGameController.usernameExists(blackPlayerName.getText())) {
+            error += "Black username already exists \n";
+            readyTostart = false;
+        }
+
+        // validate thinking time
+        if (seconds.getText().equals("") || minutes.getText().equals("")) {
+            error += "Thinking time not set";
+            readyTostart = false;
+        } else if (!isInteger(seconds.getText()) || !isInteger(minutes.getText())) {
+            error += "Thinking time is not a whole number";
+            readyTostart = false;
+        } else if (Integer.parseInt(seconds.getText()) > 60 || Integer.parseInt(seconds.getText()) < 0 || Integer.parseInt(minutes.getText()) < 0) {
+            error += "Invalid numbers given for Thinking time";
+            readyTostart = false;
+        }
+
+        // All good begin initialization process
+        if (readyTostart) {
+            if(blackPlayerName.getText().equals("")){
+                blackName = existingBlackChoices.getValue();
+            }
+            else{
+                blackName = blackPlayerName.getText();
+            }
+            if(whitePlayerName.getText().equals("")){
+                whiteName = existingWhiteChoices.getValue();
+            }
+            else{
+                whiteName = whitePlayerName.getText();
+            }
+            StartNewGameController.initializeGame();
+            StartNewGameController.blackPlayerChooseAUsername(blackName);
+            StartNewGameController.whitePlayerChoosesAUsername(whiteName);
+            StartNewGameController.setTotalThinkingTime(Integer.parseInt(minutes.getText()), Integer.parseInt(seconds.getText()));
+            BoardController.initializeBoard();
+            changePage("/fxml/InitializeBoard.fxml");
+        }
+        // Display erros
+        else {
+            AlertHelper.showAlert(Alert.AlertType.ERROR, page, "Error", error);
         }
     }
 
-    if (blackPlayerName.getText() != null) {
-        if (StartNewGameController.usernameExists(blackPlayerName.getText())) {
-            message = "Player 2 name is already existed!";
-            alertFlagBlack = true;
-        } else {
-            StartNewGameController.blackPlayerChooseAUsername(blackPlayerName.getText());
-            existedBlackPlayerList.setDisable(true);
-        }
-    } else {
-        blackPlayerName.setDisable(true);
-        if (existedWhitePlayerList != null) {
-            StartNewGameController.blackPlayerChooseAUsername(existedBlackPlayerList.getText());
-        } else {
-            message = "Please enter name for player 2!";
-            alertFlagBlack = true;
+    private boolean isInteger(String input) {
+        try {
+            Integer.parseInt(input);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
         }
     }
-
-    StartNewGameController.setThinkingTime(Integer.parseInt(minutes.getText()), Integer.parseInt(seconds.getText()));
-        //TODO: Throw IllegalInputException
-
-        if (alertFlagWhite && alertFlagBlack) {
-            message = "Please create name for both players or select name from the player list!";
-        }
-
-//        if ((whitePlayerName.getText() == null && existedWhitePlayerList.getText() == null) ||
-//                (blackPlayerName.getText() == null && existedBlackPlayerList.getText() == null)) {
-
-//            whitePlayerName.setDisable(true);
-//            existedWhitePlayerList.setDisable(true);
-//            blackPlayerName.setDisable(true);
-//            existedBlackPlayerList.setDisable(true);
-//            AlertHelper.showAlert(Alert.AlertType.ERROR, page, "alert", "Please enter username");
-//        }
-
-        changePage("/fxml/InitializeBoard.fxml");
-}catch (NullPointerException e) {
-    //System.out.println(e.getMessage());
-    //TODO: message doesnt update depend on the cases :(
-    AlertHelper.showAlert(Alert.AlertType.ERROR, page, "alert", "something wrong");
-
 }
 
 
-
-    }
-}
-
-    //TODO: load name list
+//TODO: load name list
 
