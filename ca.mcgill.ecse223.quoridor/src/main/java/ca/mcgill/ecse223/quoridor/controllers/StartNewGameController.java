@@ -176,10 +176,14 @@ public class StartNewGameController {
      * If they are all set, then the game state will update to "ReadyToStart"
      *
      */
-    private static void isReadyToStart(){
+    public static void isReadyToStart(){
         if(whitePlayerChooseName && blackPlayerChooseName & thinkingTimeIsSet){
             ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.ReadyToStart);
+            ModelQuery.getWhitePlayer().setNextPlayer(ModelQuery.getBlackPlayer());
+            ModelQuery.getBlackPlayer().setNextPlayer(ModelQuery.getWhitePlayer());
+            ModelQuery.getCurrentGame().getCurrentPosition().setPlayerToMove(ModelQuery.getWhitePlayer());
         }
+
     }
 
     /**
@@ -190,7 +194,7 @@ public class StartNewGameController {
      * @return a boolean to indicate if the username exists
      *
      */
-    private static boolean usernameExists(String username) {
+    public static boolean usernameExists(String username) {
         boolean nameExist = false;
         List<User> users = QuoridorApplication.getQuoridor().getUsers();
         for (User user: users) {
@@ -236,5 +240,11 @@ public class StartNewGameController {
 
     public static boolean totalTimeIsSet() {
         return thinkingTimeIsSet;
+    }
+
+    public static List<User> existedUsers() {
+        List<User> users = QuoridorApplication.getQuoridor().getUsers();
+
+        return users;
     }
 }
