@@ -20,11 +20,13 @@ import java.util.List;
  */
 public class PositionController {
 
+    public static boolean isPositionValid = true;
+
     //static String saveLocation = ".\\src\\main\\resources\\";
     static String saveLocation = "";
 
     /**
-     * Empty constructor for PositionController, will be updated/completed in the future
+     * Empty constructor for PositionController
      */
     public PositionController(){}
 
@@ -163,6 +165,9 @@ public class PositionController {
                 String line;
                 String playerTurn = null;
                 int currentTurn = 0;
+                List<int[]> whiteWalls = new ArrayList();
+                List<int[]> blackWalls = new ArrayList();
+
                 //Read the lines on the file and set them
                 while((line = bufferedReader.readLine()) != null){
 
@@ -173,64 +178,51 @@ public class PositionController {
 
                     if(playerInfo.contains("W")){ //White Player information
                         if(currentTurn == 0){
-                            playerTurn = "White";
+                            playerTurn = "white";
                         }
                         //.Set Player Positions
                         int[] playerCoord = posToInt(positionInfo[0]);
 
                         //Validate position here
-                        //.MARK: ValidatePositionController.validatePawnPosition(playerCoord[1],playerCoord[0]);
+                        if(!ValidatePositionController.validatePawnPosition(playerCoord[1],playerCoord[0])){
+                            isPositionValid = false;
+                            return false;
+                        }
 
                         Tile pos = new Tile(playerCoord[1],playerCoord[0],quoridor.getBoard()); //using Position --> integer
                         whitePlayerPosition = new PlayerPosition(quoridor.getCurrentGame().getWhitePlayer(),pos);
 
 
                         //.Set Player Walls
-                        for(int i = 1; i < (categorySplit.length - 1); i++){
-                            int[] wallCoord = posToInt(categorySplit[i]);
+                        for(int i = 1; i < positionInfo.length; i++){
+                            int[] wallCoord = posToInt(positionInfo[i]);
 
-                            int moveNum = 1;
-                            int roundNum = 1;
-                            Player whitePlayer = ModelQuery.getWhitePlayer();
-                            Tile wallTile = new Tile(wallCoord[1], wallCoord[0], ModelQuery.getBoard());
-                            Game currentGame = ModelQuery.getCurrentGame();
-                            Direction wallDir = convertToDir(wallCoord[2]);
-                            Wall dropWall = ModelQuery.getWhitePlayer().getWall(i);
-
-                            WallMove wallmove = new WallMove(moveNum, roundNum,whitePlayer, wallTile, currentGame, wallDir, dropWall);
-                            WallController.dropWall(wallmove,ModelQuery.getWhitePlayer());
+                            whiteWalls.add(wallCoord);
                         }
 
                     }
                     else if(playerInfo.contains("B")){ //Black Player information
                         if(currentTurn == 0){
-                            playerTurn = "Black";
+                            playerTurn = "black";
                         }
                         //.Set Player Positions
                         int[] playerCoord = posToInt(positionInfo[0]);
 
                         //validate position here
-                        //.MARK: ValidatePositionController.validatePawnPosition(playerCoord[1],playerCoord[0]);
+                        if(!ValidatePositionController.validatePawnPosition(playerCoord[1],playerCoord[0])){
+                            isPositionValid = false;
+                            return false;
+                        }
 
                         Tile pos = new Tile(playerCoord[1],playerCoord[0],quoridor.getBoard()); //using Position --> integer
                         blackPlayerPosition = new PlayerPosition(quoridor.getCurrentGame().getBlackPlayer(),pos);
 
 
                         //Set Player Walls
-                        for(int i = 1; i < (categorySplit.length - 1); i++){
-                            //TODO: drop all the walls on the board
-                            int[] wallCoord = posToInt(categorySplit[i]);
+                        for(int i = 1; i < positionInfo.length; i++){
+                            int[] wallCoord = posToInt(positionInfo[i]);
+                            blackWalls.add(wallCoord);
 
-                            int moveNum = 1;
-                            int roundNum = 1;
-                            Player blackPlayer = ModelQuery.getBlackPlayer();
-                            Tile wallTile = new Tile(wallCoord[1], wallCoord[0], ModelQuery.getBoard());
-                            Game currentGame = ModelQuery.getCurrentGame();
-                            Direction wallDir = convertToDir(wallCoord[2]);
-                            Wall dropWall = ModelQuery.getBlackPlayer().getWall(i);
-
-                            WallMove wallmove = new WallMove(moveNum, roundNum,blackPlayer, wallTile, currentGame, wallDir, dropWall);
-                            WallController.dropWall(wallmove,ModelQuery.getBlackPlayer());
                         }
                     }
                     else { //Faulty savePosition file
@@ -245,12 +237,66 @@ public class PositionController {
                 quoridor.getCurrentGame().getCurrentPosition().setWhitePosition(whitePlayerPosition);
                 quoridor.getCurrentGame().getCurrentPosition().setBlackPosition(blackPlayerPosition);
 
+                //AddWalls for players
+                for(int j = 1; j <= 10; j++){
+                    Wall wall = Wall.getWithId(j);
+                    gameposition.addWhiteWallsInStock(wall);
+                }
+                for(int j = 1; j <= 10; j++){
+                    Wall wall = Wall.getWithId(j + 10);
+                    gameposition.addBlackWallsInStock(wall);
+                }
+
+                //set player wall
+                for(int i = 0; i < whiteWalls.size(); i++){
+                    int moveNum = 1, roundNum = 1;
+
+                    Direction wallDir = convertToDir(whiteWalls.get(i)[2]);
+                    if(!ValidatePositionController.validateWallPosition(whiteWalls.get(i)[1], whiteWalls.get(i)[0], wallDir)){
+                        isPositionValid = false;
+                        return false;
+                    }
+
+                    Player whitePlayer = ModelQuery.getWhitePlayer();
+                    Tile wallTile = new Tile(whiteWalls.get(i)[1], whiteWalls.get(i)[0], ModelQuery.getBoard());
+                    Game currentGame = ModelQuery.getCurrentGame();
+
+                    Wall dropWall = ModelQuery.getCurrentGame().getCurrentPosition().getWhiteWallsInStock().get(i);
+
+                    WallMove wallmove = new WallMove(moveNum, roundNum,whitePlayer, wallTile, currentGame, wallDir, dropWall);
+
+                   loadWall(wallmove,ModelQuery.getWhitePlayer());
+                }
+
+                for(int i = 0; i < blackWalls.size(); i++){
+                    int moveNum = 1;
+                    int roundNum = 1;
+
+                    Direction wallDir = convertToDir(blackWalls.get(i)[2]);
+
+                    if(!ValidatePositionController.validateWallPosition(blackWalls.get(i)[1], blackWalls.get(i)[0], wallDir)){
+                        isPositionValid = false;
+                        return false;
+                    }
+
+                    Player blackPlayer = ModelQuery.getBlackPlayer();
+                    Tile wallTile = new Tile(blackWalls.get(i)[1], blackWalls.get(i)[0], ModelQuery.getBoard());
+                    Game currentGame = ModelQuery.getCurrentGame();
+
+                    Wall dropWall = ModelQuery.getCurrentGame().getCurrentPosition().getBlackWallsInStock().get(i);
+
+                    WallMove wallmove = new WallMove(moveNum, roundNum,blackPlayer, wallTile, currentGame, wallDir, dropWall);
+
+                    loadWall(wallmove,ModelQuery.getBlackPlayer());
+                }
+
+
                 if(playerTurn.isEmpty()){ //incase while loop was not executed
                     return false;
                 }
 
                 else{ //switch the current turn to the player
-                    //.MARK: SwitchPlayerController.SwitchActivePlayer(playerTurn);
+                    SwitchPlayerController.SwitchActivePlayer(playerTurn);
                 }
 
                 bufferedReader.close();
@@ -268,6 +314,13 @@ public class PositionController {
 
 
     //.helper methods
+
+    /**
+     * This helper method is used to convert Direction into
+     * a String that is appropriate for its save format
+     * @param direction     the direction of the wall
+     * @return              the save format of the direction
+     */
     private static String convertWallDir(Direction direction){
         switch(direction){
             case Horizontal:
@@ -279,6 +332,11 @@ public class PositionController {
         }
     }
 
+    /**
+     * This helper method is used to convert an integer into a Direction
+     * @param direction     the direction in integer form
+     * @return              the Direction of the wall
+     */
     public static Direction convertToDir(int direction){
         switch(direction){
             case 0:
@@ -296,7 +354,7 @@ public class PositionController {
      * @return int[]            [0] COLUMN
      *                          [1] ROW
      */
-    public static int[] posToInt(String playerPosition){
+    private static int[] posToInt(String playerPosition){
         //.Note [0]: always a letter, [1]: always a number
         char[] char_arr = playerPosition.toCharArray();
 
@@ -326,6 +384,13 @@ public class PositionController {
         return positionInt;
     }
 
+    /**
+     * This helper method is used to convert wall information into a string that
+     * will be used in saving position
+     * @param index         the index of the list of walls
+     * @param listOfWalls   the list of walls
+     * @return              String that will have the appropriate save format
+     */
     private static String writeWallInfo(int index, List<Wall> listOfWalls){
         Wall wall = listOfWalls.get(index);
         Tile wallTile = wall.getMove().getTargetTile(); //gets the coordinate of the wall
@@ -339,4 +404,18 @@ public class PositionController {
         return wallPosition;
     }
 
+    private static boolean loadWall(WallMove move, Player player){
+        ModelQuery.getCurrentGame().addMove(move);
+        ModelQuery.getCurrentGame().setWallMoveCandidate(null);
+
+        if(player.equals(ModelQuery.getWhitePlayer())) {
+            ModelQuery.getCurrentGame().getCurrentPosition().addWhiteWallsOnBoard(move.getWallPlaced());
+            ModelQuery.getCurrentGame().getCurrentPosition().removeWhiteWallsInStock(move.getWallPlaced());
+        }else{
+            ModelQuery.getCurrentGame().getCurrentPosition().addBlackWallsOnBoard(move.getWallPlaced());
+            ModelQuery.getCurrentGame().getCurrentPosition().removeBlackWallsInStock(move.getWallPlaced());
+        }
+
+        return true;
+    }
 }

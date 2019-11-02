@@ -38,8 +38,8 @@ public class CucumberStepDefinitions {
 	private boolean fileChanged;
 	private boolean displayError;
 
-	private static String saveLocation = ".\\src\\main\\resources\\";
-
+	//private static String saveLocation = ".\\src\\main\\resources\\";
+	private static String saveLocation = "";
 
 	// ***********************************************
 	// Background step definitions
@@ -146,7 +146,7 @@ public class CucumberStepDefinitions {
 	@When("I initiate to load a saved game {string}")
 	public void iInitiateToLoadASavedGameFilename(String filename) {
 		try {
-			PositionController.loadGame(filename, "user1", "user2");
+			PositionController.loadGame(filename, "white", "black");
 		}catch(java.lang.UnsupportedOperationException e) {
 			throw new PendingException();
 		}catch(java.io.IOException e){
@@ -159,27 +159,8 @@ public class CucumberStepDefinitions {
 	 */
 	@And("The position to load is valid")
 	public void thePositionToLoadIsValid() {
-		boolean isWallValid = true; //default values
-		boolean isPawnValid;
-
 		try {
-			int column = ModelQuery.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getColumn();
-			int row = ModelQuery.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getRow();
-			isPawnValid = ValidatePositionController.validatePawnPosition(row,column);
-
-
-			for(Wall wall: ModelQuery.getWhiteWallsOnBoard()){
-				int wallCol = wall.getMove().getTargetTile().getColumn();
-				int wallRow = wall.getMove().getTargetTile().getRow();
-				Direction dir = wall.getMove().getWallDirection();
-				if(!ValidatePositionController.validateWallPosition(wallRow, wallCol, dir)){
-					isWallValid = false;
-					break;
-				}
-			}
-
-			boolean isLoadValid = isWallValid && isPawnValid;
-			Assert.assertEquals(true, isLoadValid);
+			Assert.assertEquals(true, PositionController.isPositionValid);
 		} catch(java.lang.UnsupportedOperationException e){
 			throw new PendingException();
 		}
@@ -228,30 +209,31 @@ public class CucumberStepDefinitions {
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
 
 		Player currentPlayer;
+		boolean wallFound = false;
 		Direction ExpectedDir;
 
-		if(player.equals("player")){
-			currentPlayer = quoridor.getCurrentGame().getWhitePlayer();
-			ExpectedDir= Direction.valueOf(orientation);
+		if(player.equals("white")){
+			ExpectedDir= stringToDirection(orientation);
 
-			assertEquals(player, currentPlayer);
+			for (Wall wall : ModelQuery.getWhiteWallsOnBoard()){
+				Direction wallDirection = wall.getMove().getWallDirection();
+				int wallRow = wall.getMove().getTargetTile().getRow();
+				int wallCol = wall.getMove().getTargetTile().getColumn();
+				if( wallDirection == ExpectedDir && wallRow == row && wallCol == col)
+					wallFound = true;
+			}
 		}
 
 		else{ //If player is an opponent
-			currentPlayer = quoridor.getCurrentGame().getBlackPlayer();
-			ExpectedDir= Direction.valueOf(orientation);
+			ExpectedDir= stringToDirection(orientation);
 
-			assertEquals(player, currentPlayer);
-		}
-
-		boolean wallFound = false;
-
-		for (Wall wall : currentPlayer.getWalls()){
-			Direction wallDirection = wall.getMove().getWallDirection();
-			int wallRow = wall.getMove().getTargetTile().getRow();
-			int wallCol = wall.getMove().getTargetTile().getColumn();
-			if( wallDirection == ExpectedDir && wallRow == row && wallCol == col)
-				wallFound = true;
+			for (Wall wall : ModelQuery.getBlackWallsOnBoard()){
+				Direction wallDirection = wall.getMove().getWallDirection();
+				int wallRow = wall.getMove().getTargetTile().getRow();
+				int wallCol = wall.getMove().getTargetTile().getColumn();
+				if( wallDirection == ExpectedDir && wallRow == row && wallCol == col)
+					wallFound = true;
+			}
 		}
 
 		assertEquals(true ,wallFound);
@@ -262,9 +244,8 @@ public class CucumberStepDefinitions {
 	 */
 	@And("Both players shall have {int} in their stacks")
 	public void bothPlayersShallHaveInTheirStacks(int remaining_walls) {
-		Quoridor quoridor = QuoridorApplication.getQuoridor();
-		int blackWallsLeft = quoridor.getCurrentGame().getBlackPlayer().numberOfWalls();
-		int whiteWallsLeft = quoridor.getCurrentGame().getWhitePlayer().numberOfWalls();
+		int blackWallsLeft = ModelQuery.getCurrentGame().getCurrentPosition().getBlackWallsInStock().size();
+		int whiteWallsLeft = ModelQuery.getCurrentGame().getCurrentPosition().getWhiteWallsInStock().size();
 
 		assertEquals(remaining_walls,blackWallsLeft);
 		assertEquals(remaining_walls,whiteWallsLeft);
@@ -275,29 +256,11 @@ public class CucumberStepDefinitions {
 	 */
 	@And("The position to load is invalid")
 	public void thePositionToLoadIsInvalid() {
-		boolean isPawnValid = false; //default values
-		boolean isWallValid = false; //default values
 		try {
-			int column = ModelQuery.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getColumn();
-			int row = ModelQuery.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getRow();
-			isPawnValid = ValidatePositionController.validatePawnPosition(row,column);
-
-
-			for(Wall wall: ModelQuery.getWhiteWallsOnBoard()){
-				int wallCol = wall.getMove().getTargetTile().getColumn();
-				int wallRow = wall.getMove().getTargetTile().getRow();
-				Direction dir = wall.getMove().getWallDirection();
-				if(!ValidatePositionController.validateWallPosition(wallRow, wallCol, dir)){
-					isWallValid = false;
-					break;
-				}
-			}
-
-			boolean isLoadValid = isWallValid && isPawnValid;
+			assertEquals(false,PositionController.isPositionValid);
 		} catch(java.lang.UnsupportedOperationException e){
 			throw new PendingException();
 		}
-
 		displayError = true;
 	}
 

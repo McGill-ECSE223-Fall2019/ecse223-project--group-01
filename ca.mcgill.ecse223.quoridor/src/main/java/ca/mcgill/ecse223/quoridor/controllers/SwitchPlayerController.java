@@ -15,7 +15,7 @@ public class SwitchPlayerController {
 	public static String SwitchActivePlayer(String currentPlayerColor) {
 		Player whitePlayer = ModelQuery.getWhitePlayer();
 		Player blackPlayer = ModelQuery.getBlackPlayer();
-		
+
 		//Player currentPlayer = ModelQuery.getPlayerToMove();
 		
 		if (currentPlayerColor.equals("white")) {
