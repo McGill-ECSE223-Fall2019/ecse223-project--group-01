@@ -195,7 +195,8 @@ public class NewGameMenuController extends ViewController {
 
             StartNewGameController.setTotalThinkingTime(Integer.parseInt(minutes.getText()), Integer.parseInt(seconds.getText()));
             try {
-                if(!PositionController.loadGame("save_data.dat", ModelQuery.getWhitePlayer().getUser().getName(),ModelQuery.getBlackPlayer().getUser().getName())){
+                System.out.println("pressed");
+                if(!PositionController.loadGame("save_temp.dat", ModelQuery.getWhitePlayer().getUser().getName(),ModelQuery.getBlackPlayer().getUser().getName())){
                     Alert errorAlert = new Alert(Alert.AlertType.ERROR);
                     errorAlert.setHeaderText("Unable to load position");
                     errorAlert.setContentText("The saved positions were unable to be loaded");

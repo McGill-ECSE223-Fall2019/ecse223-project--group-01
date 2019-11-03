@@ -14,6 +14,8 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -23,6 +25,7 @@ import javafx.util.Pair;
 
 
 import java.util.List;
+import java.util.Optional;
 
 import static java.awt.event.KeyEvent.*;
 import javafx.scene.text.Text;
@@ -214,14 +217,35 @@ public class InitializeBoardController extends ViewController {
     }
 
     public void handleSavePosition(ActionEvent actionEvent) {
-        if(!PositionController.saveGame("save_data.dat",ModelQuery.getPlayerToMove())){
+        String filename;
+        TextInputDialog textInput = new TextInputDialog();
+
+        textInput.setTitle("Saving game position");
+        textInput.getDialogPane().setContentText("Name of save file");
+
+        TextField input = textInput.getEditor();
+
+        if(input.getText() != null && input.getText().length() != 0) {
+            filename = input.getText();
+
+            if (!PositionController.saveGame(filename +".dat", ModelQuery.getPlayerToMove())) {
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                if (!PositionController.isPositionValid)
+                    errorAlert.setContentText("The current positions are invalid");
+                else
+                    errorAlert.setContentText("There was an error in saving your positions");
+                errorAlert.setHeaderText("Error in loading Position");
+                errorAlert.showAndWait();
+            }
+            else{
+                Alert successAlert = new Alert(Alert.AlertType.CONFIRMATION);
+                successAlert.setContentText("Positions is successfully saved in: " +filename +".dat");
+                successAlert.showAndWait();
+            }
+        }
+        else{
             Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-            if(!PositionController.isPositionValid)
-                errorAlert.setContentText("The current positions are invalid");
-            else
-                errorAlert.setContentText("There was an error in saving your positions");
-            errorAlert.setHeaderText("Error in loading Position");
-            errorAlert.showAndWait();
+            errorAlert.setContentText("Missing file name");
         }
     }
 }
