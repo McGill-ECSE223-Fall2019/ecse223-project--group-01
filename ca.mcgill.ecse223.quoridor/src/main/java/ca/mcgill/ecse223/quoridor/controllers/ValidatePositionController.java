@@ -17,10 +17,21 @@ public class ValidatePositionController {
 	 * @return whether or not the pawn location is allowed
 	 */
 	public static boolean validatePawnPosition(int row, int col){
-		if (row >= 1 && row <= 9 && col >= 1 && col <= 9) {
-			return true;
+		if (row < 1 || row > 9 || col < 1 || col > 9) {
+			return false;
 		}
-		return false;
+		return validateOverlappingPawns();
+	}
+	
+	/**
+	 * This method checks if the pawns are overlapping by checking if they're on the same tile
+	 * @return whether or not the pawn locations are allowed (true if valid, false if invalid)
+	 */
+	public static boolean validateOverlappingPawns() {
+		PlayerPosition whitePosition = ModelQuery.getCurrentGame().getCurrentPosition().getWhitePosition();
+		PlayerPosition blackPosition = ModelQuery.getCurrentGame().getCurrentPosition().getBlackPosition();
+		
+		return !whitePosition.getTile().equals(blackPosition.getTile());
 	}
 	
 	/**
