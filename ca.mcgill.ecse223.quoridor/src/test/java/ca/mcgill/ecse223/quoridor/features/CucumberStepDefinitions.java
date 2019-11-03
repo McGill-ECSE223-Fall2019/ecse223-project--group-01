@@ -816,7 +816,7 @@ public class CucumberStepDefinitions {
 	@When("I try to grab a wall from my stock")
 	public void iTryToGrabAWallFromMyStock() {
 		try {
-			WallController.grabWall(ModelQuery.getPlayerToMove());
+			WallController.grabWall();
 		} catch (UnsupportedOperationException e) {
 			throw new PendingException();
 		}
