@@ -177,4 +177,8 @@ public class InitializeBoardController extends ViewController{
           // TODO CHECK NUMBER OF WALLS , IF ITS ZERO, PLAYER SHOULD BE NOTFIED "I shall be notified that I have no more walls"
           // TODO SAVE GAME POSITION WHEN A MOVE IS DONE
     }
+
+    public void handleClearBoard(ActionEvent actionEvent) {
+        board.getChildren().clear();
+    }
 }

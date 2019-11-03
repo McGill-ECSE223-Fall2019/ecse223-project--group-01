@@ -58,7 +58,7 @@
             <Font size="18.0" />
          </font>
       </Button>
-      <AnchorPane fx:id="board" layoutX="21.0" layoutY="47.0" prefHeight="378.0" prefWidth="378.0">
+      <AnchorPane layoutX="21.0" layoutY="47.0" prefHeight="378.0" prefWidth="378.0">
          <children>
             <Rectangle arcHeight="5.0" arcWidth="5.0" cache="true" disable="true" fill="#4aa3c795" height="380.0" smooth="false" stroke="#47a4c9c9" strokeType="OUTSIDE" strokeWidth="2.0" width="378.0" />
             <Rectangle arcHeight="5.0" arcWidth="5.0" cache="true" disable="true" fill="WHITE" height="34.0" layoutX="43.0" smooth="false" stroke="#ffffffc9" strokeType="INSIDE" width="34.0" />
@@ -141,9 +141,9 @@
             <Rectangle arcHeight="5.0" arcWidth="5.0" cache="true" disable="true" fill="WHITE" height="34.0" layoutX="258.0" layoutY="346.0" smooth="false" stroke="#ffffffc9" strokeType="INSIDE" width="34.0" />
             <Rectangle arcHeight="5.0" arcWidth="5.0" cache="true" disable="true" fill="WHITE" height="34.0" layoutX="301.0" layoutY="346.0" smooth="false" stroke="#ffffffc9" strokeType="INSIDE" width="34.0" />
             <Rectangle arcHeight="5.0" arcWidth="5.0" cache="true" disable="true" fill="WHITE" height="34.0" layoutX="344.0" layoutY="346.0" smooth="false" stroke="#ffffffc9" strokeType="INSIDE" width="34.0" />
-            <Rectangle arcHeight="5.0" arcWidth="5.0" cache="true" disable="true" fill="#5aff1e" height="77.0" layoutX="206.0" smooth="false" stroke="#000000c9" strokeType="INSIDE" strokeWidth="1.5" width="9.0" />
             <Rectangle arcHeight="5.0" arcWidth="5.0" cache="true" disable="true" fill="WHITE" height="34.0" smooth="false" stroke="#ffffffc9" strokeType="INSIDE" width="34.0" />
             <Circle fill="WHITE" layoutX="189.0" layoutY="363.0" radius="10.0" smooth="false" stroke="#ffffffc9" strokeType="INSIDE" />
+            <AnchorPane fx:id="board" prefHeight="380.0" prefWidth="378.0" />
          </children>
       </AnchorPane>
       <Button layoutX="448.0" layoutY="163.0" mnemonicParsing="false" onAction="#createNewWall" prefHeight="39.0" prefWidth="146.0" text="Wall">
@@ -180,5 +180,10 @@
       </Text>
       <Label layoutX="257.0" layoutY="452.0" prefHeight="20.0" prefWidth="83.0" text="Invalid Move!" />
       <PointLight fx:id="whitePlayerLight" color="CHARTREUSE" layoutX="249.0" layoutY="30.0" lightOn="true" />
+      <Button layoutX="448.0" layoutY="378.0" mnemonicParsing="false" onAction="#handleClearBoard" prefHeight="39.0" prefWidth="146.0" text="Clear">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>
