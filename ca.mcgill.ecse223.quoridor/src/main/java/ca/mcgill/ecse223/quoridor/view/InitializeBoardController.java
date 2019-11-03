@@ -21,6 +21,7 @@ import javafx.util.Duration;
 
 public class InitializeBoardController extends ViewController{
 
+
     @FXML
     private AnchorPane board;
     Rectangle wall;
@@ -30,6 +31,8 @@ public class InitializeBoardController extends ViewController{
     public Text blackPlayerName1;
     public Label timerForWhitePlayer;
     public Label timerForBlackPlayer;
+    public Text whiteNumOfWalls;
+    public Text blackNumOfWalls;
     public Timeline timeline;
     public static boolean playerIsWhite = false;
 
@@ -113,6 +116,8 @@ public class InitializeBoardController extends ViewController{
     }
 
       public void handleKeyPressed(KeyEvent keyEvent) {
+
+
 //
 //        //Moves the wall up
 //        if(keyEvent.equals(VK_W)){
@@ -134,5 +139,7 @@ public class InitializeBoardController extends ViewController{
 //        else if(keyEvent.equals(VK_SPACE)){
 //
 //        }
+
+          // TODO SET NUMBER OF WALLS -1 FOR THE CURRENT PLAYER
     }
 }
