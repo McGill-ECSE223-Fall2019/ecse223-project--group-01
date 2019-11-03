@@ -1,11 +1,9 @@
 package ca.mcgill.ecse223.quoridor.view;
-import ca.mcgill.ecse223.quoridor.controllers.ModelQuery;
-import ca.mcgill.ecse223.quoridor.controllers.WallController;
+import ca.mcgill.ecse223.quoridor.controllers.*;
 import ca.mcgill.ecse223.quoridor.model.Direction;
 import ca.mcgill.ecse223.quoridor.model.Tile;
 import ca.mcgill.ecse223.quoridor.model.Wall;
 import ca.mcgill.ecse223.quoridor.controllers.ModelQuery;
-import ca.mcgill.ecse223.quoridor.controllers.StartNewGameController;
 import ca.mcgill.ecse223.quoridor.model.Player;
 import javafx.animation.KeyFrame;
 
@@ -14,13 +12,13 @@ import javafx.event.ActionEvent;
 
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
-import ca.mcgill.ecse223.quoridor.controllers.BoardController;
 import javafx.util.Pair;
 
 
@@ -213,5 +211,17 @@ public class InitializeBoardController extends ViewController {
 //        }
 
           // TODO SET NUMBER OF WALLS -1 FOR THE CURRENT PLAYER
+    }
+
+    public void handleSavePosition(ActionEvent actionEvent) {
+        if(!PositionController.saveGame("save_data.dat",ModelQuery.getPlayerToMove())){
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+            if(!PositionController.isPositionValid)
+                errorAlert.setContentText("The current positions are invalid");
+            else
+                errorAlert.setContentText("There was an error in saving your positions");
+            errorAlert.setHeaderText("Error in loading Position");
+            errorAlert.showAndWait();
+        }
     }
 }
