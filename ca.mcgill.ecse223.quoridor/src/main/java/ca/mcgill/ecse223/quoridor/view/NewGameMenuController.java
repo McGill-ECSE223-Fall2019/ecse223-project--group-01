@@ -95,6 +95,7 @@ public class NewGameMenuController extends ViewController {
             readyTostart = false;
         }
 
+
         // validate thinking time
         if (seconds.getText().equals("") || minutes.getText().equals("")) {
             error += "Thinking time not set";
@@ -109,6 +110,8 @@ public class NewGameMenuController extends ViewController {
 
         // All good begin initialization process
         if (readyTostart) {
+
+            //setup names
             if(blackPlayerName.getText().equals("")){
                 blackName = existingBlackChoices.getValue();
             }
@@ -121,6 +124,14 @@ public class NewGameMenuController extends ViewController {
             else{
                 whiteName = whitePlayerName.getText();
             }
+
+            // Validate both player's name
+            if(whiteName.equals(blackName)){
+                error+= "Players may not have the same name!";
+                readyTostart = false;
+            }
+
+
             StartNewGameController.initializeGame();
             StartNewGameController.blackPlayerChooseAUsername(blackName);
             StartNewGameController.whitePlayerChoosesAUsername(whiteName);

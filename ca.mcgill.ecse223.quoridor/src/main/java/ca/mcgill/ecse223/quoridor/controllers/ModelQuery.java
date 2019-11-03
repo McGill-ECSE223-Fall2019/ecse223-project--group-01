@@ -63,6 +63,10 @@ public class ModelQuery {
         return QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getBlackWallsOnBoard();
     }
 
+    public static GamePosition getCurrentPosition(){
+        return QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition();
+    }
+
 
 
 }

@@ -152,18 +152,14 @@ public class PositionController {
         List<GamePosition> positions = ModelQuery.getCurrentGame().getPositions();
 
 
-//        BoardController.initializeBoard();
-
         //Initialize GamePosition
-
-        //
 
         if(saveFile.exists()){
             try {
                 FileReader fileReader = new FileReader(saveLocation + filename);
                 BufferedReader bufferedReader = new BufferedReader(fileReader);
                 String line;
-                String playerTurn = null;
+                Player playerTurn = null;
                 int currentTurn = 0;
                 List<int[]> whiteWalls = new ArrayList();
                 List<int[]> blackWalls = new ArrayList();
@@ -178,13 +174,13 @@ public class PositionController {
 
                     if(playerInfo.contains("W")){ //White Player information
                         if(currentTurn == 0){
-                            playerTurn = "white";
+                            playerTurn = ModelQuery.getWhitePlayer();
                         }
                         //.Set Player Positions
                         int[] playerCoord = posToInt(positionInfo[0]);
 
                         //Validate position here
-                        if(!ValidatePositionController.validatePawnPosition(playerCoord[1],playerCoord[0])){
+                        if(!validatePositionInRange(playerCoord[1],playerCoord[0])){
                             isPositionValid = false;
                             return false;
                         }
@@ -203,13 +199,13 @@ public class PositionController {
                     }
                     else if(playerInfo.contains("B")){ //Black Player information
                         if(currentTurn == 0){
-                            playerTurn = "black";
+                            playerTurn = ModelQuery.getBlackPlayer();
                         }
                         //.Set Player Positions
                         int[] playerCoord = posToInt(positionInfo[0]);
 
                         //validate position here
-                        if(!ValidatePositionController.validatePawnPosition(playerCoord[1],playerCoord[0])){
+                        if(!validatePositionInRange(playerCoord[1],playerCoord[0])){
                             isPositionValid = false;
                             return false;
                         }
@@ -236,6 +232,9 @@ public class PositionController {
                 quoridor.getCurrentGame().setCurrentPosition(gameposition);
                 quoridor.getCurrentGame().getCurrentPosition().setWhitePosition(whitePlayerPosition);
                 quoridor.getCurrentGame().getCurrentPosition().setBlackPosition(blackPlayerPosition);
+                if(!ValidatePositionController.validateOverlappingPawns()){
+                    return false;
+                }
 
                 //AddWalls for players
                 for(int j = 1; j <= 10; j++){
@@ -291,12 +290,13 @@ public class PositionController {
                 }
 
 
-                if(playerTurn.isEmpty()){ //incase while loop was not executed
+                if(playerTurn == null){ //incase while loop was not executed
                     return false;
                 }
 
                 else{ //switch the current turn to the player
-                    SwitchPlayerController.SwitchActivePlayer(playerTurn);
+                    if(ModelQuery.getPlayerToMove() != playerTurn)
+                    SwitchPlayerController.SwitchActivePlayer();
                 }
 
                 bufferedReader.close();
@@ -416,6 +416,20 @@ public class PositionController {
             ModelQuery.getCurrentGame().getCurrentPosition().removeBlackWallsInStock(move.getWallPlaced());
         }
 
+        return true;
+    }
+
+    /**
+     * Simple helper method that is used to check if the Pawn position is on the board
+     * @param row       the row of the pawn position
+     * @param col       the column of the pawn position
+     * @return          true if it is within the board range
+     *                  false if it is outside of the board
+     */
+    private static boolean validatePositionInRange(int row, int col){
+        if (row < 1 || row > 9 || col < 1 || col > 9) {
+            return false;
+        }
         return true;
     }
 }

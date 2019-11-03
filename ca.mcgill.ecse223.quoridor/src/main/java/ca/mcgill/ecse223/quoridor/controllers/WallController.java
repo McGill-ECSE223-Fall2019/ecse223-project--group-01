@@ -72,26 +72,25 @@ public class WallController {
     public static Boolean dropWall() throws UnsupportedOperationException{
         WallMove move = ModelQuery.getWallMoveCandidate();
 
-        List<Wall> placedWalls = ModelQuery.getAllWallsOnBoard();
+//        List<Wall> placedWalls = ModelQuery.getAllWallsOnBoard();
         Player player = ModelQuery.getPlayerToMove();
 
+
         // validate no overlap
-        for (Wall wall: placedWalls){
-            if(isWallOverlap(move,wall.getMove())){
-                cancelWallMove();
-                return false;
-            }
+        if(!ValidatePositionController.validateWallPosition(move.getTargetTile().getRow(),move.getTargetTile().getColumn(),move.getWallDirection())){
+            return false;
         }
+
 
         ModelQuery.getCurrentGame().addMove(move);
         ModelQuery.getCurrentGame().setWallMoveCandidate(null);
 
         if(player.equals(ModelQuery.getWhitePlayer())) {
             ModelQuery.getCurrentGame().getCurrentPosition().addWhiteWallsOnBoard(move.getWallPlaced());
-            SwitchPlayerController.SwitchActivePlayer("white");
+            SwitchPlayerController.SwitchActivePlayer();
         }else{
             ModelQuery.getCurrentGame().getCurrentPosition().addBlackWallsOnBoard(move.getWallPlaced());
-            SwitchPlayerController.SwitchActivePlayer("black");
+            SwitchPlayerController.SwitchActivePlayer();
         }
 
         return true;
