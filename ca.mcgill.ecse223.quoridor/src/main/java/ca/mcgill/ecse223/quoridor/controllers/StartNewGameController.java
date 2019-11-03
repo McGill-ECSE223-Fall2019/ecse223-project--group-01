@@ -24,12 +24,17 @@ public class StartNewGameController {
     /**
      * @Author Fulin Huang
      *
-     * Initialize game and set game status to be initializing
+     * Attempts to initialize a game and
+     * set game status to be initializing
+     *
      */
     public static void initializeGame()  {
         if (ModelQuery.getCurrentGame() != null) {
             ModelQuery.getCurrentGame().delete(); //delete the previous game
         }
+        whitePlayerChooseName=false;
+        blackPlayerChooseName=false;
+        thinkingTimeIsSet=false;
         Quoridor quoridor = QuoridorApplication.getQuoridor();
         game = new Game(Game.GameStatus.Initializing, Game.MoveMode.PlayerMove, quoridor);
     }
@@ -64,7 +69,7 @@ public class StartNewGameController {
     /**
      * @Author Fulin Huang
      *
-     * Black player chooses a username by either choosing creating a new game or
+     * Black player chooses a username by either creating a new game or
      * by choosing from an existing name list.
      *
      * @param username name of the black user
@@ -101,7 +106,6 @@ public class StartNewGameController {
         if (whitePlayerChooseName && blackPlayerChooseName) {
             setThinkingTime(minutes, seconds);   //set total thinking time
             thinkingTimeIsSet = true;
-
         }
 
         isReadyToStart();
@@ -124,11 +128,17 @@ public class StartNewGameController {
         timer.scheduleAtFixedRate(new TimerTask() {
             public void run () {
 
-                Player currentPlayer = ModelQuery.getPlayerToMove();
+                    Player currentPlayer;
                     try {
-                        if(timeToSet <= 0) {
-                            throw new Exception("00:00 time left!");
-                        } else {
+                        if (timeToSet == 0) {
+//                            System.out.println("00:00 time left!");
+                            timer.cancel(); //stop timer if zero time left
+
+                        } else if (ModelQuery.getBlackPlayer() == null && ModelQuery.getWhitePlayer() == null) {
+                            timer.cancel();
+                        }
+                        else {
+                            currentPlayer = ModelQuery.getPlayerToMove();
                             timeToSet = timeToSet - 1000; // time to set in milliseconds
                             Date date = new Date();
                             long currentMillis = date.getTime();
@@ -139,6 +149,7 @@ public class StartNewGameController {
                         System.out.println(e.getMessage());
                     }
                 }
+
 
         }, delay, period);
         //initialize board
@@ -176,10 +187,13 @@ public class StartNewGameController {
      * If they are all set, then the game state will update to "ReadyToStart"
      *
      */
-    private static void isReadyToStart(){
+    public static void isReadyToStart(){
         if(whitePlayerChooseName && blackPlayerChooseName & thinkingTimeIsSet){
             ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.ReadyToStart);
+            ModelQuery.getWhitePlayer().setNextPlayer(ModelQuery.getBlackPlayer());
+            ModelQuery.getBlackPlayer().setNextPlayer(ModelQuery.getWhitePlayer());
         }
+
     }
 
     /**
@@ -190,7 +204,7 @@ public class StartNewGameController {
      * @return a boolean to indicate if the username exists
      *
      */
-    private static boolean usernameExists(String username) {
+    public static boolean usernameExists(String username) {
         boolean nameExist = false;
         List<User> users = QuoridorApplication.getQuoridor().getUsers();
         for (User user: users) {
@@ -210,7 +224,8 @@ public class StartNewGameController {
      */
     public static String toTimeStr() {
         long minutes = TimeUnit.MILLISECONDS.toMinutes(timeToSet);
-        long seconds = TimeUnit.MILLISECONDS.toSeconds(timeToSet);
+        long seconds = TimeUnit.MILLISECONDS.toSeconds(timeToSet) -
+                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(timeToSet));
         StringBuilder sb = new StringBuilder();
         if (minutes < 10) {
             sb.append(0).append(minutes);
@@ -226,15 +241,45 @@ public class StartNewGameController {
         return sb.toString();
     }
 
+    /**
+     * @Author Fulin Huang
+     * Check if the white player set a name
+     *
+     * @return a boolean to indicate if the white player set a name
+     */
     public static boolean whitePlayerNameIsSet() {
         return  whitePlayerChooseName;
     }
 
+    /**
+     * @Author Fulin Huang
+     * check if the black player set a name
+     *
+     * @return a boolean to indicate if the black player set a name
+     */
     public static boolean blackPlayerNameIsSet() {
         return blackPlayerChooseName;
     }
 
+    /**
+     * @Author Fulin Huang
+     * check if the total thinking time is set
+     *
+     * @return a boolean to indicate if the total thinking time is set
+     */
     public static boolean totalTimeIsSet() {
         return thinkingTimeIsSet;
+    }
+
+    /**
+     * @Author Fulin Huang
+     * Attempts to get all the users
+     *
+     * @return a list of users
+     */
+    public static List<User> existedUsers() {
+        List<User> users = QuoridorApplication.getQuoridor().getUsers();
+
+        return users;
     }
 }

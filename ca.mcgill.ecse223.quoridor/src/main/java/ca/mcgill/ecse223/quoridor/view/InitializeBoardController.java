@@ -4,9 +4,17 @@ import ca.mcgill.ecse223.quoridor.controllers.WallController;
 import ca.mcgill.ecse223.quoridor.model.Direction;
 import ca.mcgill.ecse223.quoridor.model.Tile;
 import ca.mcgill.ecse223.quoridor.model.Wall;
+import ca.mcgill.ecse223.quoridor.controllers.ModelQuery;
+import ca.mcgill.ecse223.quoridor.controllers.StartNewGameController;
+import ca.mcgill.ecse223.quoridor.model.Player;
+import javafx.animation.KeyFrame;
+
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -19,9 +27,12 @@ import javafx.util.Pair;
 import java.util.List;
 
 import static java.awt.event.KeyEvent.*;
+import javafx.scene.text.Text;
+import javafx.util.Duration;
 
 
 public class InitializeBoardController extends ViewController {
+
 
 
     private Pair<Integer, Integer> convertPawnToCanvas(int row, int col){
@@ -39,10 +50,80 @@ public class InitializeBoardController extends ViewController {
 
     @FXML
     private AnchorPane board;
+    Rectangle wall;
+    public Text whitePlayerName;
+    public Text blackPlayerName;
+    public Text whitePlayerName1;
+    public Text blackPlayerName1;
+    public Label timerForWhitePlayer;
+    public Label timerForBlackPlayer;
+    public Text whiteNumOfWalls;
+    public Text blackNumOfWalls;
+    public Timeline timeline;
+    public static boolean playerIsWhite = false;
 
+
+    public void initialize() {
+        //display player name
+        whitePlayerName.setText(ModelQuery.getWhitePlayer().getUser().getName());
+        blackPlayerName.setText(ModelQuery.getBlackPlayer().getUser().getName());
+        String nextPlayer = ModelQuery.getPlayerToMove().getNextPlayer().getUser().getName();
+
+        //grey out the next player name
+        if (nextPlayer.equals(blackPlayerName.getText())) {
+            blackPlayerName.setFill(Color.LIGHTGRAY);
+            playerIsWhite = true;
+        } else {
+            whitePlayerName.setFill(Color.LIGHTGRAY);
+        }
+
+        //display player name on the thinking time section
+        whitePlayerName1.setText(ModelQuery.getWhitePlayer().getUser().getName());
+        blackPlayerName1.setText(ModelQuery.getBlackPlayer().getUser().getName());
+
+        //start the clock once the game is initiated
+        StartNewGameController.startTheClock();
+        timerForWhitePlayer.setText(StartNewGameController.toTimeStr());
+        timerForBlackPlayer.setText(StartNewGameController.toTimeStr());
+
+        if (timeline != null) {
+            timeline.stop();
+        }
+        // update timerLabel
+        //timerForWhitePlayer.setText(StartNewGameController.toTimeStr());
+        timeline = new Timeline();
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        EventHandler onFinished = new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                Player currentPlayer = ModelQuery.getPlayerToMove();
+                if (currentPlayer.getRemainingTime().getTime() <= 0) {
+                    /*
+                     * TODO: Reset total thinking time for the current player
+                     * TODO: switch Player
+                     * Player nextPlayer = currentPlayer.getNextPlayer();
+                     * SwitchPlayerController.SwitchActivePlayer(nextPlayer); //should pass in string
+                     * TODO: count down timer for the next player
+                     */
+                    // currentPlayer.setNextPlayer(currentPlayer.getNextPlayer());
+
+                } else {
+                    if (playerIsWhite) {
+                        timerForWhitePlayer.setText(StartNewGameController.toTimeStr());
+                    } else {
+                        timerForBlackPlayer.setText(StartNewGameController.toTimeStr());
+                    }
+
+                }
+            }
+        };
+        timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(1), onFinished));
+        timeline.playFromStart();
+    }
 
     public void handleBackToMenu(ActionEvent actionEvent) {
+            timeline.stop();
             changePage("/fxml/Menu.fxml");
+
     }
 
     public void createNewWall(ActionEvent actionEvent) {
