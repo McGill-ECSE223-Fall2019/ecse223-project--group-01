@@ -1,10 +1,7 @@
 package ca.mcgill.ecse223.quoridor.controllers;
 
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
-import ca.mcgill.ecse223.quoridor.model.Board;
-import ca.mcgill.ecse223.quoridor.model.GamePosition;
-import ca.mcgill.ecse223.quoridor.model.PlayerPosition;
-import ca.mcgill.ecse223.quoridor.model.Quoridor;
+import ca.mcgill.ecse223.quoridor.model.*;
 
 import java.util.List;
 
@@ -60,13 +57,13 @@ public class BoardController {
         }
         ModelQuery.getCurrentGame().getCurrentPosition().setPlayerToMove(ModelQuery.getWhitePlayer());
 
-        //TODO White's clock should be counting down(
+        for(Wall wall: ModelQuery.getWhitePlayer().getWalls()){
+            ModelQuery.getCurrentGame().getCurrentPosition().addWhiteWallsInStock(wall);
+        }
 
-        //TODO It should be shown that it's white's turn
-
-
-
-
+        for(Wall wall: ModelQuery.getBlackPlayer().getWalls()){
+            ModelQuery.getCurrentGame().getCurrentPosition().addBlackWallsInStock(wall);
+        }
         return true;
 
     }

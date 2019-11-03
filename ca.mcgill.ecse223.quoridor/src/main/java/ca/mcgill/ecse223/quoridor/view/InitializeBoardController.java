@@ -1,17 +1,15 @@
 package ca.mcgill.ecse223.quoridor.view;
-import ca.mcgill.ecse223.quoridor.controllers.ModelQuery;
-import ca.mcgill.ecse223.quoridor.controllers.WallController;
-import ca.mcgill.ecse223.quoridor.model.Direction;
-import ca.mcgill.ecse223.quoridor.model.Tile;
-import ca.mcgill.ecse223.quoridor.model.Wall;
+
 import ca.mcgill.ecse223.quoridor.controllers.ModelQuery;
 import ca.mcgill.ecse223.quoridor.controllers.StartNewGameController;
+import ca.mcgill.ecse223.quoridor.controllers.WallController;
+import ca.mcgill.ecse223.quoridor.model.Direction;
 import ca.mcgill.ecse223.quoridor.model.Player;
+import ca.mcgill.ecse223.quoridor.model.Tile;
+import ca.mcgill.ecse223.quoridor.model.Wall;
 import javafx.animation.KeyFrame;
-
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
-
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -20,31 +18,28 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
-import ca.mcgill.ecse223.quoridor.controllers.BoardController;
-import javafx.util.Pair;
-
-
-import java.util.List;
-
-import static java.awt.event.KeyEvent.*;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+import javafx.util.Pair;
+
+import java.util.List;
 
 
 public class InitializeBoardController extends ViewController {
 
+    public static boolean wallInHand = false;
 
 
-    private Pair<Integer, Integer> convertPawnToCanvas(int row, int col){
-        int x = (row-1)*43 + 17;
-        int y = (col-1)*43 + 17;
-        return new Pair<>(x,y);
+    private Pair<Integer, Integer> convertPawnToCanvas(int row, int col) {
+        int x = (row - 1) * 43 + 17;
+        int y = (col - 1) * 43 + 17;
+        return new Pair<>(x, y);
     }
 
-    private Pair<Integer, Integer> convertWallToCanvas(int row, int col){
-        int x  = row*43-10;
-        int y  = row*43-10;
-        return new Pair<>(x,y);
+    private Pair<Integer, Integer> convertWallToCanvas(int row, int col) {
+        int x = row * 43 - 10;
+        int y = row * 43 - 10;
+        return new Pair<>(x, y);
     }
 
 
@@ -121,72 +116,77 @@ public class InitializeBoardController extends ViewController {
     }
 
     public void handleBackToMenu(ActionEvent actionEvent) {
-            timeline.stop();
-            changePage("/fxml/Menu.fxml");
+        timeline.stop();
+        changePage("/fxml/Menu.fxml");
 
     }
 
     public void createNewWall(ActionEvent actionEvent) {
-        try {
-            if(WallController.grabWall()){
-                refresh();
-            }
-            else{
-                System.out.println("no more walls");
-            }
-        } catch (Exception e){
-            System.out.println("Error");
+
+        // Check if there is already a wall in hand
+        // If so just cancel the wall move
+        if (wallInHand) {
+            WallController.cancelWallMove();
+            wallInHand = false;
+        }
+        //
+        else if (WallController.grabWall()) {
+            wallInHand = true;
+            refresh();
+        } else {
+            System.out.println("no more walls");
         }
     }
 
-    public void refresh(){
+    public void refresh() {
         // remove all walls and pawns
 
+        // update player turn
+
+        // update walls in stock
 
         // update wall positions
         ModelQuery.getCurrentGame();
         List<Wall> walls = ModelQuery.getAllWallsOnBoard();
 
-        for(Wall wall: walls){
+        for (Wall wall : walls) {
             placeWall(wall, false);
         }
 
-        Wall wall =  ModelQuery.getWallMoveCandidate().getWallPlaced();
-        placeWall(wall,true);
-
+        // update wall move candidate
+        Wall wall = ModelQuery.getWallMoveCandidate().getWallPlaced();
+        placeWall(wall, true);
     }
 
-    public void placeWall(Wall wall, boolean isWall){
+    public void placeWall(Wall wall, boolean isWall) {
 
-            Tile tile  = wall.getMove().getTargetTile();
-            Direction dir = wall.getMove().getWallDirection();
-            Pair<Integer,Integer> coord = convertWallToCanvas(tile.getRow(),tile.getColumn());
+        Tile tile = wall.getMove().getTargetTile();
+        Direction dir = wall.getMove().getWallDirection();
+        Pair<Integer, Integer> coord = convertWallToCanvas(tile.getRow(), tile.getColumn());
 
 
-            Rectangle rectangle = new Rectangle(coord.getKey(), coord.getValue(), 9, 77);
+        Rectangle rectangle = new Rectangle(coord.getKey(), coord.getValue(), 9, 77);
 
-            if(isWall){
-                rectangle.setFill(Color.GREY);
-            }
-            else{
-                rectangle.setFill(Color.web("#5aff1e"));
-            }
-            rectangle.setArcWidth(5);
-            rectangle.setArcHeight(5);
-            rectangle.setStroke(Color.web("#000000"));
-            rectangle.setStrokeWidth(1.5);
-            rectangle.setStrokeType(StrokeType.INSIDE);
-        if(dir.toString() == "Horizontal"){
-            rectangle.setRotate(0);
+        if (isWall) {
+            rectangle.setFill(Color.GREY);
+        } else {
+            rectangle.setFill(Color.web("#5aff1e"));
         }
-        else{
+        rectangle.setArcWidth(5);
+        rectangle.setArcHeight(5);
+        rectangle.setStroke(Color.web("#000000"));
+        rectangle.setStrokeWidth(1.5);
+        rectangle.setStrokeType(StrokeType.INSIDE);
+        if (dir.toString() == "Horizontal") {
+            rectangle.setRotate(0);
+        } else {
             rectangle.setRotate(90);
         }
-            board.getChildren().add(rectangle);
+        board.getChildren().add(rectangle);
 
     }
 
-      public void handleKeyPressed(KeyEvent keyEvent) {
+    public void handleKeyPressed(KeyEvent keyEvent) {
 //
 //        //Moves the wall up
 //        if(keyEvent.equals(VK_W)){
