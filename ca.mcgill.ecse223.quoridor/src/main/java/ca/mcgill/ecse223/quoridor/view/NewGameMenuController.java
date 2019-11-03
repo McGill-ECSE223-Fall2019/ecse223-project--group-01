@@ -10,8 +10,14 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Window;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 
 public class NewGameMenuController extends ViewController {
@@ -24,6 +30,9 @@ public class NewGameMenuController extends ViewController {
     public Button confirm;
     public ChoiceBox<String> existingBlackChoices;
     public ChoiceBox<String> existingWhiteChoices;
+    public ChoiceBox<String> existingSavedPosition;
+    List<String> saveFiles;
+    public String saveLocation = ".\\";
 
     public void initialize() {
 
@@ -193,9 +202,22 @@ public class NewGameMenuController extends ViewController {
                 whiteName = whitePlayerName.getText();
             }
 
+            //add all savefiles into a list
+            File directory = new File(saveLocation);
+            File[] saveFiles = directory.listFiles((d,name) -> name.endsWith(".dat"));
+
+            //make those savefiles appear in the ChoiceBox
+            if(saveFiles.length > 0){
+                for(File names: saveFiles){
+                    existingSavedPosition.getItems().add(names.getName());
+                }
+            }
+
+
+
             StartNewGameController.setTotalThinkingTime(Integer.parseInt(minutes.getText()), Integer.parseInt(seconds.getText()));
             try {
-                System.out.println("pressed");
+
                 if(!PositionController.loadGame("save_temp.dat", ModelQuery.getWhitePlayer().getUser().getName(),ModelQuery.getBlackPlayer().getUser().getName())){
                     Alert errorAlert = new Alert(Alert.AlertType.ERROR);
                     errorAlert.setHeaderText("Unable to load position");
