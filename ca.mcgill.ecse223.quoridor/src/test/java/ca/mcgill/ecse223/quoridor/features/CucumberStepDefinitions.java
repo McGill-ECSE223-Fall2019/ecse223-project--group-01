@@ -1025,6 +1025,12 @@ public class CucumberStepDefinitions {
 
 	@Given("The player to move is {string}")
 	public void thePlayerToMoveIs(String playerColor) {
+		if(playerColor.equals("white")){
+			ModelQuery.getCurrentGame().getCurrentPosition().setPlayerToMove(ModelQuery.getWhitePlayer());
+		}
+		else{
+			ModelQuery.getCurrentGame().getCurrentPosition().setPlayerToMove(ModelQuery.getBlackPlayer());
+		}
 		originalPlayerColor = playerColor;
 	}
 
