@@ -63,7 +63,7 @@
             <Rectangle arcHeight="5.0" arcWidth="5.0" cache="true" disable="true" fill="WHITE" height="34.0" layoutX="43.0" smooth="false" stroke="#ffffffc9" strokeType="INSIDE" width="34.0" />
             <Rectangle arcHeight="5.0" arcWidth="5.0" cache="true" disable="true" fill="WHITE" height="34.0" layoutX="86.0" smooth="false" stroke="#ffffffc9" strokeType="INSIDE" width="34.0" />
             <Rectangle arcHeight="5.0" arcWidth="5.0" cache="true" disable="true" fill="WHITE" height="34.0" layoutX="129.0" smooth="false" stroke="#ffffffc9" strokeType="INSIDE" width="34.0" />
-            <Rectangle arcHeight="5.0" arcWidth="5.0" cache="true" disable="true" fill="WHITE" height="34.0" layoutX="172.0" smooth="false" stroke="#ffffffc9" strokeType="INSIDE" width="34.0" />
+            <Rectangle fx:id="initialBluePosition" arcHeight="5.0" arcWidth="5.0" cache="true" disable="true" fill="WHITE" height="34.0" layoutX="172.0" smooth="false" stroke="#ffffffc9" strokeType="INSIDE" width="34.0" />
             <Rectangle arcHeight="5.0" arcWidth="5.0" cache="true" disable="true" fill="WHITE" height="34.0" layoutX="215.0" smooth="false" stroke="#ffffffc9" strokeType="INSIDE" width="34.0" />
             <Rectangle arcHeight="5.0" arcWidth="5.0" cache="true" disable="true" fill="WHITE" height="34.0" layoutX="258.0" smooth="false" stroke="#ffffffc9" strokeType="INSIDE" width="34.0" />
             <Rectangle arcHeight="5.0" arcWidth="5.0" cache="true" disable="true" fill="WHITE" height="34.0" layoutX="301.0" smooth="false" stroke="#ffffffc9" strokeType="INSIDE" width="34.0" />
@@ -135,14 +135,13 @@
             <Rectangle arcHeight="5.0" arcWidth="5.0" cache="true" disable="true" fill="WHITE" height="34.0" layoutX="43.0" layoutY="346.0" smooth="false" stroke="#ffffffc9" strokeType="INSIDE" width="34.0" />
             <Rectangle arcHeight="5.0" arcWidth="5.0" cache="true" disable="true" fill="WHITE" height="34.0" layoutX="86.0" layoutY="346.0" smooth="false" stroke="#ffffffc9" strokeType="INSIDE" width="34.0" />
             <Rectangle arcHeight="5.0" arcWidth="5.0" cache="true" disable="true" fill="WHITE" height="34.0" layoutX="129.0" layoutY="346.0" smooth="false" stroke="#ffffffc9" strokeType="INSIDE" width="34.0" />
-            <Rectangle arcHeight="5.0" arcWidth="5.0" cache="true" disable="true" fill="WHITE" height="34.0" layoutX="172.0" layoutY="346.0" smooth="false" stroke="#ffffffc9" strokeType="INSIDE" width="34.0" />
+            <Rectangle fx:id="initialGreenPosition" arcHeight="5.0" arcWidth="5.0" cache="true" disable="true" fill="WHITE" height="34.0" layoutX="172.0" layoutY="346.0" smooth="false" stroke="#ffffffc9" strokeType="INSIDE" width="34.0" />
             <Rectangle arcHeight="5.0" arcWidth="5.0" cache="true" disable="true" fill="WHITE" height="34.0" layoutX="215.0" layoutY="346.0" smooth="false" stroke="#ffffffc9" strokeType="INSIDE" width="34.0" />
             <Rectangle arcHeight="5.0" arcWidth="5.0" cache="true" disable="true" fill="WHITE" height="34.0" layoutX="258.0" layoutY="346.0" smooth="false" stroke="#ffffffc9" strokeType="INSIDE" width="34.0" />
             <Rectangle arcHeight="5.0" arcWidth="5.0" cache="true" disable="true" fill="WHITE" height="34.0" layoutX="301.0" layoutY="346.0" smooth="false" stroke="#ffffffc9" strokeType="INSIDE" width="34.0" />
             <Rectangle arcHeight="5.0" arcWidth="5.0" cache="true" disable="true" fill="WHITE" height="34.0" layoutX="344.0" layoutY="346.0" smooth="false" stroke="#ffffffc9" strokeType="INSIDE" width="34.0" />
             <Rectangle arcHeight="5.0" arcWidth="5.0" cache="true" disable="true" fill="#5aff1e" height="77.0" layoutX="206.0" smooth="false" stroke="#000000c9" strokeType="INSIDE" strokeWidth="1.5" width="9.0" />
             <Rectangle arcHeight="5.0" arcWidth="5.0" cache="true" disable="true" fill="WHITE" height="34.0" smooth="false" stroke="#ffffffc9" strokeType="INSIDE" width="34.0" />
-            <Circle fill="WHITE" layoutX="189.0" layoutY="363.0" radius="10.0" smooth="false" stroke="#ffffffc9" strokeType="INSIDE" />
          </children>
       </AnchorPane>
       <Button layoutX="448.0" layoutY="163.0" mnemonicParsing="false" onAction="#createNewWall" prefHeight="39.0" prefWidth="146.0" text="Wall">
