@@ -6,7 +6,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.awt.*;
 import java.net.URL;
 
 
@@ -23,7 +22,7 @@ public class Main extends Application{
         FXMLLoader loader = new FXMLLoader();
         URL location = getClass().getResource("");
 //        loader.setLocation(getClass().getResource("foo.fxml"));
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/menu.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/fxml/Menu.fxml"));
 //        Parent root = loader.load();
         stage.setTitle("Quoridor");
         stage.setScene(new Scene(root,600,400));
