@@ -12,14 +12,10 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
-import java.sql.Time;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
 import java.io.File;
 import java.sql.Time;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -542,7 +538,7 @@ public class CucumberStepDefinitions {
 		WallMove move = game.getWallMoveCandidate();
 		boolean outcome;
 		try {
-			outcome = WallController.shiftWall(side, move);
+			outcome = WallController.shiftWall(side);
 		} catch (UnsupportedOperationException e) {
 			throw new PendingException();
 		}
@@ -607,7 +603,7 @@ public class CucumberStepDefinitions {
 		WallMove move = ModelQuery.getWallMoveCandidate();
 		Player player = ModelQuery.getWhitePlayer();
 		try{
-			WallController.dropWall(move, player);
+			WallController.dropWall();
 		} catch (UnsupportedOperationException e) {
 			throw new PendingException();
 		}
@@ -928,13 +924,14 @@ public class CucumberStepDefinitions {
 	private int col;
 	private boolean valid;
 	private boolean pawnPos; //true if validating position of pawn, false if wall
+	private boolean isInput = false; //true if single wall input, false if "following walls provided"
 	private Direction dir;
 
 	//@author: Mark Zhu
 	@Given("A game position is supplied with pawn coordinate {int}:{int}")
-	public void gamePositionSuppliedPawnCoordinates(int row, int col) {
-		this.row = row;
-		this.col = col;
+	public void gamePositionSuppliedPawnCoordinates(int inRow, int inCol) {
+		row = inRow;
+		col = inCol;
 		pawnPos=true;
 	}
 
@@ -947,9 +944,25 @@ public class CucumberStepDefinitions {
 			} catch (UnsupportedOperationException e) {
 				throw new PendingException();
 			}
-		} else {
+		} else if (!pawnPos && isInput){
 			try {
 				valid = ValidatePositionController.validateWallPosition(row,col,dir);
+			} catch (UnsupportedOperationException e) {
+				throw new PendingException();
+			}
+		} else { //no input or pawn position -> "the following walls exist" test
+			try {
+				List<Wall> allWalls = ModelQuery.getAllWallsOnBoard();
+				int size = allWalls.size();
+				
+				for(int x = 0; x<size; x++) {
+					Wall checkingWall = allWalls.remove(x);
+					Tile refTile = checkingWall.getMove().getTargetTile();
+					valid = !ValidatePositionController.validateOverlappingWalls(refTile.getRow(),
+							refTile.getColumn(),checkingWall.getMove().getWallDirection(),allWalls);
+					allWalls.add(x,checkingWall);
+				}		
+				
 			} catch (UnsupportedOperationException e) {
 				throw new PendingException();
 			}
@@ -972,33 +985,39 @@ public class CucumberStepDefinitions {
 
 	//@author: Mark Zhu
 	@Given("A game position is supplied with wall coordinate {int}:{int}-{string}")
-	public void gamePositionSuppliedWallCoordinates(int row, int col, String direct) {
-		this.row = row;
-		this.col = col;
-		if (direct == "horizontal") {
-			this.dir = Direction.Horizontal;
+	public void gamePositionSuppliedWallCoordinates(int inRow, int inCol, String inDir) {
+		row = inRow;
+		col = inCol;
+		if (inDir.equals("horizontal")) {
+			dir = Direction.Horizontal;
 		}
-		else if (direct == "vertical") {
-			this.dir = Direction.Vertical;
+		else if (inDir.equals("vertical")) {
+			dir = Direction.Vertical;
 		}
 		pawnPos=false;
+		isInput=true;
 	}
 
 	//@author: Mark Zhu
 	@Then("The position shall be valid")
 	public void positionValid() {
-		assertEquals(valid,true);
+		assertEquals(true,valid);
 	}
 
 	//@author: Mark Zhu
 	@Then("The position shall be invalid")
 	public void positionInvalid() {
-		assertEquals(valid,false);
+		assertEquals(false,valid);
 	}
 
 	//************************************
 	//Switch Player
 	//@author: Mark Zhu
+	Instant activeStart = Instant.now();
+	Instant activeEnd = Instant.now();
+	Instant passiveStart = Instant.now();
+	Instant passiveEnd = Instant.now();
+	Duration timeSpent;
 
 	String originalPlayerColor;
 	String nextPlayerColor;
@@ -1011,20 +1030,22 @@ public class CucumberStepDefinitions {
 	//@author: Mark Zhu
 	@And("The clock of {string} is running")
 	public void currentClockRunning(String playerColor) {
-		//TODO: GUI step
+		activeStart = Instant.now();
 	}
 
 	//@author: Mark Zhu
 	@And("The clock of {string} is stopped")
 	public void nextClockStopped(String playerColor) {
-		//TODO: GUI step
+		passiveEnd = Instant.now();
 	}
 
 	//@author: Mark Zhu
 	@When("Player {string} completes his move")
 	public void playerMoveCompleted(String playerColor) {
 		try {
-			nextPlayerColor = SwitchPlayerController.SwitchActivePlayer(playerColor);
+			activeEnd = Instant.now();
+			timeSpent = Duration.between(activeStart, activeEnd); //TODO: Timer
+			nextPlayerColor = SwitchPlayerController.SwitchActivePlayer(originalPlayerColor);
 		} catch (UnsupportedOperationException e) {
 			throw new PendingException();
 		}
@@ -1051,14 +1072,12 @@ public class CucumberStepDefinitions {
 	//@author: Mark Zhu
 	@And("The next player to move shall be {string}")
 	public void checkActivePlayer(String playerColor) {
-		if (originalPlayerColor == "white") {
+		if (originalPlayerColor.equals("white")) {
 			assertEquals(nextPlayerColor,"black");
 		} else {
 			assertEquals(nextPlayerColor,"white");
 		}
 	}
-
-
 	// Feature 4  Initialize Board
 
 	/**
@@ -1433,6 +1452,7 @@ public class CucumberStepDefinitions {
 		}
 
 		game.setCurrentPosition(gamePosition);
+		game.getCurrentPosition().setPlayerToMove(quoridor.getCurrentGame().getWhitePlayer());
 	}
 
 	private Direction stringToDirection(String direction){
