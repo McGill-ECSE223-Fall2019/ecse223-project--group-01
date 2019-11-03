@@ -3,10 +3,7 @@ package ca.mcgill.ecse223.quoridor.view;
 import ca.mcgill.ecse223.quoridor.controllers.ModelQuery;
 import ca.mcgill.ecse223.quoridor.controllers.StartNewGameController;
 import ca.mcgill.ecse223.quoridor.controllers.WallController;
-import ca.mcgill.ecse223.quoridor.model.Direction;
-import ca.mcgill.ecse223.quoridor.model.Player;
-import ca.mcgill.ecse223.quoridor.model.Tile;
-import ca.mcgill.ecse223.quoridor.model.Wall;
+import ca.mcgill.ecse223.quoridor.model.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
@@ -28,20 +25,6 @@ import java.util.List;
 public class InitializeBoardController extends ViewController {
 
     public static boolean wallInHand = false;
-
-
-    private Pair<Integer, Integer> convertPawnToCanvas(int row, int col) {
-        int x = (row - 1) * 43 + 17;
-        int y = (col - 1) * 43 + 17;
-        return new Pair<>(x, y);
-    }
-
-    private Pair<Integer, Integer> convertWallToCanvas(int row, int col) {
-        int x = row * 43 - 10;
-        int y = row * 43 - 10;
-        return new Pair<>(x, y);
-    }
-
 
     @FXML
     private AnchorPane board;
@@ -128,6 +111,7 @@ public class InitializeBoardController extends ViewController {
         if (wallInHand) {
             WallController.cancelWallMove();
             wallInHand = false;
+            refresh();
         }
         //
         else if (WallController.grabWall()) {
@@ -139,11 +123,28 @@ public class InitializeBoardController extends ViewController {
     }
 
     public void refresh() {
+        GamePosition position = ModelQuery.getCurrentPosition();
+        Player white = ModelQuery.getWhitePlayer();
+        Player black = ModelQuery.getBlackPlayer();
+
         // remove all walls and pawns
 
+
         // update player turn
+        if (position.getPlayerToMove().equals(black)) {
+            whitePlayerName.setFill(Color.BLACK);
+            blackPlayerName.setFill(Color.LIGHTGRAY);
+        } else {
+            whitePlayerName.setFill(Color.LIGHTGRAY);
+            blackPlayerName.setFill(Color.BLACK);
+        }
 
         // update walls in stock
+        whiteNumOfWalls.setText(String.valueOf(position.getWhiteWallsInStock().size()));
+        blackNumOfWalls.setText(String.valueOf(position.getBlackWallsInStock().size()));
+
+
+        // update pawn positions
 
         // update wall positions
         ModelQuery.getCurrentGame();
@@ -158,6 +159,10 @@ public class InitializeBoardController extends ViewController {
         placeWall(wall, true);
     }
 
+    private void placePawn(PlayerPosition pawn){
+        Tile tile = pawn.getTile();
+    }
+
     public void placeWall(Wall wall, boolean isWall) {
 
         Tile tile = wall.getMove().getTargetTile();
@@ -167,23 +172,26 @@ public class InitializeBoardController extends ViewController {
 
         Rectangle rectangle = new Rectangle(coord.getKey(), coord.getValue(), 9, 77);
 
+        // setup color
         if (isWall) {
             rectangle.setFill(Color.GREY);
         } else {
             rectangle.setFill(Color.web("#5aff1e"));
         }
-        rectangle.setArcWidth(5);
-        rectangle.setArcHeight(5);
-        rectangle.setStroke(Color.web("#000000"));
-        rectangle.setStrokeWidth(1.5);
-        rectangle.setStrokeType(StrokeType.INSIDE);
+
         if (dir.toString() == "Horizontal") {
             rectangle.setRotate(0);
         } else {
             rectangle.setRotate(90);
         }
-        board.getChildren().add(rectangle);
 
+        rectangle.setArcWidth(5);
+        rectangle.setArcHeight(5);
+        rectangle.setStroke(Color.web("#000000"));
+        rectangle.setStrokeWidth(1.5);
+        rectangle.setStrokeType(StrokeType.INSIDE);
+
+        board.getChildren().add(rectangle);
     }
 
     public void handleKeyPressed(KeyEvent keyEvent) {
@@ -209,4 +217,17 @@ public class InitializeBoardController extends ViewController {
 //
 //        }
     }
+
+    private Pair<Integer, Integer> convertPawnToCanvas(int row, int col) {
+        int x = (row - 1) * 43 + 17;
+        int y = (col - 1) * 43 + 17;
+        return new Pair<>(x, y);
+    }
+
+    private Pair<Integer, Integer> convertWallToCanvas(int row, int col) {
+        int x = row * 43 - 10;
+        int y = row * 43 - 10;
+        return new Pair<>(x, y);
+    }
+
 }
