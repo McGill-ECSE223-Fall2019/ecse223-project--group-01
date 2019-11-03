@@ -24,8 +24,7 @@ public class SwitchPlayerController {
 		} else if (currentPlayer.equals(blackPlayer)) {
 			//ModelQuery.getBlackPlayer().setRemainingTime(new Time(ModelQuery.getBlackPlayer().getRemainingTime().getTime()-timeSpent.toMillis()));
 			QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().setPlayerToMove(currentPlayer.getNextPlayer());
-		} 
-		throw new UnsupportedOperationException();
+		}
 	}
 	
 }

@@ -1399,6 +1399,8 @@ public class CucumberStepDefinitions {
 		ArrayList<Player> playersList = new ArrayList<Player>();
 		playersList.add(player1);
 		playersList.add(player2);
+		player1.setNextPlayer(player2);
+		player2.setNextPlayer(player1);
 
 		return playersList;
 	}
