@@ -9,9 +9,7 @@ import javafx.event.ActionEvent;
 
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.PointLight;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -33,45 +31,70 @@ public class InitializeBoardController extends ViewController{
     public Label timerForWhitePlayer;
     public Label timerForBlackPlayer;
     public Timeline timeline;
+    public static boolean playerIsWhite = false;
 
 
     public void initialize() {
+        //display player name
         whitePlayerName.setText(ModelQuery.getWhitePlayer().getUser().getName());
         blackPlayerName.setText(ModelQuery.getBlackPlayer().getUser().getName());
-        blackPlayerName.setFill(Color.LIGHTGRAY);       //white player's turn when the game starts
+        String nextPlayer = ModelQuery.getPlayerToMove().getNextPlayer().getUser().getName();
+
+        //grey out the next player name
+        if (nextPlayer.equals(blackPlayerName.getText())) {
+            blackPlayerName.setFill(Color.LIGHTGRAY);
+            playerIsWhite = true;
+        } else {
+            whitePlayerName.setFill(Color.LIGHTGRAY);
+        }
+
+        //display player name on the thinking time section
         whitePlayerName1.setText(ModelQuery.getWhitePlayer().getUser().getName());
         blackPlayerName1.setText(ModelQuery.getBlackPlayer().getUser().getName());
+
+        //start the clock once the game is initiated
         StartNewGameController.startTheClock();
         timerForWhitePlayer.setText(StartNewGameController.toTimeStr());
         timerForBlackPlayer.setText(StartNewGameController.toTimeStr());
-
 
         if (timeline != null) {
             timeline.stop();
         }
         // update timerLabel
-        timerForWhitePlayer.setText(StartNewGameController.toTimeStr());
+        //timerForWhitePlayer.setText(StartNewGameController.toTimeStr());
         timeline = new Timeline();
         timeline.setCycleCount(Timeline.INDEFINITE);
         EventHandler onFinished = new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 Player currentPlayer = ModelQuery.getPlayerToMove();
                 if (currentPlayer.getRemainingTime().getTime() <= 0) {
-                    System.out.println("stop");
-                    timeline.stop();
+                    /*
+                     * TODO: Reset total thinking time for the current player
+                     * TODO: switch Player
+                     * Player nextPlayer = currentPlayer.getNextPlayer();
+                     * SwitchPlayerController.SwitchActivePlayer(nextPlayer); //should pass in string
+                     * TODO: count down timer for the next player
+                     */
+                    // currentPlayer.setNextPlayer(currentPlayer.getNextPlayer());
+
                 } else {
-                    timerForWhitePlayer.setText(StartNewGameController.toTimeStr());
+                    if (playerIsWhite) {
+                        timerForWhitePlayer.setText(StartNewGameController.toTimeStr());
+                    } else {
+                        timerForBlackPlayer.setText(StartNewGameController.toTimeStr());
+                    }
 
                 }
             }
         };
-        timeline.getKeyFrames().add(
-                new KeyFrame(Duration.seconds(1), onFinished));
+        timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(1), onFinished));
         timeline.playFromStart();
     }
 
     public void handleBackToMenu(ActionEvent actionEvent) {
+            timeline.stop();
             changePage("/fxml/Menu.fxml");
+
     }
 
     public void createNewWall(ActionEvent actionEvent) {

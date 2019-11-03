@@ -22,8 +22,8 @@ public class NewGameMenuController extends ViewController {
     public ChoiceBox<String> existingBlackChoices;
     public ChoiceBox<String> existingWhiteChoices;
 
-
     public void initialize() {
+
         StartNewGameController.initializeGame();
         List<User> existingUsers = StartNewGameController.existedUsers();
 
