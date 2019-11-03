@@ -23,12 +23,19 @@ public class BoardController {
     public static boolean initializeBoard()throws UnsupportedOperationException{
 
         Quoridor quoridor = QuoridorApplication.getQuoridor();
-        Board board = new Board(quoridor);
-        for (int i = 1; i <= 9; i++) { // rows
-            for (int j = 1; j <= 9; j++) { // columns
-                board.addTile(i, j);
+        Board board;
+        if(quoridor.getBoard() == null){
+            board = new Board(quoridor);
+            for (int i = 1; i <= 9; i++) { // rows
+                for (int j = 1; j <= 9; j++) { // columns
+                    board.addTile(i, j);
+                }
             }
         }
+        else{
+            board = quoridor.getBoard();
+        }
+
 
         PlayerPosition whitePlayerPos =  new PlayerPosition(quoridor.getCurrentGame().getWhitePlayer(), quoridor.getBoard().getTile(36));
         PlayerPosition blackPlayerPos =  new PlayerPosition(quoridor.getCurrentGame().getBlackPlayer(), quoridor.getBoard().getTile(44));
@@ -51,6 +58,7 @@ public class BoardController {
         for(int j = 11; j <= 20; j++) {
             ModelQuery.getCurrentGame().getBlackPlayer().addWall(j);
         }
+        ModelQuery.getCurrentGame().getCurrentPosition().setPlayerToMove(ModelQuery.getWhitePlayer());
 
         //TODO White's clock should be counting down(
 
