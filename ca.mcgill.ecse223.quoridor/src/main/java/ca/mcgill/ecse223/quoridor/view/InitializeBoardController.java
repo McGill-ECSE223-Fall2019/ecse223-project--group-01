@@ -18,6 +18,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+import jdk.javadoc.internal.tool.Start;
 
 
 public class InitializeBoardController extends ViewController{
@@ -36,6 +37,7 @@ public class InitializeBoardController extends ViewController{
     public Text blackNumOfWalls;
     public Timeline timeline;
     public static boolean playerIsWhite = false;
+    public static boolean isWallDrop = false;
 
 
     public void initialize() {
@@ -74,15 +76,7 @@ public class InitializeBoardController extends ViewController{
         //display player name
         whitePlayerName.setText(ModelQuery.getWhitePlayer().getUser().getName());
         blackPlayerName.setText(ModelQuery.getBlackPlayer().getUser().getName());
-        String nextPlayer = ModelQuery.getPlayerToMove().getNextPlayer().getUser().getName();
 
-        //grey out the next player name
-        if (nextPlayer.equals(blackPlayerName.getText())) {
-            blackPlayerName.setFill(Color.LIGHTGRAY);
-            playerIsWhite = true;
-        } else {
-            whitePlayerName.setFill(Color.LIGHTGRAY);
-        }
 
         //display player name on the thinking time section
         whitePlayerName1.setText(ModelQuery.getWhitePlayer().getUser().getName());
@@ -103,20 +97,27 @@ public class InitializeBoardController extends ViewController{
         EventHandler onFinished = new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 Player currentPlayer = ModelQuery.getPlayerToMove();
-                if (currentPlayer.getRemainingTime().getTime() <= 0) {
+                boolean zeroTimeLeft = currentPlayer.getRemainingTime().getTime() <= 0;
+                if ((zeroTimeLeft == true) || (isWallDrop == true) ) {
                     /*
-                     * TODO: Reset total thinking time for the current player
+                     *
                      * TODO: switch Player
                      * Player nextPlayer = currentPlayer.getNextPlayer();
-                     * SwitchPlayerController.SwitchActivePlayer(nextPlayer); //should pass in string
-                     * TODO: count down timer for the next player
+                     * SwitchPlayerController.SwitchActivePlayer(nextPlayer);
+                     * TODO: count down time for the next player
                      */
                     // currentPlayer.setNextPlayer(currentPlayer.getNextPlayer());
 
-                } else {
-                    if (playerIsWhite) {
+                }
+                else {
+                    String nextPlayer = ModelQuery.getPlayerToMove().getNextPlayer().getUser().getName();
+
+                    //grey out the next player name & count down time for the current player
+                    if (nextPlayer.equals(blackPlayerName.getText())) {
+                        blackPlayerName.setFill(Color.LIGHTGRAY);
                         timerForWhitePlayer.setText(StartNewGameController.toTimeStr());
                     } else {
+                        whitePlayerName.setFill(Color.LIGHTGRAY);
                         timerForBlackPlayer.setText(StartNewGameController.toTimeStr());
                     }
 

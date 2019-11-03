@@ -243,6 +243,20 @@ public class StartNewGameController {
 
     /**
      * @Author Fulin Huang
+     *
+     * Attempts to get the total thinking time that the user set
+     *
+     * @return the total thinking time
+     */
+    public static Time getTotalThinkingTime() {
+        Date date = new Date();
+        long currentMillis = date.getTime();
+        Time totalThinkingTime = new Time(timeToSet + currentMillis);
+        return totalThinkingTime;
+    }
+
+    /**
+     * @Author Fulin Huang
      * Check if the white player set a name
      *
      * @return a boolean to indicate if the white player set a name
