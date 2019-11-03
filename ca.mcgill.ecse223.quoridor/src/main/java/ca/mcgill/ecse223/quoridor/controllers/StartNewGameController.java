@@ -13,6 +13,8 @@ public class StartNewGameController {
     private static Game game;
     private static boolean whitePlayerChooseName = false;
     private static boolean blackPlayerChooseName = false;
+    private static boolean redPlayerChooseName = false;
+    private static boolean bluePlayerChooseName = false;
     private static boolean thinkingTimeIsSet = false;
     private static long millis;
     private static Timer timer;
