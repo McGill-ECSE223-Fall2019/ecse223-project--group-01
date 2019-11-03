@@ -14,8 +14,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
@@ -24,7 +24,7 @@ import javafx.util.Pair;
 import java.util.List;
 
 
-public class InitializeBoardController extends ViewController {
+public class InitializeBoardController extends ViewController{
 
     public static boolean wallInHand = false;
 
@@ -107,7 +107,7 @@ public class InitializeBoardController extends ViewController {
             wallInHand = true;
             refresh();
         } else {
-            System.out.println("no more walls");
+            System.out.println("No more walls");
         }
     }
 
@@ -141,13 +141,13 @@ public class InitializeBoardController extends ViewController {
         List<Wall> walls = ModelQuery.getAllWallsOnBoard();
 
         for (Wall wall : walls) {
-            placeWall(wall, false);
+            placeWall(wall.getMove(), false);
         }
 
         // update wall move candidate
         if(ModelQuery.getWallMoveCandidate()!=null){
-            Wall wall = ModelQuery.getWallMoveCandidate().getWallPlaced();
-            placeWall(wall, true);
+            WallMove move = ModelQuery.getWallMoveCandidate();
+            placeWall(move, true);
         }
     }
 
@@ -169,12 +169,11 @@ public class InitializeBoardController extends ViewController {
         board.getChildren().add(pawn);
     }
 
-    public void placeWall(Wall wall, boolean isWall) {
-
-        Tile tile = wall.getMove().getTargetTile();
-        Direction dir = wall.getMove().getWallDirection();
-//        Pair<Integer, Integer> coord = convertWallToCanvas(tile.getRow(), tile.getColumn());
-        Pair<Integer, Integer> coord = convertWallToCanvas(1, 1);
+    public void placeWall(WallMove move, boolean isWall) {
+        Tile tile = move.getTargetTile();
+        Direction dir = move.getWallDirection();
+        Pair<Integer, Integer> coord = convertWallToCanvas(tile.getRow(), tile.getColumn());
+//        Pair<Integer, Integer> coord = convertWallToCanvas(, 1);
 
 //        Rectangle rectangle = new Rectangle(coord.getKey(), coord.getValue(), 9, 77);
 
@@ -188,9 +187,9 @@ public class InitializeBoardController extends ViewController {
         }
 
         if (dir.toString() == "Horizontal") {
-            rectangle.setRotate(0);
-        } else {
             rectangle.setRotate(90);
+        } else {
+            rectangle.setRotate(0);
         }
 
         rectangle.setArcWidth(5);
@@ -202,30 +201,34 @@ public class InitializeBoardController extends ViewController {
         board.getChildren().add(rectangle);
     }
 
-    public void handleKeyPressed(KeyEvent keyEvent) {
-        KeyCode code = keyEvent.getCode();
+    @FXML
+    public void handleKeyPressed(KeyEvent event) {
+        KeyCode code = event.getCode();
         if(wallInHand){
             //Moves the wall up
-            if(code.equals(KeyCode.UP)){
+            if(code.equals(KeyCode.W)){
                 WallController.shiftWall("up");
             }
             //Moves the wall left
-            else if(code.equals(KeyCode.LEFT)){
+            else if(code.equals(KeyCode.A)){
                 WallController.shiftWall("left");
             }
             //Moves the wall down
-            else if(code.equals(KeyCode.DOWN)){
+            else if(code.equals(KeyCode.S)){
                 WallController.shiftWall("down");
             }
             //Moves the wall right
-            else if(code.equals(KeyCode.RIGHT)){
+            else if(code.equals(KeyCode.D)){
                 WallController.shiftWall("right");
             }
             //Confirm wall placement and drops the wall
-            else if(code.equals(KeyCode.SPACE)){
+            else if(code.equals(KeyCode.C)){
                 if(WallController.dropWall()){
                     wallInHand=false;
-                };
+                }
+            }
+            else if(code.equals(KeyCode.R)){
+                WallController.rotateWall();
             }
             refresh();
         }
@@ -237,7 +240,7 @@ public class InitializeBoardController extends ViewController {
         return new Pair<>(x, y);
     }
 
-    private Pair<Integer, Integer> convertWallToCanvas(int row, int col) {
+    private Pair<Integer, Integer> convertWallToCanvas(int col, int row) {
         int x = (row) * 43 - 9;
         int y = (col-1) * 43;
         return new Pair<>(x, y);
