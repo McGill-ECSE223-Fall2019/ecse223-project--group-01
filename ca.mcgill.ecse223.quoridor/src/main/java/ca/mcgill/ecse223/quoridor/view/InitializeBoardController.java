@@ -1,14 +1,24 @@
 package ca.mcgill.ecse223.quoridor.view;
+import ca.mcgill.ecse223.quoridor.controllers.ModelQuery;
+import ca.mcgill.ecse223.quoridor.controllers.StartNewGameController;
+import ca.mcgill.ecse223.quoridor.model.Player;
+import javafx.animation.KeyFrame;
+
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.PointLight;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
-
-import static java.awt.event.KeyEvent.*;
+import javafx.scene.text.Text;
+import javafx.util.Duration;
 
 
 public class InitializeBoardController extends ViewController{
@@ -16,6 +26,49 @@ public class InitializeBoardController extends ViewController{
     @FXML
     private AnchorPane board;
     Rectangle wall;
+    public Text whitePlayerName;
+    public Text blackPlayerName;
+    public Text whitePlayerName1;
+    public Text blackPlayerName1;
+    public Label timerForWhitePlayer;
+    public Label timerForBlackPlayer;
+    public Timeline timeline;
+
+
+    public void initialize() {
+        whitePlayerName.setText(ModelQuery.getWhitePlayer().getUser().getName());
+        blackPlayerName.setText(ModelQuery.getBlackPlayer().getUser().getName());
+        blackPlayerName.setFill(Color.LIGHTGRAY);       //white player's turn when the game starts
+        whitePlayerName1.setText(ModelQuery.getWhitePlayer().getUser().getName());
+        blackPlayerName1.setText(ModelQuery.getBlackPlayer().getUser().getName());
+        StartNewGameController.startTheClock();
+        timerForWhitePlayer.setText(StartNewGameController.toTimeStr());
+        timerForBlackPlayer.setText(StartNewGameController.toTimeStr());
+
+
+        if (timeline != null) {
+            timeline.stop();
+        }
+        // update timerLabel
+        timerForWhitePlayer.setText(StartNewGameController.toTimeStr());
+        timeline = new Timeline();
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        EventHandler onFinished = new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                Player currentPlayer = ModelQuery.getPlayerToMove();
+                if (currentPlayer.getRemainingTime().getTime() <= 0) {
+                    System.out.println("stop");
+                    timeline.stop();
+                } else {
+                    timerForWhitePlayer.setText(StartNewGameController.toTimeStr());
+
+                }
+            }
+        };
+        timeline.getKeyFrames().add(
+                new KeyFrame(Duration.seconds(1), onFinished));
+        timeline.playFromStart();
+    }
 
     public void handleBackToMenu(ActionEvent actionEvent) {
             changePage("/fxml/Menu.fxml");

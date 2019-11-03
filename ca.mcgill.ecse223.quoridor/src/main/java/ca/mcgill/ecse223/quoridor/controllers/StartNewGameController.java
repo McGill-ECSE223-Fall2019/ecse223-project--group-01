@@ -129,8 +129,10 @@ public class StartNewGameController {
 
                 Player currentPlayer = ModelQuery.getPlayerToMove();
                     try {
-                        if(timeToSet <= 0) {
-                            throw new Exception("00:00 time left!");
+                        if(timeToSet == 0) {
+                            System.out.println("00:00 time left!");
+                            timer.cancel(); //stop timer if zero time left
+
                         } else {
                             timeToSet = timeToSet - 1000; // time to set in milliseconds
                             Date date = new Date();

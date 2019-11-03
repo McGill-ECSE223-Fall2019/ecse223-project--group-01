@@ -47,6 +47,7 @@ public class NewGameMenuController extends ViewController {
             existingBlackChoices.getItems().add(user.getName());
             existingWhiteChoices.getItems().add(user.getName());
         }
+
     }
 
     public void backToMainMenu(ActionEvent actionEvent) {
