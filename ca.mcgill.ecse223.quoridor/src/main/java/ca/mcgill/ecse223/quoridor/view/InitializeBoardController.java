@@ -207,31 +207,39 @@ public class InitializeBoardController extends ViewController{
         if(wallInHand){
             //Moves the wall up
             if(code.equals(KeyCode.W)){
-                WallController.shiftWall("up");
+                shiftWall("up");
             }
             //Moves the wall left
             else if(code.equals(KeyCode.A)){
-                WallController.shiftWall("left");
+                shiftWall("left");
             }
             //Moves the wall down
             else if(code.equals(KeyCode.S)){
-                WallController.shiftWall("down");
+                shiftWall("down");
             }
             //Moves the wall right
             else if(code.equals(KeyCode.D)){
-                WallController.shiftWall("right");
+                shiftWall("right");
             }
             //Confirm wall placement and drops the wall
             else if(code.equals(KeyCode.C)){
-                if(WallController.dropWall()){
-                    wallInHand=false;
-                }
+                dropWall();
             }
             else if(code.equals(KeyCode.R)){
                 WallController.rotateWall();
             }
             refresh();
         }
+    }
+
+    public void dropWall(){
+        if(WallController.dropWall()){
+            wallInHand=false;
+        }
+    }
+
+    public void shiftWall(String side){
+        WallController.shiftWall(side);
     }
 
     private Pair<Integer, Integer> convertPawnToCanvas(int row, int col) {

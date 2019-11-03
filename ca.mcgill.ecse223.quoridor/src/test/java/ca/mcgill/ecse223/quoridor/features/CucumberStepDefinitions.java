@@ -5,6 +5,7 @@ import ca.mcgill.ecse223.quoridor.controllers.*;
 import ca.mcgill.ecse223.quoridor.model.*;
 import ca.mcgill.ecse223.quoridor.model.Game.GameStatus;
 import ca.mcgill.ecse223.quoridor.model.Game.MoveMode;
+import ca.mcgill.ecse223.quoridor.view.InitializeBoardController;
 import cucumber.api.PendingException;
 import io.cucumber.java.After;
 import io.cucumber.java.en.And;
@@ -32,6 +33,8 @@ public class CucumberStepDefinitions {
 
 	private static String saveLocation = ".\\src\\main\\resources\\";
 	File saveData = new File(".\\src\\main\\resources\\save_game_test.dat");
+
+	InitializeBoardController control;
 
 
 	// ***********************************************
@@ -105,12 +108,12 @@ public class CucumberStepDefinitions {
 
 	@And("I do not have a wall in my hand")
 	public void iDoNotHaveAWallInMyHand() {
-		// GUI-related feature -- TODO for later
+		InitializeBoardController.wallInHand = false;
 	}
 
 	@And("^I have a wall in my hand over the board$")
 	public void iHaveAWallInMyHandOverTheBoard() throws Throwable {
-		// GUI-related feature -- TODO for later
+		InitializeBoardController.wallInHand = true;
 	}
 
 	
@@ -549,7 +552,7 @@ public class CucumberStepDefinitions {
 	 */
 	@Then("The wall shall be moved over the board to position \\({int}, {int})")
 	public void theWallShallBeMovedOverTheBoardToPositionNrowNcol(int nrow, int ncol) {
-		//	TODO GUI step
+
 	}
 
 	/**
@@ -603,7 +606,8 @@ public class CucumberStepDefinitions {
 		WallMove move = ModelQuery.getWallMoveCandidate();
 		Player player = ModelQuery.getWhitePlayer();
 		try{
-			WallController.dropWall();
+			control = new InitializeBoardController();
+			control.dropWall();
 		} catch (UnsupportedOperationException e) {
 			throw new PendingException();
 		}
@@ -656,7 +660,7 @@ public class CucumberStepDefinitions {
 	 */
 	@And("I shall not have a wall in my hand")
 	public void iShallNotHaveAWallInMyHand() {
-		// TODO GUI
+		assertFalse(control.wallInHand);
 	}
 
 	// Invalid drop wall
@@ -836,8 +840,7 @@ public class CucumberStepDefinitions {
 	 */
 	@And("I shall have a wall in my hand over the board")
 	public void iShallHaveAWallInMyHandOverTheBoard() {
-		//GUI TODO later
-		throw new PendingException();
+		assertTrue(InitializeBoardController.wallInHand);
 	}
 
 	/**
