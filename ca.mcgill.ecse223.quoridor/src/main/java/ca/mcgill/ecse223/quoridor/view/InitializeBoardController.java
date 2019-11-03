@@ -14,6 +14,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
@@ -38,6 +39,38 @@ public class InitializeBoardController extends ViewController{
 
 
     public void initialize() {
+
+        //display white player's pawn
+        Circle whitePawn = new Circle();
+//       awn.setCenterX(0);
+//      pawn.setCenterY(0);
+        whitePawn.setLayoutX(189);
+        whitePawn.setLayoutY(17);
+        whitePawn.setRadius(8);
+        whitePawn.setFill(Color.web("#1e90ff"));
+        board.getChildren().add(whitePawn);
+
+        Circle blackPawn = new Circle();
+//       awn.setCenterX(0);
+//      pawn.setCenterY(0);
+        blackPawn.setLayoutX(189);
+        blackPawn.setLayoutY(363);
+        blackPawn.setRadius(8);
+        blackPawn.setFill(Color.web("#5aff1e"));
+        board.getChildren().add(blackPawn);
+
+
+
+        Circle pawn = new Circle();
+//       awn.setCenterX(0);
+//      pawn.setCenterY(0);
+        pawn.setLayoutX(189);
+        pawn.setLayoutX(17);
+        pawn.setRadius(8);
+        pawn.setFill(Color.web("#1e90ff"));
+        board.getChildren().add(pawn);
+
+
         //display player name
         whitePlayerName.setText(ModelQuery.getWhitePlayer().getUser().getName());
         blackPlayerName.setText(ModelQuery.getBlackPlayer().getUser().getName());
@@ -141,5 +174,11 @@ public class InitializeBoardController extends ViewController{
 //        }
 
           // TODO SET NUMBER OF WALLS -1 FOR THE CURRENT PLAYER
+          // TODO CHECK NUMBER OF WALLS , IF ITS ZERO, PLAYER SHOULD BE NOTFIED "I shall be notified that I have no more walls"
+          // TODO SAVE GAME POSITION WHEN A MOVE IS DONE
+    }
+
+    public void handleClearBoard(ActionEvent actionEvent) {
+        board.getChildren().clear();
     }
 }
