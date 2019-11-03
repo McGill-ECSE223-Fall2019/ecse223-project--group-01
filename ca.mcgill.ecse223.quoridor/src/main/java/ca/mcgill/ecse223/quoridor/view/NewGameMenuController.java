@@ -7,17 +7,15 @@ import ca.mcgill.ecse223.quoridor.controllers.StartNewGameController;
 import ca.mcgill.ecse223.quoridor.model.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.TextField;
 import javafx.stage.Window;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 
 public class NewGameMenuController extends ViewController {
@@ -218,7 +216,7 @@ public class NewGameMenuController extends ViewController {
             File[] saveFiles = directory.listFiles((d,name) -> name.endsWith(".dat"));
 
             //make those savefiles appear in the ChoiceBox
-            if(saveFiles.length > 0){
+            if(saveFiles!= null && saveFiles.length > 0){
                 for(File names: saveFiles){
                     existingSavedPosition.getItems().add(names.getName());
                 }
@@ -228,12 +226,12 @@ public class NewGameMenuController extends ViewController {
 
             StartNewGameController.setTotalThinkingTime(Integer.parseInt(minutes.getText()), Integer.parseInt(seconds.getText()));
             try {
-
                 if(!PositionController.loadGame("save_temp.dat", ModelQuery.getWhitePlayer().getUser().getName(),ModelQuery.getBlackPlayer().getUser().getName())){
                     Alert errorAlert = new Alert(Alert.AlertType.ERROR);
                     errorAlert.setHeaderText("Unable to load position");
                     errorAlert.setContentText("The saved positions were unable to be loaded");
                     errorAlert.showAndWait();
+                    changePage("/fxml/InitializeBoard.fxml");
                 }
             } catch (IOException e) {
                 Alert errorAlert = new Alert(Alert.AlertType.ERROR);
@@ -241,8 +239,14 @@ public class NewGameMenuController extends ViewController {
                 errorAlert.setContentText("There was an error in loading your position");
                 errorAlert.showAndWait();
                 e.printStackTrace();
+            } catch (NullPointerException e) {
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                errorAlert.setHeaderText("Error in loading Position");
+                errorAlert.setContentText("There are no save files");
+                errorAlert.showAndWait();
+
             }
-            changePage("/fxml/InitializeBoard.fxml");
+
         }
         // Display errors
         else {
