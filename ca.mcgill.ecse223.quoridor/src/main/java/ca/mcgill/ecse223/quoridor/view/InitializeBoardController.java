@@ -29,7 +29,6 @@ public class InitializeBoardController extends ViewController {
 
     @FXML
     private AnchorPane board;
-    Rectangle wall;
     public Text whitePlayerName;
     public Text blackPlayerName;
     public Text whitePlayerName1;
@@ -44,53 +43,9 @@ public class InitializeBoardController extends ViewController {
 
     public void initialize() {
 
-        //display white player's pawn
-        Circle whitePawn = new Circle();
-//       awn.setCenterX(0);
-//      pawn.setCenterY(0);
-        whitePawn.setLayoutX(189);
-        whitePawn.setLayoutY(17);
-        whitePawn.setRadius(8);
-        whitePawn.setFill(Color.web("#1e90ff"));
-        board.getChildren().add(whitePawn);
-
-        Circle blackPawn = new Circle();
-//       awn.setCenterX(0);
-//      pawn.setCenterY(0);
-        blackPawn.setLayoutX(189);
-        blackPawn.setLayoutY(363);
-        blackPawn.setRadius(8);
-        blackPawn.setFill(Color.web("#5aff1e"));
-        board.getChildren().add(blackPawn);
-
-
-
-        Circle pawn = new Circle();
-//       awn.setCenterX(0);
-//      pawn.setCenterY(0);
-        pawn.setLayoutX(189);
-        pawn.setLayoutX(17);
-        pawn.setRadius(8);
-        pawn.setFill(Color.web("#1e90ff"));
-        board.getChildren().add(pawn);
-
-
         //display player name
         whitePlayerName.setText(ModelQuery.getWhitePlayer().getUser().getName());
         blackPlayerName.setText(ModelQuery.getBlackPlayer().getUser().getName());
-        String nextPlayer = ModelQuery.getPlayerToMove().getNextPlayer().getUser().getName();
-
-        //grey out the next player name
-        if (nextPlayer.equals(blackPlayerName.getText())) {
-            blackPlayerName.setFill(Color.LIGHTGRAY);
-            playerIsWhite = true;
-        } else {
-            whitePlayerName.setFill(Color.LIGHTGRAY);
-        }
-
-        //display player name on the thinking time section
-        whitePlayerName1.setText(ModelQuery.getWhitePlayer().getUser().getName());
-        blackPlayerName1.setText(ModelQuery.getBlackPlayer().getUser().getName());
 
         //start the clock once the game is initiated
         StartNewGameController.startTheClock();
@@ -123,12 +78,12 @@ public class InitializeBoardController extends ViewController {
                     } else {
                         timerForBlackPlayer.setText(StartNewGameController.toTimeStr());
                     }
-
                 }
             }
         };
         timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(1), onFinished));
         timeline.playFromStart();
+        refresh();
     }
 
     public void handleBackToMenu(ActionEvent actionEvent) {
@@ -162,7 +117,6 @@ public class InitializeBoardController extends ViewController {
 
         // remove all walls and pawns
 
-
         // update player turn
         if (position.getPlayerToMove().equals(black)) {
             whitePlayerName.setFill(Color.BLACK);
@@ -176,8 +130,9 @@ public class InitializeBoardController extends ViewController {
         whiteNumOfWalls.setText(String.valueOf(position.getWhiteWallsInStock().size()));
         blackNumOfWalls.setText(String.valueOf(position.getBlackWallsInStock().size()));
 
-
         // update pawn positions
+        placePawn(position.getWhitePosition(),true);
+        placePawn(position.getBlackPosition(),false);
 
         // update wall positions
         ModelQuery.getCurrentGame();
@@ -188,20 +143,38 @@ public class InitializeBoardController extends ViewController {
         }
 
         // update wall move candidate
-        Wall wall = ModelQuery.getWallMoveCandidate().getWallPlaced();
-        placeWall(wall, true);
+        if(ModelQuery.getWallMoveCandidate()!=null){
+            Wall wall = ModelQuery.getWallMoveCandidate().getWallPlaced();
+            placeWall(wall, true);
+        }
     }
 
-    private void placePawn(PlayerPosition pawn){
-        Tile tile = pawn.getTile();
+    private void placePawn(PlayerPosition position, boolean isWhite){
+        Tile tile = position.getTile();
+
+        Pair<Integer,Integer> coord = convertPawnToCanvas(tile.getRow(),tile.getColumn());
+
+        Circle pawn = new Circle();
+        if(isWhite){
+            pawn.setFill(Color.web("#1e90ff"));
+        }
+        else{
+            pawn.setFill(Color.web("#5aff1e"));
+        }
+        pawn.setLayoutX(coord.getKey());
+        pawn.setLayoutY(coord.getValue());
+        pawn.setRadius(8);
+        board.getChildren().add(pawn);
     }
 
     public void placeWall(Wall wall, boolean isWall) {
 
         Tile tile = wall.getMove().getTargetTile();
         Direction dir = wall.getMove().getWallDirection();
-        Pair<Integer, Integer> coord = convertWallToCanvas(tile.getRow(), tile.getColumn());
+//        Pair<Integer, Integer> coord = convertWallToCanvas(tile.getRow(), tile.getColumn());
+        Pair<Integer, Integer> coord = convertWallToCanvas(1, 1);
 
+//        Rectangle rectangle = new Rectangle(coord.getKey(), coord.getValue(), 9, 77);
 
         Rectangle rectangle = new Rectangle(coord.getKey(), coord.getValue(), 9, 77);
 
@@ -258,8 +231,8 @@ public class InitializeBoardController extends ViewController {
     }
 
     private Pair<Integer, Integer> convertWallToCanvas(int row, int col) {
-        int x = row * 43 - 10;
-        int y = row * 43 - 10;
+        int x = (row) * 43 - 9;
+        int y = (col-1) * 43;
         return new Pair<>(x, y);
     }
 
