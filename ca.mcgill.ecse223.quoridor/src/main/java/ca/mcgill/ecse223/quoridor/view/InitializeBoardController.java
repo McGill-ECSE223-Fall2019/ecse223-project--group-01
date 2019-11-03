@@ -10,6 +10,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -116,6 +117,7 @@ public class InitializeBoardController extends ViewController {
         Player black = ModelQuery.getBlackPlayer();
 
         // remove all walls and pawns
+        board.getChildren().clear();
 
         // update player turn
         if (position.getPlayerToMove().equals(black)) {
@@ -201,27 +203,32 @@ public class InitializeBoardController extends ViewController {
     }
 
     public void handleKeyPressed(KeyEvent keyEvent) {
-//
-//        //Moves the wall up
-//        if(keyEvent.equals(VK_W)){
-//            wall.setY();
-//        }
-//        //Moves the wall left
-//        else if(keyEvent.equals(VK_A)){
-//            wall.setX();
-//        }
-//        //Moves the wall down
-//        else if(keyEvent.equals(VK_S)){
-//            wall.setY();
-//        }
-//        //Moves the wall right
-//        else if(keyEvent.equals(VK_D)){
-//            wall.setX();
-//        }
-//        //Confirm wall placement and drops the wall
-//        else if(keyEvent.equals(VK_SPACE)){
-//
-//        }
+        KeyCode code = keyEvent.getCode();
+        if(wallInHand){
+            //Moves the wall up
+            if(code.equals(KeyCode.UP)){
+                WallController.shiftWall("up");
+            }
+            //Moves the wall left
+            else if(code.equals(KeyCode.LEFT)){
+                WallController.shiftWall("left");
+            }
+            //Moves the wall down
+            else if(code.equals(KeyCode.DOWN)){
+                WallController.shiftWall("down");
+            }
+            //Moves the wall right
+            else if(code.equals(KeyCode.RIGHT)){
+                WallController.shiftWall("right");
+            }
+            //Confirm wall placement and drops the wall
+            else if(code.equals(KeyCode.SPACE)){
+                if(WallController.dropWall()){
+                    wallInHand=false;
+                };
+            }
+            refresh();
+        }
     }
 
     private Pair<Integer, Integer> convertPawnToCanvas(int row, int col) {
@@ -234,6 +241,13 @@ public class InitializeBoardController extends ViewController {
         int x = (row) * 43 - 9;
         int y = (col-1) * 43;
         return new Pair<>(x, y);
+    }
+
+    public void handleRotate(ActionEvent event){
+        if(wallInHand){
+            WallController.rotateWall();
+            refresh();
+        }
     }
 
     public void handleClearBoard(ActionEvent actionEvent) {
