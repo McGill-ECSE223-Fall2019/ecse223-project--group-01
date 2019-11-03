@@ -13,6 +13,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.Assert;
 
+import java.io.File;
 import java.sql.Time;
 import java.time.Duration;
 import java.time.Instant;
@@ -525,7 +526,7 @@ public class CucumberStepDefinitions {
 		WallMove move = game.getWallMoveCandidate();
 		boolean outcome;
 		try {
-			outcome = WallController.shiftWall(side, move);
+			outcome = WallController.shiftWall(side);
 		} catch (UnsupportedOperationException e) {
 			throw new PendingException();
 		}
@@ -590,7 +591,7 @@ public class CucumberStepDefinitions {
 		WallMove move = ModelQuery.getWallMoveCandidate();
 		Player player = ModelQuery.getWhitePlayer();
 		try{
-			WallController.dropWall(move, player);
+			WallController.dropWall();
 		} catch (UnsupportedOperationException e) {
 			throw new PendingException();
 		}
@@ -803,7 +804,8 @@ public class CucumberStepDefinitions {
 	@When("I try to grab a wall from my stock")
 	public void iTryToGrabAWallFromMyStock() {
 		try {
-			WallController.grabWall(ModelQuery.getPlayerToMove());
+			//WallController.grabWall(ModelQuery.getPlayerToMove());
+			WallController.grabWall();
 		} catch (UnsupportedOperationException e) {
 			throw new PendingException();
 		}
@@ -1011,6 +1013,12 @@ public class CucumberStepDefinitions {
 
 	@Given("The player to move is {string}")
 	public void thePlayerToMoveIs(String playerColor) {
+		if(playerColor.equals("white")){
+			ModelQuery.getCurrentGame().getCurrentPosition().setPlayerToMove(ModelQuery.getWhitePlayer());
+		}
+		else{
+			ModelQuery.getCurrentGame().getCurrentPosition().setPlayerToMove(ModelQuery.getBlackPlayer());
+		}
 		originalPlayerColor = playerColor;
 	}
 
@@ -1032,7 +1040,7 @@ public class CucumberStepDefinitions {
 		try {
 			activeEnd = Instant.now();
 			timeSpent = Duration.between(activeStart, activeEnd); //TODO: Timer
-			nextPlayerColor = SwitchPlayerController.SwitchActivePlayer(originalPlayerColor);
+			SwitchPlayerController.SwitchActivePlayer();
 		} catch (UnsupportedOperationException e) {
 			throw new PendingException();
 		}
@@ -1060,9 +1068,9 @@ public class CucumberStepDefinitions {
 	@And("The next player to move shall be {string}")
 	public void checkActivePlayer(String playerColor) {
 		if (originalPlayerColor.equals("white")) {
-			assertEquals(nextPlayerColor,"black");
+			assertEquals(ModelQuery.getBlackPlayer(),ModelQuery.getCurrentGame().getCurrentPosition().getPlayerToMove());
 		} else {
-			assertEquals(nextPlayerColor,"white");
+			assertEquals(ModelQuery.getWhitePlayer(),ModelQuery.getCurrentGame().getCurrentPosition().getPlayerToMove());
 		}
 	}
 	// Feature 4  Initialize Board
@@ -1385,6 +1393,8 @@ public class CucumberStepDefinitions {
 		ArrayList<Player> playersList = new ArrayList<Player>();
 		playersList.add(player1);
 		playersList.add(player2);
+		player1.setNextPlayer(player2);
+		player2.setNextPlayer(player1);
 
 		return playersList;
 	}
@@ -1439,6 +1449,7 @@ public class CucumberStepDefinitions {
 		}
 
 		game.setCurrentPosition(gamePosition);
+		game.getCurrentPosition().setPlayerToMove(quoridor.getCurrentGame().getWhitePlayer());
 	}
 
 	private Direction stringToDirection(String direction){

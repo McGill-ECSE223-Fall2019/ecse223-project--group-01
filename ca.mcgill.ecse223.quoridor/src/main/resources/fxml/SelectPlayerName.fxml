@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.Spinner?>
-<?import javafx.scene.control.SplitMenuButton?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
@@ -11,52 +9,38 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ca.mcgill.ecse223.quoridor.view.NewGameMenuController">
    <children>
-      <Text layoutX="81.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PLAYER 1" wrappingWidth="107.151118046875">
+      <Text layoutX="71.0" layoutY="90.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PLAYER 1" wrappingWidth="126.151118046875">
          <font>
             <Font size="25.0" />
          </font>
       </Text>
-      <Text layoutX="407.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PLAYER 2" wrappingWidth="107.15111804687501">
+      <Text layoutX="409.0" layoutY="90.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PLAYER 2" wrappingWidth="120.15111804687501">
          <font>
             <Font size="25.0" />
          </font>
       </Text>
-      <TextField layoutX="61.0" layoutY="112.0" promptText="Enter Name" style="-fx-background-color: #ffff;" />
-      <Text layoutX="107.0" layoutY="174.0" strokeType="OUTSIDE" strokeWidth="0.0" text="OR" wrappingWidth="34.48443866455078">
+      <TextField fx:id="whitePlayerName" layoutX="49.0" layoutY="112.0" promptText="Enter Name" style="-fx-background-color: #ffff;" />
+      <Text layoutX="113.0" layoutY="173.0" strokeType="OUTSIDE" strokeWidth="0.0" text="OR" wrappingWidth="42.484438664550794">
          <font>
             <Font size="25.0" />
          </font>
       </Text>
-      <Text layoutX="444.0" layoutY="174.0" strokeType="OUTSIDE" strokeWidth="0.0" text="OR" wrappingWidth="34.48443866455078">
+      <Text layoutX="448.0" layoutY="173.0" strokeType="OUTSIDE" strokeWidth="0.0" text="OR" wrappingWidth="42.484438664550794">
          <font>
             <Font size="25.0" />
          </font>
       </Text>
-      <SplitMenuButton layoutX="70.0" layoutY="187.0" mnemonicParsing="false" text="Select Player" textFill="WHITE">
-        <items>
-          <MenuItem mnemonicParsing="false" text="Action 1" />
-          <MenuItem mnemonicParsing="false" text="Action 2" />
-        </items>
-      </SplitMenuButton>
-      <SplitMenuButton layoutX="407.0" layoutY="187.0" mnemonicParsing="false" text="Select Player" textFill="WHITE">
-         <items>
-            <MenuItem mnemonicParsing="false" text="Action 1" />
-            <MenuItem mnemonicParsing="false" text="Action 2" />
-         </items>
-      </SplitMenuButton>
       <Text layoutX="36.0" layoutY="264.0" strokeType="OUTSIDE" strokeWidth="0.0" text="TOTAL THINKING TIME:" wrappingWidth="303.15107989990236">
          <font>
             <Font size="15.0" />
          </font>
       </Text>
-      <Spinner layoutX="79.0" layoutY="287.0" prefHeight="25.0" prefWidth="90.0" />
-      <Spinner layoutX="255.0" layoutY="287.0" prefHeight="25.0" prefWidth="90.0" />
-      <Text layoutX="188.0" layoutY="307.0" strokeType="OUTSIDE" strokeWidth="0.0" text="mins" wrappingWidth="42.48443866455078">
+      <Text layoutX="176.0" layoutY="307.0" strokeType="OUTSIDE" strokeWidth="0.0" text="mins" wrappingWidth="51.48443866455078">
          <font>
             <Font size="20.0" />
          </font>
       </Text>
-      <Text layoutX="361.0" layoutY="307.0" strokeType="OUTSIDE" strokeWidth="0.0" text="seconds" wrappingWidth="73.15106464111328">
+      <Text layoutX="362.0" layoutY="306.0" strokeType="OUTSIDE" strokeWidth="0.0" text="seconds" wrappingWidth="90.0">
          <font>
             <Font size="20.0" />
          </font>
@@ -66,8 +50,12 @@
             <Font size="13.0" />
          </font>
       </Button>
-      <Button layoutX="209.0" layoutY="344.0" mnemonicParsing="false" onAction="#handleInitializeBoard" prefHeight="36.0" prefWidth="73.0" text="Confirm" />
-      <Button layoutX="461.0" layoutY="344.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="90.0" text="Load Postion" />
-      <TextField layoutX="386.0" layoutY="112.0" promptText="Enter Name" style="-fx-background-color: #ffff;" />
+      <Button fx:id="confirm" layoutX="264.0" layoutY="344.0" mnemonicParsing="false" onAction="#handleInitializeBoard" prefHeight="36.0" prefWidth="73.0" text="Confirm" />
+      <Button layoutX="438.0" layoutY="344.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="113.0" text="Load Postion" />
+      <TextField fx:id="blackPlayerName" layoutX="384.0" layoutY="112.0" promptText="Enter Name" style="-fx-background-color: #ffff;" />
+      <TextField fx:id="minutes" layoutX="79.0" layoutY="287.0" prefHeight="27.0" prefWidth="90.0" />
+      <TextField fx:id="seconds" layoutX="265.0" layoutY="287.0" prefHeight="27.0" prefWidth="90.0" />
+      <ChoiceBox fx:id="existingWhiteChoices" layoutX="59.0" layoutY="180.0" prefWidth="150.0" />
+      <ChoiceBox fx:id="existingBlackChoices" layoutX="394.0" layoutY="180.0" prefWidth="150.0" />
    </children>
 </AnchorPane>
