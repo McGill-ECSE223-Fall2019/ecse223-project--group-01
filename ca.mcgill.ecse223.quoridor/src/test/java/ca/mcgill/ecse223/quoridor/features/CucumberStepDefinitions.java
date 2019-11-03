@@ -13,6 +13,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.Assert;
 
+import java.io.File;
 import java.sql.Time;
 import java.time.Duration;
 import java.time.Instant;
@@ -525,7 +526,7 @@ public class CucumberStepDefinitions {
 		WallMove move = game.getWallMoveCandidate();
 		boolean outcome;
 		try {
-			outcome = WallController.shiftWall(side, move);
+			outcome = WallController.shiftWall(side);
 		} catch (UnsupportedOperationException e) {
 			throw new PendingException();
 		}
@@ -590,7 +591,7 @@ public class CucumberStepDefinitions {
 		WallMove move = ModelQuery.getWallMoveCandidate();
 		Player player = ModelQuery.getWhitePlayer();
 		try{
-			WallController.dropWall(move, player);
+			WallController.dropWall();
 		} catch (UnsupportedOperationException e) {
 			throw new PendingException();
 		}
@@ -1439,6 +1440,7 @@ public class CucumberStepDefinitions {
 		}
 
 		game.setCurrentPosition(gamePosition);
+		game.getCurrentPosition().setPlayerToMove(quoridor.getCurrentGame().getWhitePlayer());
 	}
 
 	private Direction stringToDirection(String direction){
