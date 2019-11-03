@@ -236,4 +236,7 @@ public class InitializeBoardController extends ViewController {
         return new Pair<>(x, y);
     }
 
+    public void handleClearBoard(ActionEvent actionEvent) {
+        board.getChildren().clear();
+    }
 }
