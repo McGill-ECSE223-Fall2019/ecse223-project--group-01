@@ -91,8 +91,8 @@ public class InitializeBoardController extends ViewController{
         EventHandler onFinished = new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 Player currentPlayer = ModelQuery.getPlayerToMove();
-                boolean zeroTimeLeft = currentPlayer.getRemainingTime().getTime() <= 0;
-                if ((zeroTimeLeft == true) || (isWallDrop == true) ) {
+                //boolean zeroTimeLeft = currentPlayer.getRemainingTime().getTime() <= 0;
+                if ((StartNewGameController.timeOver()) || (isWallDrop == true) ) {
                     /*
                      *
                      * TODO: switch Player
@@ -102,12 +102,13 @@ public class InitializeBoardController extends ViewController{
                      */
                     // currentPlayer.setNextPlayer(currentPlayer.getNextPlayer());
                 	
-                	
                 	timerForWhitePlayer.setText(initialTime);
                 	timerForBlackPlayer.setText(initialTime);
                 	
-                	SwitchPlayerController.SwitchActivePlayer();
+                	SwitchPlayerController.switchActivePlayer();
                 	isWallDrop = false;
+                	
+                	StartNewGameController.resetTimeToSet();
                 }
                 
                 String nextPlayer = ModelQuery.getPlayerToMove().getNextPlayer().getUser().getName();
@@ -270,7 +271,7 @@ public class InitializeBoardController extends ViewController{
             else if(code.equals(KeyCode.C)){
                 if(WallController.dropWall()){
                     wallInHand=false;
-                    SwitchPlayerController.SwitchActivePlayer();
+                    SwitchPlayerController.switchActivePlayer();
                     isWallDrop=true;
                 }
             }

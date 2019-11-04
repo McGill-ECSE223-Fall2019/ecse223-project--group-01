@@ -296,4 +296,21 @@ public class StartNewGameController {
 
         return users;
     }
+    
+    /**
+     * @Author Mark Zhu
+     * Resets timeToThink between rounds
+     */
+    public static void resetTimeToSet() {
+        timeToSet = millis;
+    }
+    
+    /**
+     * @Author Mark Zhu
+     * returns whether or not the timer has run out
+     * @returns true if the timer has run out, false otherwise
+     */
+    public static boolean timeOver() {
+        return timeToSet==0;
+    }
 }
