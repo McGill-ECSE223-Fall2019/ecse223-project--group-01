@@ -69,8 +69,6 @@ public class InitializeBoardController extends ViewController{
         //record the time set per turn
         initialTime = StartNewGameController.toTimeStr();
         
-        
-        whitePlayerName.setText(initialTime);
     	timerForWhitePlayer.setText(initialTime);
     	timerForBlackPlayer.setText(initialTime);
         
@@ -91,16 +89,7 @@ public class InitializeBoardController extends ViewController{
         EventHandler onFinished = new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 Player currentPlayer = ModelQuery.getPlayerToMove();
-                //boolean zeroTimeLeft = currentPlayer.getRemainingTime().getTime() <= 0;
                 if ((StartNewGameController.timeOver()) || (isWallDrop == true) ) {
-                    /*
-                     *
-                     * TODO: switch Player
-                     * Player nextPlayer = currentPlayer.getNextPlayer();
-                     * SwitchPlayerController.SwitchActivePlayer(nextPlayer);
-                     * TODO: count down time for the next player
-                     */
-                    // currentPlayer.setNextPlayer(currentPlayer.getNextPlayer());
                 	
                 	timerForWhitePlayer.setText(initialTime);
                 	timerForBlackPlayer.setText(initialTime);
@@ -111,16 +100,15 @@ public class InitializeBoardController extends ViewController{
                 	StartNewGameController.resetTimeToSet();
                 }
                 
-                String nextPlayer = ModelQuery.getPlayerToMove().getNextPlayer().getUser().getName();
 
                 //grey out the next player name & count down time for the current player
-                if (nextPlayer.equals(blackPlayerName.getText())) {
+                if (currentPlayer.equals(ModelQuery.getWhitePlayer())) {
                     blackPlayerName.setFill(Color.LIGHTGRAY);
-                    whitePlayerName.setFill(Color.AZURE);
+                    whitePlayerName.setFill(Color.BLACK);
                     timerForWhitePlayer.setText(StartNewGameController.toTimeStr());
                 } else {
                     whitePlayerName.setFill(Color.LIGHTGRAY);
-                    blackPlayerName.setFill(Color.AZURE);
+                    blackPlayerName.setFill(Color.BLACK);
                     timerForBlackPlayer.setText(StartNewGameController.toTimeStr());
                     
                 }
