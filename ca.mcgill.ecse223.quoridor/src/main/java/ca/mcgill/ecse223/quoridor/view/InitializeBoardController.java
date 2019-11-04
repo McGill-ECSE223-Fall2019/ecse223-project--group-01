@@ -54,22 +54,22 @@ public class InitializeBoardController extends ViewController{
         //display player name on the thinking time section
         whitePlayerName1.setText(ModelQuery.getWhitePlayer().getUser().getName());
         blackPlayerName1.setText(ModelQuery.getBlackPlayer().getUser().getName());
-        
+
         //start the clock once the game is initiated
         StartNewGameController.startTheClock();
-        
+
         //record the time set per turn
         initialTime = StartNewGameController.toTimeStr();
-        
+
     	timerForWhitePlayer.setText(initialTime);
     	timerForBlackPlayer.setText(initialTime);
-        
+
 
         switchTimer();
     }
-    
-    public void switchTimer() {  	
-    	
+
+    public void switchTimer() {
+
         if (timeline != null) {
             timeline.stop();
         }
@@ -77,32 +77,32 @@ public class InitializeBoardController extends ViewController{
         //timerForWhitePlayer.setText(StartNewGameController.toTimeStr());
         timeline = new Timeline();
         timeline.setCycleCount(Timeline.INDEFINITE);
-        
+
         EventHandler onFinished = new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 Player currentPlayer = ModelQuery.getPlayerToMove();
                 if ((StartNewGameController.timeOver()) || (isWallDrop == true) ) {
-                	
+
                 	timerForWhitePlayer.setText(initialTime);
                 	timerForBlackPlayer.setText(initialTime);
-                	
+
                 	SwitchPlayerController.switchActivePlayer();
                 	isWallDrop = false;
-                	
+
                 	StartNewGameController.resetTimeToSet();
                 }
-                
+
 
                 //grey out the next player name & count down time for the current player
                 if (currentPlayer.equals(ModelQuery.getWhitePlayer())) {
                     timerForWhitePlayer.setText(StartNewGameController.toTimeStr());
                 } else {
                     timerForBlackPlayer.setText(StartNewGameController.toTimeStr());
-                    
+
                 }
             }
         };
-        
+
         timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(1), onFinished));
         timeline.playFromStart();
         refresh();
@@ -229,19 +229,19 @@ public class InitializeBoardController extends ViewController{
         if(wallInHand){
             //Moves the wall up
             if(code.equals(KeyCode.W)){
-                WallController.shiftWall("up");
+                shiftWall("up");
             }
             //Moves the wall left
             else if(code.equals(KeyCode.A)){
-                WallController.shiftWall("left");
+                shiftWall("left");
             }
             //Moves the wall down
             else if(code.equals(KeyCode.S)){
-                WallController.shiftWall("down");
+                shiftWall("down");
             }
             //Moves the wall right
             else if(code.equals(KeyCode.D)){
-                WallController.shiftWall("right");
+                shiftWall("right");
             }
             //Confirm wall placement and drops the wall
             else if(code.equals(KeyCode.E)){
@@ -256,6 +256,16 @@ public class InitializeBoardController extends ViewController{
             }
             refresh();
         }
+    }
+
+    public void dropWall(){
+        if(WallController.dropWall()){
+            wallInHand=false;
+        }
+    }
+
+    public void shiftWall(String side){
+        WallController.shiftWall(side);
     }
 
     private Pair<Integer, Integer> convertPawnToCanvas(int row, int col) {
