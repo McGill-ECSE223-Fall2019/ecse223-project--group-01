@@ -4,9 +4,12 @@
 
 package ca.mcgill.ecse223.quoridor.controllers;
 
-import java.util.List;
+import ca.mcgill.ecse223.quoridor.model.Direction;
+import ca.mcgill.ecse223.quoridor.model.PlayerPosition;
+import ca.mcgill.ecse223.quoridor.model.Tile;
+import ca.mcgill.ecse223.quoridor.model.Wall;
 
-import ca.mcgill.ecse223.quoridor.model.*;
+import java.util.List;
 
 public class ValidatePositionController {
 	

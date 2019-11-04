@@ -43,12 +43,12 @@
             <Font size="20.0" />
          </font>
       </Text>
-      <Button layoutX="448.0" layoutY="216.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="146.0" text="Rotate Wall (R)">
+      <Button layoutX="448.0" layoutY="216.0" mnemonicParsing="false" onAction="#handleRotate" prefHeight="39.0" prefWidth="146.0" text="Rotate Wall (R)">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
-      <Button layoutX="448.0" layoutY="270.0" mnemonicParsing="false" prefHeight="39.0" prefWidth="146.0" text="Save Position">
+      <Button layoutX="448.0" layoutY="270.0" mnemonicParsing="false" onAction="#handleSavePosition" prefHeight="39.0" prefWidth="146.0" text="Save Position">
          <font>
             <Font size="18.0" />
          </font>

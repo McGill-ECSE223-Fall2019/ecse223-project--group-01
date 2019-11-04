@@ -23,7 +23,6 @@ public abstract class ViewController {
             stage.show();
         } catch (Exception e){
             System.out.println("Error");
-
         }
     }
 
