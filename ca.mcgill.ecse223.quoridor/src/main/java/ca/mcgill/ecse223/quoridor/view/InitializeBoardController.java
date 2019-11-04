@@ -103,12 +103,12 @@ public class InitializeBoardController extends ViewController{
 
                 //grey out the next player name & count down time for the current player
                 if (currentPlayer.equals(ModelQuery.getWhitePlayer())) {
-                    blackPlayerName.setFill(Color.LIGHTGRAY);
-                    whitePlayerName.setFill(Color.BLACK);
+                    //blackPlayerName.setFill(Color.LIGHTGRAY);
+                    //whitePlayerName.setFill(Color.BLACK);
                     timerForWhitePlayer.setText(StartNewGameController.toTimeStr());
                 } else {
-                    whitePlayerName.setFill(Color.LIGHTGRAY);
-                    blackPlayerName.setFill(Color.BLACK);
+                    //whitePlayerName.setFill(Color.LIGHTGRAY);
+                    //blackPlayerName.setFill(Color.BLACK);
                     timerForBlackPlayer.setText(StartNewGameController.toTimeStr());
                     
                 }
