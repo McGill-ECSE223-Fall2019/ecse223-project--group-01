@@ -31,6 +31,9 @@ public class NewGameMenuController extends ViewController {
     public ChoiceBox<String> existingSavedPosition;
     List<String> saveFiles;
     public String saveLocation = ".\\";
+    
+    public static String minS;
+    public static String secS;
 
     public void initialize() {
 
@@ -133,6 +136,9 @@ public class NewGameMenuController extends ViewController {
             StartNewGameController.initializeGame();
             StartNewGameController.blackPlayerChooseAUsername(blackName);
             StartNewGameController.whitePlayerChoosesAUsername(whiteName);
+            
+            minS = minutes.getText();
+            secS = seconds.getText();
             StartNewGameController.setTotalThinkingTime(Integer.parseInt(minutes.getText()), Integer.parseInt(seconds.getText()));
             BoardController.initializeBoard();
             changePage("/fxml/InitializeBoard.fxml");
