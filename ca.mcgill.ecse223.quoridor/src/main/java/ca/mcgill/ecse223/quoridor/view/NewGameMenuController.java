@@ -1,7 +1,6 @@
 package ca.mcgill.ecse223.quoridor.view;
 
 import ca.mcgill.ecse223.quoridor.controllers.BoardController;
-import ca.mcgill.ecse223.quoridor.controllers.ModelQuery;
 import ca.mcgill.ecse223.quoridor.controllers.PositionController;
 import ca.mcgill.ecse223.quoridor.controllers.StartNewGameController;
 import ca.mcgill.ecse223.quoridor.model.User;
@@ -29,7 +28,7 @@ public class NewGameMenuController extends ViewController {
     public ChoiceBox<String> existingWhiteChoices;
     public ChoiceDialog<String> existingSavedPosition;
     List<String> saveFiles;
-    public String saveLocation = ".\\";
+    public String saveLocation = "";
 
     public void initialize() {
 
@@ -211,7 +210,7 @@ public class NewGameMenuController extends ViewController {
             }
 
             //add all savefiles into a list
-            File directory = new File(saveLocation);
+            File directory = new File("./");
             File[] saveFiles = directory.listFiles((d,name) -> name.endsWith(".dat"));
             List<String> listOfSaves = new ArrayList<>();
             for(File file: saveFiles){

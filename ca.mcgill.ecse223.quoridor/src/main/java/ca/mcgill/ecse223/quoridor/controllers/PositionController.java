@@ -3,12 +3,6 @@ package ca.mcgill.ecse223.quoridor.controllers;
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 import ca.mcgill.ecse223.quoridor.model.*;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintWriter;
-import java.util.List;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -407,7 +401,7 @@ public class PositionController {
 
         //Wall save: ColumnRowDirection
         char columnLetter = (char) (wallCol + 96);
-        String wallPosition = ", " + String.valueOf(columnLetter) + Integer.toString(wallRow) + orientation;
+        String wallPosition = "," + String.valueOf(columnLetter) + Integer.toString(wallRow) + orientation;
         return wallPosition;
     }
 
