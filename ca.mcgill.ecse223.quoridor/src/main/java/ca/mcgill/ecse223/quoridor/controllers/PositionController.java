@@ -17,7 +17,7 @@ public class PositionController {
     public static boolean isPositionValid = true;
 
     //static String saveLocation = ".\\src\\main\\resources\\";
-    static String saveLocation = "";
+    static String saveLocation = ".\\";
 
     /**
      * Empty constructor for PositionController
@@ -297,7 +297,7 @@ public class PositionController {
 
                 else{ //switch the current turn to the player
                     if(ModelQuery.getPlayerToMove() != playerTurn)
-                    SwitchPlayerController.SwitchActivePlayer();
+                    SwitchPlayerController.switchActivePlayer();
                 }
 
                 bufferedReader.close();

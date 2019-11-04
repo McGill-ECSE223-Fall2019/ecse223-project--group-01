@@ -1039,7 +1039,7 @@ public class CucumberStepDefinitions {
 		try {
 			activeEnd = Instant.now();
 			timeSpent = Duration.between(activeStart, activeEnd); //TODO: Timer
-			SwitchPlayerController.SwitchActivePlayer();
+			SwitchPlayerController.switchActivePlayer();
 		} catch (UnsupportedOperationException e) {
 			throw new PendingException();
 		}
