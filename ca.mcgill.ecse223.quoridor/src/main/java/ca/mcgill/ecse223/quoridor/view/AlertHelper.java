@@ -1,5 +1,4 @@
 package ca.mcgill.ecse223.quoridor.view;
-import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;

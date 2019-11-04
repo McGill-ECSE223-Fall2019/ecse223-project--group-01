@@ -1,8 +1,6 @@
 package ca.mcgill.ecse223.quoridor.view;
 
-import ca.mcgill.ecse223.quoridor.controllers.StartNewGameController;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.stage.Window;

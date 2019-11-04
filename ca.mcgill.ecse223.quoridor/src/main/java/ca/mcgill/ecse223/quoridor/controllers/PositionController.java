@@ -17,7 +17,7 @@ public class PositionController {
     public static boolean isPositionValid = true;
 
     //static String saveLocation = ".\\src\\main\\resources\\";
-    static String saveLocation = ".\\";
+    static String saveLocation = "./";
 
     /**
      * Empty constructor for PositionController
@@ -132,7 +132,7 @@ public class PositionController {
      * @throws java.lang.UnsupportedOperationException
      */
     public static boolean loadGame(String filename, String whiteUser, String blackUser) throws java.lang.UnsupportedOperationException, IOException {
-        File saveFile = new File(saveLocation + filename);
+        File saveFile = new File("./" + filename);
         Quoridor quoridor = QuoridorApplication.getQuoridor();
 
         //Make game running
