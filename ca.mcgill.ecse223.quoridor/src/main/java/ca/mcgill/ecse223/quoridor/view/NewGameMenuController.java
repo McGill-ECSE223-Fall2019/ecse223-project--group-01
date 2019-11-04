@@ -7,15 +7,14 @@ import ca.mcgill.ecse223.quoridor.controllers.StartNewGameController;
 import ca.mcgill.ecse223.quoridor.model.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Window;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 public class NewGameMenuController extends ViewController {
@@ -28,7 +27,7 @@ public class NewGameMenuController extends ViewController {
     public Button confirm;
     public ChoiceBox<String> existingBlackChoices;
     public ChoiceBox<String> existingWhiteChoices;
-    public ChoiceBox<String> existingSavedPosition;
+    public ChoiceDialog<String> existingSavedPosition;
     List<String> saveFiles;
     public String saveLocation = ".\\";
 
@@ -214,19 +213,33 @@ public class NewGameMenuController extends ViewController {
             //add all savefiles into a list
             File directory = new File(saveLocation);
             File[] saveFiles = directory.listFiles((d,name) -> name.endsWith(".dat"));
-
-            //make those savefiles appear in the ChoiceBox
-            if(saveFiles!= null && saveFiles.length > 0){
-                for(File names: saveFiles){
-                    existingSavedPosition.getItems().add(names.getName());
-                }
+            List<String> listOfSaves = new ArrayList<>();
+            for(File file: saveFiles){
+                listOfSaves.add(file.getName());
             }
 
+            //make those savefiles appear in the ChoiceBox
+            existingSavedPosition = new ChoiceDialog<String>("",listOfSaves);
+            existingSavedPosition.setTitle("List of saved positions");
+            existingSavedPosition.setHeaderText("Choose a saved position file to load");
 
+
+            //get repsonse value
+            Optional<String> result = existingSavedPosition.showAndWait();
+            if(result.isPresent()){
+                filename = result.get();
+            }
+            else{
+                Alert loadWarning = new Alert(Alert.AlertType.WARNING);
+                loadWarning.setHeaderText("Missing selection");
+                loadWarning.setContentText("Missing selection of save position file");
+                loadWarning.showAndWait();
+                filename = null;
+            }
 
             StartNewGameController.setTotalThinkingTime(Integer.parseInt(minutes.getText()), Integer.parseInt(seconds.getText()));
             try {
-                if(!PositionController.loadGame("save_temp.dat", ModelQuery.getWhitePlayer().getUser().getName(),ModelQuery.getBlackPlayer().getUser().getName())){
+                if(!PositionController.loadGame(filename, whitePlayerName.getText(),blackPlayerName.getText())){
                     Alert errorAlert = new Alert(Alert.AlertType.ERROR);
                     errorAlert.setHeaderText("Unable to load position");
                     errorAlert.setContentText("The saved positions were unable to be loaded");

@@ -185,7 +185,7 @@ public class PositionController {
                             return false;
                         }
 
-                        Tile pos = new Tile(playerCoord[1],playerCoord[0],quoridor.getBoard()); //using Position --> integer
+                        Tile pos = new Tile(playerCoord[1],playerCoord[0],loadGameBoard()); //using Position --> integer
                         whitePlayerPosition = new PlayerPosition(quoridor.getCurrentGame().getWhitePlayer(),pos);
 
 
@@ -210,7 +210,7 @@ public class PositionController {
                             return false;
                         }
 
-                        Tile pos = new Tile(playerCoord[1],playerCoord[0],quoridor.getBoard()); //using Position --> integer
+                        Tile pos = new Tile(playerCoord[1],playerCoord[0],loadGameBoard()); //using Position --> integer
                         blackPlayerPosition = new PlayerPosition(quoridor.getCurrentGame().getBlackPlayer(),pos);
 
 
@@ -431,5 +431,21 @@ public class PositionController {
             return false;
         }
         return true;
+    }
+
+    private static Board loadGameBoard() {
+        Quoridor quoridor = QuoridorApplication.getQuoridor();
+        Board board;
+        if (quoridor.getBoard() == null) {
+            board = new Board(quoridor);
+            for (int i = 1; i <= 9; i++) { // rows
+                for (int j = 1; j <= 9; j++) { // columns
+                    board.addTile(i, j);
+                }
+            }
+        } else {
+            board = quoridor.getBoard();
+        }
+        return board;
     }
 }
