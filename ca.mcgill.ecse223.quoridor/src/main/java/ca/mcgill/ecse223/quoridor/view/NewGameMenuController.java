@@ -272,6 +272,10 @@ public class NewGameMenuController extends ViewController {
             AlertHelper.showAlert(Alert.AlertType.ERROR, page, "Error", error);
         }
     }
+
+    public void handleBackToMenu(ActionEvent actionEvent) {
+        changePage("/fxml/Menu.fxml");
+    }
 }
 
 

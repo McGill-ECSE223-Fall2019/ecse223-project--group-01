@@ -43,17 +43,17 @@
             <Font size="20.0" />
          </font>
       </Text>
-      <Button layoutX="448.0" layoutY="216.0" mnemonicParsing="false" onAction="#handleRotate" prefHeight="39.0" prefWidth="146.0" text="Rotate Wall (R)">
+      <Button layoutX="442.0" layoutY="216.0" mnemonicParsing="false" onAction="#handleRotate" prefHeight="39.0" prefWidth="152.0" text="Rotate Wall (R)">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
-      <Button layoutX="448.0" layoutY="270.0" mnemonicParsing="false" onAction="#handleSavePosition" prefHeight="39.0" prefWidth="146.0" text="Save Position">
+      <Button layoutX="442.0" layoutY="270.0" mnemonicParsing="false" onAction="#handleSavePosition" prefHeight="39.0" prefWidth="152.0" text="Save Position">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
-      <Button layoutX="451.0" layoutY="326.0" mnemonicParsing="false" onAction="#handleBackToMenu" prefHeight="39.0" prefWidth="146.0" text="Back to Menu">
+      <Button layoutX="445.0" layoutY="326.0" mnemonicParsing="false" onAction="#handleBackToMenu" prefHeight="39.0" prefWidth="152.0" text="Back to Menu">
          <font>
             <Font size="18.0" />
          </font>
@@ -146,7 +146,7 @@
             <AnchorPane fx:id="board" prefHeight="380.0" prefWidth="378.0" />
          </children>
       </AnchorPane>
-      <Button layoutX="448.0" layoutY="163.0" mnemonicParsing="false" onAction="#createNewWall" prefHeight="39.0" prefWidth="146.0" text="Wall">
+      <Button layoutX="442.0" layoutY="163.0" mnemonicParsing="false" onAction="#createNewWall" prefHeight="39.0" prefWidth="152.0" text="Wall">
          <font>
             <Font size="18.0" />
          </font>
@@ -180,7 +180,7 @@
       </Text>
       <Label layoutX="257.0" layoutY="452.0" prefHeight="20.0" prefWidth="83.0" text="Invalid Move!" />
       <PointLight fx:id="whitePlayerLight" color="CHARTREUSE" layoutX="249.0" layoutY="30.0" lightOn="true" />
-      <Button layoutX="448.0" layoutY="378.0" mnemonicParsing="false" onAction="#handleClearBoard" prefHeight="39.0" prefWidth="146.0" text="Clear">
+      <Button layoutX="442.0" layoutY="378.0" mnemonicParsing="false" onAction="#handleClearBoard" prefHeight="39.0" prefWidth="152.0" text="Clear">
          <font>
             <Font size="18.0" />
          </font>
