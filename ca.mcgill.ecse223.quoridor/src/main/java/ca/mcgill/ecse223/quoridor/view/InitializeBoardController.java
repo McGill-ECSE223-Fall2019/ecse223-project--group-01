@@ -275,6 +275,7 @@ public class InitializeBoardController extends ViewController{
         textInput.getDialogPane().setContentText("Name of save file");
 
         TextField input = textInput.getEditor();
+        textInput.showAndWait();
 
         if(input.getText() != null && input.getText().length() != 0) {
             filename = input.getText();
