@@ -4,12 +4,21 @@ import ca.mcgill.ecse223.quoridor.controllers.ModelQuery;
 import ca.mcgill.ecse223.quoridor.controllers.StartNewGameController;
 import ca.mcgill.ecse223.quoridor.controllers.WallController;
 import ca.mcgill.ecse223.quoridor.model.*;
+import ca.mcgill.ecse223.quoridor.controllers.*;
+import ca.mcgill.ecse223.quoridor.model.Direction;
+import ca.mcgill.ecse223.quoridor.model.Tile;
+import ca.mcgill.ecse223.quoridor.model.Wall;
+import ca.mcgill.ecse223.quoridor.controllers.ModelQuery;
+import ca.mcgill.ecse223.quoridor.model.Player;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
@@ -86,6 +95,7 @@ public class InitializeBoardController extends ViewController{
         timeline.playFromStart();
         refresh();
     }
+
 
     public void handleBackToMenu(ActionEvent actionEvent) {
         timeline.stop();
@@ -255,5 +265,38 @@ public class InitializeBoardController extends ViewController{
 
     public void handleClearBoard(ActionEvent actionEvent) {
         board.getChildren().clear();
+    }
+
+    public void handleSavePosition(ActionEvent actionEvent) {
+        String filename;
+        TextInputDialog textInput = new TextInputDialog();
+
+        textInput.setTitle("Saving game position");
+        textInput.getDialogPane().setContentText("Name of save file");
+
+        TextField input = textInput.getEditor();
+
+        if(input.getText() != null && input.getText().length() != 0) {
+            filename = input.getText();
+
+            if (!PositionController.saveGame(filename +".dat", ModelQuery.getPlayerToMove())) {
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                if (!PositionController.isPositionValid)
+                    errorAlert.setContentText("The current positions are invalid");
+                else
+                    errorAlert.setContentText("There was an error in saving your positions");
+                errorAlert.setHeaderText("Error in loading Position");
+                errorAlert.showAndWait();
+            }
+            else{
+                Alert successAlert = new Alert(Alert.AlertType.CONFIRMATION);
+                successAlert.setContentText("Positions is successfully saved in: " +filename +".dat");
+                successAlert.showAndWait();
+            }
+        }
+        else{
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+            errorAlert.setContentText("Missing file name");
+        }
     }
 }
