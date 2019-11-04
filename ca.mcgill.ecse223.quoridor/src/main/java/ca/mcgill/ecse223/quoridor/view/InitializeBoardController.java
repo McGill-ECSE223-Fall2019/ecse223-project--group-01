@@ -1,15 +1,7 @@
 package ca.mcgill.ecse223.quoridor.view;
 
-import ca.mcgill.ecse223.quoridor.controllers.ModelQuery;
-import ca.mcgill.ecse223.quoridor.controllers.StartNewGameController;
-import ca.mcgill.ecse223.quoridor.controllers.WallController;
-import ca.mcgill.ecse223.quoridor.model.*;
 import ca.mcgill.ecse223.quoridor.controllers.*;
-import ca.mcgill.ecse223.quoridor.model.Direction;
-import ca.mcgill.ecse223.quoridor.model.Tile;
-import ca.mcgill.ecse223.quoridor.model.Wall;
-import ca.mcgill.ecse223.quoridor.controllers.ModelQuery;
-import ca.mcgill.ecse223.quoridor.model.Player;
+import ca.mcgill.ecse223.quoridor.model.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
@@ -252,7 +244,7 @@ public class InitializeBoardController extends ViewController{
                 WallController.shiftWall("right");
             }
             //Confirm wall placement and drops the wall
-            else if(code.equals(KeyCode.C)){
+            else if(code.equals(KeyCode.E)){
                 if(WallController.dropWall()){
                     wallInHand=false;
                     SwitchPlayerController.switchActivePlayer();
@@ -297,6 +289,7 @@ public class InitializeBoardController extends ViewController{
         textInput.getDialogPane().setContentText("Name of save file");
 
         TextField input = textInput.getEditor();
+        textInput.showAndWait();
 
         if(input.getText() != null && input.getText().length() != 0) {
             filename = input.getText();

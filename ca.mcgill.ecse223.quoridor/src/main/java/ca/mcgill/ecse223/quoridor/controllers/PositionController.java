@@ -3,12 +3,6 @@ package ca.mcgill.ecse223.quoridor.controllers;
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 import ca.mcgill.ecse223.quoridor.model.*;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintWriter;
-import java.util.List;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +17,7 @@ public class PositionController {
     public static boolean isPositionValid = true;
 
     //static String saveLocation = ".\\src\\main\\resources\\";
-    static String saveLocation = "";
+    static String saveLocation = "./";
 
     /**
      * Empty constructor for PositionController
@@ -138,7 +132,7 @@ public class PositionController {
      * @throws java.lang.UnsupportedOperationException
      */
     public static boolean loadGame(String filename, String whiteUser, String blackUser) throws java.lang.UnsupportedOperationException, IOException {
-        File saveFile = new File(saveLocation + filename);
+        File saveFile = new File("./" + filename);
         Quoridor quoridor = QuoridorApplication.getQuoridor();
 
         //Make game running
@@ -185,7 +179,7 @@ public class PositionController {
                             return false;
                         }
 
-                        Tile pos = new Tile(playerCoord[1],playerCoord[0],quoridor.getBoard()); //using Position --> integer
+                        Tile pos = new Tile(playerCoord[1],playerCoord[0],loadGameBoard()); //using Position --> integer
                         whitePlayerPosition = new PlayerPosition(quoridor.getCurrentGame().getWhitePlayer(),pos);
 
 
@@ -210,7 +204,7 @@ public class PositionController {
                             return false;
                         }
 
-                        Tile pos = new Tile(playerCoord[1],playerCoord[0],quoridor.getBoard()); //using Position --> integer
+                        Tile pos = new Tile(playerCoord[1],playerCoord[0],loadGameBoard()); //using Position --> integer
                         blackPlayerPosition = new PlayerPosition(quoridor.getCurrentGame().getBlackPlayer(),pos);
 
 
@@ -235,6 +229,16 @@ public class PositionController {
                 if(!ValidatePositionController.validateOverlappingPawns()){
                     return false;
                 }
+
+                if(Wall.getWithId(1)==null){
+                    for(int i =1; i <= 10; i++){
+                        ModelQuery.getCurrentGame().getWhitePlayer().addWall(i);
+                    }
+                    for(int j = 11; j <= 20; j++) {
+                        ModelQuery.getCurrentGame().getBlackPlayer().addWall(j);
+                    }
+                }
+
 
                 //AddWalls for players
                 for(int j = 1; j <= 10; j++){
@@ -400,7 +404,7 @@ public class PositionController {
 
         //Wall save: ColumnRowDirection
         char columnLetter = (char) (wallCol + 96);
-        String wallPosition = ", " + String.valueOf(columnLetter) + Integer.toString(wallRow) + orientation;
+        String wallPosition = "," + String.valueOf(columnLetter) + Integer.toString(wallRow) + orientation;
         return wallPosition;
     }
 
@@ -431,5 +435,21 @@ public class PositionController {
             return false;
         }
         return true;
+    }
+
+    private static Board loadGameBoard() {
+        Quoridor quoridor = QuoridorApplication.getQuoridor();
+        Board board;
+        if (quoridor.getBoard() == null) {
+            board = new Board(quoridor);
+            for (int i = 1; i <= 9; i++) { // rows
+                for (int j = 1; j <= 9; j++) { // columns
+                    board.addTile(i, j);
+                }
+            }
+        } else {
+            board = quoridor.getBoard();
+        }
+        return board;
     }
 }

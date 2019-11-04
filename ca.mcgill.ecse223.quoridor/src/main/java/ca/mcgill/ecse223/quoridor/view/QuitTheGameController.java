@@ -1,9 +1,6 @@
 package ca.mcgill.ecse223.quoridor.view;
-import javafx.event.ActionEvent;
 import javafx.application.Platform;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.stage.Window;
+import javafx.event.ActionEvent;
 
 public class QuitTheGameController extends ViewController{
 
