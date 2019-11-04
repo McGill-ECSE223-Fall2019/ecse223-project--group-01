@@ -240,7 +240,7 @@ public class StartNewGameController {
         }
         return sb.toString();
     }
-
+    
     /**
      * @Author Fulin Huang
      *

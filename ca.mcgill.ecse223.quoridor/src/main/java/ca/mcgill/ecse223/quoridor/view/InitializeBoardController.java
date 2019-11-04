@@ -50,6 +50,7 @@ public class InitializeBoardController extends ViewController{
     public Timeline timeline;
     public static boolean playerIsWhite = false;
     public static boolean isWallDrop = false;
+    public String initialTime;
 
 
     public void initialize() {
@@ -61,12 +62,24 @@ public class InitializeBoardController extends ViewController{
         //display player name on the thinking time section
         whitePlayerName1.setText(ModelQuery.getWhitePlayer().getUser().getName());
         blackPlayerName1.setText(ModelQuery.getBlackPlayer().getUser().getName());
-
+        
         //start the clock once the game is initiated
         StartNewGameController.startTheClock();
-        timerForWhitePlayer.setText(StartNewGameController.toTimeStr());
-        timerForBlackPlayer.setText(StartNewGameController.toTimeStr());
+        
+        //record the time set per turn
+        initialTime = StartNewGameController.toTimeStr();
+        
+        
+        whitePlayerName.setText(initialTime);
+    	timerForWhitePlayer.setText(initialTime);
+    	timerForBlackPlayer.setText(initialTime);
+        
 
+        switchTimer();
+    }
+    
+    public void switchTimer() {  	
+    	
         if (timeline != null) {
             timeline.stop();
         }
@@ -74,6 +87,7 @@ public class InitializeBoardController extends ViewController{
         //timerForWhitePlayer.setText(StartNewGameController.toTimeStr());
         timeline = new Timeline();
         timeline.setCycleCount(Timeline.INDEFINITE);
+        
         EventHandler onFinished = new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 Player currentPlayer = ModelQuery.getPlayerToMove();
@@ -87,22 +101,31 @@ public class InitializeBoardController extends ViewController{
                      * TODO: count down time for the next player
                      */
                     // currentPlayer.setNextPlayer(currentPlayer.getNextPlayer());
-
+                	
+                	
+                	timerForWhitePlayer.setText(initialTime);
+                	timerForBlackPlayer.setText(initialTime);
+                	
+                	SwitchPlayerController.SwitchActivePlayer();
+                	isWallDrop = false;
                 }
-                else {
-                    String nextPlayer = ModelQuery.getPlayerToMove().getNextPlayer().getUser().getName();
+                
+                String nextPlayer = ModelQuery.getPlayerToMove().getNextPlayer().getUser().getName();
 
-                    //grey out the next player name & count down time for the current player
-                    if (nextPlayer.equals(blackPlayerName.getText())) {
-                        blackPlayerName.setFill(Color.LIGHTGRAY);
-                        timerForWhitePlayer.setText(StartNewGameController.toTimeStr());
-                    } else {
-                        whitePlayerName.setFill(Color.LIGHTGRAY);
-                        timerForBlackPlayer.setText(StartNewGameController.toTimeStr());
-                    }
+                //grey out the next player name & count down time for the current player
+                if (nextPlayer.equals(blackPlayerName.getText())) {
+                    blackPlayerName.setFill(Color.LIGHTGRAY);
+                    whitePlayerName.setFill(Color.AZURE);
+                    timerForWhitePlayer.setText(StartNewGameController.toTimeStr());
+                } else {
+                    whitePlayerName.setFill(Color.LIGHTGRAY);
+                    blackPlayerName.setFill(Color.AZURE);
+                    timerForBlackPlayer.setText(StartNewGameController.toTimeStr());
+                    
                 }
             }
         };
+        
         timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(1), onFinished));
         timeline.playFromStart();
         refresh();
@@ -247,6 +270,8 @@ public class InitializeBoardController extends ViewController{
             else if(code.equals(KeyCode.C)){
                 if(WallController.dropWall()){
                     wallInHand=false;
+                    SwitchPlayerController.SwitchActivePlayer();
+                    isWallDrop=true;
                 }
             }
             else if(code.equals(KeyCode.R)){
