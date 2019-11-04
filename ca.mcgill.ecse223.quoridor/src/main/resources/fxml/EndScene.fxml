@@ -9,11 +9,6 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <ImageView fitHeight="410.0" fitWidth="500.0" layoutX="202.0" layoutY="6.0" opacity="0.16" pickOnBounds="true" preserveRatio="true" scaleX="2.9" scaleY="1.1">
-         <image>
-            <Image url="@../assets/tritin2.jpg" />
-         </image>
-      </ImageView>
       <Text layoutX="103.0" layoutY="103.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PLAYER 1 WINS">
          <font>
             <Font size="60.0" />

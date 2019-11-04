@@ -1,15 +1,16 @@
 package ca.mcgill.ecse223.quoridor.view;
 
-import ca.mcgill.ecse223.quoridor.controllers.ModelQuery;
-import ca.mcgill.ecse223.quoridor.controllers.StartNewGameController;
-import ca.mcgill.ecse223.quoridor.controllers.WallController;
+import ca.mcgill.ecse223.quoridor.controllers.*;
 import ca.mcgill.ecse223.quoridor.model.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
@@ -40,6 +41,8 @@ public class InitializeBoardController extends ViewController{
     public Text blackNumOfWalls;
     public Timeline timeline;
     public static boolean playerIsWhite = false;
+    public static boolean isWallDrop = false;
+    public String initialTime;
 
 
     public void initialize() {
@@ -48,10 +51,24 @@ public class InitializeBoardController extends ViewController{
         whitePlayerName.setText(ModelQuery.getWhitePlayer().getUser().getName());
         blackPlayerName.setText(ModelQuery.getBlackPlayer().getUser().getName());
 
+        //display player name on the thinking time section
+        whitePlayerName1.setText(ModelQuery.getWhitePlayer().getUser().getName());
+        blackPlayerName1.setText(ModelQuery.getBlackPlayer().getUser().getName());
+
         //start the clock once the game is initiated
         StartNewGameController.startTheClock();
-        timerForWhitePlayer.setText(StartNewGameController.toTimeStr());
-        timerForBlackPlayer.setText(StartNewGameController.toTimeStr());
+
+        //record the time set per turn
+        initialTime = StartNewGameController.toTimeStr();
+
+    	timerForWhitePlayer.setText(initialTime);
+    	timerForBlackPlayer.setText(initialTime);
+
+
+        switchTimer();
+    }
+
+    public void switchTimer() {
 
         if (timeline != null) {
             timeline.stop();
@@ -60,32 +77,37 @@ public class InitializeBoardController extends ViewController{
         //timerForWhitePlayer.setText(StartNewGameController.toTimeStr());
         timeline = new Timeline();
         timeline.setCycleCount(Timeline.INDEFINITE);
+
         EventHandler onFinished = new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 Player currentPlayer = ModelQuery.getPlayerToMove();
-                if (currentPlayer.getRemainingTime().getTime() <= 0) {
-                    /*
-                     * TODO: Reset total thinking time for the current player
-                     * TODO: switch Player
-                     * Player nextPlayer = currentPlayer.getNextPlayer();
-                     * SwitchPlayerController.SwitchActivePlayer(nextPlayer); //should pass in string
-                     * TODO: count down timer for the next player
-                     */
-                    // currentPlayer.setNextPlayer(currentPlayer.getNextPlayer());
+                if ((StartNewGameController.timeOver()) || (isWallDrop == true) ) {
 
+                	timerForWhitePlayer.setText(initialTime);
+                	timerForBlackPlayer.setText(initialTime);
+
+                	SwitchPlayerController.switchActivePlayer();
+                	isWallDrop = false;
+
+                	StartNewGameController.resetTimeToSet();
+                }
+
+
+                //grey out the next player name & count down time for the current player
+                if (currentPlayer.equals(ModelQuery.getWhitePlayer())) {
+                    timerForWhitePlayer.setText(StartNewGameController.toTimeStr());
                 } else {
-                    if (playerIsWhite) {
-                        timerForWhitePlayer.setText(StartNewGameController.toTimeStr());
-                    } else {
-                        timerForBlackPlayer.setText(StartNewGameController.toTimeStr());
-                    }
+                    timerForBlackPlayer.setText(StartNewGameController.toTimeStr());
+
                 }
             }
         };
+
         timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(1), onFinished));
         timeline.playFromStart();
         refresh();
     }
+
 
     public void handleBackToMenu(ActionEvent actionEvent) {
         timeline.stop();
@@ -222,8 +244,12 @@ public class InitializeBoardController extends ViewController{
                 shiftWall("right");
             }
             //Confirm wall placement and drops the wall
-            else if(code.equals(KeyCode.C)){
-                dropWall();
+            else if(code.equals(KeyCode.E)){
+                if(WallController.dropWall()){
+                    wallInHand=false;
+                    SwitchPlayerController.switchActivePlayer();
+                    isWallDrop=true;
+                }
             }
             else if(code.equals(KeyCode.R)){
                 WallController.rotateWall();
@@ -261,7 +287,37 @@ public class InitializeBoardController extends ViewController{
         }
     }
 
-    public void handleClearBoard(ActionEvent actionEvent) {
-        board.getChildren().clear();
+    public void handleSavePosition(ActionEvent actionEvent) {
+        String filename;
+        TextInputDialog textInput = new TextInputDialog();
+
+        textInput.setTitle("Saving game position");
+        textInput.getDialogPane().setContentText("Name of save file");
+
+        TextField input = textInput.getEditor();
+        textInput.showAndWait();
+
+        if(input.getText() != null && input.getText().length() != 0) {
+            filename = input.getText();
+
+            if (!PositionController.saveGame(filename +".dat", ModelQuery.getPlayerToMove())) {
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                if (!PositionController.isPositionValid)
+                    errorAlert.setContentText("The current positions are invalid");
+                else
+                    errorAlert.setContentText("There was an error in saving your positions");
+                errorAlert.setHeaderText("Error in loading Position");
+                errorAlert.showAndWait();
+            }
+            else{
+                Alert successAlert = new Alert(Alert.AlertType.CONFIRMATION);
+                successAlert.setContentText("Positions is successfully saved in: " +filename +".dat");
+                successAlert.showAndWait();
+            }
+        }
+        else{
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+            errorAlert.setContentText("Missing file name");
+        }
     }
 }

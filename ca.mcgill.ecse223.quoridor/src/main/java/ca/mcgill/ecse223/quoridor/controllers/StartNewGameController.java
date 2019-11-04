@@ -240,6 +240,20 @@ public class StartNewGameController {
         }
         return sb.toString();
     }
+    
+    /**
+     * @Author Fulin Huang
+     *
+     * Attempts to get the total thinking time that the user set
+     *
+     * @return the total thinking time
+     */
+    public static Time getTotalThinkingTime() {
+        Date date = new Date();
+        long currentMillis = date.getTime();
+        Time totalThinkingTime = new Time(timeToSet + currentMillis);
+        return totalThinkingTime;
+    }
 
     /**
      * @Author Fulin Huang
@@ -281,5 +295,22 @@ public class StartNewGameController {
         List<User> users = QuoridorApplication.getQuoridor().getUsers();
 
         return users;
+    }
+    
+    /**
+     * @Author Mark Zhu
+     * Resets timeToThink between rounds
+     */
+    public static void resetTimeToSet() {
+        timeToSet = millis;
+    }
+    
+    /**
+     * @Author Mark Zhu
+     * returns whether or not the timer has run out
+     * @returns true if the timer has run out, false otherwise
+     */
+    public static boolean timeOver() {
+        return timeToSet==0;
     }
 }

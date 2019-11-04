@@ -45,17 +45,13 @@
             <Font size="20.0" />
          </font>
       </Text>
-      <Button layoutX="61.0" layoutY="344.0" mnemonicParsing="false" onAction="#backToMainMenu" prefHeight="36.0" prefWidth="34.0" text="⬅">
-         <font>
-            <Font size="13.0" />
-         </font>
-      </Button>
       <Button fx:id="confirm" layoutX="264.0" layoutY="344.0" mnemonicParsing="false" onAction="#handleInitializeBoard" prefHeight="36.0" prefWidth="73.0" text="Confirm" />
-      <Button layoutX="438.0" layoutY="344.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="113.0" text="Load Postion" />
+      <Button layoutX="438.0" layoutY="344.0" mnemonicParsing="false" onAction="#handleLoadPosition" prefHeight="36.0" prefWidth="113.0" text="Load Postion" />
       <TextField fx:id="blackPlayerName" layoutX="384.0" layoutY="112.0" promptText="Enter Name" style="-fx-background-color: #ffff;" />
       <TextField fx:id="minutes" layoutX="79.0" layoutY="287.0" prefHeight="27.0" prefWidth="90.0" />
       <TextField fx:id="seconds" layoutX="265.0" layoutY="287.0" prefHeight="27.0" prefWidth="90.0" />
       <ChoiceBox fx:id="existingWhiteChoices" layoutX="59.0" layoutY="180.0" prefWidth="150.0" />
       <ChoiceBox fx:id="existingBlackChoices" layoutX="394.0" layoutY="180.0" prefWidth="150.0" />
+      <Button layoutX="59.0" layoutY="344.0" mnemonicParsing="false" onAction="#handleBackToMenu" prefHeight="36.0" prefWidth="126.0" text="Back to Menu" />
    </children>
 </AnchorPane>
