@@ -236,6 +236,13 @@ public class PositionController {
                     return false;
                 }
 
+                for(int i =1; i <= 10; i++){
+                    ModelQuery.getCurrentGame().getWhitePlayer().addWall(i);
+                }
+                for(int j = 11; j <= 20; j++) {
+                    ModelQuery.getCurrentGame().getBlackPlayer().addWall(j);
+                }
+
                 //AddWalls for players
                 for(int j = 1; j <= 10; j++){
                     Wall wall = Wall.getWithId(j);

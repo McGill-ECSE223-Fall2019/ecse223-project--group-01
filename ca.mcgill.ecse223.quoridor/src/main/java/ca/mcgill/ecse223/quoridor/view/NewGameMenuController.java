@@ -244,8 +244,9 @@ public class NewGameMenuController extends ViewController {
                     errorAlert.setHeaderText("Unable to load position");
                     errorAlert.setContentText("The saved positions were unable to be loaded");
                     errorAlert.showAndWait();
-                    changePage("/fxml/InitializeBoard.fxml");
                 }
+                else
+                    changePage("/fxml/InitializeBoard.fxml");
             } catch (IOException e) {
                 Alert errorAlert = new Alert(Alert.AlertType.ERROR);
                 errorAlert.setHeaderText("Error in loading Position");
