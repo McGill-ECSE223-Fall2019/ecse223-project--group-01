@@ -1,9 +1,6 @@
 package ca.mcgill.ecse223.quoridor.view;
 
-import ca.mcgill.ecse223.quoridor.controllers.ModelQuery;
-import ca.mcgill.ecse223.quoridor.controllers.PositionController;
-import ca.mcgill.ecse223.quoridor.controllers.StartNewGameController;
-import ca.mcgill.ecse223.quoridor.controllers.WallController;
+import ca.mcgill.ecse223.quoridor.controllers.*;
 import ca.mcgill.ecse223.quoridor.model.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
