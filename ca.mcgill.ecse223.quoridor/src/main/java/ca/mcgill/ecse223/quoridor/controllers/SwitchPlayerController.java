@@ -12,7 +12,7 @@ public class SwitchPlayerController {
 	 * @return A string representing the color of the player that ends as active
 	 */
 	
-	public static void SwitchActivePlayer() {
+	public static void switchActivePlayer() {
 		Player whitePlayer = ModelQuery.getWhitePlayer();
 		Player blackPlayer = ModelQuery.getBlackPlayer();
 		

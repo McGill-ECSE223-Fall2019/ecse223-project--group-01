@@ -303,7 +303,7 @@ public class PositionController {
 
                 else{ //switch the current turn to the player
                     if(ModelQuery.getPlayerToMove() != playerTurn)
-                    SwitchPlayerController.SwitchActivePlayer();
+                    SwitchPlayerController.switchActivePlayer();
                 }
 
                 bufferedReader.close();
