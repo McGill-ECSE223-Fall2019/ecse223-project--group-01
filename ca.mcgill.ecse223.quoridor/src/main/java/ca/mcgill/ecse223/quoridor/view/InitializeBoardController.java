@@ -277,10 +277,6 @@ public class InitializeBoardController extends ViewController{
         }
     }
 
-    public void handleClearBoard(ActionEvent actionEvent) {
-        board.getChildren().clear();
-    }
-
     public void handleSavePosition(ActionEvent actionEvent) {
         String filename;
         TextInputDialog textInput = new TextInputDialog();

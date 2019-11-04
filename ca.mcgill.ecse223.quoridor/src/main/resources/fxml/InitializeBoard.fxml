@@ -180,10 +180,5 @@
       </Text>
       <Label layoutX="257.0" layoutY="452.0" prefHeight="20.0" prefWidth="83.0" text="Invalid Move!" />
       <PointLight fx:id="whitePlayerLight" color="CHARTREUSE" layoutX="249.0" layoutY="30.0" lightOn="true" />
-      <Button layoutX="442.0" layoutY="378.0" mnemonicParsing="false" onAction="#handleClearBoard" prefHeight="39.0" prefWidth="152.0" text="Clear">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Button>
    </children>
 </AnchorPane>
