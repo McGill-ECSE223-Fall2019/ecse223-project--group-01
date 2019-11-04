@@ -23,7 +23,7 @@ public class PositionController {
     public static boolean isPositionValid = true;
 
     //static String saveLocation = ".\\src\\main\\resources\\";
-    static String saveLocation = "";
+    static String saveLocation = ".\\";
 
     /**
      * Empty constructor for PositionController
