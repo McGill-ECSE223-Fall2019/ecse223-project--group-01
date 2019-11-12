@@ -5,12 +5,14 @@ import ca.mcgill.ecse223.quoridor.controllers.*;
 import ca.mcgill.ecse223.quoridor.model.*;
 import ca.mcgill.ecse223.quoridor.model.Game.GameStatus;
 import ca.mcgill.ecse223.quoridor.model.Game.MoveMode;
+import ca.mcgill.ecse223.quoridor.view.InitializeBoardController;
 import cucumber.api.PendingException;
 import io.cucumber.java.After;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.junit.Assert;
 
 import java.io.File;
 import java.sql.Time;
@@ -21,17 +23,27 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
+import java.sql.Time;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
 import static org.junit.Assert.*;
 
 
 public class CucumberStepDefinitions {
 
-	private boolean fileInSystem;
 	private boolean fileChanged;
 	private boolean displayError;
 
-	private static String saveLocation = ".\\src\\main\\resources\\";
-	File saveData = new File(".\\src\\main\\resources\\save_game_test.dat");
+	//private static String saveLocation = ".\\src\\main\\resources\\";
+	private static String saveLocation = "";
+
+	InitializeBoardController control;
 
 
 	// ***********************************************
@@ -105,12 +117,12 @@ public class CucumberStepDefinitions {
 
 	@And("I do not have a wall in my hand")
 	public void iDoNotHaveAWallInMyHand() {
-		// GUI-related feature -- TODO for later
+		InitializeBoardController.wallInHand = false;
 	}
 
 	@And("^I have a wall in my hand over the board$")
 	public void iHaveAWallInMyHandOverTheBoard() throws Throwable {
-		// GUI-related feature -- TODO for later
+		InitializeBoardController.wallInHand = true;
 	}
 
 	
@@ -139,8 +151,10 @@ public class CucumberStepDefinitions {
 	@When("I initiate to load a saved game {string}")
 	public void iInitiateToLoadASavedGameFilename(String filename) {
 		try {
-			PositionController.loadGame(filename);
-		}catch(java.lang.UnsupportedOperationException e){
+			PositionController.loadGame(filename, "white", "black");
+		}catch(java.lang.UnsupportedOperationException e) {
+			throw new PendingException();
+		}catch(java.io.IOException e){
 			throw new PendingException();
 		}
 	}
@@ -150,26 +164,8 @@ public class CucumberStepDefinitions {
 	 */
 	@And("The position to load is valid")
 	public void thePositionToLoadIsValid() {
-		boolean isWallValid = true; //default values
-		boolean isPawnValid;
-
 		try {
-			int column = ModelQuery.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getColumn();
-			int row = ModelQuery.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getRow();
-			isPawnValid = ValidatePositionController.validatePawnPosition(row,column);
-
-
-			for(Wall wall: ModelQuery.getWhiteWallsOnBoard()){
-				int wallCol = wall.getMove().getTargetTile().getColumn();
-				int wallRow = wall.getMove().getTargetTile().getRow();
-				Direction dir = wall.getMove().getWallDirection();
-				if(!ValidatePositionController.validateWallPosition(wallRow, wallCol, dir)){
-					isWallValid = false;
-					break;
-				}
-			}
-
-			boolean isLoadValid = isWallValid && isPawnValid;
+			Assert.assertEquals(true, PositionController.isPositionValid);
 		} catch(java.lang.UnsupportedOperationException e){
 			throw new PendingException();
 		}
@@ -218,30 +214,31 @@ public class CucumberStepDefinitions {
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
 
 		Player currentPlayer;
+		boolean wallFound = false;
 		Direction ExpectedDir;
 
-		if(player.equals("player")){
-			currentPlayer = quoridor.getCurrentGame().getWhitePlayer();
-			ExpectedDir= Direction.valueOf(orientation);
+		if(player.equals("white")){
+			ExpectedDir= stringToDirection(orientation);
 
-			assertEquals(player, currentPlayer);
+			for (Wall wall : ModelQuery.getWhiteWallsOnBoard()){
+				Direction wallDirection = wall.getMove().getWallDirection();
+				int wallRow = wall.getMove().getTargetTile().getRow();
+				int wallCol = wall.getMove().getTargetTile().getColumn();
+				if( wallDirection == ExpectedDir && wallRow == row && wallCol == col)
+					wallFound = true;
+			}
 		}
 
 		else{ //If player is an opponent
-			currentPlayer = quoridor.getCurrentGame().getBlackPlayer();
-			ExpectedDir= Direction.valueOf(orientation);
+			ExpectedDir= stringToDirection(orientation);
 
-			assertEquals(player, currentPlayer);
-		}
-
-		boolean wallFound = false;
-
-		for (Wall wall : currentPlayer.getWalls()){
-			Direction wallDirection = wall.getMove().getWallDirection();
-			int wallRow = wall.getMove().getTargetTile().getRow();
-			int wallCol = wall.getMove().getTargetTile().getColumn();
-			if( wallDirection == ExpectedDir && wallRow == row && wallCol == col)
-				wallFound = true;
+			for (Wall wall : ModelQuery.getBlackWallsOnBoard()){
+				Direction wallDirection = wall.getMove().getWallDirection();
+				int wallRow = wall.getMove().getTargetTile().getRow();
+				int wallCol = wall.getMove().getTargetTile().getColumn();
+				if( wallDirection == ExpectedDir && wallRow == row && wallCol == col)
+					wallFound = true;
+			}
 		}
 
 		assertEquals(true ,wallFound);
@@ -252,9 +249,8 @@ public class CucumberStepDefinitions {
 	 */
 	@And("Both players shall have {int} in their stacks")
 	public void bothPlayersShallHaveInTheirStacks(int remaining_walls) {
-		Quoridor quoridor = QuoridorApplication.getQuoridor();
-		int blackWallsLeft = quoridor.getCurrentGame().getBlackPlayer().numberOfWalls();
-		int whiteWallsLeft = quoridor.getCurrentGame().getWhitePlayer().numberOfWalls();
+		int blackWallsLeft = ModelQuery.getCurrentGame().getCurrentPosition().getBlackWallsInStock().size();
+		int whiteWallsLeft = ModelQuery.getCurrentGame().getCurrentPosition().getWhiteWallsInStock().size();
 
 		assertEquals(remaining_walls,blackWallsLeft);
 		assertEquals(remaining_walls,whiteWallsLeft);
@@ -265,29 +261,11 @@ public class CucumberStepDefinitions {
 	 */
 	@And("The position to load is invalid")
 	public void thePositionToLoadIsInvalid() {
-		boolean isPawnValid = false; //default values
-		boolean isWallValid = false; //default values
 		try {
-			int column = ModelQuery.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getColumn();
-			int row = ModelQuery.getCurrentGame().getCurrentPosition().getWhitePosition().getTile().getRow();
-			isPawnValid = ValidatePositionController.validatePawnPosition(row,column);
-
-
-			for(Wall wall: ModelQuery.getWhiteWallsOnBoard()){
-				int wallCol = wall.getMove().getTargetTile().getColumn();
-				int wallRow = wall.getMove().getTargetTile().getRow();
-				Direction dir = wall.getMove().getWallDirection();
-				if(!ValidatePositionController.validateWallPosition(wallRow, wallCol, dir)){
-					isWallValid = false;
-					break;
-				}
-			}
-
-			boolean isLoadValid = isWallValid && isPawnValid;
+			assertEquals(false,PositionController.isPositionValid);
 		} catch(java.lang.UnsupportedOperationException e){
 			throw new PendingException();
 		}
-
 		displayError = true;
 	}
 
@@ -306,8 +284,11 @@ public class CucumberStepDefinitions {
      */
 	@Given("No file {string} exists in the filesystem")
 	public void noFileFilenameExistsInTheFilesystem(String filename) {
-		//Can't potentially create file in filesystem
-		fileInSystem = !saveData.exists();
+		//if the file exists in the system, remove it
+		File saveData = new File(saveLocation + filename);
+		if(saveData.exists()){
+			saveData.delete();
+		}
 	}
 
     /**
@@ -330,6 +311,7 @@ public class CucumberStepDefinitions {
      */
 	@Then("A file with {string} shall be created in the filesystem")
 	public void aFileWithFilenameIsCreatedInTheFilesystem(String filename) {
+		File saveData = new File(saveLocation + filename);
 		assertEquals(true, saveData.exists());
 	}
 
@@ -339,8 +321,16 @@ public class CucumberStepDefinitions {
      */
 	@Given("File {string} exists in the filesystem")
 	public void fileFilenameExistsInTheFilesystem(String filename) {
-		//Can't potentially search file in filesystem
-		fileInSystem = saveData.exists();
+		//check if file exists in the filesystem
+		File saveData = new File(saveLocation + filename);
+
+		if(!saveData.exists()){
+			try {
+				saveData.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 
@@ -359,7 +349,9 @@ public class CucumberStepDefinitions {
      */
 	@Then("File with {string} shall be updated in the filesystem")
 	public void fileWithFilenameIsUpdatedInTheFilesystem(String filename) {
+		File saveData = new File(saveLocation + filename);
 		assertEquals(true, saveData.exists());
+
 	}
 
 	//Scenario Outline: Save position cancelled due to existing file name
@@ -379,7 +371,7 @@ public class CucumberStepDefinitions {
      */
 	@Then("File {string} shall not be changed in the filesystem")
 	public void fileFilenameIsNotChangedInTheFilesystem(String filename) {
-		assertEquals(false, saveData.exists());
+		assertEquals(false, fileChanged);
 	}
 
 
@@ -549,7 +541,7 @@ public class CucumberStepDefinitions {
 	 */
 	@Then("The wall shall be moved over the board to position \\({int}, {int})")
 	public void theWallShallBeMovedOverTheBoardToPositionNrowNcol(int nrow, int ncol) {
-		//	TODO GUI step
+
 	}
 
 	/**
@@ -603,7 +595,8 @@ public class CucumberStepDefinitions {
 		WallMove move = ModelQuery.getWallMoveCandidate();
 		Player player = ModelQuery.getWhitePlayer();
 		try{
-			WallController.dropWall();
+			control = new InitializeBoardController();
+			control.dropWall();
 		} catch (UnsupportedOperationException e) {
 			throw new PendingException();
 		}
@@ -656,7 +649,7 @@ public class CucumberStepDefinitions {
 	 */
 	@And("I shall not have a wall in my hand")
 	public void iShallNotHaveAWallInMyHand() {
-		// TODO GUI
+		assertFalse(control.wallInHand);
 	}
 
 	// Invalid drop wall
@@ -816,7 +809,7 @@ public class CucumberStepDefinitions {
 	@When("I try to grab a wall from my stock")
 	public void iTryToGrabAWallFromMyStock() {
 		try {
-			WallController.grabWall(ModelQuery.getPlayerToMove());
+			WallController.grabWall();
 		} catch (UnsupportedOperationException e) {
 			throw new PendingException();
 		}
@@ -836,8 +829,7 @@ public class CucumberStepDefinitions {
 	 */
 	@And("I shall have a wall in my hand over the board")
 	public void iShallHaveAWallInMyHandOverTheBoard() {
-		//GUI TODO later
-		throw new PendingException();
+		assertTrue(InitializeBoardController.wallInHand);
 	}
 
 	/**
@@ -1024,6 +1016,12 @@ public class CucumberStepDefinitions {
 
 	@Given("The player to move is {string}")
 	public void thePlayerToMoveIs(String playerColor) {
+		if(playerColor.equals("white")){
+			ModelQuery.getCurrentGame().getCurrentPosition().setPlayerToMove(ModelQuery.getWhitePlayer());
+		}
+		else{
+			ModelQuery.getCurrentGame().getCurrentPosition().setPlayerToMove(ModelQuery.getBlackPlayer());
+		}
 		originalPlayerColor = playerColor;
 	}
 
@@ -1045,7 +1043,7 @@ public class CucumberStepDefinitions {
 		try {
 			activeEnd = Instant.now();
 			timeSpent = Duration.between(activeStart, activeEnd); //TODO: Timer
-			nextPlayerColor = SwitchPlayerController.SwitchActivePlayer(originalPlayerColor);
+			SwitchPlayerController.switchActivePlayer();
 		} catch (UnsupportedOperationException e) {
 			throw new PendingException();
 		}
@@ -1073,9 +1071,9 @@ public class CucumberStepDefinitions {
 	@And("The next player to move shall be {string}")
 	public void checkActivePlayer(String playerColor) {
 		if (originalPlayerColor.equals("white")) {
-			assertEquals(nextPlayerColor,"black");
+			assertEquals(ModelQuery.getBlackPlayer(),ModelQuery.getCurrentGame().getCurrentPosition().getPlayerToMove());
 		} else {
-			assertEquals(nextPlayerColor,"white");
+			assertEquals(ModelQuery.getWhitePlayer(),ModelQuery.getCurrentGame().getCurrentPosition().getPlayerToMove());
 		}
 	}
 	// Feature 4  Initialize Board
@@ -1398,6 +1396,8 @@ public class CucumberStepDefinitions {
 		ArrayList<Player> playersList = new ArrayList<Player>();
 		playersList.add(player1);
 		playersList.add(player2);
+		player1.setNextPlayer(player2);
+		player2.setNextPlayer(player1);
 
 		return playersList;
 	}
@@ -1431,7 +1431,7 @@ public class CucumberStepDefinitions {
 		// positions
 		Tile player1StartPos = quoridor.getBoard().getTile(36);
 		Tile player2StartPos = quoridor.getBoard().getTile(44);
-		
+
 		Game game = new Game(GameStatus.Running, MoveMode.PlayerMove, quoridor);
 		game.setWhitePlayer(players.get(0));
 		game.setBlackPlayer(players.get(1));

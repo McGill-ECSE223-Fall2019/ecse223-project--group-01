@@ -23,10 +23,9 @@ public abstract class ViewController {
             stage.show();
         } catch (Exception e){
             System.out.println("Error");
-
         }
-
     }
+
     public void changePage(String path){
         try {
             Stage currentStage = Main.getCurrentStage();

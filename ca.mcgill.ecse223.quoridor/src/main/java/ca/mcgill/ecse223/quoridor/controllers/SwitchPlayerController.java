@@ -12,24 +12,19 @@ public class SwitchPlayerController {
 	 * @return A string representing the color of the player that ends as active
 	 */
 	
-	public static String SwitchActivePlayer(String currentPlayerColor) {
+	public static void switchActivePlayer() {
 		Player whitePlayer = ModelQuery.getWhitePlayer();
 		Player blackPlayer = ModelQuery.getBlackPlayer();
 		
-		//Player currentPlayer = ModelQuery.getPlayerToMove();
+		Player currentPlayer = ModelQuery.getPlayerToMove();
 		
-		if (currentPlayerColor.equals("white")) {
+		if (currentPlayer.equals(whitePlayer)) {
 			//ModelQuery.getWhitePlayer().setRemainingTime(new Time(ModelQuery.getWhitePlayer().getRemainingTime().getTime()-timeSpent.toMillis()));
-			QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().setPlayerToMove(blackPlayer);
-			return "black";
-		} else if (currentPlayerColor.equals("black")) {
+			QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().setPlayerToMove(currentPlayer.getNextPlayer());
+		} else if (currentPlayer.equals(blackPlayer)) {
 			//ModelQuery.getBlackPlayer().setRemainingTime(new Time(ModelQuery.getBlackPlayer().getRemainingTime().getTime()-timeSpent.toMillis()));
-			QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().setPlayerToMove(whitePlayer);
-			return "white";
-		} else {
-			throw new UnsupportedOperationException();
+			QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().setPlayerToMove(currentPlayer.getNextPlayer());
 		}
-		
 	}
 	
 }

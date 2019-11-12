@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -12,11 +10,6 @@
   <children>
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
       <children>
-            <ImageView fitHeight="374.0" layoutX="162.0" layoutY="-41.0" opacity="0.24" pickOnBounds="true" preserveRatio="true" scaleX="2.4" scaleY="1.4">
-               <image>
-                  <Image url="@../assets/tritin.jpg" />
-               </image>
-            </ImageView>
             <Text layoutX="199.0" layoutY="154.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Quoridor">
                <font>
                   <Font size="60.0" />
