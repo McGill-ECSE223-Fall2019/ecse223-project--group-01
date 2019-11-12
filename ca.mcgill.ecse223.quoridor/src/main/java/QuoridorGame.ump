@@ -34,7 +34,7 @@ class Wall {
 class Player {
 	* -> 1 User user;
 	1 <@>- 1 Destination destination; 	
-	Time remainingTime;
+	float remainingTime;
 	1 owner <@>- 0..10 Wall walls; 
 	0..1 -> 0..1 Player nextPlayer; // Alternates between white and black
 }

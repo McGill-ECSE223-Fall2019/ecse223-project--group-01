@@ -60,6 +60,7 @@ public class StartNewGameController {
             white_user = UserController.newUsername(username);
             whitePlayerChooseName = true;
         }
+        Time x = new Time(40);
         int tempThinkingTime = 90;
         Player player = new Player(new Time(tempThinkingTime), white_user, 9, Direction.Horizontal);
         ModelQuery.getCurrentGame().setWhitePlayer(player); //set White player
