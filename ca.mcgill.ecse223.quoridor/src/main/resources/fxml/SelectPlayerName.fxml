@@ -16,7 +16,7 @@
             <Font size="25.0" />
          </font>
       </Text>
-      <Text layoutX="488.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" text="BLACK" wrappingWidth="100.0">
+      <Text layoutX="485.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" text="GREEN" textAlignment="CENTER" wrappingWidth="100.0">
          <font>
             <Font size="25.0" />
          </font>
@@ -49,24 +49,24 @@
       </Text>
       <Button fx:id="confirm" layoutX="264.0" layoutY="344.0" mnemonicParsing="false" onAction="#handleInitializeBoard" prefHeight="36.0" prefWidth="73.0" text="Confirm" />
       <Button layoutX="438.0" layoutY="344.0" mnemonicParsing="false" onAction="#handleLoadPosition" prefHeight="36.0" prefWidth="113.0" text="Load Postion" />
-      <TextField fx:id="blackPlayerName" layoutX="484.0" layoutY="68.0" prefHeight="26.0" prefWidth="100.0" promptText="Enter Name" style="-fx-background-color: #ffff;" />
+      <TextField fx:id="greenPlayerName" layoutX="486.0" layoutY="68.0" prefHeight="26.0" prefWidth="100.0" promptText="Enter Name" style="-fx-background-color: #ffff;" />
       <TextField fx:id="minutes" layoutX="79.0" layoutY="287.0" prefHeight="27.0" prefWidth="90.0" />
       <TextField fx:id="seconds" layoutX="265.0" layoutY="287.0" prefHeight="27.0" prefWidth="90.0" />
       <ChoiceBox fx:id="existingWhiteChoices" layoutX="24.0" layoutY="151.0" prefHeight="26.0" prefWidth="100.0" />
-      <ChoiceBox fx:id="existingBlackChoices" layoutX="488.0" layoutY="151.0" prefHeight="26.0" prefWidth="100.0" />
+      <ChoiceBox fx:id="existingGreenChoices" layoutX="488.0" layoutY="151.0" prefHeight="26.0" prefWidth="100.0" />
       <Button layoutX="59.0" layoutY="344.0" mnemonicParsing="false" onAction="#handleBackToMenu" prefHeight="36.0" prefWidth="126.0" text="Back to Menu" />
-      <Text layoutX="188.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" text="RED" wrappingWidth="100.0">
+      <Text layoutX="173.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" text="BLACK" textAlignment="CENTER" wrappingWidth="100.0">
          <font>
             <Font size="25.0" />
          </font>
       </Text>
-      <Text layoutX="320.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" text="GREEN" wrappingWidth="100.0">
+      <Text layoutX="320.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" text="RED" textAlignment="CENTER" wrappingWidth="100.0">
          <font>
             <Font size="25.0" />
          </font>
       </Text>
-      <TextField fx:id="redPlayerName" layoutX="177.0" layoutY="68.0" prefHeight="26.0" prefWidth="100.0" promptText="Enter Name" style="-fx-background-color: #ffff;" />
-      <TextField fx:id="greenPlayerName" layoutX="320.0" layoutY="68.0" prefHeight="26.0" prefWidth="100.0" promptText="Enter Name" style="-fx-background-color: #ffff;" />
+      <TextField fx:id="blackPlayerName" layoutX="173.0" layoutY="68.0" prefHeight="26.0" prefWidth="100.0" promptText="Enter Name" style="-fx-background-color: #ffff;" />
+      <TextField fx:id="redPlayerName" layoutX="320.0" layoutY="68.0" prefHeight="26.0" prefWidth="100.0" promptText="Enter Name" style="-fx-background-color: #ffff;" />
       <Text layoutX="202.0" layoutY="132.0" strokeType="OUTSIDE" strokeWidth="0.0" text="OR" wrappingWidth="42.484438664550794">
          <font>
             <Font size="25.0" />
@@ -77,13 +77,13 @@
             <Font size="25.0" />
          </font>
       </Text>
-      <ChoiceBox fx:id="existingRedChoices" layoutX="173.0" layoutY="151.0" prefHeight="26.0" prefWidth="100.0" />
-      <ChoiceBox fx:id="existingGreenChoices" layoutX="320.0" layoutY="151.0" prefHeight="26.0" prefWidth="100.0" />
-      <RadioButton layoutX="436.0" layoutY="210.0" mnemonicParsing="false" selected="true" text="Two Player">
+      <ChoiceBox fx:id="existingBlackChoices" layoutX="173.0" layoutY="151.0" prefHeight="26.0" prefWidth="100.0" />
+      <ChoiceBox fx:id="existingRedChoices" layoutX="320.0" layoutY="151.0" prefHeight="26.0" prefWidth="100.0" />
+      <RadioButton fx:id="twoPlayer" layoutX="436.0" layoutY="210.0" mnemonicParsing="false" selected="true" text="Two Player">
          <toggleGroup>
             <ToggleGroup fx:id="numberPlayers" />
          </toggleGroup>
       </RadioButton>
-      <RadioButton layoutX="436.0" layoutY="241.0" mnemonicParsing="false" text="Four Player" toggleGroup="$numberPlayers" />
+      <RadioButton fx:id="fourPlayer" layoutX="436.0" layoutY="241.0" mnemonicParsing="false" text="Four Player" toggleGroup="$numberPlayers" />
    </children>
 </AnchorPane>

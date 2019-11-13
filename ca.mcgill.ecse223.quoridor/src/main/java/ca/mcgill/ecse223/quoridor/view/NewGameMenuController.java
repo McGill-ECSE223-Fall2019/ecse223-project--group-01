@@ -33,7 +33,10 @@ public class NewGameMenuController extends ViewController {
     public ChoiceDialog<String> existingSavedPosition;
     List<String> saveFiles;
     public String saveLocation = ".\\";
-    public ToggleGroup numPlayers;
+    
+    public RadioButton twoPlayer;
+    public RadioButton fourPlayer;
+    public ToggleGroup numberPlayers;
 
     public static String minS;
     public static String secS;
@@ -42,12 +45,13 @@ public class NewGameMenuController extends ViewController {
 
         StartNewGameController.initializeGame();
         List<User> existingUsers = StartNewGameController.existedUsers();
-
-        existingBlackChoices.setOnAction(e -> blackPlayerName.setText(""));
-
-        existingWhiteChoices.setOnAction(e -> whitePlayerName.setText(""));
         
-        redPlayerName.setText(numPlayers.getSelectedToggle().toString());
+        existingWhiteChoices.setOnAction(e -> whitePlayerName.setText(""));
+        existingBlackChoices.setOnAction(e -> blackPlayerName.setText(""));
+        existingRedChoices.setOnAction(e -> blackPlayerName.setText(""));
+        existingGreenChoices.setOnAction(e -> whitePlayerName.setText(""));
+        
+        //redPlayerName.setText(numPlayers.getSelectedToggle().toString());
         
         
 
@@ -62,10 +66,25 @@ public class NewGameMenuController extends ViewController {
                 existingBlackChoices.setValue(null);
             }
         });
+        
+        redPlayerName.textProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue!=null){
+                existingRedChoices.setValue(null);
+            }
+        });
+
+        greenPlayerName.textProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue!=null){
+                existingGreenChoices.setValue(null);
+            }
+        });
+
 
         for (User user : existingUsers) {
+        	existingWhiteChoices.getItems().add(user.getName());
             existingBlackChoices.getItems().add(user.getName());
-            existingWhiteChoices.getItems().add(user.getName());
+            existingRedChoices.getItems().add(user.getName());
+            existingGreenChoices.getItems().add(user.getName());
         }
 
     }
@@ -81,6 +100,8 @@ public class NewGameMenuController extends ViewController {
         String error = "";
         String whiteName;
         String blackName;
+        String redName = "";
+        String greenName = "";
 
 
         // confirm that all fields have been set
@@ -103,6 +124,24 @@ public class NewGameMenuController extends ViewController {
             readyTostart = false;
         }
 
+        if (numberPlayers.getSelectedToggle().equals(fourPlayer)) {
+            if (redPlayerName.getText().equals("") && existingRedChoices.getValue() == null) {
+                error += "Red name not set \n";
+                readyTostart = false;
+            } else if (!redPlayerName.getText().equals("") && StartNewGameController.usernameExists(redPlayerName.getText())) {
+                error += "Red username already exists \n";
+                readyTostart = false;
+            }
+
+            //validate black player name
+            if (greenPlayerName.getText().equals("") && existingGreenChoices.getValue() == null) {
+                error += "Green player name not set \n";
+                readyTostart = false;
+            } else if (!greenPlayerName.getText().equals("") && StartNewGameController.usernameExists(greenPlayerName.getText())) {
+                error += "Green username already exists \n";
+                readyTostart = false;
+            }
+        }
 
         // validate thinking time
         if (seconds.getText().equals("") || minutes.getText().equals("")) {
@@ -120,37 +159,64 @@ public class NewGameMenuController extends ViewController {
         if (readyTostart) {
 
             //setup names
-            if(blackPlayerName.getText().equals("")){
-                blackName = existingBlackChoices.getValue();
-            }
-            else{
-                blackName = blackPlayerName.getText();
-            }
             if(whitePlayerName.getText().equals("")){
                 whiteName = existingWhiteChoices.getValue();
             }
             else{
                 whiteName = whitePlayerName.getText();
             }
+            if(blackPlayerName.getText().equals("")){
+                blackName = existingBlackChoices.getValue();
+            }
+            else{
+                blackName = blackPlayerName.getText();
+            }
+            
+            if(numberPlayers.getSelectedToggle().equals(fourPlayer)) {
+                if(redPlayerName.getText().equals("")){
+                    redName = existingRedChoices.getValue();
+                }
+                else{
+                    redName = redPlayerName.getText();
+                }
+                if(blackPlayerName.getText().equals("")){
+                    greenName = existingGreenChoices.getValue();
+                }
+                else{
+                    greenName = greenPlayerName.getText();
+                }
+            }
+
 
             // Validate both player's name
             if(whiteName.equals(blackName)){
                 error+= "Players may not have the same name!";
                 readyTostart = false;
             }
+            if(numberPlayers.getSelectedToggle().equals(fourPlayer)) {
+            	if(whiteName.equals(redName) || whiteName.equals(greenName) || blackName.equals(redName) || blackName.equals(greenName) ||
+            			redName.equals(greenName)) {
+            		error+= "Players may not have the same name!";
+            		readyTostart = false;
+            	}
+            }
 
 
             StartNewGameController.initializeGame();
-            StartNewGameController.blackPlayerChooseAUsername(blackName);
             StartNewGameController.whitePlayerChoosesAUsername(whiteName);
-
+            StartNewGameController.blackPlayerChooseAUsername(blackName);
+            if(numberPlayers.getSelectedToggle().equals(fourPlayer)) {
+            	StartNewGameController.redPlayerChooseAUsername(redName);
+            	StartNewGameController.greenPlayerChooseAUsername(greenName);
+            }
+            
             minS = minutes.getText();
             secS = seconds.getText();
             StartNewGameController.setTotalThinkingTime(Integer.parseInt(minutes.getText()), Integer.parseInt(seconds.getText()));
             BoardController.initializeBoard();
             changePage("/fxml/InitializeBoard.fxml");
         }
-        // Display erros
+        // Display errors
         else {
             AlertHelper.showAlert(Alert.AlertType.ERROR, page, "Error", error);
         }

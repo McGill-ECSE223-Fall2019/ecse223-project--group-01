@@ -14,7 +14,7 @@ public class StartNewGameController {
     private static boolean whitePlayerChooseName = false;
     private static boolean blackPlayerChooseName = false;
     private static boolean redPlayerChooseName = false;
-    private static boolean bluePlayerChooseName = false;
+    private static boolean greenPlayerChooseName = false;
     private static boolean thinkingTimeIsSet = false;
     private static long millis;
     private static Timer timer;
@@ -36,6 +36,8 @@ public class StartNewGameController {
         }
         whitePlayerChooseName=false;
         blackPlayerChooseName=false;
+        redPlayerChooseName = false;
+        greenPlayerChooseName = false;
         thinkingTimeIsSet=false;
         Quoridor quoridor = QuoridorApplication.getQuoridor();
         game = new Game(Game.GameStatus.Initializing, Game.MoveMode.PlayerMove, quoridor);
@@ -60,13 +62,12 @@ public class StartNewGameController {
             white_user = UserController.newUsername(username);
             whitePlayerChooseName = true;
         }
-        Time x = new Time(40);
         int tempThinkingTime = 90;
         Player player = new Player(new Time(tempThinkingTime), white_user, 9, Direction.Horizontal,ModelQuery.getCurrentGame());
         ModelQuery.getCurrentGame().setWhitePlayer(player); //set White player
         ModelQuery.getWhitePlayer().setUser(white_user);
 
-        isReadyToStart(); //check if white and black player chose name and if total thinking time is set
+        isReadyToStart(); //check if players chose name and if total thinking time is set
     }
 
     /**
@@ -91,7 +92,57 @@ public class StartNewGameController {
         ModelQuery.getCurrentGame().setBlackPlayer(player);
         ModelQuery.getBlackPlayer().setUser(black_user);
 
-        isReadyToStart();  //check if white and black player chose name and if total thinking time is set
+        isReadyToStart();  //check if players chose name and if total thinking time is set
+    }
+    
+    /**
+     * @Author Fulin Huang & Mark Zhu
+     *
+     * Red player chooses a username by either creating a new game or
+     * by choosing from an existing name list.
+     *
+     * @param username name of the red user
+     */
+    public static void redPlayerChooseAUsername(String username) {
+        User red_user = null;
+        if (usernameExists(username)) {
+            red_user = UserController.selectExistingUsername(username);
+            redPlayerChooseName = true;
+        } else {
+            red_user = UserController.newUsername(username);
+            redPlayerChooseName = true;
+        }
+        int tempThinkingTime = 90;
+        Player player = new Player(new Time(tempThinkingTime), red_user, 1, Direction.Vertical,ModelQuery.getCurrentGame());
+        ModelQuery.getCurrentGame().setRedPlayer(player);
+        ModelQuery.getRedPlayer().setUser(red_user);
+
+        isReadyToStart();  //check if players chose name and if total thinking time is set
+    }
+    
+    /**
+     * @Author Fulin Huang & Mark Zhu
+     *
+     * Green player chooses a username by either creating a new game or
+     * by choosing from an existing name list.
+     *
+     * @param username name of the green user
+     */
+    public static void greenPlayerChooseAUsername(String username) {
+        User green_user = null;
+        if (usernameExists(username)) {
+            green_user = UserController.selectExistingUsername(username);
+            greenPlayerChooseName = true;
+        } else {
+            green_user = UserController.newUsername(username);
+            greenPlayerChooseName = true;
+        }
+        int tempThinkingTime = 90;
+        Player player = new Player(new Time(tempThinkingTime), green_user, 1, Direction.Vertical,ModelQuery.getCurrentGame());
+        ModelQuery.getCurrentGame().setGreenPlayer(player);
+        ModelQuery.getGreenPlayer().setUser(green_user);
+
+        isReadyToStart();  //check if players chose name and if total thinking time is set
     }
 
     /**
@@ -191,14 +242,18 @@ public class StartNewGameController {
      *
      */
     public static void isReadyToStart(){
-        if(whitePlayerChooseName && blackPlayerChooseName & thinkingTimeIsSet){
+        if(thinkingTimeIsSet && whitePlayerChooseName && blackPlayerChooseName || !redPlayerChooseName || !greenPlayerChooseName){
             ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.ReadyToStart);
             ModelQuery.getWhitePlayer().setNextPlayer(ModelQuery.getBlackPlayer());
-            ModelQuery.getBlackPlayer().setNextPlayer(ModelQuery.getRedPlayer());
-            ModelQuery.getRedPlayer().setNextPlayer(ModelQuery.getGreenPlayer());
+            ModelQuery.getBlackPlayer().setNextPlayer(ModelQuery.getWhitePlayer());
+
+        } else if (thinkingTimeIsSet && whitePlayerChooseName && blackPlayerChooseName || redPlayerChooseName || greenPlayerChooseName) {
+            ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.ReadyToStart);
+            ModelQuery.getWhitePlayer().setNextPlayer(ModelQuery.getBlackPlayer());
+        	ModelQuery.getBlackPlayer().setNextPlayer(ModelQuery.getRedPlayer());    
+        	ModelQuery.getRedPlayer().setNextPlayer(ModelQuery.getGreenPlayer());
             ModelQuery.getGreenPlayer().setNextPlayer(ModelQuery.getWhitePlayer());
         }
-
     }
 
     /**
@@ -278,6 +333,26 @@ public class StartNewGameController {
      */
     public static boolean blackPlayerNameIsSet() {
         return blackPlayerChooseName;
+    }
+    
+    /**
+     * @Author Fulin Huang & Mark Zhu
+     * check if the red player set a name
+     *
+     * @return a boolean to indicate if the red player set a name
+     */
+    public static boolean redPlayerNameIsSet() {
+        return redPlayerChooseName;
+    }
+    
+    /**
+     * @Author Fulin Huang & Mark Zhu
+     * check if the green player set a name
+     *
+     * @return a boolean to indicate if the green player set a name
+     */
+    public static boolean greenPlayerNameIsSet() {
+        return greenPlayerChooseName;
     }
 
     /**

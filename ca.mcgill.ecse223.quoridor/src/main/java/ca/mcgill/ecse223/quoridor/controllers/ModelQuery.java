@@ -30,6 +30,10 @@ public class ModelQuery {
     public static Player getGreenPlayer() {
     	return QuoridorApplication.getQuoridor().getCurrentGame().getGreenPlayer();
     }
+    
+    public static int getNumberPlayers() {
+    	return QuoridorApplication.getQuoridor().getCurrentGame().getPlayers().size();
+    }
 
     public static Board getBoard(){
         return QuoridorApplication.getQuoridor().getBoard();
@@ -53,10 +57,19 @@ public class ModelQuery {
     }
 
     public static List<Wall> getAllWallsOnBoard(){
-        List<Wall> whiteWalls = ModelQuery.getWhiteWallsOnBoard();
-        List<Wall> blackWalls = ModelQuery.getBlackWallsOnBoard();
-
         List<Wall> placedWalls = new ArrayList<>();
+        
+    	List<Wall> whiteWalls = ModelQuery.getWhiteWallsOnBoard();
+        List<Wall> blackWalls = ModelQuery.getBlackWallsOnBoard();
+        List<Wall> redWalls;
+        List<Wall> greenWalls;
+        if (getNumberPlayers() == 4) {
+            redWalls = ModelQuery.getRedWallsOnBoard();
+            greenWalls = ModelQuery.getGreenWallsOnBoard();
+        	placedWalls.addAll(redWalls);
+        	placedWalls.addAll(greenWalls);
+        }
+
         placedWalls.addAll(whiteWalls);
         placedWalls.addAll(blackWalls);
 
@@ -69,6 +82,14 @@ public class ModelQuery {
 
     public static List<Wall> getBlackWallsOnBoard(){
         return QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getBlackWallsOnBoard();
+    }
+    
+    public static List<Wall> getRedWallsOnBoard(){
+        return QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getRedWallsOnBoard();
+    }
+    
+    public static List<Wall> getGreenWallsOnBoard(){
+        return QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getGreenWallsOnBoard();
     }
 
     public static GamePosition getCurrentPosition(){
