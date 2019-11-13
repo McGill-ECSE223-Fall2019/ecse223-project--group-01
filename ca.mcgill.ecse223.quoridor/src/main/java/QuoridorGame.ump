@@ -34,13 +34,13 @@ class Wall {
 class Player {
 	* -> 1 User user;
 	1 <@>- 1 Destination destination; 	
-	float remainingTime;
+	Time remainingTime;
 	1 owner <@>- 0..10 Wall walls; 
 	0..1 -> 0..1 Player nextPlayer; // Alternates between white and black
 }
 
 class Game {
-	enum GameStatus { Initializing, ReadyToStart, Running, WhiteWon, BlackWon, RedWon, BlueWon, Draw, Replay };
+	enum GameStatus { Initializing, ReadyToStart, Running, WhiteWon, BlackWon, RedWon, GreenWon, Draw, Replay };
 	GameStatus gameStatus;
 	enum MoveMode { WallMove, PlayerMove};
 	MoveMode moveMode;
@@ -51,7 +51,7 @@ class Game {
 	0..1 gameAsWhite <@>- 0..1 Player whitePlayer;  
 	0..1 gameAsBlack <@>- 0..1 Player blackPlayer;
 	0..1 gameAsRed <@>- 0..1 Player redPlayer;  
-	0..1 gameAsBlue <@>- 0..1 Player bluePlayer;
+	0..1 gameAsgreen <@>- 0..1 Player greenPlayer;
 	1 <@>- * Player players; // Add this for four player game
 }
 
@@ -60,16 +60,16 @@ class GamePosition {
 	0..1 whiteInGame <@>- 1 PlayerPosition whitePosition;
 	0..1 blackInGame <@>- 1 PlayerPosition blackPosition;
 	0..1 redInGame <@>- 1 PlayerPosition redPosition;
-	0..1 blueInGame <@>- 1 PlayerPosition bluePosition;
+	0..1 greenInGame <@>- 1 PlayerPosition greenPosition;
 	0..1 -> 1 Player playerToMove;
 	0..1 -> * Wall whiteWallsOnBoard;
 	0..1 -> * Wall blackWallsOnBoard;
 	0..1 -> * Wall whiteWallsInStock;
 	0..1 -> * Wall blackWallsInStock;
 	0..1 -> * Wall redWallsOnBoard;
-	0..1 -> * Wall blueWallsOnBoard;
+	0..1 -> * Wall greenWallsOnBoard;
 	0..1 -> * Wall redWallsInStock;
-	0..1 -> * Wall blueWallsInStock;
+	0..1 -> * Wall greenWallsInStock;
 }
 
 class Destination {

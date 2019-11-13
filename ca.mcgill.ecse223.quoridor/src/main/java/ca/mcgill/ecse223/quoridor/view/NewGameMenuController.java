@@ -21,14 +21,19 @@ public class NewGameMenuController extends ViewController {
     @FXML
     public TextField whitePlayerName;
     public TextField blackPlayerName;
+    public TextField redPlayerName;
+    public TextField greenPlayerName;
     public TextField minutes;
     public TextField seconds;
     public Button confirm;
-    public ChoiceBox<String> existingBlackChoices;
     public ChoiceBox<String> existingWhiteChoices;
+    public ChoiceBox<String> existingBlackChoices;
+    public ChoiceBox<String> existingRedChoices;
+    public ChoiceBox<String> existingGreenChoices;
     public ChoiceDialog<String> existingSavedPosition;
     List<String> saveFiles;
     public String saveLocation = ".\\";
+    public ToggleGroup numPlayers;
 
     public static String minS;
     public static String secS;
@@ -41,6 +46,10 @@ public class NewGameMenuController extends ViewController {
         existingBlackChoices.setOnAction(e -> blackPlayerName.setText(""));
 
         existingWhiteChoices.setOnAction(e -> whitePlayerName.setText(""));
+        
+        redPlayerName.setText(numPlayers.getSelectedToggle().toString());
+        
+        
 
         whitePlayerName.textProperty().addListener((observable, oldValue, newValue) -> {
             if(newValue!=null){

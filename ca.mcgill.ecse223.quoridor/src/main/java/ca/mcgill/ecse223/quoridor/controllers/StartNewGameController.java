@@ -62,7 +62,7 @@ public class StartNewGameController {
         }
         Time x = new Time(40);
         int tempThinkingTime = 90;
-        Player player = new Player(new Time(tempThinkingTime), white_user, 9, Direction.Horizontal);
+        Player player = new Player(new Time(tempThinkingTime), white_user, 9, Direction.Horizontal,ModelQuery.getCurrentGame());
         ModelQuery.getCurrentGame().setWhitePlayer(player); //set White player
         ModelQuery.getWhitePlayer().setUser(white_user);
 
@@ -87,7 +87,7 @@ public class StartNewGameController {
             blackPlayerChooseName = true;
         }
         int tempThinkingTime = 90;
-        Player player = new Player(new Time(tempThinkingTime), black_user, 1, Direction.Vertical);
+        Player player = new Player(new Time(tempThinkingTime), black_user, 1, Direction.Vertical,ModelQuery.getCurrentGame());
         ModelQuery.getCurrentGame().setBlackPlayer(player);
         ModelQuery.getBlackPlayer().setUser(black_user);
 
@@ -194,7 +194,9 @@ public class StartNewGameController {
         if(whitePlayerChooseName && blackPlayerChooseName & thinkingTimeIsSet){
             ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.ReadyToStart);
             ModelQuery.getWhitePlayer().setNextPlayer(ModelQuery.getBlackPlayer());
-            ModelQuery.getBlackPlayer().setNextPlayer(ModelQuery.getWhitePlayer());
+            ModelQuery.getBlackPlayer().setNextPlayer(ModelQuery.getRedPlayer());
+            ModelQuery.getRedPlayer().setNextPlayer(ModelQuery.getGreenPlayer());
+            ModelQuery.getGreenPlayer().setNextPlayer(ModelQuery.getWhitePlayer());
         }
 
     }

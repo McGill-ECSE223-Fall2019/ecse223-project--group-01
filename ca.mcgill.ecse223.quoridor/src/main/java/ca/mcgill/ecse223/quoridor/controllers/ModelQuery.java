@@ -22,6 +22,14 @@ public class ModelQuery {
     public static Player getBlackPlayer(){
         return QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
     }
+    
+    public static Player getRedPlayer() {
+    	return QuoridorApplication.getQuoridor().getCurrentGame().getRedPlayer();
+    }
+    
+    public static Player getGreenPlayer() {
+    	return QuoridorApplication.getQuoridor().getCurrentGame().getGreenPlayer();
+    }
 
     public static Board getBoard(){
         return QuoridorApplication.getQuoridor().getBoard();

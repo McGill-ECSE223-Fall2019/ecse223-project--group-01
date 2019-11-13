@@ -143,6 +143,8 @@ public class PositionController {
 
         PlayerPosition whitePlayerPosition = null;
         PlayerPosition blackPlayerPosition = null;
+        PlayerPosition redPlayerPosition = null;
+        PlayerPosition greenPlayerPosition = null;
         List<GamePosition> positions = ModelQuery.getCurrentGame().getPositions();
 
 
@@ -222,7 +224,7 @@ public class PositionController {
                     currentTurn++;
                 }
 
-                GamePosition gameposition = new GamePosition(positions.size()+1, whitePlayerPosition, blackPlayerPosition, quoridor.getCurrentGame().getWhitePlayer(), quoridor.getCurrentGame());
+                GamePosition gameposition = new GamePosition(positions.size()+1, whitePlayerPosition, blackPlayerPosition, redPlayerPosition, greenPlayerPosition, quoridor.getCurrentGame().getWhitePlayer(), quoridor.getCurrentGame());
                 quoridor.getCurrentGame().setCurrentPosition(gameposition);
                 quoridor.getCurrentGame().getCurrentPosition().setWhitePosition(whitePlayerPosition);
                 quoridor.getCurrentGame().getCurrentPosition().setBlackPosition(blackPlayerPosition);
