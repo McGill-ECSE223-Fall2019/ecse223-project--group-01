@@ -15,6 +15,8 @@ public class SwitchPlayerController {
 	public static void switchActivePlayer() {
 		Player whitePlayer = ModelQuery.getWhitePlayer();
 		Player blackPlayer = ModelQuery.getBlackPlayer();
+		Player redPlayer = ModelQuery.getRedPlayer();
+		Player greenPlayer = ModelQuery.getGreenPlayer();
 		
 		Player currentPlayer = ModelQuery.getPlayerToMove();
 		

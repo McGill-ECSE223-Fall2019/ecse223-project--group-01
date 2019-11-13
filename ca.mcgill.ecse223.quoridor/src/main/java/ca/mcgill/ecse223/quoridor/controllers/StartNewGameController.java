@@ -230,6 +230,8 @@ public class StartNewGameController {
         Time totalThinkingTime = new Time(millis+currentMillis);
         ModelQuery.getWhitePlayer().setRemainingTime(totalThinkingTime);
         ModelQuery.getBlackPlayer().setRemainingTime(totalThinkingTime);
+        ModelQuery.getRedPlayer().setRemainingTime(totalThinkingTime);
+        ModelQuery.getGreenPlayer().setRemainingTime(totalThinkingTime);
         return totalThinkingTime;
     }
 
