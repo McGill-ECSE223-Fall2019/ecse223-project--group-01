@@ -33,13 +33,26 @@ public class InitializeBoardController extends ViewController{
     private AnchorPane board;
     public Text whitePlayerName;
     public Text blackPlayerName;
+    public Text redPlayerName;
+    public Text greenPlayerName;
+    
     public Text whitePlayerName1;
     public Text blackPlayerName1;
+    public Text redPlayerName1;
+    public Text greenPlayerName1;
+    
     public Label timerForWhitePlayer;
     public Label timerForBlackPlayer;
+    public Label timerForRedPlayer;
+    public Label timerForGreenPlayer;
+    
     public Text whiteNumOfWalls;
     public Text blackNumOfWalls;
+    public Text redNumOfWalls;
+    public Text greenNumOfWalls;
+    
     public Timeline timeline;
+    
     public static boolean playerIsWhite = false;
     public static boolean isWallDrop = false;
     public String initialTime;
@@ -55,6 +68,22 @@ public class InitializeBoardController extends ViewController{
         whitePlayerName1.setText(ModelQuery.getWhitePlayer().getUser().getName());
         blackPlayerName1.setText(ModelQuery.getBlackPlayer().getUser().getName());
 
+        //if 4player mode
+        if(ModelQuery.getNumberPlayers()==4) {
+            //display player name
+            redPlayerName.setText(ModelQuery.getRedPlayer().getUser().getName());
+            greenPlayerName.setText(ModelQuery.getGreenPlayer().getUser().getName());
+
+            //display player name on the thinking time section
+            redPlayerName1.setText(ModelQuery.getRedPlayer().getUser().getName());
+            greenPlayerName1.setText(ModelQuery.getGreenPlayer().getUser().getName());
+        } else { //if 2player mode, set 4player content invisible
+        	redPlayerName.setVisible(false);
+        	redPlayerName1.setVisible(false);
+        	greenPlayerName.setVisible(false);
+        	greenPlayerName1.setVisible(false);
+        }
+        
         //start the clock once the game is initiated
         StartNewGameController.startTheClock();
 
@@ -63,6 +92,14 @@ public class InitializeBoardController extends ViewController{
 
     	timerForWhitePlayer.setText(initialTime);
     	timerForBlackPlayer.setText(initialTime);
+    	
+    	if(ModelQuery.getNumberPlayers()==4) {
+    		timerForRedPlayer.setText(initialTime);
+    		timerForGreenPlayer.setText(initialTime);
+    	} else { //if 2player mode, set 4player content invisible
+    		timerForRedPlayer.setVisible(false);
+    		timerForGreenPlayer.setVisible(false);
+    	}
 
 
         switchTimer();
@@ -96,9 +133,12 @@ public class InitializeBoardController extends ViewController{
                 //grey out the next player name & count down time for the current player
                 if (currentPlayer.equals(ModelQuery.getWhitePlayer())) {
                     timerForWhitePlayer.setText(StartNewGameController.toTimeStr());
-                } else {
+                } else if (currentPlayer.equals(ModelQuery.getBlackPlayer())){
                     timerForBlackPlayer.setText(StartNewGameController.toTimeStr());
-
+                } else if (currentPlayer.equals(ModelQuery.getRedPlayer())) {
+                	timerForRedPlayer.setText(StartNewGameController.toTimeStr());
+                } else if (currentPlayer.equals(ModelQuery.getGreenPlayer())) {
+                	timerForGreenPlayer.setText(StartNewGameController.toTimeStr());
                 }
             }
         };
@@ -137,6 +177,8 @@ public class InitializeBoardController extends ViewController{
         GamePosition position = ModelQuery.getCurrentPosition();
         Player white = ModelQuery.getWhitePlayer();
         Player black = ModelQuery.getBlackPlayer();
+        Player red = ModelQuery.getRedPlayer();
+        Player green = ModelQuery.getGreenPlayer();
 
         // remove all walls and pawns
         board.getChildren().clear();
