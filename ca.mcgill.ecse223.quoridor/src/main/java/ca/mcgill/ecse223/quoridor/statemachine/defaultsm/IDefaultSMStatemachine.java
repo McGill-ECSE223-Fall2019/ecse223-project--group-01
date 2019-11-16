@@ -38,14 +38,6 @@ public interface IDefaultSMStatemachine extends IStatemachine {
 		
 		public void raiseRight();
 		
-		public long getRow();
-		
-		public void setRow(long value);
-		
-		public long getColumn();
-		
-		public void setColumn(long value);
-		
 		public void setSCIPawnOperationCallback(SCIPawnOperationCallback operationCallback);
 	
 	}

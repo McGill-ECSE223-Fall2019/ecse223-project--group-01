@@ -2,6 +2,8 @@
 package ca.mcgill.ecse223.quoridor.statemachine.defaultsm;
 
 
+import ca.mcgill.ecse223.quoridor.statemachine.IStatemachine;
+
 public class DefaultSMStatemachine implements IDefaultSMStatemachine {
 	protected class SCIPawnImpl implements SCIPawn {
 	
@@ -83,26 +85,6 @@ public class DefaultSMStatemachine implements IDefaultSMStatemachine {
 			runCycle();
 		}
 		
-		private long row;
-		
-		public long getRow() {
-			return row;
-		}
-		
-		public void setRow(long value) {
-			this.row = value;
-		}
-		
-		private long column;
-		
-		public long getColumn() {
-			return column;
-		}
-		
-		public void setColumn(long value) {
-			this.column = value;
-		}
-		
 		protected void clearEvents() {
 			setup = false;
 			up = false;
@@ -159,9 +141,6 @@ public class DefaultSMStatemachine implements IDefaultSMStatemachine {
 		}
 		clearEvents();
 		clearOutEvents();
-		sCIPawn.setRow(0);
-		
-		sCIPawn.setColumn(0);
 	}
 	
 	public void enter() {
@@ -221,7 +200,7 @@ public class DefaultSMStatemachine implements IDefaultSMStatemachine {
 	}
 	
 	/**
-
+	 * @see IStatemachine#isActive()
 	 */
 	public boolean isActive() {
 		return stateVector[0] != State.$NullState$||stateVector[1] != State.$NullState$;
@@ -230,7 +209,7 @@ public class DefaultSMStatemachine implements IDefaultSMStatemachine {
 	/** 
 	* Always returns 'false' since this state machine can never become final.
 	*
-
+	* @see IStatemachine#isFinal()
 	*/
 	public boolean isFinal() {
 		return false;
@@ -311,24 +290,12 @@ public class DefaultSMStatemachine implements IDefaultSMStatemachine {
 		return operationCallback.pawnGetRow()==9;
 	}
 	
-	private boolean check_main_region_PawnState_Vertical__choice_0_tr5_tr5() {
-		return ((sCIPawn.up) && (operationCallback.isValidJump()));
-	}
-	
-	private boolean check_main_region_PawnState_Vertical__choice_0_tr6_tr6() {
-		return ((sCIPawn.upRight) && ((operationCallback.isValidJump() && !isStateActive(State.main_region_PawnState_Horizontal_Right))));
-	}
-	
-	private boolean check_main_region_PawnState_Vertical__choice_0_tr7_tr7() {
-		return ((sCIPawn.upLeft) && ((operationCallback.isValidJump() && !isStateActive(State.main_region_PawnState_Horizontal_Left))));
-	}
-	
 	private boolean check_main_region_PawnState_Horizontal__choice_0_tr0_tr0() {
-		return (operationCallback.pawnGetCol()>3 && operationCallback.pawnGetCol()<7);
+		return operationCallback.pawnGetCol()==1;
 	}
 	
 	private boolean check_main_region_PawnState_Horizontal__choice_0_tr1_tr1() {
-		return operationCallback.pawnGetCol()==1;
+		return (operationCallback.pawnGetCol()>3 && operationCallback.pawnGetCol()<7);
 	}
 	
 	private boolean check_main_region_PawnState_Horizontal__choice_0_tr2_tr2() {
@@ -341,18 +308,6 @@ public class DefaultSMStatemachine implements IDefaultSMStatemachine {
 	
 	private boolean check_main_region_PawnState_Horizontal__choice_0_tr4_tr4() {
 		return operationCallback.pawnGetCol()==9;
-	}
-	
-	private boolean check_main_region_PawnState_Horizontal__choice_0_tr5_tr5() {
-		return ((sCIPawn.left) && (operationCallback.isValidJump()));
-	}
-	
-	private boolean check_main_region_PawnState_Horizontal__choice_0_tr6_tr6() {
-		return ((sCIPawn.downLeft) && ((operationCallback.isValidJump() && !isStateActive(State.main_region_PawnState_Vertical_Bottom))));
-	}
-	
-	private boolean check_main_region_PawnState_Horizontal__choice_0_tr7_tr7() {
-		return ((sCIPawn.upLeft) && ((operationCallback.isValidJump() && !isStateActive(State.main_region_PawnState_Vertical_Top))));
 	}
 	
 	private void effect_main_region_PawnState_Vertical__choice_0_tr0() {
@@ -376,29 +331,15 @@ public class DefaultSMStatemachine implements IDefaultSMStatemachine {
 	}
 	
 	private void effect_main_region_PawnState_Vertical__choice_0_tr5() {
-		sCIPawn.operationCallback.movePawn("up", 2);
-		
-		enterSequence_main_region_PawnState_Vertical_Bottom_default();
-	}
-	
-	private void effect_main_region_PawnState_Vertical__choice_0_tr6() {
-		sCIPawn.operationCallback.movePawn("up", 1);
-		
-		enterSequence_main_region_PawnState_Vertical_Bottom_default();
-	}
-	
-	private void effect_main_region_PawnState_Vertical__choice_0_tr7() {
-		sCIPawn.operationCallback.movePawn("up", 1);
-		
-		enterSequence_main_region_PawnState_Vertical_Bottom_default();
+		enterSequence_main_region_PawnState_Vertical_Mid_default();
 	}
 	
 	private void effect_main_region_PawnState_Horizontal__choice_0_tr0() {
-		enterSequence_main_region_PawnState_Horizontal_Mid_default();
+		enterSequence_main_region_PawnState_Horizontal_Left_default();
 	}
 	
 	private void effect_main_region_PawnState_Horizontal__choice_0_tr1() {
-		enterSequence_main_region_PawnState_Horizontal_Left_default();
+		enterSequence_main_region_PawnState_Horizontal_Mid_default();
 	}
 	
 	private void effect_main_region_PawnState_Horizontal__choice_0_tr2() {
@@ -414,21 +355,7 @@ public class DefaultSMStatemachine implements IDefaultSMStatemachine {
 	}
 	
 	private void effect_main_region_PawnState_Horizontal__choice_0_tr5() {
-		sCIPawn.operationCallback.movePawn("left", 2);
-		
-		enterSequence_main_region_PawnState_Horizontal_Right_default();
-	}
-	
-	private void effect_main_region_PawnState_Horizontal__choice_0_tr6() {
-		sCIPawn.operationCallback.movePawn("left", 1);
-		
-		enterSequence_main_region_PawnState_Horizontal_Right_default();
-	}
-	
-	private void effect_main_region_PawnState_Horizontal__choice_0_tr7() {
-		sCIPawn.operationCallback.movePawn("left", 1);
-		
-		enterSequence_main_region_PawnState_Horizontal_Right_default();
+		enterSequence_main_region_PawnState_Horizontal_Mid_default();
 	}
 	
 	/* 'default' enter sequence for state Top */
@@ -662,17 +589,7 @@ public class DefaultSMStatemachine implements IDefaultSMStatemachine {
 						if (check_main_region_PawnState_Vertical__choice_0_tr4_tr4()) {
 							effect_main_region_PawnState_Vertical__choice_0_tr4();
 						} else {
-							if (check_main_region_PawnState_Vertical__choice_0_tr5_tr5()) {
-								effect_main_region_PawnState_Vertical__choice_0_tr5();
-							} else {
-								if (check_main_region_PawnState_Vertical__choice_0_tr6_tr6()) {
-									effect_main_region_PawnState_Vertical__choice_0_tr6();
-								} else {
-									if (check_main_region_PawnState_Vertical__choice_0_tr7_tr7()) {
-										effect_main_region_PawnState_Vertical__choice_0_tr7();
-									}
-								}
-							}
+							effect_main_region_PawnState_Vertical__choice_0_tr5();
 						}
 					}
 				}
@@ -697,17 +614,7 @@ public class DefaultSMStatemachine implements IDefaultSMStatemachine {
 						if (check_main_region_PawnState_Horizontal__choice_0_tr4_tr4()) {
 							effect_main_region_PawnState_Horizontal__choice_0_tr4();
 						} else {
-							if (check_main_region_PawnState_Horizontal__choice_0_tr5_tr5()) {
-								effect_main_region_PawnState_Horizontal__choice_0_tr5();
-							} else {
-								if (check_main_region_PawnState_Horizontal__choice_0_tr6_tr6()) {
-									effect_main_region_PawnState_Horizontal__choice_0_tr6();
-								} else {
-									if (check_main_region_PawnState_Horizontal__choice_0_tr7_tr7()) {
-										effect_main_region_PawnState_Horizontal__choice_0_tr7();
-									}
-								}
-							}
+							effect_main_region_PawnState_Horizontal__choice_0_tr5();
 						}
 					}
 				}
@@ -905,7 +812,28 @@ public class DefaultSMStatemachine implements IDefaultSMStatemachine {
 				
 				react_main_region_PawnState_Vertical__choice_0();
 			} else {
-				did_transition = false;
+				if (((sCIPawn.upLeft) && ((operationCallback.isValidJump() && !isStateActive(State.main_region_PawnState_Horizontal_Left))))) {
+					exitSequence_main_region_PawnState_Vertical_Bottom();
+					sCIPawn.operationCallback.movePawn("up", 1);
+					
+					react_main_region_PawnState_Vertical__choice_0();
+				} else {
+					if (((sCIPawn.upRight) && ((operationCallback.isValidJump() && !isStateActive(State.main_region_PawnState_Horizontal_Right))))) {
+						exitSequence_main_region_PawnState_Vertical_Bottom();
+						sCIPawn.operationCallback.movePawn("up", 1);
+						
+						react_main_region_PawnState_Vertical__choice_0();
+					} else {
+						if (((sCIPawn.up) && (operationCallback.isValidJump()))) {
+							exitSequence_main_region_PawnState_Vertical_Bottom();
+							sCIPawn.operationCallback.movePawn("up", 2);
+							
+							react_main_region_PawnState_Vertical__choice_0();
+						} else {
+							did_transition = false;
+						}
+					}
+				}
 			}
 		}
 		return did_transition;
@@ -1148,7 +1076,28 @@ public class DefaultSMStatemachine implements IDefaultSMStatemachine {
 				
 				react_main_region_PawnState_Horizontal__choice_0();
 			} else {
-				did_transition = false;
+				if (((sCIPawn.upLeft) && ((operationCallback.isValidJump() && !isStateActive(State.main_region_PawnState_Vertical_Top))))) {
+					exitSequence_main_region_PawnState_Horizontal_Right();
+					sCIPawn.operationCallback.movePawn("left", 1);
+					
+					react_main_region_PawnState_Horizontal__choice_0();
+				} else {
+					if (((sCIPawn.downLeft) && ((operationCallback.isValidJump() && !isStateActive(State.main_region_PawnState_Vertical_Bottom))))) {
+						exitSequence_main_region_PawnState_Horizontal_Right();
+						sCIPawn.operationCallback.movePawn("left", 1);
+						
+						react_main_region_PawnState_Horizontal__choice_0();
+					} else {
+						if (((sCIPawn.left) && (operationCallback.isValidJump()))) {
+							exitSequence_main_region_PawnState_Horizontal_Right();
+							sCIPawn.operationCallback.movePawn("left", 2);
+							
+							react_main_region_PawnState_Horizontal__choice_0();
+						} else {
+							did_transition = false;
+						}
+					}
+				}
 			}
 		}
 		if (did_transition==false) {
