@@ -157,7 +157,6 @@ public class NewGameMenuController extends ViewController {
 
         // All good begin initialization process
         if (readyTostart) {
-
             //setup names
             if(whitePlayerName.getText().equals("")){
                 whiteName = existingWhiteChoices.getValue();
@@ -189,30 +188,32 @@ public class NewGameMenuController extends ViewController {
 
 
             // Validate both player's name
-            if(whiteName.equals(blackName)){
-                error+= "Players may not have the same name!";
-                readyTostart = false;
-            }
-            if(numberPlayers.getSelectedToggle().equals(fourPlayer)) {
-            	if(whiteName.equals(redName) || whiteName.equals(greenName) || blackName.equals(redName) || blackName.equals(greenName) ||
-            			redName.equals(greenName)) {
+            if(numberPlayers.getSelectedToggle().equals(twoPlayer)) {
+            	if(whiteName.equals(blackName)){
+            		error+= "Players may not have the same name!";
+                	readyTostart = false;
+            	}
+            } else if(numberPlayers.getSelectedToggle().equals(fourPlayer)) {
+            	if(whiteName.equals(blackName)|| whiteName.equals(redName) || whiteName.equals(greenName) || 
+            			blackName.equals(redName) || blackName.equals(greenName) || redName.equals(greenName)) {
             		error+= "Players may not have the same name!";
             		readyTostart = false;
             	}
             }
 
-
+            
             StartNewGameController.initializeGame();
-            StartNewGameController.whitePlayerChoosesAUsername(whiteName);
+            StartNewGameController.whitePlayerChoosesAUsername(whiteName); //bugged
             StartNewGameController.blackPlayerChooseAUsername(blackName);
             if(numberPlayers.getSelectedToggle().equals(fourPlayer)) {
             	StartNewGameController.redPlayerChooseAUsername(redName);
             	StartNewGameController.greenPlayerChooseAUsername(greenName);
             }
-            
+            whitePlayerName.setText("dd");
             minS = minutes.getText();
             secS = seconds.getText();
             StartNewGameController.setTotalThinkingTime(Integer.parseInt(minutes.getText()), Integer.parseInt(seconds.getText()));
+            blackPlayerName.setText("ff");
             BoardController.initializeBoard();
             changePage("/fxml/InitializeBoard.fxml");
         }

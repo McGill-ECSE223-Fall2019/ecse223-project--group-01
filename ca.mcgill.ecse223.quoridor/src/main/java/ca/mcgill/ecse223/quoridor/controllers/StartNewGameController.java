@@ -66,7 +66,7 @@ public class StartNewGameController {
         Player player = new Player(new Time(tempThinkingTime), white_user, 9, Direction.Horizontal,ModelQuery.getCurrentGame());
         ModelQuery.getCurrentGame().setWhitePlayer(player); //set White player
         ModelQuery.getWhitePlayer().setUser(white_user);
-
+        
         isReadyToStart(); //check if players chose name and if total thinking time is set
     }
 
@@ -158,6 +158,7 @@ public class StartNewGameController {
     public static void setTotalThinkingTime (int minutes, int seconds) {
         //total thinking time is able to set only if players are existed
         if (whitePlayerChooseName && blackPlayerChooseName) {
+        	System.out.println(minutes);
             setThinkingTime(minutes, seconds);   //set total thinking time
             thinkingTimeIsSet = true;
         }
@@ -230,8 +231,8 @@ public class StartNewGameController {
         Time totalThinkingTime = new Time(millis+currentMillis);
         ModelQuery.getWhitePlayer().setRemainingTime(totalThinkingTime);
         ModelQuery.getBlackPlayer().setRemainingTime(totalThinkingTime);
-        ModelQuery.getRedPlayer().setRemainingTime(totalThinkingTime);
-        ModelQuery.getGreenPlayer().setRemainingTime(totalThinkingTime);
+        	ModelQuery.getRedPlayer().setRemainingTime(totalThinkingTime);
+        	ModelQuery.getGreenPlayer().setRemainingTime(totalThinkingTime);
         return totalThinkingTime;
     }
 
@@ -244,12 +245,11 @@ public class StartNewGameController {
      *
      */
     public static void isReadyToStart(){
-        if(thinkingTimeIsSet && whitePlayerChooseName && blackPlayerChooseName || !redPlayerChooseName || !greenPlayerChooseName){
+        if(thinkingTimeIsSet && whitePlayerChooseName && blackPlayerChooseName && !redPlayerChooseName && !greenPlayerChooseName){
             ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.ReadyToStart);
             ModelQuery.getWhitePlayer().setNextPlayer(ModelQuery.getBlackPlayer());
             ModelQuery.getBlackPlayer().setNextPlayer(ModelQuery.getWhitePlayer());
-
-        } else if (thinkingTimeIsSet && whitePlayerChooseName && blackPlayerChooseName || redPlayerChooseName || greenPlayerChooseName) {
+        } else if (thinkingTimeIsSet && whitePlayerChooseName && blackPlayerChooseName && redPlayerChooseName && greenPlayerChooseName) {
             ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.ReadyToStart);
             ModelQuery.getWhitePlayer().setNextPlayer(ModelQuery.getBlackPlayer());
         	ModelQuery.getBlackPlayer().setNextPlayer(ModelQuery.getRedPlayer());    
