@@ -1,17 +1,23 @@
 package ca.mcgill.ecse223.quoridor.features;
 
+import static org.junit.Assert.assertEquals;
+
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.List;
 
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 import ca.mcgill.ecse223.quoridor.controllers.PawnController;
+import ca.mcgill.ecse223.quoridor.controllers.*;
 import ca.mcgill.ecse223.quoridor.model.*;
 import ca.mcgill.ecse223.quoridor.model.Game.GameStatus;
 import ca.mcgill.ecse223.quoridor.model.Game.MoveMode;
+import cucumber.api.PendingException;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.junit.Assert;
 
 public class PawnStepDefinition {
 
@@ -87,7 +93,7 @@ public class PawnStepDefinition {
 	 */
 	@And("There are no {string} walls {string} from the player nearby")
 	public void thereAreNoDirWallsSideFromThePlayerNearby(Direction dir, String side) {
-		
+		//do nothing
 	}
 	
 	/**
@@ -95,7 +101,11 @@ public class PawnStepDefinition {
 	 */
 	@When("Player {string} initiates to move {string}")
 	public void playerInitiatesToMoveSide(Player player, String side) {
-		
+		try {
+			PawnController.jumpPawn(player, side);
+		} catch (UnsupportedOperationException e) {
+			throw new PendingException();
+		}
 	}
 	
 	/**
@@ -111,7 +121,18 @@ public class PawnStepDefinition {
 	 */
 	@And("Player's new position shall be {string}:{string}")
 	public void playersNewPositionShallBeRowCol(int row, int col) {
-		
+		Player player = ModelQuery.getPlayerToMove();
+		Tile tile;
+		//player is white
+		if (player.equals(ModelQuery.getWhitePlayer())) {
+			tile = ModelQuery.getCurrentPosition().getWhitePosition().getTile();
+		}
+		//player is black
+		else {
+			tile = ModelQuery.getCurrentPosition().getBlackPosition().getTile();
+		}
+		assertEquals(tile.getRow(), row);
+		assertEquals(tile.getColumn(),col);
 	}
 	
 	/**
@@ -119,7 +140,7 @@ public class PawnStepDefinition {
 	 */
 	@And("The next player to move shall become {string}")
 	public void theNextPlayerToMoveShallBecome(Player nextPlayer) {
-		
+		assertEquals(nextPlayer, ModelQuery.getCurrentPosition().getPlayerToMove().getNextPlayer());
 	}
 	
 	//scenario outline: Jump of player blocked by wall

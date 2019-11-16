@@ -1,6 +1,7 @@
 package ca.mcgill.ecse223.quoridor.controllers;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import ca.mcgill.ecse223.quoridor.model.Player;
+import ca.mcgill.ecse223.quoridor.model.Tile;
 
 public class PawnController {
 
@@ -10,5 +11,45 @@ public class PawnController {
 
     public static void getPossibleMoves() throws  NotImplementedException{
         throw new NotImplementedException();
+    }
+    
+    public static boolean jumpPawn(Player player, String side) {
+    	//player is white
+    	int row, col;
+		if (player.equals(ModelQuery.getWhitePlayer())) {
+			Tile curTile = ModelQuery.getCurrentPosition().getWhitePosition().getTile();
+			row = curTile.getRow();
+			col = curTile.getColumn();
+		}
+		//player is black
+		else {
+			Tile curTile = ModelQuery.getCurrentPosition().getBlackPosition().getTile();
+			row = curTile.getRow();
+			col = curTile.getColumn();
+		}
+		
+		switch(side){
+        	case "left":{
+        		col-=2;
+        		break;
+        	}
+        	case "right":{
+        		col+=2;
+        		break;
+        	}
+        	case "up": {
+        		row-=2;
+        		break;
+        	}
+        	case "down":{
+        		row+=2;
+        		break;
+        	}
+		}
+		Tile targetTile = ModelQuery.getTile(row, col);
+		
+		
+		return false;
+    			
     }
 }
