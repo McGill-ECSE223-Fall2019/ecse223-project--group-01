@@ -133,10 +133,6 @@ public class InitializeBoardController extends ViewController{
             public void handle(ActionEvent t) {
                 Player currentPlayer = ModelQuery.getPlayerToMove();
                 if ((StartNewGameController.timeOver()) || (isWallDrop == true) ) {
-
-                	timerForWhitePlayer.setText(initialTime);
-                	timerForBlackPlayer.setText(initialTime);
-
                 	SwitchPlayerController.switchActivePlayer();
                 	isWallDrop = false;
 
@@ -172,20 +168,23 @@ public class InitializeBoardController extends ViewController{
 
     public void createNewWall(ActionEvent actionEvent) {
 
-        // Check if there is already a wall in hand
-        // If so just cancel the wall move
-        if (wallInHand) {
-            WallController.cancelWallMove();
-            wallInHand = false;
-            refresh();
-        }
-        //
-        else if (WallController.grabWall()) {
-            wallInHand = true;
-            refresh();
-        } else {
-            System.out.println("No more walls");
-        }
+    	if(!isWallDrop) { //avoids issue with dropping multiple walls in a single clock cycle
+    		
+            // Check if there is already a wall in hand
+            // If so just cancel the wall move
+	        if (wallInHand) {
+	            WallController.cancelWallMove();
+	            wallInHand = false;
+	            refresh();
+	        }
+	        //
+	        else if (WallController.grabWall()) {
+	            wallInHand = true;
+	            refresh();
+	        } else {
+	            System.out.println("No more walls");
+	        }
+    	}
     }
 
     public void refresh() {
