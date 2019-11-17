@@ -67,6 +67,12 @@ public class ModelQuery {
         return QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition();
     }
 
+    public static List<PlayerPosition> getAllPlayerPosition(){
+        List<PlayerPosition> positions = new ArrayList<>();
+        positions.add(QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getBlackPosition());
+        positions.add(QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getWhitePosition());
+        return positions;
+    }
 
 
 }

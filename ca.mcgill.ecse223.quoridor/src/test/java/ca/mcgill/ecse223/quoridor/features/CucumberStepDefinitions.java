@@ -15,18 +15,10 @@ import io.cucumber.java.en.When;
 import org.junit.Assert;
 
 import java.io.File;
+import java.io.IOException;
 import java.sql.Time;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Paths;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -1453,6 +1445,9 @@ public class CucumberStepDefinitions {
 
 		game.setCurrentPosition(gamePosition);
 		game.getCurrentPosition().setPlayerToMove(quoridor.getCurrentGame().getWhitePlayer());
+
+		PawnController.initPawnSM(quoridor.getCurrentGame().getBlackPlayer(), player1Position);
+		PawnController.initPawnSM(quoridor.getCurrentGame().getWhitePlayer(), player2Position);
 	}
 
 	private Direction stringToDirection(String direction){

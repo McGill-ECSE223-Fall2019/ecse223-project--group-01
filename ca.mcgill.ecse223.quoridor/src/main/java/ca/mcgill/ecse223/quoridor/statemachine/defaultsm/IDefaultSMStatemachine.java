@@ -6,9 +6,9 @@ import ca.mcgill.ecse223.quoridor.statemachine.IStatemachine;
 public interface IDefaultSMStatemachine extends IStatemachine {
 	public interface InternalOperationCallback {
 	
-		public boolean isValidMove();
+		public boolean isValidMove(String side);
 		
-		public boolean isValidJump();
+		public boolean isValidJump(String side);
 		
 		public long pawnGetRow();
 		
@@ -37,6 +37,8 @@ public interface IDefaultSMStatemachine extends IStatemachine {
 		public void raiseLeft();
 		
 		public void raiseRight();
+		
+		public boolean isRaisedMoveCompleted();
 		
 		public void setSCIPawnOperationCallback(SCIPawnOperationCallback operationCallback);
 	

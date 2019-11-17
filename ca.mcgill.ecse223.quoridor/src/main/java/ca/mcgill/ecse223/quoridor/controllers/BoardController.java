@@ -49,6 +49,9 @@ public class BoardController {
         ModelQuery.getCurrentGame().getCurrentPosition().setWhitePosition(whitePlayerPos);
         ModelQuery.getCurrentGame().getCurrentPosition().setBlackPosition(blackPlayerPos);
 
+        PawnController.initPawnSM(quoridor.getCurrentGame().getBlackPlayer(), blackPlayerPos);
+        PawnController.initPawnSM(quoridor.getCurrentGame().getWhitePlayer(), whitePlayerPos);
+
         for(int i =1; i <= 10; i++){
             ModelQuery.getCurrentGame().getWhitePlayer().addWall(i);
         }
