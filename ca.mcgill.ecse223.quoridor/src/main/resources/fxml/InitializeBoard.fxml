@@ -178,7 +178,6 @@
             <Font size="20.0" />
          </font>
       </Text>
-      <Label layoutX="257.0" layoutY="452.0" prefHeight="20.0" prefWidth="83.0" text="Invalid Move!" />
       <PointLight fx:id="whitePlayerLight" color="CHARTREUSE" layoutX="249.0" layoutY="30.0" lightOn="true" />
 
       <Text layoutX="9.0" layoutY="68.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1" wrappingWidth="9.0" />
