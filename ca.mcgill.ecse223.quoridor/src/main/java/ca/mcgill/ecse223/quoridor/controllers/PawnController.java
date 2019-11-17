@@ -4,13 +4,12 @@ import ca.mcgill.ecse223.quoridor.model.Player;
 import ca.mcgill.ecse223.quoridor.model.Tile;
 
 public class PawnController {
-
-    public static  boolean movePawn(String side) throws NotImplementedException {
-        throw new NotImplementedException();
+		public static  boolean movePawn(String side) throws UnsupportedOperationException {
+        throw new UnsupportedOperationException();
     }
 
-    public static void getPossibleMoves() throws  NotImplementedException{
-        throw new NotImplementedException();
+    public static void getPossibleMoves() throws  UnsupportedOperationException{
+        throw new UnsupportedOperationException();
     }
     
     public static boolean jumpPawn(Player player, String side) {
