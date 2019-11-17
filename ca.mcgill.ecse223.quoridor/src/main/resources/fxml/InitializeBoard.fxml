@@ -16,8 +16,8 @@
             <Font size="20.0" />
          </font>
       </Text>
-      <Circle fill="DODGERBLUE" layoutX="34.0" layoutY="22.0" radius="8.0" stroke="BLACK" strokeType="INSIDE" />
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="33.0" layoutX="173.0" layoutY="5.0" stroke="BLACK" strokeType="INSIDE" width="9.0" />
+      <Circle fill="WHITE" layoutX="34.0" layoutY="22.0" radius="8.0" stroke="BLACK" strokeType="INSIDE" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="33.0" layoutX="173.0" layoutY="5.0" stroke="BLACK" strokeType="INSIDE" width="9.0" />
       <Text layoutX="194.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="x" wrappingWidth="35.151102788085936">
          <font>
             <Font size="20.0" />
@@ -166,8 +166,8 @@
             <Font size="20.0" />
          </font>
       </Text>
-      <Circle fill="#5aff1e" layoutX="34.0" layoutY="470.0" radius="8.0" stroke="BLACK" strokeType="INSIDE" />
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#5aff1e" height="33.0" layoutX="175.0" layoutY="453.0" stroke="BLACK" strokeType="INSIDE" width="9.0" />
+      <Circle fill="#111111" layoutX="34.0" layoutY="470.0" radius="8.0" stroke="BLACK" strokeType="INSIDE" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#111111" height="33.0" layoutX="175.0" layoutY="453.0" stroke="BLACK" strokeType="INSIDE" width="9.0" />
       <Text layoutX="196.0" layoutY="477.0" strokeType="OUTSIDE" strokeWidth="0.0" text="x" wrappingWidth="35.151102788085936">
          <font>
             <Font size="20.0" />

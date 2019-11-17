@@ -142,7 +142,7 @@ public class InitializeBoardController extends ViewController{
         board.getChildren().clear();
 
         // update player turn
-        if (position.getPlayerToMove().equals(black)) {
+        if (position.getPlayerToMove().equals(white)) {
             whitePlayerName.setFill(Color.BLACK);
             blackPlayerName.setFill(Color.LIGHTGRAY);
         } else {
@@ -180,10 +180,13 @@ public class InitializeBoardController extends ViewController{
 
         Circle pawn = new Circle();
         if(isWhite){
-            pawn.setFill(Color.web("#1e90ff"));
+            pawn.setFill(Color.WHITE);
+            pawn.setStroke(Color.BLACK);
+
         }
         else{
-            pawn.setFill(Color.web("#5aff1e"));
+            pawn.setFill(Color.BLACK);
+
         }
         pawn.setLayoutX(coord.getKey());
         pawn.setLayoutY(coord.getValue());
