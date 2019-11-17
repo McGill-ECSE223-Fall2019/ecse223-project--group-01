@@ -28,6 +28,8 @@ import java.util.List;
 public class InitializeBoardController extends ViewController{
 
     public static boolean wallInHand = false;
+    public static boolean pawnInHand = false;
+    KeyCode previousKey = null;
 
     @FXML
     private AnchorPane board;
@@ -133,6 +135,12 @@ public class InitializeBoardController extends ViewController{
         }
     }
 
+    public void handleGrabPawn(ActionEvent actionEvent) {
+        pawnInHand = true;
+         refresh();
+    }
+
+
     public void refresh() {
         GamePosition position = ModelQuery.getCurrentPosition();
         Player white = ModelQuery.getWhitePlayer();
@@ -229,6 +237,7 @@ public class InitializeBoardController extends ViewController{
     @FXML
     public void handleKeyPressed(KeyEvent event) {
         KeyCode code = event.getCode();
+
         if(wallInHand){
             //Moves the wall up
             if(code.equals(KeyCode.W)){
@@ -257,6 +266,36 @@ public class InitializeBoardController extends ViewController{
             else if(code.equals(KeyCode.R)){
                 WallController.rotateWall();
             }
+            refresh();
+        }
+
+        if (pawnInHand){
+            /*For handling pawn move*/
+                if (code.equals(KeyCode.I)) {
+                    PawnController.movePawn("up");
+                }
+                else if (code.equals(KeyCode.K)) {
+                    PawnController.movePawn("down");
+                }
+                else if (code.equals(KeyCode.J)) {
+                    PawnController.movePawn("left");
+                }
+                else if (code.equals(KeyCode.L)) {
+                    PawnController.movePawn("right");
+                }
+                else if (code.equals(KeyCode.U)) {
+                    PawnController.movePawn("upleft");
+                }
+                else if (code.equals(KeyCode.O)) {
+                    PawnController.movePawn("upright");
+                }
+                else if (code.equals(KeyCode.N)) {
+                    PawnController.movePawn("downleft");
+                }
+                else if (code.equals(KeyCode.COMMA)) {
+                    PawnController.movePawn("downright");
+                }
+
             refresh();
         }
     }
