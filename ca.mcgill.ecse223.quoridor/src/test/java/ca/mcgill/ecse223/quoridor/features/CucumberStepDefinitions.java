@@ -1062,7 +1062,7 @@ public class CucumberStepDefinitions {
 	//@author: Mark Zhu
 	@And("The next player to move shall be {string}")
 	public void checkActivePlayer(String playerColor) {
-		if (originalPlayerColor.equals("white")) {
+		if (playerColor.equals("black")) {
 			assertEquals(ModelQuery.getBlackPlayer(),ModelQuery.getCurrentGame().getCurrentPosition().getPlayerToMove());
 		} else {
 			assertEquals(ModelQuery.getWhitePlayer(),ModelQuery.getCurrentGame().getCurrentPosition().getPlayerToMove());
@@ -1421,8 +1421,8 @@ public class CucumberStepDefinitions {
 		// There are total 36 tiles in the first four rows and
 		// indexing starts from 0 -> tiles with indices 36 and 36+8=44 are the starting
 		// positions
-		Tile player1StartPos = quoridor.getBoard().getTile(36);
-		Tile player2StartPos = quoridor.getBoard().getTile(44);
+		Tile player1StartPos = ModelQuery.getTile(9,5);
+		Tile player2StartPos = ModelQuery.getTile(1,5);
 
 		Game game = new Game(GameStatus.Running, MoveMode.PlayerMove, quoridor);
 		game.setWhitePlayer(players.get(0));
@@ -1446,8 +1446,8 @@ public class CucumberStepDefinitions {
 		game.setCurrentPosition(gamePosition);
 		game.getCurrentPosition().setPlayerToMove(quoridor.getCurrentGame().getWhitePlayer());
 
-		PawnController.initPawnSM(quoridor.getCurrentGame().getBlackPlayer(), player1Position);
-		PawnController.initPawnSM(quoridor.getCurrentGame().getWhitePlayer(), player2Position);
+		PawnController.initPawnSM(quoridor.getCurrentGame().getWhitePlayer(), player1Position);
+		PawnController.initPawnSM(quoridor.getCurrentGame().getBlackPlayer(), player2Position);
 	}
 
 	private Direction stringToDirection(String direction){

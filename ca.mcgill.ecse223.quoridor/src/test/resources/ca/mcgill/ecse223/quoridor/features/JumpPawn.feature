@@ -14,9 +14,9 @@ Feature: Jump Pawn
     When Player "<player>" initiates to move "<side>"
     Then The move "<side>" shall be "<status>"
     And Player's new position shall be <nrow>:<ncol>
-    And The next player to move shall become "<nplayer>"
+    And The next player to move shall be "<nplayer>"
 
-    Examples: 
+    Examples:
       | player | prow | pcol | orow | ocol | dir        | side  | status  | nrow | ncol | nplayer |
       | white  |    3 |    3 |    3 |    2 | vertical   | left  | success |    3 |    1 | black   |
       | black  |    3 |    2 |    3 |    1 | vertical   | left  | illegal |    3 |    2 | black   |
@@ -35,9 +35,9 @@ Feature: Jump Pawn
     When Player "<player>" initiates to move "<side>"
     Then The move "<side>" shall be "<status>"
     And Player's new position shall be <nrow>:<ncol>
-    And The next player to move shall become "<nplayer>"
+    And The next player to move shall be "<nplayer>"
 
-    Examples: 
+    Examples:
       | player | row | col | orow | ocol | dir        | wrow | wcol | side  | status  | nrow | ncol | nplayer |
       | white  |   3 |   3 |    3 |    2 | vertical   |    2 |    2 | left  | illegal |    3 |    3 | white   |
       | black  |   3 |   3 |    3 |    2 | vertical   |    3 |    1 | left  | illegal |    3 |    3 | black   |
@@ -56,9 +56,9 @@ Feature: Jump Pawn
     When Player "<player>" initiates to move "<side>"
     Then The move "<side>" shall be "<status>"
     And Player's new position shall be <nrow>:<ncol>
-    And The next player to move shall become "<nplayer>"
+    And The next player to move shall be "<nplayer>"
 
-    Examples: 
+    Examples:
       | player | row | col | orow | ocol | dir        | wrow | wcol | side      | status  | nrow | ncol | nplayer |
       | black  |   3 |   3 |    3 |    2 | vertical   |    3 |    1 | upleft    | success |    2 |    2 | white   |
       | white  |   3 |   3 |    3 |    2 | vertical   |    3 |    1 | downleft  | success |    4 |    2 | black   |
@@ -85,15 +85,15 @@ Feature: Jump Pawn
     When Player "<player>" initiates to move "<side>"
     Then The move "<side>" shall be "<status>"
     And Player's new position shall be <nrow>:<ncol>
-    And The next player to move shall become "<nplayer>"
+    And The next player to move shall be "<nplayer>"
 
-    Examples: 
+    Examples:
       | player | prow | pcol | orow | ocol | dir        | side      | status  | nrow | ncol | nplayer |
       | white  |    3 |    2 |    3 |    1 | vertical   | upleft    | success |    2 |    1 | black   |
       | white  |    3 |    2 |    3 |    1 | vertical   | downleft  | success |    4 |    1 | black   |
       | black  |    6 |    8 |    6 |    9 | vertical   | upright   | success |    5 |    9 | white   |
       | black  |    6 |    8 |    6 |    9 | vertical   | downright | success |    7 |    9 | white   |
-      | white  |    2 |    3 |    1 |    3 | horizontal | upleft    | success |    1 |    2 | white   |
-      | white  |    2 |    3 |    1 |    3 | horizontal | upright   | success |    1 |    4 | white   |
+      | white  |    2 |    3 |    1 |    3 | horizontal | upleft    | success |    1 |    2 | black   |
+      | white  |    2 |    3 |    1 |    3 | horizontal | upright   | success |    1 |    4 | black   |
       | black  |    8 |    6 |    9 |    6 | horizontal | downleft  | success |    9 |    5 | white   |
       | black  |    8 |    6 |    9 |    6 | horizontal | downright | success |    9 |    7 | white   |

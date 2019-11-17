@@ -94,6 +94,26 @@ public class DefaultSMStatemachine implements IDefaultSMStatemachine {
 			moveCompleted = true;
 		}
 		
+		private long targetRow;
+		
+		public long getTargetRow() {
+			return targetRow;
+		}
+		
+		public void setTargetRow(long value) {
+			this.targetRow = value;
+		}
+		
+		private long targetCol;
+		
+		public long getTargetCol() {
+			return targetCol;
+		}
+		
+		public void setTargetCol(long value) {
+			this.targetCol = value;
+		}
+		
 		protected void clearEvents() {
 			setup = false;
 			up = false;
@@ -155,6 +175,9 @@ public class DefaultSMStatemachine implements IDefaultSMStatemachine {
 		}
 		clearEvents();
 		clearOutEvents();
+		sCIPawn.setTargetRow(0);
+		
+		sCIPawn.setTargetCol(0);
 	}
 	
 	public void enter() {
@@ -1035,7 +1058,7 @@ public class DefaultSMStatemachine implements IDefaultSMStatemachine {
 					
 					react_main_region_PawnState_Horizontal__choice_0();
 				} else {
-					if (((sCIPawn.downLeft) && ((operationCallback.isValidJump("downright") && !isStateActive(State.main_region_PawnState_Vertical_Bottom))))) {
+					if (((sCIPawn.downLeft) && ((operationCallback.isValidJump("downleft") && !isStateActive(State.main_region_PawnState_Vertical_Bottom))))) {
 						exitSequence_main_region_PawnState_Horizontal_Almost_Left();
 						sCIPawn.operationCallback.movePawn("left", 1);
 						
