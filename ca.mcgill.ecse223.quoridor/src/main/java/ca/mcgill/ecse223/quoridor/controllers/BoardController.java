@@ -34,8 +34,8 @@ public class BoardController {
         }
 
 
-        PlayerPosition whitePlayerPos =  new PlayerPosition(quoridor.getCurrentGame().getWhitePlayer(), quoridor.getBoard().getTile(36));
-        PlayerPosition blackPlayerPos =  new PlayerPosition(quoridor.getCurrentGame().getBlackPlayer(), quoridor.getBoard().getTile(44));
+        PlayerPosition whitePlayerPos =  new PlayerPosition(quoridor.getCurrentGame().getWhitePlayer(), ModelQuery.getTile(9,5));
+        PlayerPosition blackPlayerPos =  new PlayerPosition(quoridor.getCurrentGame().getBlackPlayer(), ModelQuery.getTile(1,5));
 
 
         List<GamePosition> positions = ModelQuery.getCurrentGame().getPositions();

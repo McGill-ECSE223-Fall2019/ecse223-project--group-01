@@ -14,6 +14,7 @@ import static org.junit.Assert.*;
 public class PawnStepDefinition {
 
     private boolean isLegalMove;
+    private Player currentPlayer;
 
     /**
      * @author Kate Ward
@@ -32,6 +33,8 @@ public class PawnStepDefinition {
             Tile tile = ModelQuery.getTile(row, col);
             quoridor.getCurrentGame().getCurrentPosition().getBlackPosition().setTile(tile);
         }
+        player.getStatemachine().exit();
+        player.getStatemachine().enter();
     }
 
     /**
@@ -66,6 +69,7 @@ public class PawnStepDefinition {
      */
     @When("Player {string} initiates to move {string}")
     public void playerInitiatesToMoveSide(String playerColor, String side) {
+        currentPlayer = stringToPlayer(playerColor);
         try {
             isLegalMove = PawnController.movePawn(side);
         } catch (UnsupportedOperationException e) {
@@ -90,18 +94,17 @@ public class PawnStepDefinition {
      */
     @And("Player's new position shall be {int}:{int}")
     public void playersNewPositionShallBeRowCol(int row, int col) {
-        Player player = ModelQuery.getPlayerToMove();
         Tile tile;
         //player is white
-        if (player.equals(ModelQuery.getWhitePlayer())) {
+        if (currentPlayer.equals(ModelQuery.getWhitePlayer())) {
             tile = ModelQuery.getCurrentPosition().getWhitePosition().getTile();
         }
         //player is black
         else {
             tile = ModelQuery.getCurrentPosition().getBlackPosition().getTile();
         }
-        assertEquals(tile.getRow(), row);
-        assertEquals(tile.getColumn(), col);
+        assertEquals(row, tile.getRow());
+        assertEquals(col, tile.getColumn());
     }
 
     //scenario outline: Jump of player blocked by wall
@@ -154,6 +157,20 @@ public class PawnStepDefinition {
             }
             case "vertical": {
                 return Direction.Vertical;
+            }
+            default: {
+                return null;
+            }
+        }
+    }
+
+    private Player stringToPlayer(String playerColor){
+        switch (playerColor) {
+            case "white": {
+                return ModelQuery.getWhitePlayer();
+            }
+            case "black": {
+                return ModelQuery.getBlackPlayer();
             }
             default: {
                 return null;

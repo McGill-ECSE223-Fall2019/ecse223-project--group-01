@@ -40,6 +40,14 @@ public interface IDefaultSMStatemachine extends IStatemachine {
 		
 		public boolean isRaisedMoveCompleted();
 		
+		public long getTargetRow();
+		
+		public void setTargetRow(long value);
+		
+		public long getTargetCol();
+		
+		public void setTargetCol(long value);
+		
 		public void setSCIPawnOperationCallback(SCIPawnOperationCallback operationCallback);
 	
 	}

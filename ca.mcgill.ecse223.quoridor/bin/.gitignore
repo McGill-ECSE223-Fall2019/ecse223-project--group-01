@@ -1,11 +1,6 @@
 # Ignore Gradle project-specific cache directory
 .gradle
 .idea
-/QuoridorGame.ump
-/ca/
-/main/
-/test/
-/default/
 
 # Ignore Gradle build output directory
 build

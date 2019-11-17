@@ -1,7 +1,5 @@
 package ca.mcgill.ecse223.quoridor.controllers;
 
-import ca.mcgill.ecse223.quoridor.model.Player;
-import ca.mcgill.ecse223.quoridor.model.Tile;
 import ca.mcgill.ecse223.quoridor.model.*;
 import ca.mcgill.ecse223.quoridor.statemachine.defaultsm.DefaultSMStatemachine;
 import ca.mcgill.ecse223.quoridor.statemachine.defaultsm.IDefaultSMStatemachine;
@@ -10,10 +8,6 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import java.util.List;
 
 public class PawnController {
-		public static  boolean movePawn(String side) throws UnsupportedOperationException {
-        throw new UnsupportedOperationException();
-    }
-
     public static void initPawnSM(Player player, PlayerPosition position) {
 
         DefaultSMStatemachine statemachine = new DefaultSMStatemachine();
@@ -21,24 +15,22 @@ public class PawnController {
         IDefaultSMStatemachine.SCIPawnOperationCallback callback = (side, dist) -> {
             int travel = (int) dist;
             Tile source = position.getTile();
-            Tile dest = source;
             switch (side) {
                 case "up":
-                    dest = ModelQuery.getTile(source.getRow() - travel, source.getColumn());
+                    statemachine.getSCIPawn().setTargetRow(source.getRow() - travel);
                     break;
                 case "right":
-                    dest = ModelQuery.getTile(source.getRow(), source.getColumn() + travel);
+                    statemachine.getSCIPawn().setTargetCol(source.getColumn() + travel);
                     break;
                 case "down":
-                    dest = ModelQuery.getTile(source.getRow() + travel, source.getColumn());
+                    statemachine.getSCIPawn().setTargetRow(source.getRow() + travel);
                     break;
                 case "left":
-                    dest = ModelQuery.getTile(source.getRow(), source.getColumn() - travel);
+                    statemachine.getSCIPawn().setTargetCol(source.getColumn() - travel);
                     break;
                 default:
                     break;
             }
-            position.setTile(dest);
         };
 
         IDefaultSMStatemachine.InternalOperationCallback internalCallback = new IDefaultSMStatemachine.InternalOperationCallback() {
@@ -79,17 +71,19 @@ public class PawnController {
                     Tile invalidTile1 = ModelQuery.getTile(invalidTile2.getRow(), invalidTile2.getColumn() - 1);
                     for (Wall wall : placedWalls) {
                         Tile wallTile = wall.getMove().getTargetTile();
-                        if ((wallTile.equals(invalidTile2)) || wallTile.equals(invalidTile1)) {
+                        Direction direction = wall.getMove().getWallDirection();
+                        if (((wallTile.equals(invalidTile2)) || wallTile.equals(invalidTile1)) && direction == Direction.Horizontal) {
                             return true;
                         }
                     }
                     return false;
                 } else if (t1.getRow() == t2.getRow()) {
                     Tile invalidTile2 = t1.getColumn() < t2.getColumn() ? t1 : t2;
-                    Tile invalidTile1 = ModelQuery.getTile(invalidTile2.getColumn(), invalidTile2.getColumn() + 1);
+                    Tile invalidTile1 = ModelQuery.getTile(invalidTile2.getRow() - 1, invalidTile2.getColumn());
                     for (Wall wall : placedWalls) {
                         Tile wallTile = wall.getMove().getTargetTile();
-                        if ((wallTile.equals(invalidTile2)) || wallTile.equals(invalidTile1)) {
+                        Direction direction = wall.getMove().getWallDirection();
+                        if (((wallTile.equals(invalidTile2)) || wallTile.equals(invalidTile1)) && direction == Direction.Vertical) {
                             return true;
                         }
                     }
@@ -100,8 +94,8 @@ public class PawnController {
 
             private boolean isPawnBlocking(Tile dest) {
                 List<PlayerPosition> positions = ModelQuery.getAllPlayerPosition();
-                for (PlayerPosition position : positions) {
-                    if (position.getTile() == dest) {
+                for (PlayerPosition pawn_position : positions) {
+                    if (pawn_position.getTile().getColumn() == dest.getColumn() && pawn_position.getTile().getRow() == dest.getRow()) {
                         return true;
                     }
                 }
@@ -117,29 +111,29 @@ public class PawnController {
 
                 switch (side) {
                     case "up":
-                        dest = ModelQuery.getTile(source.getRow(), source.getColumn() - 2);
+                        dest = ModelQuery.getTile(source.getRow() - 2, source.getColumn());
                         enemyTile1 = ModelQuery.getTile(source.getRow() - 1, source.getColumn());
                         return isPathValidJump(source, dest, enemyTile1);
                     case "right":
-                        dest = ModelQuery.getTile(source.getRow() + 2, source.getColumn());
+                        dest = ModelQuery.getTile(source.getRow(), source.getColumn() + 2);
                         enemyTile1 = ModelQuery.getTile(source.getRow(), source.getColumn() + 1);
                         return isPathValidJump(source, dest, enemyTile1);
                     case "down":
-                        dest = ModelQuery.getTile(source.getRow(), source.getColumn() + 2);
+                        dest = ModelQuery.getTile(source.getRow() + 2, source.getColumn());
                         enemyTile1 = ModelQuery.getTile(source.getRow() + 1, source.getColumn());
                         return isPathValidJump(source, dest, enemyTile1);
                     case "left":
-                        dest = ModelQuery.getTile(source.getRow() - 2, source.getColumn());
+                        dest = ModelQuery.getTile(source.getRow(), source.getColumn() - 2);
                         enemyTile1 = ModelQuery.getTile(source.getRow(), source.getColumn() - 1);
                         return isPathValidJump(source, dest, enemyTile1);
                     case "upright":
-                        dest = ModelQuery.getTile(source.getRow() - 1, source.getColumn() - 1);
-                        enemyTile1 = ModelQuery.getTile(source.getRow(), source.getColumn() - 1);
+                        dest = ModelQuery.getTile(source.getRow() - 1, source.getColumn() + 1);
+                        enemyTile1 = ModelQuery.getTile(source.getRow(), source.getColumn() + 1);
                         enemyTile2 = ModelQuery.getTile(source.getRow() - 1, source.getColumn());
                         return isPathValidJump(source, dest, enemyTile1) || isPathValidJump(source, dest, enemyTile2);
                     case "upleft":
-                        dest = ModelQuery.getTile(source.getRow() - 1, source.getColumn() + 1);
-                        enemyTile1 = ModelQuery.getTile(source.getRow(), source.getColumn() + 1);
+                        dest = ModelQuery.getTile(source.getRow() - 1, source.getColumn() - 1);
+                        enemyTile1 = ModelQuery.getTile(source.getRow(), source.getColumn() - 1);
                         enemyTile2 = ModelQuery.getTile(source.getRow() - 1, source.getColumn());
                         return isPathValidJump(source, dest, enemyTile1) || isPathValidJump(source, dest, enemyTile2);
                     case "downright":
@@ -181,6 +175,11 @@ public class PawnController {
 
     public static boolean movePawn(String side) throws NotImplementedException {
         DefaultSMStatemachine sm = ModelQuery.getPlayerToMove().getStatemachine();
+        PlayerPosition playerPosition = ModelQuery.getPlayerPositionOfPlayerToMove();
+
+        sm.getSCIPawn().setTargetRow(playerPosition.getTile().getRow());
+        sm.getSCIPawn().setTargetCol(playerPosition.getTile().getColumn());
+
         switch (side) {
             case "up":
                 sm.getSCIPawn().raiseUp();
@@ -210,11 +209,12 @@ public class PawnController {
                 return false;
         }
 
-        if(sm.getSCIPawn().isRaisedMoveCompleted()){
+        if (sm.getSCIPawn().isRaisedMoveCompleted()) {
+            Tile target = ModelQuery.getTile((int) sm.getSCIPawn().getTargetRow(), (int) sm.getSCIPawn().getTargetCol());
+            playerPosition.setTile(target);
             SwitchPlayerController.switchActivePlayer();
             return true;
-        }
-        else{
+        } else {
             return false;
         }
     }
