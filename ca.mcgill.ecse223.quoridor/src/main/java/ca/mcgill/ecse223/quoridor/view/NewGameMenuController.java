@@ -104,15 +104,15 @@ public class NewGameMenuController extends ViewController {
             	if(numberPlayers.getSelectedToggle().equals(twoPlayer)) {
             		redPlayerName.setEditable(false);
             		greenPlayerName.setEditable(false);
-            		existingRedChoices.setDisable(false);
-            		existingGreenChoices.setDisable(false);
+            		existingRedChoices.setDisable(true);
+            		existingGreenChoices.setDisable(true);
             		redPlayerName.setStyle("-fx-background-color: grey;");
             		greenPlayerName.setStyle("-fx-background-color: grey;");
             	} else {
             		redPlayerName.setEditable(true);
             		greenPlayerName.setEditable(true);
-            		existingRedChoices.setDisable(true);
-            		existingGreenChoices.setDisable(true);
+            		existingRedChoices.setDisable(false);
+            		existingGreenChoices.setDisable(false);
             		redPlayerName.setStyle("-fx-background-color: white;");
             		greenPlayerName.setStyle("-fx-background-color: white;");
             	}

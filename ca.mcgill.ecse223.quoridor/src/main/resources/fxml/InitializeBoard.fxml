@@ -22,7 +22,7 @@
             <Font size="20.0" />
          </font>
       </Text>
-      <Circle fill="#d5d8da" layoutX="26.0" layoutY="23.0" radius="8.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fill="#dde8f2" layoutX="26.0" layoutY="23.0" radius="8.0" stroke="BLACK" strokeType="INSIDE" />
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#dde8f2" height="33.0" layoutX="133.0" layoutY="6.0" stroke="BLACK" strokeType="INSIDE" width="9.0" />
       <Text layoutX="142.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="x" wrappingWidth="35.151102788085936">
          <font>
@@ -172,8 +172,8 @@
             <Font size="20.0" />
          </font>
       </Text>
-      <Circle fill="#101110" layoutX="26.0" layoutY="470.0" radius="8.0" stroke="BLACK" strokeType="INSIDE" />
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#1a1b19" height="33.0" layoutX="133.0" layoutY="454.0" stroke="BLACK" strokeType="INSIDE" width="9.0" />
+      <Circle layoutX="26.0" layoutY="470.0" radius="8.0" stroke="BLACK" strokeType="INSIDE" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" height="33.0" layoutX="133.0" layoutY="454.0" stroke="BLACK" strokeType="INSIDE" width="9.0" />
       <Text layoutX="142.0" layoutY="477.0" strokeType="OUTSIDE" strokeWidth="0.0" text="x" wrappingWidth="35.151102788085936">
          <font>
             <Font size="20.0" />
@@ -206,8 +206,8 @@
             <Font size="15.0" />
          </font>
       </Label>
-      <Circle fx:id="c1" fill="#ff401f" layoutX="241.0" layoutY="23.0" radius="8.0" stroke="BLACK" strokeType="INSIDE" />
-      <Circle fx:id="c2" fill="#21ff3a" layoutX="241.0" layoutY="471.0" radius="8.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="c1" fill="RED" layoutX="241.0" layoutY="23.0" radius="8.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="c2" fill="LIGHTGREEN" layoutX="241.0" layoutY="471.0" radius="8.0" stroke="BLACK" strokeType="INSIDE" />
       <Text fx:id="redPlayerName" layoutX="249.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PLAYER 3" wrappingWidth="107.151118046875">
          <font>
             <Font size="20.0" />
@@ -228,8 +228,8 @@
             <Font size="20.0" />
          </font>
       </Text>
-      <Rectangle fx:id="r2" arcHeight="5.0" arcWidth="5.0" fill="#0be34d" height="33.0" layoutX="347.0" layoutY="454.0" stroke="BLACK" strokeType="INSIDE" width="9.0" />
-      <Rectangle fx:id="r1" arcHeight="5.0" arcWidth="5.0" fill="#ff661f" height="33.0" layoutX="346.0" layoutY="5.0" stroke="BLACK" strokeType="INSIDE" width="9.0" />
+      <Rectangle fx:id="r2" arcHeight="5.0" arcWidth="5.0" fill="LIGHTGREEN" height="33.0" layoutX="347.0" layoutY="454.0" stroke="BLACK" strokeType="INSIDE" width="9.0" />
+      <Rectangle fx:id="r1" arcHeight="5.0" arcWidth="5.0" fill="RED" height="33.0" layoutX="346.0" layoutY="5.0" stroke="BLACK" strokeType="INSIDE" width="9.0" />
       <Text fx:id="greenNumOfWalls" layoutX="370.0" layoutY="478.0" strokeType="OUTSIDE" strokeWidth="0.0" text="10" wrappingWidth="35.151102788085936">
          <font>
             <Font size="20.0" />

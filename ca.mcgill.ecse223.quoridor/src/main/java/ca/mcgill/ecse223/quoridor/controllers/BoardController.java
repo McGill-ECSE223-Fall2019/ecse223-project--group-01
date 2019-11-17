@@ -83,7 +83,6 @@ public class BoardController {
     	        }
             }
         }
-        
 	    return true;
 
     }

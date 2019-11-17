@@ -114,11 +114,7 @@ public class InitializeBoardController extends ViewController{
     	if(ModelQuery.isFourPlayer()) {
     		timerForRedPlayer.setText(initialTime);
     		timerForGreenPlayer.setText(initialTime);
-    	} else { //if 2player mode, set 4player content invisible
-    		timerForRedPlayer.setVisible(false);
-    		timerForGreenPlayer.setVisible(false);
-    	}
-
+    	} 
 
         switchTimer();
     }
@@ -145,6 +141,7 @@ public class InitializeBoardController extends ViewController{
                 	isWallDrop = false;
 
                 	StartNewGameController.resetTimeToSet();
+                	refresh();
                 }
 
 
@@ -202,17 +199,73 @@ public class InitializeBoardController extends ViewController{
         board.getChildren().clear();
 
         // update player turn
-        if (position.getPlayerToMove().equals(black)) {
+        if (position.getPlayerToMove().equals(white)) {
             whitePlayerName.setFill(Color.BLACK);
             blackPlayerName.setFill(Color.LIGHTGRAY);
-        } else {
+            redPlayerName.setFill(Color.LIGHTGRAY);
+            greenPlayerName.setFill(Color.LIGHTGRAY);    
+            
+            whitePlayerName1.setFill(Color.BLACK);
+            blackPlayerName1.setFill(Color.LIGHTGRAY);
+            redPlayerName1.setFill(Color.LIGHTGRAY);
+            greenPlayerName1.setFill(Color.LIGHTGRAY);   
+            
+            whiteNumOfWalls.setFill(Color.BLACK);
+            blackNumOfWalls.setFill(Color.LIGHTGRAY);
+            redNumOfWalls.setFill(Color.LIGHTGRAY);
+            greenNumOfWalls.setFill(Color.LIGHTGRAY);
+        } else if (position.getPlayerToMove().equals(black)){
             whitePlayerName.setFill(Color.LIGHTGRAY);
             blackPlayerName.setFill(Color.BLACK);
+            redPlayerName.setFill(Color.LIGHTGRAY);
+            greenPlayerName.setFill(Color.LIGHTGRAY);
+            
+            whitePlayerName1.setFill(Color.LIGHTGRAY);
+            blackPlayerName1.setFill(Color.BLACK);
+            redPlayerName1.setFill(Color.LIGHTGRAY);
+            greenPlayerName1.setFill(Color.LIGHTGRAY);   
+            
+            whiteNumOfWalls.setFill(Color.LIGHTGRAY);
+            blackNumOfWalls.setFill(Color.BLACK);
+            redNumOfWalls.setFill(Color.LIGHTGRAY);
+            greenNumOfWalls.setFill(Color.LIGHTGRAY);
+        } else if (position.getPlayerToMove().equals(red)){
+            whitePlayerName.setFill(Color.LIGHTGRAY);
+            blackPlayerName.setFill(Color.LIGHTGRAY);
+            redPlayerName.setFill(Color.BLACK);
+            greenPlayerName.setFill(Color.LIGHTGRAY);
+            
+            whitePlayerName1.setFill(Color.LIGHTGRAY);
+            blackPlayerName1.setFill(Color.LIGHTGRAY);
+            redPlayerName1.setFill(Color.BLACK);
+            greenPlayerName1.setFill(Color.LIGHTGRAY);   
+            
+            whiteNumOfWalls.setFill(Color.LIGHTGRAY);
+            blackNumOfWalls.setFill(Color.LIGHTGRAY);
+            redNumOfWalls.setFill(Color.BLACK);
+            greenNumOfWalls.setFill(Color.LIGHTGRAY);
+        } else {
+            whitePlayerName.setFill(Color.LIGHTGRAY);
+            blackPlayerName.setFill(Color.LIGHTGRAY);
+            redPlayerName.setFill(Color.LIGHTGRAY);
+            greenPlayerName.setFill(Color.BLACK);
+            
+            whitePlayerName1.setFill(Color.LIGHTGRAY);
+            blackPlayerName1.setFill(Color.LIGHTGRAY);
+            redPlayerName1.setFill(Color.LIGHTGRAY);
+            greenPlayerName1.setFill(Color.BLACK);   
+            
+            whiteNumOfWalls.setFill(Color.LIGHTGRAY);
+            blackNumOfWalls.setFill(Color.LIGHTGRAY);
+            redNumOfWalls.setFill(Color.LIGHTGRAY);
+            greenNumOfWalls.setFill(Color.BLACK);
         }
 
         // update walls in stock
         whiteNumOfWalls.setText(String.valueOf(position.getWhiteWallsInStock().size()));
         blackNumOfWalls.setText(String.valueOf(position.getBlackWallsInStock().size()));
+        redNumOfWalls.setText(String.valueOf(position.getRedWallsInStock().size()));
+        greenNumOfWalls.setText(String.valueOf(position.getGreenWallsInStock().size()));
 
         // update pawn positions
         placePawn(position.getWhitePosition(),true);
@@ -265,6 +318,15 @@ public class InitializeBoardController extends ViewController{
         if (isWall) {
             rectangle.setFill(Color.GREY);
         } else {
+            /*if (ModelQuery.getPlayerToMove().equals(ModelQuery.getWhitePlayer())) {
+            	rectangle.setFill(Color.web("#dde8f2"));
+            } else if (ModelQuery.getPlayerToMove().equals(ModelQuery.getBlackPlayer())){
+            	rectangle.setFill(Color.BLACK);
+            } else if (ModelQuery.getPlayerToMove().equals(ModelQuery.getRedPlayer())) {
+            	rectangle.setFill(Color.RED);
+            } else if (ModelQuery.getPlayerToMove().equals(ModelQuery.getGreenPlayer())) {
+            	rectangle.setFill(Color.LIGHTGREEN);
+            }    */
             rectangle.setFill(Color.web("#5aff1e"));
         }
 
@@ -307,7 +369,6 @@ public class InitializeBoardController extends ViewController{
             else if(code.equals(KeyCode.E)){
                 if(WallController.dropWall()){
                     wallInHand=false;
-                    SwitchPlayerController.switchActivePlayer();
                     isWallDrop=true;
                 }
             }
@@ -318,11 +379,12 @@ public class InitializeBoardController extends ViewController{
         }
     }
 
+    /*
     public void dropWall(){
         if(WallController.dropWall()){
             wallInHand=false;
         }
-    }
+    }*/
 
     public void shiftWall(String side){
         WallController.shiftWall(side);

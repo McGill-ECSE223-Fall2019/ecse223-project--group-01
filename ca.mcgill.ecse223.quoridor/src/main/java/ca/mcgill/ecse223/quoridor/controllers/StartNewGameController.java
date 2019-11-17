@@ -152,7 +152,13 @@ public class StartNewGameController {
      *
      */
     public static void playerDummies() {
-    	User dummyUser = new User("", QuoridorApplication.getQuoridor());
+    	User dummyUser;
+    	if(usernameExists("")) {
+        	dummyUser = UserController.selectExistingUsername("");
+    	} else {
+    		dummyUser = UserController.newUsername("");
+    	}
+
     	
         User red_user = dummyUser;
         int tempThinkingTime = 90;

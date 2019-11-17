@@ -32,7 +32,7 @@ public class ModelQuery {
     }
     
     public static boolean isFourPlayer() {
-    	return QuoridorApplication.getQuoridor().getCurrentGame().getPlayers().size() == 4;
+    	return !getGreenPlayer().getUser().getName().equals("");
     }
 
     public static Board getBoard(){
