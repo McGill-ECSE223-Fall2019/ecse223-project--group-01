@@ -56,6 +56,13 @@ public class InitializeBoardController extends ViewController{
     public static boolean playerIsWhite = false;
     public static boolean isWallDrop = false;
     public String initialTime;
+    
+    public Circle c1;
+    public Circle c2;
+    public Rectangle r1;
+    public Rectangle r2;
+    public Text x1;
+    public Text x2;
 
 
     public void initialize() {
@@ -69,7 +76,7 @@ public class InitializeBoardController extends ViewController{
         blackPlayerName1.setText(ModelQuery.getBlackPlayer().getUser().getName());
 
         //if 4player mode
-        if(ModelQuery.getNumberPlayers()==4) {
+        if(ModelQuery.isFourPlayer()) {
             //display player name
             redPlayerName.setText(ModelQuery.getRedPlayer().getUser().getName());
             greenPlayerName.setText(ModelQuery.getGreenPlayer().getUser().getName());
@@ -80,8 +87,19 @@ public class InitializeBoardController extends ViewController{
         } else { //if 2player mode, set 4player content invisible
         	redPlayerName.setVisible(false);
         	redPlayerName1.setVisible(false);
+        	redNumOfWalls.setVisible(false);
+        	timerForRedPlayer.setVisible(false);
         	greenPlayerName.setVisible(false);
         	greenPlayerName1.setVisible(false);
+        	greenNumOfWalls.setVisible(false);
+        	timerForGreenPlayer.setVisible(false);
+        	c1.setVisible(false);
+        	c2.setVisible(false);
+        	r1.setVisible(false);
+        	r2.setVisible(false);
+        	x1.setVisible(false);
+        	x2.setVisible(false);
+
         }
         
         //start the clock once the game is initiated
@@ -93,7 +111,7 @@ public class InitializeBoardController extends ViewController{
     	timerForWhitePlayer.setText(initialTime);
     	timerForBlackPlayer.setText(initialTime);
     	
-    	if(ModelQuery.getNumberPlayers()==4) {
+    	if(ModelQuery.isFourPlayer()) {
     		timerForRedPlayer.setText(initialTime);
     		timerForGreenPlayer.setText(initialTime);
     	} else { //if 2player mode, set 4player content invisible

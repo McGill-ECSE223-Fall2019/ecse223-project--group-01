@@ -144,6 +144,30 @@ public class StartNewGameController {
 
         isReadyToStart();  //check if players chose name and if total thinking time is set
     }
+    
+    /**
+     * @Author Fulin Huang & Mark Zhu
+     *
+     * Creates a dummy red player and green player in case of 2player mode
+     *
+     */
+    public static void playerDummies() {
+    	User dummyUser = new User("", QuoridorApplication.getQuoridor());
+    	
+        User red_user = dummyUser;
+        int tempThinkingTime = 90;
+        Player redDummy = new Player(new Time(tempThinkingTime), red_user, 1, Direction.Vertical,ModelQuery.getCurrentGame());
+        ModelQuery.getCurrentGame().setRedPlayer(redDummy);
+        ModelQuery.getRedPlayer().setUser(red_user);
+        
+        User green_user = dummyUser;
+        Player greenDummy = new Player(new Time(tempThinkingTime), green_user, 1, Direction.Vertical,ModelQuery.getCurrentGame());
+        ModelQuery.getCurrentGame().setGreenPlayer(greenDummy);
+        ModelQuery.getRedPlayer().setUser(green_user);
+
+        isReadyToStart();  //check if players chose name and if total thinking time is set
+    }
+
 
     /**
      * @Author Fulin Huang
@@ -158,7 +182,7 @@ public class StartNewGameController {
     public static void setTotalThinkingTime (int minutes, int seconds) {
         //total thinking time is able to set only if players are existed
         if (whitePlayerChooseName && blackPlayerChooseName) {
-        	System.out.println(minutes);
+
             setThinkingTime(minutes, seconds);   //set total thinking time
             thinkingTimeIsSet = true;
         }
@@ -229,10 +253,15 @@ public class StartNewGameController {
         Date date = new Date();
         long currentMillis = date.getTime();
         Time totalThinkingTime = new Time(millis+currentMillis);
+        
         ModelQuery.getWhitePlayer().setRemainingTime(totalThinkingTime);
         ModelQuery.getBlackPlayer().setRemainingTime(totalThinkingTime);
+
+        if(ModelQuery.isFourPlayer()) {
+
         	ModelQuery.getRedPlayer().setRemainingTime(totalThinkingTime);
         	ModelQuery.getGreenPlayer().setRemainingTime(totalThinkingTime);
+        }
         return totalThinkingTime;
     }
 

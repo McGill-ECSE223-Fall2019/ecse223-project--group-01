@@ -4,6 +4,8 @@ import ca.mcgill.ecse223.quoridor.controllers.BoardController;
 import ca.mcgill.ecse223.quoridor.controllers.PositionController;
 import ca.mcgill.ecse223.quoridor.controllers.StartNewGameController;
 import ca.mcgill.ecse223.quoridor.model.User;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -86,6 +88,36 @@ public class NewGameMenuController extends ViewController {
             existingRedChoices.getItems().add(user.getName());
             existingGreenChoices.getItems().add(user.getName());
         }
+        
+        
+		redPlayerName.setEditable(false);
+		greenPlayerName.setEditable(false);
+		existingRedChoices.setDisable(false);
+		existingGreenChoices.setDisable(false);
+		redPlayerName.setStyle("-fx-background-color: grey;");
+		greenPlayerName.setStyle("-fx-background-color: grey;");
+        numberPlayers.selectedToggleProperty().addListener(new ChangeListener<Toggle>()  
+        { 
+            public void changed(ObservableValue<? extends Toggle> ob,  
+                                                    Toggle o, Toggle n) 
+            { 
+            	if(numberPlayers.getSelectedToggle().equals(twoPlayer)) {
+            		redPlayerName.setEditable(false);
+            		greenPlayerName.setEditable(false);
+            		existingRedChoices.setDisable(false);
+            		existingGreenChoices.setDisable(false);
+            		redPlayerName.setStyle("-fx-background-color: grey;");
+            		greenPlayerName.setStyle("-fx-background-color: grey;");
+            	} else {
+            		redPlayerName.setEditable(true);
+            		greenPlayerName.setEditable(true);
+            		existingRedChoices.setDisable(true);
+            		existingGreenChoices.setDisable(true);
+            		redPlayerName.setStyle("-fx-background-color: white;");
+            		greenPlayerName.setStyle("-fx-background-color: white;");
+            	}
+            } 
+        }); 
 
     }
 
@@ -203,17 +235,20 @@ public class NewGameMenuController extends ViewController {
 
             
             StartNewGameController.initializeGame();
-            StartNewGameController.whitePlayerChoosesAUsername(whiteName); //bugged
+            
+            //setup user-player connections
+            StartNewGameController.whitePlayerChoosesAUsername(whiteName); 
             StartNewGameController.blackPlayerChooseAUsername(blackName);
-            if(numberPlayers.getSelectedToggle().equals(fourPlayer)) {
+            if(numberPlayers.getSelectedToggle().equals(fourPlayer)) { 
             	StartNewGameController.redPlayerChooseAUsername(redName);
             	StartNewGameController.greenPlayerChooseAUsername(greenName);
+            } else { //if 2 player, setup dummy red and green players
+            	StartNewGameController.playerDummies();
             }
-            whitePlayerName.setText("dd");
+            
             minS = minutes.getText();
             secS = seconds.getText();
             StartNewGameController.setTotalThinkingTime(Integer.parseInt(minutes.getText()), Integer.parseInt(seconds.getText()));
-            blackPlayerName.setText("ff");
             BoardController.initializeBoard();
             changePage("/fxml/InitializeBoard.fxml");
         }

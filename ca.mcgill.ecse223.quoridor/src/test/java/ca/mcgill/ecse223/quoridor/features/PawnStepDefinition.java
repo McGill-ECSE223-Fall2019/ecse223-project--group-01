@@ -1,9 +1,10 @@
 package ca.mcgill.ecse223.quoridor.features;
 
 import ca.mcgill.ecse223.quoridor.controllers.PawnController;
+import cucumber.api.PendingException;
 import io.cucumber.java.en.When;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-import sun.security.util.PendingException;
+
+
 
 public class PawnStepDefinition {
 
@@ -12,7 +13,7 @@ public class PawnStepDefinition {
     public void iInitiateToLoadASavedGameFilename(String playerColor, String side) {
         try{
             PawnController.movePawn(side);
-        }catch (NotImplementedException e){
+        }catch (UnsupportedOperationException e){
             throw new PendingException();
         }
 

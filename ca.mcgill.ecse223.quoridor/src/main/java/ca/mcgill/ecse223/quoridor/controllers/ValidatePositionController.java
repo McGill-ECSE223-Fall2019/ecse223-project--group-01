@@ -39,7 +39,7 @@ public class ValidatePositionController {
 			valid = false;
 		}
 		
-		if(ModelQuery.getNumberPlayers()==4) {
+		if(ModelQuery.isFourPlayer()) {
 			PlayerPosition redPosition = ModelQuery.getCurrentGame().getCurrentPosition().getRedPosition();
 			PlayerPosition greenPosition = ModelQuery.getCurrentGame().getCurrentPosition().getGreenPosition();
 			if(whitePosition.getTile().equals(redPosition.getTile()) || whitePosition.getTile().equals(greenPosition.getTile()) ||

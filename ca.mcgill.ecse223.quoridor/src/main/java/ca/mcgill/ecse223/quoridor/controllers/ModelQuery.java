@@ -31,8 +31,8 @@ public class ModelQuery {
     	return QuoridorApplication.getQuoridor().getCurrentGame().getGreenPlayer();
     }
     
-    public static int getNumberPlayers() {
-    	return QuoridorApplication.getQuoridor().getCurrentGame().getPlayers().size();
+    public static boolean isFourPlayer() {
+    	return QuoridorApplication.getQuoridor().getCurrentGame().getPlayers().size() == 4;
     }
 
     public static Board getBoard(){
@@ -63,7 +63,7 @@ public class ModelQuery {
         List<Wall> blackWalls = ModelQuery.getBlackWallsOnBoard();
         List<Wall> redWalls;
         List<Wall> greenWalls;
-        if (getNumberPlayers() == 4) {
+        if (isFourPlayer()) {
             redWalls = ModelQuery.getRedWallsOnBoard();
             greenWalls = ModelQuery.getGreenWallsOnBoard();
         	placedWalls.addAll(redWalls);
