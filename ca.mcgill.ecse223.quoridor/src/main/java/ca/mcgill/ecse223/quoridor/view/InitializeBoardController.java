@@ -136,6 +136,11 @@ public class InitializeBoardController extends ViewController{
     }
 
     public void handleGrabPawn(ActionEvent actionEvent) {
+        if (wallInHand) {
+            WallController.cancelWallMove();
+            wallInHand = false;
+            refresh();
+        }
         pawnInHand = true;
          refresh();
     }
@@ -196,8 +201,8 @@ public class InitializeBoardController extends ViewController{
             pawn.setFill(Color.BLACK);
 
         }
-        pawn.setLayoutX(coord.getKey());
-        pawn.setLayoutY(coord.getValue());
+        pawn.setLayoutX(coord.getValue());
+        pawn.setLayoutY(coord.getKey());
         pawn.setRadius(8);
         board.getChildren().add(pawn);
     }
@@ -212,11 +217,13 @@ public class InitializeBoardController extends ViewController{
 
         Rectangle rectangle = new Rectangle(coord.getKey(), coord.getValue(), 9, 77);
 
+        Player white = ModelQuery.getWhitePlayer();
+        Player black = ModelQuery.getBlackPlayer();
         // setup color
         if (isWall) {
-            rectangle.setFill(Color.GREY);
+            rectangle.setFill(Color.GRAY);
         } else {
-            rectangle.setFill(Color.web("#5aff1e"));
+            rectangle.setFill(Color.DEEPSKYBLUE);
         }
 
         if (dir.toString() == "Horizontal") {
