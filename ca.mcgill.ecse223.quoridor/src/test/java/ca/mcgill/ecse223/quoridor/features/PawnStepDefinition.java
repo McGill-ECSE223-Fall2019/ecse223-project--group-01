@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
-import ca.mcgill.ecse223.quoridor.controllers.PawnController;
 import ca.mcgill.ecse223.quoridor.controllers.*;
 import ca.mcgill.ecse223.quoridor.model.*;
 import ca.mcgill.ecse223.quoridor.model.Game.GameStatus;
@@ -149,7 +148,14 @@ public class PawnStepDefinition {
 	 */
 	@And("There is a {string} wall at {string}:{string}")
 	public void thereIsAWallAtRowCol(Direction dir, int row, int col) {
-		
+		//place a wall
+		Player player = ModelQuery.getWhitePlayer();
+		Board board = ModelQuery.getBoard();
+		Game game = ModelQuery.getCurrentGame();
+		Wall wall = player.getWall(1);
+		WallMove move = new WallMove(0,1,player,board.getTile((row-1)*9+col-1), game, dir, wall);
+		game.setWallMoveCandidate(move);
+		ModelQuery.getCurrentPosition().addWhiteWallsOnBoard(move.getWallPlaced());
 	}
 	
 	//scenario outline: Diagonal jumps of a player near wall. no new methods

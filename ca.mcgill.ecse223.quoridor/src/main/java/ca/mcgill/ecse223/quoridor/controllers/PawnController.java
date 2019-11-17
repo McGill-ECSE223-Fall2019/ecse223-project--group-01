@@ -47,7 +47,14 @@ public class PawnController {
         	}
 		}
 		Tile targetTile = ModelQuery.getTile(row, col);
-		
+		if (player.equals(ModelQuery.getWhitePlayer())) {
+			ModelQuery.getCurrentPosition().getWhitePosition().setTile(targetTile);
+			return true;
+		}
+		if (player.equals(ModelQuery.getBlackPlayer())) {
+			ModelQuery.getCurrentPosition().getBlackPosition().setTile(targetTile);
+			return true;
+		}
 		
 		return false;
     			
