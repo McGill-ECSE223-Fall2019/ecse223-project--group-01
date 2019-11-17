@@ -13,7 +13,7 @@ Feature: Move Pawn
     When Player "<player>" initiates to move "<side>"
     Then The move "<side>" shall be "<status>"
     And Player's new position shall be <nrow>:<ncol>
-    And The next player to move shall become "<nplayer>"
+    And The next player to move shall be "<nplayer>"
 
     Examples: 
       | player | row | col | dir        | side  | status  | nrow | ncol | nplayer |
@@ -34,7 +34,7 @@ Feature: Move Pawn
     When Player "<player>" initiates to move "<side>"
     Then The move "<side>" shall be "<status>"
     And Player's new position shall be <nrow>:<ncol>
-    And The next player to move shall become "<nplayer>"
+    And The next player to move shall be "<nplayer>"
 
     Examples: 
       | player | prow | pcol | dir        | wrow | wcol | side  | status  | nrow | ncol | player |
