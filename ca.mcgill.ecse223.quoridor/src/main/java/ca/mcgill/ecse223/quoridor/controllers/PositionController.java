@@ -106,7 +106,7 @@ public class PositionController {
 
             columnLetter = (char) (column + 96);
             String whitePosition = String.valueOf(columnLetter) + Integer.toString(row);
-            playerInfo = String.format("B: %s", whitePosition);
+            playerInfo = String.format("W: %s", whitePosition);
             output.append(playerInfo);
 
             listOfWalls = ModelQuery.getWhiteWallsOnBoard();
