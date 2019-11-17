@@ -14,7 +14,7 @@ Feature: Jump Pawn
     When Player "<player>" initiates to move "<side>"
     Then The move "<side>" shall be "<status>"
     And Player's new position shall be <nrow>:<ncol>
-    And The next player to move shall become "<nplayer>"
+    And The next player to move shall be "<nplayer>"
 
     Examples: 
       | player | prow | pcol | orow | ocol | dir        | side  | status  | nrow | ncol | nplayer |
@@ -35,7 +35,7 @@ Feature: Jump Pawn
     When Player "<player>" initiates to move "<side>"
     Then The move "<side>" shall be "<status>"
     And Player's new position shall be <nrow>:<ncol>
-    And The next player to move shall become "<nplayer>"
+    And The next player to move shall be "<nplayer>"
 
     Examples: 
       | player | row | col | orow | ocol | dir        | wrow | wcol | side  | status  | nrow | ncol | nplayer |
@@ -56,7 +56,7 @@ Feature: Jump Pawn
     When Player "<player>" initiates to move "<side>"
     Then The move "<side>" shall be "<status>"
     And Player's new position shall be <nrow>:<ncol>
-    And The next player to move shall become "<nplayer>"
+    And The next player to move shall be "<nplayer>"
 
     Examples: 
       | player | row | col | orow | ocol | dir        | wrow | wcol | side      | status  | nrow | ncol | nplayer |
@@ -85,7 +85,7 @@ Feature: Jump Pawn
     When Player "<player>" initiates to move "<side>"
     Then The move "<side>" shall be "<status>"
     And Player's new position shall be <nrow>:<ncol>
-    And The next player to move shall become "<nplayer>"
+    And The next player to move shall be "<nplayer>"
 
     Examples: 
       | player | prow | pcol | orow | ocol | dir        | side      | status  | nrow | ncol | nplayer |

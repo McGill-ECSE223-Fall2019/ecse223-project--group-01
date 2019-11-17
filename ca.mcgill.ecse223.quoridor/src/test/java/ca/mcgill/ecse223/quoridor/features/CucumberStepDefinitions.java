@@ -1062,7 +1062,7 @@ public class CucumberStepDefinitions {
 	//@author: Mark Zhu
 	@And("The next player to move shall be {string}")
 	public void checkActivePlayer(String playerColor) {
-		if (originalPlayerColor.equals("white")) {
+		if (playerColor.equals("black")) {
 			assertEquals(ModelQuery.getBlackPlayer(),ModelQuery.getCurrentGame().getCurrentPosition().getPlayerToMove());
 		} else {
 			assertEquals(ModelQuery.getWhitePlayer(),ModelQuery.getCurrentGame().getCurrentPosition().getPlayerToMove());

@@ -1,5 +1,7 @@
 package ca.mcgill.ecse223.quoridor.controllers;
 
+import ca.mcgill.ecse223.quoridor.model.Player;
+import ca.mcgill.ecse223.quoridor.model.Tile;
 import ca.mcgill.ecse223.quoridor.model.*;
 import ca.mcgill.ecse223.quoridor.statemachine.defaultsm.DefaultSMStatemachine;
 import ca.mcgill.ecse223.quoridor.statemachine.defaultsm.IDefaultSMStatemachine;
@@ -8,6 +10,9 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import java.util.List;
 
 public class PawnController {
+		public static  boolean movePawn(String side) throws UnsupportedOperationException {
+        throw new UnsupportedOperationException();
+    }
 
     public static void initPawnSM(Player player, PlayerPosition position) {
 
