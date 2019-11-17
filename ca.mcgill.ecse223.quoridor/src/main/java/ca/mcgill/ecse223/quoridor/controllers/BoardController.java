@@ -6,7 +6,7 @@ import ca.mcgill.ecse223.quoridor.model.*;
 import java.util.List;
 
 
-public class BoardController {
+public class    BoardController {
     /**
      *This controller method is responsible for initializing the board when quoridor is initialized
      * Returns true if it is successfully initialized

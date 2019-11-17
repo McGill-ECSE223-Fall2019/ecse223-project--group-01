@@ -180,5 +180,23 @@
       </Text>
       <Label layoutX="257.0" layoutY="452.0" prefHeight="20.0" prefWidth="83.0" text="Invalid Move!" />
       <PointLight fx:id="whitePlayerLight" color="CHARTREUSE" layoutX="249.0" layoutY="30.0" lightOn="true" />
+      <Text layoutX="9.0" layoutY="68.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1" wrappingWidth="9.0" />
+      <Text layoutX="10.0" layoutY="112.0" strokeType="OUTSIDE" strokeWidth="0.0" text="2" wrappingWidth="9.0" />
+      <Text layoutX="10.0" layoutY="156.0" strokeType="OUTSIDE" strokeWidth="0.0" text="3" wrappingWidth="9.0" />
+      <Text layoutX="9.0" layoutY="200.0" strokeType="OUTSIDE" strokeWidth="0.0" text="4" wrappingWidth="9.0" />
+      <Text layoutX="10.0" layoutY="240.0" strokeType="OUTSIDE" strokeWidth="0.0" text="5" wrappingWidth="9.0" />
+      <Text layoutX="11.0" layoutY="285.0" strokeType="OUTSIDE" strokeWidth="0.0" text="6" wrappingWidth="9.0" />
+      <Text layoutX="11.0" layoutY="330.0" strokeType="OUTSIDE" strokeWidth="0.0" text="7" wrappingWidth="9.0" />
+      <Text layoutX="10.0" layoutY="374.0" strokeType="OUTSIDE" strokeWidth="0.0" text="8" wrappingWidth="9.0" />
+      <Text layoutX="9.0" layoutY="416.0" strokeType="OUTSIDE" strokeWidth="0.0" text="9" wrappingWidth="9.0" />
+      <Text layoutX="33.0" layoutY="442.0" strokeType="OUTSIDE" strokeWidth="0.0" text="a" wrappingWidth="9.0" />
+      <Text layoutX="79.0" layoutY="442.0" strokeType="OUTSIDE" strokeWidth="0.0" text="b" wrappingWidth="9.0" />
+      <Text layoutX="117.0" layoutY="441.0" strokeType="OUTSIDE" strokeWidth="0.0" text="c" wrappingWidth="9.0" />
+      <Text layoutX="158.0" layoutY="442.0" strokeType="OUTSIDE" strokeWidth="0.0" text="d" wrappingWidth="9.0" />
+      <Text layoutX="206.0" layoutY="442.0" strokeType="OUTSIDE" strokeWidth="0.0" text="e" wrappingWidth="9.0" />
+      <Text layoutX="252.0" layoutY="442.0" strokeType="OUTSIDE" strokeWidth="0.0" text="f" wrappingWidth="9.0" />
+      <Text layoutX="290.0" layoutY="441.0" strokeType="OUTSIDE" strokeWidth="0.0" text="g" wrappingWidth="9.0" />
+      <Text layoutX="331.0" layoutY="442.0" strokeType="OUTSIDE" strokeWidth="0.0" text="h" wrappingWidth="9.0" />
+      <Text layoutX="379.0" layoutY="441.0" strokeType="OUTSIDE" strokeWidth="0.0" text="i" wrappingWidth="9.0" />
    </children>
 </AnchorPane>
