@@ -6,7 +6,7 @@ import ca.mcgill.ecse223.quoridor.model.*;
 import java.util.List;
 
 
-public class    BoardController {
+public class BoardController {
     /**
      *This controller method is responsible for initializing the board when quoridor is initialized
      * Returns true if it is successfully initialized
@@ -37,8 +37,8 @@ public class    BoardController {
         PlayerPosition blackPlayerPos =  new PlayerPosition(quoridor.getCurrentGame().getBlackPlayer(), ModelQuery.getTile(1,5));
 
 
-        //PlayerPosition redPlayerPos =  new PlayerPosition(quoridor.getCurrentGame().getRedPlayer(), quoridor.getBoard().getTile(5));
-        //PlayerPosition greenPlayerPos =  new PlayerPosition(quoridor.getCurrentGame().getGreenPlayer(), quoridor.getBoard().getTile(77));
+        PlayerPosition redPlayerPos =  new PlayerPosition(quoridor.getCurrentGame().getRedPlayer(), ModelQuery.getTile(5,1));
+        PlayerPosition greenPlayerPos =  new PlayerPosition(quoridor.getCurrentGame().getGreenPlayer(), ModelQuery.getTile(5,9));
 
 
         List<GamePosition> positions = ModelQuery.getCurrentGame().getPositions();
@@ -62,6 +62,10 @@ public class    BoardController {
 
         PawnController.initPawnSM(quoridor.getCurrentGame().getBlackPlayer(), blackPlayerPos);
         PawnController.initPawnSM(quoridor.getCurrentGame().getWhitePlayer(), whitePlayerPos);
+        if(ModelQuery.isFourPlayer()) {
+            PawnController.initPawnSM(quoridor.getCurrentGame().getBlackPlayer(), blackPlayerPos);
+            PawnController.initPawnSM(quoridor.getCurrentGame().getWhitePlayer(), whitePlayerPos);
+        }
 
         for(int i =1; i <= 10; i++){
             ModelQuery.getCurrentGame().getWhitePlayer().addWall(i);

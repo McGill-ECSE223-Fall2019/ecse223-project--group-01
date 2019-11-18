@@ -37,6 +37,9 @@ class Player {
 	Time remainingTime;
 	1 owner <@>- 0..10 Wall walls; 
 	0..1 -> 0..1 Player nextPlayer; // Alternates between white and black
+	
+	depend ca.mcgill.ecse223.quoridor.statemachine.defaultsm.DefaultSMStatemachine;
+	lazy DefaultSMStatemachine statemachine;
 }
 
 class Game {
