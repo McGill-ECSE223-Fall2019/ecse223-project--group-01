@@ -3,6 +3,7 @@ package ca.mcgill.ecse223.quoridor.features;
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 import ca.mcgill.ecse223.quoridor.controllers.ModelQuery;
 import ca.mcgill.ecse223.quoridor.controllers.PawnController;
+
 import ca.mcgill.ecse223.quoridor.model.*;
 import cucumber.api.PendingException;
 import io.cucumber.java.en.And;
@@ -10,6 +11,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
 import static org.junit.Assert.*;
+
 
 public class PawnStepDefinition {
 
@@ -68,11 +70,18 @@ public class PawnStepDefinition {
      * @author Kate Ward
      */
     @When("Player {string} initiates to move {string}")
+<<<<<<< HEAD
+    public void iInitiateToLoadASavedGameFilename(String playerColor, String side) {
+        try{
+            PawnController.movePawn(side);
+        }catch (UnsupportedOperationException e){
+=======
     public void playerInitiatesToMoveSide(String playerColor, String side) {
         currentPlayer = stringToPlayer(playerColor);
         try {
             isLegalMove = PawnController.movePawn(side);
         } catch (UnsupportedOperationException e) {
+>>>>>>> 795c32d58f45c73692d2882b447a396c9bef27a4
             throw new PendingException();
         }
     }

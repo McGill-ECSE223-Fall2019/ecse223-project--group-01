@@ -1360,8 +1360,8 @@ public class CucumberStepDefinitions {
 		 *
 		 */
 		//@formatter:on
-		Player player1 = new Player(new Time(thinkingTime), user1, 9, Direction.Horizontal);
-		Player player2 = new Player(new Time(thinkingTime), user2, 1, Direction.Horizontal);
+		Player player1 = new Player(new Time(thinkingTime), user1, 9, Direction.Horizontal, ModelQuery.getCurrentGame());
+		Player player2 = new Player(new Time(thinkingTime), user2, 1, Direction.Horizontal, ModelQuery.getCurrentGame());
 
 		Player[] players = { player1, player2 };
 
@@ -1395,8 +1395,8 @@ public class CucumberStepDefinitions {
 		User user1 = quoridor.addUser("userWhite");
 		User user2 = quoridor.addUser("userBlack");
 		int totalThinkingTime = 180;
-		Player player1 = new Player(new Time(totalThinkingTime), user1, 9, Direction.Horizontal);
-		Player player2 = new Player(new Time(totalThinkingTime), user2, 1, Direction.Horizontal);
+		Player player1 = new Player(new Time(totalThinkingTime), user1, 9, Direction.Horizontal, ModelQuery.getCurrentGame());
+		Player player2 = new Player(new Time(totalThinkingTime), user2, 1, Direction.Horizontal, ModelQuery.getCurrentGame());
 		Game game = new Game(GameStatus.ReadyToStart, MoveMode.PlayerMove, quoridor);
 		game.setBlackPlayer(player2);
 		game.setWhitePlayer(player1);

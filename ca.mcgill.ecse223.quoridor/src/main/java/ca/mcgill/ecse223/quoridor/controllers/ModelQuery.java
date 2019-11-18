@@ -22,6 +22,18 @@ public class ModelQuery {
     public static Player getBlackPlayer(){
         return QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
     }
+    
+    public static Player getRedPlayer() {
+    	return QuoridorApplication.getQuoridor().getCurrentGame().getRedPlayer();
+    }
+    
+    public static Player getGreenPlayer() {
+    	return QuoridorApplication.getQuoridor().getCurrentGame().getGreenPlayer();
+    }
+    
+    public static boolean isFourPlayer() {
+    	return !getGreenPlayer().getUser().getName().equals("");
+    }
 
     public static Board getBoard(){
         return QuoridorApplication.getQuoridor().getBoard();
@@ -49,10 +61,19 @@ public class ModelQuery {
     }
 
     public static List<Wall> getAllWallsOnBoard(){
-        List<Wall> whiteWalls = ModelQuery.getWhiteWallsOnBoard();
-        List<Wall> blackWalls = ModelQuery.getBlackWallsOnBoard();
-
         List<Wall> placedWalls = new ArrayList<>();
+        
+    	List<Wall> whiteWalls = ModelQuery.getWhiteWallsOnBoard();
+        List<Wall> blackWalls = ModelQuery.getBlackWallsOnBoard();
+        List<Wall> redWalls;
+        List<Wall> greenWalls;
+        if (isFourPlayer()) {
+            redWalls = ModelQuery.getRedWallsOnBoard();
+            greenWalls = ModelQuery.getGreenWallsOnBoard();
+        	placedWalls.addAll(redWalls);
+        	placedWalls.addAll(greenWalls);
+        }
+
         placedWalls.addAll(whiteWalls);
         placedWalls.addAll(blackWalls);
 
@@ -65,6 +86,14 @@ public class ModelQuery {
 
     public static List<Wall> getBlackWallsOnBoard(){
         return QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getBlackWallsOnBoard();
+    }
+    
+    public static List<Wall> getRedWallsOnBoard(){
+        return QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getRedWallsOnBoard();
+    }
+    
+    public static List<Wall> getGreenWallsOnBoard(){
+        return QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getGreenWallsOnBoard();
     }
 
     public static GamePosition getCurrentPosition(){
