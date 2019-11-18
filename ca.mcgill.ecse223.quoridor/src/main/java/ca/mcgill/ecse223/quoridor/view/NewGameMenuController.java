@@ -94,6 +94,20 @@ public class NewGameMenuController extends ViewController {
             readyTostart = false;
         }
 
+        //validate both players do not have the same name
+        if (!blackPlayerName.getText().equals("") & !whitePlayerName.getText().equals("")) {
+            if (blackPlayerName.getText().equals(whitePlayerName.getText())) {
+                error += "Players should not have the same name \n";
+                readyTostart = false;
+            }
+        }
+
+        if (existingBlackChoices.getValue() != null && existingWhiteChoices.getValue() != null) {
+            if (existingBlackChoices.getValue().equals(existingWhiteChoices.getValue())) {
+                error += "Players should not choose the same name \n";
+                readyTostart = false;
+            }
+        }
 
         // validate thinking time
         if (seconds.getText().equals("") || minutes.getText().equals("")) {
@@ -104,6 +118,9 @@ public class NewGameMenuController extends ViewController {
             readyTostart = false;
         } else if (Integer.parseInt(seconds.getText()) > 60 || Integer.parseInt(seconds.getText()) < 0 || Integer.parseInt(minutes.getText()) < 0) {
             error += "Invalid numbers given for Thinking time";
+            readyTostart = false;
+        } else if (Integer.parseInt(seconds.getText()) == 0 && Integer.parseInt(minutes.getText()) == 0) {
+            error += "Thinking Time is invalid";
             readyTostart = false;
         }
 
