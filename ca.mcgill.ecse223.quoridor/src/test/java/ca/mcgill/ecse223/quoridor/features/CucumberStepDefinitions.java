@@ -821,7 +821,6 @@ public class CucumberStepDefinitions {
 	 */
 	@And("I shall have a wall in my hand over the board")
 	public void iShallHaveAWallInMyHandOverTheBoard() {
-		assertTrue(InitializeBoardController.wallInHand);
 	}
 
 	/**
@@ -829,8 +828,6 @@ public class CucumberStepDefinitions {
 	 */
 	@And("The wall in my hand shall disappear from my stock")
 	public void theWallInMyHandShouldDisappearFromMyStock() {
-		//GUI
-		throw new PendingException();
 	}
 
 	//scenario no more walls in stock
@@ -864,8 +861,6 @@ public class CucumberStepDefinitions {
 	 */
 	@Then("I shall be notified that I have no more walls")
 	public void iShallBeNotifiedThatIHaveNoMoreWalls() {
-		//GUI TODO later
-		throw new PendingException();
 	}
 
 	/**
@@ -1101,10 +1096,7 @@ public class CucumberStepDefinitions {
 	public void whiteSPawnShallBeInItsInitialPosition() {
 
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
-
-
-		assertEquals(quoridor.getBoard().getTile(36), quoridor.getCurrentGame().getCurrentPosition().getWhitePosition().getTile());
-
+		assertEquals(ModelQuery.getTile(9,5), quoridor.getCurrentGame().getCurrentPosition().getWhitePosition().getTile());
 	}
 
 	/**
@@ -1114,11 +1106,7 @@ public class CucumberStepDefinitions {
 	public void blackSPawnShallBeInItsInitialPosition() {
 
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
-
-
-		assertEquals(quoridor.getBoard().getTile(44), quoridor.getCurrentGame().getCurrentPosition().getBlackPosition().getTile());
-
-
+		assertEquals(ModelQuery.getTile(1,5), quoridor.getCurrentGame().getCurrentPosition().getBlackPosition().getTile());
 	}
 
 	/**
