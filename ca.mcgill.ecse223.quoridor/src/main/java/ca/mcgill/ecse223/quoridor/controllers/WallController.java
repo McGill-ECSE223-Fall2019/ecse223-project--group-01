@@ -1,7 +1,8 @@
 package ca.mcgill.ecse223.quoridor.controllers;
-import ca.mcgill.ecse223.quoridor.WallGraph;
+import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 import ca.mcgill.ecse223.quoridor.model.*;
-import java.util.*;
+
+import java.util.List;
 
 public class WallController {
 
@@ -10,14 +11,13 @@ public class WallController {
      * Set the tile of WallMove to a specific row and column
      * returns true if operation is successful
      *
-     * @param move The subject of the move
      * @param row The target row of the move
      * @param col The target column of the move
      * @return Outcome of operation either
      * @throws UnsupportedOperationException
      */
-    public static Boolean moveWall(WallMove move, int row, int col) throws UnsupportedOperationException{
-
+    public static Boolean moveWall(int row, int col) throws UnsupportedOperationException{
+        WallMove move = ModelQuery.getWallMoveCandidate();
         if(row<1 || row > 8 || col < 1 || col > 8){
             return false;
         }
@@ -31,12 +31,12 @@ public class WallController {
      * Shifts the position of a WallMove 1 tile left,right,up or down
      * returns true if the operation is successful
      *
-     * @param side Direction of the shift (left,right,down,up)
-     * @param move The subject of the shift
+     * @param side Direction of the shift (left,right,down,up
      * @return outcome of operation
      * @throws UnsupportedOperationException
      */
-    public static Boolean shiftWall(String side, WallMove move) throws UnsupportedOperationException {
+    public static Boolean shiftWall(String side) throws UnsupportedOperationException {
+        WallMove move = ModelQuery.getWallMoveCandidate();
         int row = move.getTargetTile().getRow();
         int col = move.getTargetTile().getColumn();
         switch(side){
@@ -57,7 +57,7 @@ public class WallController {
                 break;
             }
         }
-        return WallController.moveWall(move,row,col);
+        return WallController.moveWall(row,col);
     }
 
     /**
@@ -66,62 +66,72 @@ public class WallController {
      * Attempts to drop the wall at the current position
      * Also completes the moves
      *
-     * @param move The subject of the drop
      * @return outcome of operation
      * @throws UnsupportedOperationException
      */
-    public static Boolean dropWall(WallMove move, Player player) throws UnsupportedOperationException{
-        List<Wall> placedWalls = ModelQuery.getAllWallsOnBoard();
+    public static Boolean dropWall() throws UnsupportedOperationException{
+        WallMove move = ModelQuery.getWallMoveCandidate();
+
+//        List<Wall> placedWalls = ModelQuery.getAllWallsOnBoard();
+        Player player = ModelQuery.getPlayerToMove();
+
 
         // validate no overlap
-        for (Wall wall: placedWalls){
-            if(compareWalls(move,wall.getMove())){
-                return false;
-            }
+        if(!ValidatePositionController.validateWallPosition(move.getTargetTile().getRow(),move.getTargetTile().getColumn(),move.getWallDirection())){
+            return false;
         }
+
 
         ModelQuery.getCurrentGame().addMove(move);
         ModelQuery.getCurrentGame().setWallMoveCandidate(null);
 
         if(player.equals(ModelQuery.getWhitePlayer())) {
-            ModelQuery.getCurrentGame().getCurrentPosition().removeWhiteWallsInStock(move.getWallPlaced());
             ModelQuery.getCurrentGame().getCurrentPosition().addWhiteWallsOnBoard(move.getWallPlaced());
-            SwitchPlayerController.SwitchActivePlayer("white");
+            SwitchPlayerController.switchActivePlayer();
         }else{
-            ModelQuery.getCurrentGame().getCurrentPosition().removeBlackWallsInStock(move.getWallPlaced());
             ModelQuery.getCurrentGame().getCurrentPosition().addBlackWallsOnBoard(move.getWallPlaced());
-            SwitchPlayerController.SwitchActivePlayer("black");
+            SwitchPlayerController.switchActivePlayer();
         }
 
         return true;
     }
 
-    // Return true if the wall do not overlap
-    private static Boolean compareWalls(WallMove wall1, WallMove wall2){
-        if( wall1.getWallDirection() == Direction.Vertical && wall2.getWallDirection() == Direction.Vertical){
-            return Math.abs(wall1.getTargetTile().getRow() - wall2.getTargetTile().getRow()) > 1;
+    public static boolean cancelWallMove(){
+        Player player = ModelQuery.getPlayerToMove();
+        WallMove move = ModelQuery.getWallMoveCandidate();
+        if(move == null){
+            return false;
         }
-        else if(wall1.getWallDirection() == Direction.Horizontal && wall2.getWallDirection() == Direction.Horizontal){
-            return Math.abs(wall1.getTargetTile().getColumn() - wall2.getTargetTile().getColumn()) > 1;
+        if(player.equals(ModelQuery.getWhitePlayer())) {
+            ModelQuery.getCurrentGame().getCurrentPosition().addWhiteWallsInStock(move.getWallPlaced());
+        }else{
+            ModelQuery.getCurrentGame().getCurrentPosition().addBlackWallsInStock(move.getWallPlaced());
         }
-        else if(wall1.getWallDirection() == Direction.Horizontal && wall2.getWallDirection() == Direction.Vertical){
-            return wall2.getTargetTile().getColumn() == wall1.getTargetTile().getColumn()-1 && wall2.getTargetTile().getRow() == wall1.getTargetTile().getRow()-1;
-        }
-        else{
-            return wall1.getTargetTile().getColumn() == wall2.getTargetTile().getColumn()+1 && wall1.getTargetTile().getRow() == wall2.getTargetTile().getRow()-1;
-        }
+        ModelQuery.getCurrentGame().setWallMoveCandidate(null);
+        return true;
     }
 
     /**
      * @author Kate Ward
      * Attempts to rotate wall in hand
+     * returns true if successful
      *
      * @return outcome of operation
      * @throws UnsupportedOperationException
      */
     public static boolean rotateWall() {
-        throw new UnsupportedOperationException();
-
+    	Game game = QuoridorApplication.getQuoridor().getCurrentGame();
+        if (game.getWallMoveCandidate().equals(null)) {
+        	return false;
+        }
+        if( game.getWallMoveCandidate().getWallDirection() == Direction.Vertical) {
+        	game.getWallMoveCandidate().setWallDirection(Direction.Horizontal);
+        }
+        else {
+        	game.getWallMoveCandidate().setWallDirection(Direction.Vertical);
+        }
+    	
+        return true;
     }
 
     /**
@@ -132,9 +142,46 @@ public class WallController {
      * @return outcome of operation
      * @throws UnsupportedOperationException
      */
-    public static boolean grabWall() {
-        throw new UnsupportedOperationException();
-
+    public static boolean grabWall() throws UnsupportedOperationException{
+        Player player = ModelQuery.getPlayerToMove();
+        int movesSize = ModelQuery.getMoves().size();
+        int moveNum;
+        int roundNum;
+        if (movesSize>0) {
+            moveNum = ModelQuery.getMoves().get(movesSize-1).getMoveNumber();
+            roundNum = ModelQuery.getMoves().get(movesSize-1).getRoundNumber();
+        }
+        else {
+            moveNum = 0;
+            roundNum = 0;
+        }
+        if (ModelQuery.getCurrentGame().getWallMoveCandidate()!=null) {		//wall already in hand
+        	return false;
+        }
+        else {
+    		if(player.equals(ModelQuery.getWhitePlayer()) && ModelQuery.getCurrentGame().getCurrentPosition().getWhiteWallsInStock().size()>0) {
+        		List <Wall> walls = ModelQuery.getCurrentGame().getCurrentPosition().getWhiteWallsInStock();
+        		Wall wall = walls.get(0);		//get(0) null for some reason
+                ModelQuery.getCurrentGame().getCurrentPosition().removeWhiteWallsInStock(wall);
+                //create wall move candidate
+                WallMove move = new WallMove(moveNum+1, roundNum+1, player, ModelQuery.getTile(1,1), ModelQuery.getCurrentGame(), Direction.Vertical, wall);
+                ModelQuery.getCurrentGame().setWallMoveCandidate(move);
+                
+            }else if(player.equals(ModelQuery.getBlackPlayer()) && ModelQuery.getCurrentGame().getCurrentPosition().getBlackWallsInStock().size()>0){
+            	List <Wall> walls = ModelQuery.getCurrentGame().getCurrentPosition().getBlackWallsInStock();
+            	Wall wall = walls.get(0);		//get(0) null for some reason
+                ModelQuery.getCurrentGame().getCurrentPosition().removeBlackWallsInStock(wall);
+                //create wall move candidate
+                WallMove move = new WallMove(moveNum+1, roundNum, player, ModelQuery.getTile(1,1), ModelQuery.getCurrentGame(), Direction.Vertical, wall);
+                ModelQuery.getCurrentGame().setWallMoveCandidate(move);
+            }
+        	//white player nor black player has walls in stock
+            else {
+            	return false;
+            }
+    	}
+    	
+        return true;
     }
 
     private static void initGraph(){
