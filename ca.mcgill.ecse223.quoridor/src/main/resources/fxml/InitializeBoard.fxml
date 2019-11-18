@@ -39,12 +39,12 @@
             <Font size="20.0" />
          </font>
       </Text>
-      <Text fx:id="whitePlayerName1" layoutX="413.0" layoutY="98.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" text="PLAYER 1" wrappingWidth="107.151118046875">
+      <Text fx:id="blackPlayerName1" layoutX="413.0" layoutY="98.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" text="PLAYER 1" wrappingWidth="107.151118046875">
          <font>
             <Font size="20.0" />
          </font>
       </Text>
-      <Text fx:id="blackPlayerName1" layoutX="413.0" layoutY="135.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PLAYER 2" wrappingWidth="107.151118046875">
+      <Text fx:id="whitePlayerName1" layoutX="413.0" layoutY="135.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PLAYER 2" wrappingWidth="107.151118046875">
          <font>
             <Font size="20.0" />
          </font>
@@ -157,12 +157,12 @@
             <Font size="18.0" />
          </font>
       </Button>
-      <Label fx:id="timerForWhitePlayer" layoutX="533.0" layoutY="79.0" prefHeight="23.0" prefWidth="61.0" style="-fx-border-color: #000000;" text="   11:30" textAlignment="CENTER">
+      <Label fx:id="timerForBlackPlayer" layoutX="533.0" layoutY="79.0" prefHeight="23.0" prefWidth="61.0" style="-fx-border-color: #000000;" text="   11:30" textAlignment="CENTER">
          <font>
             <Font size="15.0" />
          </font>
       </Label>
-      <Label fx:id="timerForBlackPlayer" layoutX="533.0" layoutY="116.0" prefHeight="23.0" prefWidth="61.0" style="-fx-border-color: #000000;" text="   12:30" textAlignment="CENTER">
+      <Label fx:id="timerForWhitePlayer" layoutX="533.0" layoutY="116.0" prefHeight="23.0" prefWidth="61.0" style="-fx-border-color: #000000;" text="   12:30" textAlignment="CENTER">
          <font>
             <Font size="15.0" />
          </font>

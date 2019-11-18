@@ -228,6 +228,9 @@ public class PositionController {
                 quoridor.getCurrentGame().setCurrentPosition(gameposition);
                 quoridor.getCurrentGame().getCurrentPosition().setWhitePosition(whitePlayerPosition);
                 quoridor.getCurrentGame().getCurrentPosition().setBlackPosition(blackPlayerPosition);
+
+                PawnController.initPawnSM(quoridor.getCurrentGame().getBlackPlayer(), blackPlayerPosition);
+                PawnController.initPawnSM(quoridor.getCurrentGame().getWhitePlayer(), whitePlayerPosition);
                 if(!ValidatePositionController.validateOverlappingPawns()){
                     return false;
                 }

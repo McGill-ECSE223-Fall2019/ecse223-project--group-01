@@ -28,6 +28,8 @@ import java.util.List;
 public class InitializeBoardController extends ViewController{
 
     public static boolean wallInHand = false;
+    public static boolean pawnInHand = false;
+    KeyCode previousKey = null;
 
     @FXML
     private AnchorPane board;
@@ -55,6 +57,7 @@ public class InitializeBoardController extends ViewController{
     
     public static boolean playerIsWhite = false;
     public static boolean isWallDrop = false;
+    public static boolean pawnMoved = false;
     public String initialTime;
     
     public Circle c1;
@@ -132,7 +135,7 @@ public class InitializeBoardController extends ViewController{
         EventHandler onFinished = new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 Player currentPlayer = ModelQuery.getPlayerToMove();
-                if ((StartNewGameController.timeOver()) || (isWallDrop == true) ) {
+                if ((StartNewGameController.timeOver()) || isWallDrop || pawnMoved ) {
                 	
                 	SwitchPlayerController.switchActivePlayer();
                 	isWallDrop = false;
@@ -189,6 +192,17 @@ public class InitializeBoardController extends ViewController{
 	        }
     	}
     }
+
+    public void handleGrabPawn(ActionEvent actionEvent) {
+        if (wallInHand) {
+            WallController.cancelWallMove();
+            wallInHand = false;
+            refresh();
+        }
+        pawnInHand = true;
+         refresh();
+    }
+
 
     public void refresh() {
         GamePosition position = ModelQuery.getCurrentPosition();
@@ -295,13 +309,16 @@ public class InitializeBoardController extends ViewController{
 
         Circle pawn = new Circle();
         if(isWhite){
-            pawn.setFill(Color.web("#1e90ff"));
+            pawn.setFill(Color.WHITE);
+            pawn.setStroke(Color.BLACK);
+
         }
         else{
-            pawn.setFill(Color.web("#5aff1e"));
+            pawn.setFill(Color.BLACK);
+
         }
-        pawn.setLayoutX(coord.getKey());
-        pawn.setLayoutY(coord.getValue());
+        pawn.setLayoutX(coord.getValue());
+        pawn.setLayoutY(coord.getKey());
         pawn.setRadius(8);
         board.getChildren().add(pawn);
     }
@@ -316,9 +333,11 @@ public class InitializeBoardController extends ViewController{
 
         Rectangle rectangle = new Rectangle(coord.getKey(), coord.getValue(), 9, 77);
 
+        Player white = ModelQuery.getWhitePlayer();
+        Player black = ModelQuery.getBlackPlayer();
         // setup color
         if (isWall) {
-            rectangle.setFill(Color.GREY);
+            rectangle.setFill(Color.GRAY);
         } else {
             /*if (ModelQuery.getPlayerToMove().equals(ModelQuery.getWhitePlayer())) {
             	rectangle.setFill(Color.web("#dde8f2"));
@@ -329,7 +348,7 @@ public class InitializeBoardController extends ViewController{
             } else if (ModelQuery.getPlayerToMove().equals(ModelQuery.getGreenPlayer())) {
             	rectangle.setFill(Color.LIGHTGREEN);
             }    */
-            rectangle.setFill(Color.web("#5aff1e"));
+            rectangle.setFill(Color.DEEPSKYBLUE);
         }
 
         if (dir.toString() == "Horizontal") {
@@ -350,6 +369,7 @@ public class InitializeBoardController extends ViewController{
     @FXML
     public void handleKeyPressed(KeyEvent event) {
         KeyCode code = event.getCode();
+
         if(wallInHand){
             //Moves the wall up
             if(code.equals(KeyCode.W)){
@@ -377,6 +397,37 @@ public class InitializeBoardController extends ViewController{
             else if(code.equals(KeyCode.R)){
                 WallController.rotateWall();
             }
+            refresh();
+        }
+
+        if (pawnInHand){
+            /*For handling pawn move*/
+                if (code.equals(KeyCode.I)) {
+                    PawnController.movePawn("up");
+                }
+                else if (code.equals(KeyCode.K)) {
+                    PawnController.movePawn("down");
+                }
+                else if (code.equals(KeyCode.J)) {
+                    PawnController.movePawn("left");
+                }
+                else if (code.equals(KeyCode.L)) {
+                    PawnController.movePawn("right");
+                }
+                else if (code.equals(KeyCode.U)) {
+                    PawnController.movePawn("upleft");
+                }
+                else if (code.equals(KeyCode.O)) {
+                    PawnController.movePawn("upright");
+                }
+                else if (code.equals(KeyCode.N)) {
+                    PawnController.movePawn("downleft");
+                }
+                else if (code.equals(KeyCode.COMMA)) {
+                    PawnController.movePawn("downright");
+                }
+                pawnMoved = true;
+
             refresh();
         }
     }

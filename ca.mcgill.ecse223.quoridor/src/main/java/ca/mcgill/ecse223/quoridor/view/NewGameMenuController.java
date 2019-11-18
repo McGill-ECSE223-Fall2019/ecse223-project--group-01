@@ -185,6 +185,9 @@ public class NewGameMenuController extends ViewController {
         } else if (Integer.parseInt(seconds.getText()) > 60 || Integer.parseInt(seconds.getText()) < 0 || Integer.parseInt(minutes.getText()) < 0) {
             error += "Invalid numbers given for Thinking time";
             readyTostart = false;
+        } else if (Integer.parseInt(seconds.getText()) == 0 && Integer.parseInt(minutes.getText()) == 0) {
+            error += "Thinking Time is invalid";
+            readyTostart = false;
         }
 
         // All good begin initialization process

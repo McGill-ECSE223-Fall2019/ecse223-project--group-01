@@ -59,8 +59,8 @@ class GamePosition {
 	unique Integer id;
 	0..1 whiteInGame <@>- 1 PlayerPosition whitePosition;
 	0..1 blackInGame <@>- 1 PlayerPosition blackPosition;
-	0..1 redInGame <@>- 1 PlayerPosition redPosition;
-	0..1 greenInGame <@>- 1 PlayerPosition greenPosition;
+	0..1 redInGame <@>- 0..1 PlayerPosition redPosition;
+	0..1 greenInGame <@>- 0..1 PlayerPosition greenPosition;
 	0..1 -> 1 Player playerToMove;
 	0..1 -> * Wall whiteWallsOnBoard;
 	0..1 -> * Wall blackWallsOnBoard;
@@ -104,4 +104,3 @@ class PlayerPosition {
 	* -> 1 Player player; 
 	* -> 1 Tile tile; 
 }
-
