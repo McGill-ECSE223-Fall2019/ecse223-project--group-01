@@ -41,7 +41,11 @@ public class ModelQuery {
 
     public static Tile getTile(int row,int col){
         int index = (row - 1) * 9 + col - 1;
-        return QuoridorApplication.getQuoridor().getBoard().getTile(index);
+        try{
+            return QuoridorApplication.getQuoridor().getBoard().getTile(index);
+        }catch (Exception e){
+            return null;
+        }
     }
 
     public static List<Wall> getAllWallsOnBoard(){
@@ -67,6 +71,29 @@ public class ModelQuery {
         return QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition();
     }
 
+    public static List<PlayerPosition> getAllPlayerPosition(){
+        List<PlayerPosition> positions = new ArrayList<>();
+        positions.add(QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getBlackPosition());
+        positions.add(QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getWhitePosition());
+        return positions;
+    }
 
+    public static PlayerPosition getWhitePosition(){
+        return QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getWhitePosition();
+    }
 
+    public static PlayerPosition getBlackPosition(){
+        return QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getBlackPosition();
+    }
+
+    public static PlayerPosition getPlayerPositionOfPlayerToMove(){
+        if (ModelQuery.getPlayerToMove().equals(ModelQuery.getWhitePlayer())) {
+            return ModelQuery.getWhitePosition();
+        } else if (ModelQuery.getPlayerToMove().equals(ModelQuery.getBlackPlayer())) {
+            return ModelQuery.getBlackPosition();
+        }
+        else{
+            return null;
+        }
+    }
 }
