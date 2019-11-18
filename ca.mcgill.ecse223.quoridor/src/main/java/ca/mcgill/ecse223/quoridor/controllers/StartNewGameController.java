@@ -225,9 +225,7 @@ public class StartNewGameController {
                         else {
                             currentPlayer = ModelQuery.getPlayerToMove();
                             timeToSet = timeToSet - 1000; // time to set in milliseconds
-                            Date date = new Date();
-                            long currentMillis = date.getTime();
-                            Time newThinkingTime = new Time(timeToSet + currentMillis);
+                            Time newThinkingTime = new Time(timeToSet);
                             currentPlayer.setRemainingTime(newThinkingTime);
                         }
                     } catch (Exception e) {
@@ -256,9 +254,7 @@ public class StartNewGameController {
      */
     public static Time setThinkingTime (int minutes, int seconds) {
         millis = minutes * 60 * 1000 + seconds * 1000;
-        Date date = new Date();
-        long currentMillis = date.getTime();
-        Time totalThinkingTime = new Time(millis+currentMillis);
+        Time totalThinkingTime = new Time(millis);
         
         ModelQuery.getWhitePlayer().setRemainingTime(totalThinkingTime);
         ModelQuery.getBlackPlayer().setRemainingTime(totalThinkingTime);
@@ -421,6 +417,7 @@ public class StartNewGameController {
     public static void resetTimeToSet() {
         //timeToSet = millis;
     	timeToSet = ModelQuery.getPlayerToMove().getRemainingTime().getTime();
+    	System.out.println(timeToSet);
     }
     
     /**

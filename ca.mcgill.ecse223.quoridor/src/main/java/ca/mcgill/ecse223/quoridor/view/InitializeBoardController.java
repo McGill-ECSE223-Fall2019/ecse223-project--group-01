@@ -133,23 +133,26 @@ public class InitializeBoardController extends ViewController{
             public void handle(ActionEvent t) {
                 Player currentPlayer = ModelQuery.getPlayerToMove();
                 if ((StartNewGameController.timeOver()) || (isWallDrop == true) ) {
+                	
                 	SwitchPlayerController.switchActivePlayer();
                 	isWallDrop = false;
 
-                	StartNewGameController.resetTimeToSet();
                 	refresh();
-                }
-
-
+                	StartNewGameController.resetTimeToSet();
+                	
+                } else {
+                
                 //grey out the next player name & count down time for the current player
-                if (currentPlayer.equals(ModelQuery.getWhitePlayer())) {
-                    timerForWhitePlayer.setText(StartNewGameController.toTimeStr());
-                } else if (currentPlayer.equals(ModelQuery.getBlackPlayer())){
-                    timerForBlackPlayer.setText(StartNewGameController.toTimeStr());
-                } else if (currentPlayer.equals(ModelQuery.getRedPlayer())) {
-                	timerForRedPlayer.setText(StartNewGameController.toTimeStr());
-                } else if (currentPlayer.equals(ModelQuery.getGreenPlayer())) {
-                	timerForGreenPlayer.setText(StartNewGameController.toTimeStr());
+	                if (currentPlayer.equals(ModelQuery.getWhitePlayer())) {
+	                    timerForWhitePlayer.setText(StartNewGameController.toTimeStr());
+	                } else if (currentPlayer.equals(ModelQuery.getBlackPlayer())){
+	                    timerForBlackPlayer.setText(StartNewGameController.toTimeStr());
+	                } else if (currentPlayer.equals(ModelQuery.getRedPlayer())) {
+	                	timerForRedPlayer.setText(StartNewGameController.toTimeStr());
+	                } else if (currentPlayer.equals(ModelQuery.getGreenPlayer())) {
+	                	timerForGreenPlayer.setText(StartNewGameController.toTimeStr());
+	                }
+                
                 }
             }
         };
