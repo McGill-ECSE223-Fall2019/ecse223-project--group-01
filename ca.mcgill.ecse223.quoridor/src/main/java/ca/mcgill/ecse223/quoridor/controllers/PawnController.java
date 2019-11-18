@@ -3,11 +3,19 @@ package ca.mcgill.ecse223.quoridor.controllers;
 import ca.mcgill.ecse223.quoridor.model.*;
 import ca.mcgill.ecse223.quoridor.statemachine.defaultsm.DefaultSMStatemachine;
 import ca.mcgill.ecse223.quoridor.statemachine.defaultsm.IDefaultSMStatemachine;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.List;
 
 public class PawnController {
+
+    /**
+     * @author Tritin Truong, Kevin Li, Jason Lau
+     * @param player
+     * @param position
+     *
+     * This method initializes the state machine to be used for each pawn
+     * The state machine is tied to the player
+     */
     public static void initPawnSM(Player player, PlayerPosition position) {
 
         DefaultSMStatemachine statemachine = new DefaultSMStatemachine();
@@ -92,6 +100,7 @@ public class PawnController {
                 return true;
             }
 
+            // Checks if there is a pawn at the location
             private boolean isPawnBlocking(Tile dest) {
                 List<PlayerPosition> positions = ModelQuery.getAllPlayerPosition();
                 for (PlayerPosition pawn_position : positions) {
@@ -102,6 +111,14 @@ public class PawnController {
                 return false;
             }
 
+            /**
+             *
+             * @param side
+             * @return
+             *
+             * Returns true if there is a valid jump move at the target side
+             *
+             */
             @Override
             public boolean isValidJump(String side) {
                 Tile source = position.getTile();
@@ -173,7 +190,15 @@ public class PawnController {
         player.setStatemachine(statemachine);
     }
 
-    public static boolean movePawn(String side) throws NotImplementedException {
+
+    /**
+     * @author Tritin Truong, Jason Lau, Kevin Li
+     * @param side, the side where you want to move the pawn
+     * @return
+     *
+     * This method controls the pawn movement, if the move completes the turn also automatically ends
+     */
+    public static boolean movePawn(String side) {
         DefaultSMStatemachine sm = ModelQuery.getPlayerToMove().getStatemachine();
         PlayerPosition playerPosition = ModelQuery.getPlayerPositionOfPlayerToMove();
 
