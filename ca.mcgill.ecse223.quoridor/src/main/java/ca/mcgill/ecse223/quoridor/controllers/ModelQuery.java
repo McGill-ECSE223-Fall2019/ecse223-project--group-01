@@ -31,8 +31,8 @@ public class ModelQuery {
     	return QuoridorApplication.getQuoridor().getCurrentGame().getGreenPlayer();
     }
     
-    public static boolean isFourPlayer() {
-    	return !getGreenPlayer().getUser().getName().equals("");
+    public static boolean isFourPlayer() { //TODO
+    	return getCurrentGame().numberOfPlayers() == 4;
     }
 
     public static Board getBoard(){

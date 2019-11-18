@@ -63,7 +63,7 @@ public class StartNewGameController {
             whitePlayerChooseName = true;
         }
         int tempThinkingTime = 90;
-        Player player = new Player(new Time(tempThinkingTime), white_user, 9, Direction.Horizontal,ModelQuery.getCurrentGame());
+        Player player = new Player(new Time(tempThinkingTime), white_user, 9, Direction.Horizontal, ModelQuery.getCurrentGame());
         ModelQuery.getCurrentGame().setWhitePlayer(player); //set White player
         ModelQuery.getWhitePlayer().setUser(white_user);
         
@@ -88,7 +88,7 @@ public class StartNewGameController {
             blackPlayerChooseName = true;
         }
         int tempThinkingTime = 90;
-        Player player = new Player(new Time(tempThinkingTime), black_user, 1, Direction.Vertical,ModelQuery.getCurrentGame());
+        Player player = new Player(new Time(tempThinkingTime), black_user, 1, Direction.Vertical, ModelQuery.getCurrentGame());
         ModelQuery.getCurrentGame().setBlackPlayer(player);
         ModelQuery.getBlackPlayer().setUser(black_user);
 
@@ -113,7 +113,7 @@ public class StartNewGameController {
             redPlayerChooseName = true;
         }
         int tempThinkingTime = 90;
-        Player player = new Player(new Time(tempThinkingTime), red_user, 1, Direction.Vertical,ModelQuery.getCurrentGame());
+        Player player = new Player(new Time(tempThinkingTime), red_user, 1, Direction.Vertical, ModelQuery.getCurrentGame());
         ModelQuery.getCurrentGame().setRedPlayer(player);
         ModelQuery.getRedPlayer().setUser(red_user);
 
@@ -138,7 +138,7 @@ public class StartNewGameController {
             greenPlayerChooseName = true;
         }
         int tempThinkingTime = 90;
-        Player player = new Player(new Time(tempThinkingTime), green_user, 1, Direction.Vertical,ModelQuery.getCurrentGame());
+        Player player = new Player(new Time(tempThinkingTime), green_user, 1, Direction.Vertical, ModelQuery.getCurrentGame());
         ModelQuery.getCurrentGame().setGreenPlayer(player);
         ModelQuery.getGreenPlayer().setUser(green_user);
 
@@ -151,7 +151,7 @@ public class StartNewGameController {
      * Creates a dummy red player and green player in case of 2player mode
      *
      */
-    public static void playerDummies() {
+    /*public static void playerDummies() {
     	User dummyUser;
     	if(usernameExists("")) {
         	dummyUser = UserController.selectExistingUsername("");
@@ -162,17 +162,17 @@ public class StartNewGameController {
     	
         User red_user = dummyUser;
         int tempThinkingTime = 90;
-        Player redDummy = new Player(new Time(tempThinkingTime), red_user, 1, Direction.Vertical,ModelQuery.getCurrentGame());
+        Player redDummy = new Player(new Time(tempThinkingTime), red_user, 1, Direction.Vertical, ModelQuery.getCurrentGame());
         ModelQuery.getCurrentGame().setRedPlayer(redDummy);
         ModelQuery.getRedPlayer().setUser(red_user);
         
         User green_user = dummyUser;
-        Player greenDummy = new Player(new Time(tempThinkingTime), green_user, 1, Direction.Vertical,ModelQuery.getCurrentGame());
+        Player greenDummy = new Player(new Time(tempThinkingTime), green_user, 1, Direction.Vertical, ModelQuery.getCurrentGame());
         ModelQuery.getCurrentGame().setGreenPlayer(greenDummy);
         ModelQuery.getRedPlayer().setUser(green_user);
 
         isReadyToStart();  //check if players chose name and if total thinking time is set
-    }
+    }/*
 
 
     /**
@@ -417,7 +417,6 @@ public class StartNewGameController {
     public static void resetTimeToSet() {
         //timeToSet = millis;
     	timeToSet = ModelQuery.getPlayerToMove().getRemainingTime().getTime();
-    	System.out.println(timeToSet);
     }
     
     /**

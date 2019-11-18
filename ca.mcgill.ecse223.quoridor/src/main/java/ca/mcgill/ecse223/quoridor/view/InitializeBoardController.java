@@ -139,6 +139,7 @@ public class InitializeBoardController extends ViewController{
                 	
                 	SwitchPlayerController.switchActivePlayer();
                 	isWallDrop = false;
+                	pawnMoved = false;
 
                 	refresh();
                 	StartNewGameController.resetTimeToSet();
@@ -160,7 +161,7 @@ public class InitializeBoardController extends ViewController{
             }
         };
 
-        timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(1), onFinished));
+        timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(0.25), onFinished));
         timeline.playFromStart();
         refresh();
     }
@@ -174,7 +175,7 @@ public class InitializeBoardController extends ViewController{
 
     public void createNewWall(ActionEvent actionEvent) {
 
-    	if(!isWallDrop) { //avoids issue with dropping multiple walls in a single clock cycle
+    	if(!isWallDrop && pawnMoved) { //avoids issue with dropping multiple walls before turn ends
     		
             // Check if there is already a wall in hand
             // If so just cancel the wall move
@@ -284,8 +285,12 @@ public class InitializeBoardController extends ViewController{
         greenNumOfWalls.setText(String.valueOf(position.getGreenWallsInStock().size()));
 
         // update pawn positions
-        placePawn(position.getWhitePosition(),true);
-        placePawn(position.getBlackPosition(),false);
+        placePawn(position.getWhitePosition(),"w");
+        placePawn(position.getBlackPosition(),"b");
+        if(ModelQuery.isFourPlayer()) {
+        	placePawn(position.getRedPosition(),"r");
+        	placePawn(position.getGreenPosition(),"g");
+        }
 
         // update wall positions
         ModelQuery.getCurrentGame();
@@ -302,21 +307,29 @@ public class InitializeBoardController extends ViewController{
         }
     }
 
-    private void placePawn(PlayerPosition position, boolean isWhite){
+    private void placePawn(PlayerPosition position, String color){
         Tile tile = position.getTile();
 
         Pair<Integer,Integer> coord = convertPawnToCanvas(tile.getRow(),tile.getColumn());
 
         Circle pawn = new Circle();
-        if(isWhite){
+        if(color.equals("w")){
             pawn.setFill(Color.WHITE);
             pawn.setStroke(Color.BLACK);
 
         }
-        else{
+        else if(color.equals("b")){
             pawn.setFill(Color.BLACK);
-
         }
+        else if(color.equals("r")) {
+        	pawn.setFill(Color.RED);
+        	pawn.setStroke(Color.BLACK);
+        }
+        else {
+        	pawn.setFill(Color.GREEN);
+        	pawn.setStroke(Color.BLACK);
+        }
+        
         pawn.setLayoutX(coord.getValue());
         pawn.setLayoutY(coord.getKey());
         pawn.setRadius(8);
@@ -432,12 +445,12 @@ public class InitializeBoardController extends ViewController{
         }
     }
 
-    /*
+    
     public void dropWall(){
         if(WallController.dropWall()){
             wallInHand=false;
         }
-    }*/
+    }
 
     public void shiftWall(String side){
         WallController.shiftWall(side);

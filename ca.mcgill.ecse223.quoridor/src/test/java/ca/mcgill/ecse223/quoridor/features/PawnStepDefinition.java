@@ -70,18 +70,11 @@ public class PawnStepDefinition {
      * @author Kate Ward
      */
     @When("Player {string} initiates to move {string}")
-<<<<<<< HEAD
-    public void iInitiateToLoadASavedGameFilename(String playerColor, String side) {
-        try{
-            PawnController.movePawn(side);
-        }catch (UnsupportedOperationException e){
-=======
     public void playerInitiatesToMoveSide(String playerColor, String side) {
         currentPlayer = stringToPlayer(playerColor);
         try {
             isLegalMove = PawnController.movePawn(side);
         } catch (UnsupportedOperationException e) {
->>>>>>> 795c32d58f45c73692d2882b447a396c9bef27a4
             throw new PendingException();
         }
     }

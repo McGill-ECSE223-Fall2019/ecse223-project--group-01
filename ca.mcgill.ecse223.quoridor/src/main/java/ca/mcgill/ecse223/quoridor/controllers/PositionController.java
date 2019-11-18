@@ -238,8 +238,12 @@ public class PositionController {
                 	ModelQuery.getCurrentGame().getCurrentPosition().setGreenPosition(greenPlayerPosition);
                 }
 
-                PawnController.initPawnSM(quoridor.getCurrentGame().getBlackPlayer(), blackPlayerPosition);
                 PawnController.initPawnSM(quoridor.getCurrentGame().getWhitePlayer(), whitePlayerPosition);
+                PawnController.initPawnSM(quoridor.getCurrentGame().getBlackPlayer(), blackPlayerPosition);
+                if(ModelQuery.isFourPlayer()) {
+                    PawnController.initPawnSM(quoridor.getCurrentGame().getRedPlayer(), redPlayerPosition);
+                    PawnController.initPawnSM(quoridor.getCurrentGame().getGreenPlayer(), greenPlayerPosition);
+                }
                 if(!ValidatePositionController.validateOverlappingPawns()){
                     return false;
                 }

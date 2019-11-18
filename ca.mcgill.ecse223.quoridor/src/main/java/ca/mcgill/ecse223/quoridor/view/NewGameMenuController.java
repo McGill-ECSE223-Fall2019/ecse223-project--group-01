@@ -245,8 +245,6 @@ public class NewGameMenuController extends ViewController {
             if(numberPlayers.getSelectedToggle().equals(fourPlayer)) { 
             	StartNewGameController.redPlayerChooseAUsername(redName);
             	StartNewGameController.greenPlayerChooseAUsername(greenName);
-            } else { //if 2 player, setup dummy red and green players
-            	StartNewGameController.playerDummies();
             }
             
             minS = minutes.getText();
