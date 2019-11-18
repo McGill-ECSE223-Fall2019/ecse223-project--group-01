@@ -103,6 +103,9 @@ public class PawnController {
             // Checks if there is a pawn at the location
             private boolean isPawnBlocking(Tile dest) {
                 List<PlayerPosition> positions = ModelQuery.getAllPlayerPosition();
+                if(dest==null){
+                    return true;
+                }
                 for (PlayerPosition pawn_position : positions) {
                     if (pawn_position.getTile().getColumn() == dest.getColumn() && pawn_position.getTile().getRow() == dest.getRow()) {
                         return true;

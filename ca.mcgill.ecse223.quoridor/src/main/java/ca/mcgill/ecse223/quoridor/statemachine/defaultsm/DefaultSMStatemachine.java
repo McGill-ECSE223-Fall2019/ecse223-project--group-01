@@ -309,7 +309,7 @@ public class DefaultSMStatemachine implements IDefaultSMStatemachine {
 	}
 	
 	private boolean check_main_region_PawnState_Vertical__choice_0_tr0_tr0() {
-		return (operationCallback.pawnGetRow()>3 && operationCallback.pawnGetRow()<7);
+		return (operationCallback.pawnGetRow()>=3 && operationCallback.pawnGetRow()<=7);
 	}
 	
 	private boolean check_main_region_PawnState_Vertical__choice_0_tr1_tr1() {
@@ -333,7 +333,7 @@ public class DefaultSMStatemachine implements IDefaultSMStatemachine {
 	}
 	
 	private boolean check_main_region_PawnState_Horizontal__choice_0_tr1_tr1() {
-		return (operationCallback.pawnGetCol()>3 && operationCallback.pawnGetCol()<7);
+		return (operationCallback.pawnGetCol()>=3 && operationCallback.pawnGetCol()<=7);
 	}
 	
 	private boolean check_main_region_PawnState_Horizontal__choice_0_tr2_tr2() {
