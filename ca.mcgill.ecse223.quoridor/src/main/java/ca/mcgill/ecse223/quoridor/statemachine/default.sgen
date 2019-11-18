@@ -1,0 +1,15 @@
+GeneratorModel for yakindu::java {
+
+	statechart default {
+
+		feature Outlet {
+			//targetProject = "ca.mcgill.ecse223.quoridor"
+			targetProject = "ca.mcgill.ecse223.quoridor"
+			targetFolder = "src/main/java"
+		}
+		
+		feature Naming {
+   			 basePackage = "ca.mcgill.ecse223.quoridor.statemachine"
+		}
+	}
+}

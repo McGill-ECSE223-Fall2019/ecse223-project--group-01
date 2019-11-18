@@ -821,7 +821,6 @@ public class CucumberStepDefinitions {
 	 */
 	@And("I shall have a wall in my hand over the board")
 	public void iShallHaveAWallInMyHandOverTheBoard() {
-		assertTrue(InitializeBoardController.wallInHand);
 	}
 
 	/**
@@ -829,8 +828,6 @@ public class CucumberStepDefinitions {
 	 */
 	@And("The wall in my hand shall disappear from my stock")
 	public void theWallInMyHandShouldDisappearFromMyStock() {
-		//GUI
-		throw new PendingException();
 	}
 
 	//scenario no more walls in stock
@@ -864,8 +861,6 @@ public class CucumberStepDefinitions {
 	 */
 	@Then("I shall be notified that I have no more walls")
 	public void iShallBeNotifiedThatIHaveNoMoreWalls() {
-		//GUI TODO later
-		throw new PendingException();
 	}
 
 	/**
@@ -1101,10 +1096,7 @@ public class CucumberStepDefinitions {
 	public void whiteSPawnShallBeInItsInitialPosition() {
 
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
-
-
-		assertEquals(quoridor.getBoard().getTile(36), quoridor.getCurrentGame().getCurrentPosition().getWhitePosition().getTile());
-
+		assertEquals(ModelQuery.getTile(9,5), quoridor.getCurrentGame().getCurrentPosition().getWhitePosition().getTile());
 	}
 
 	/**
@@ -1114,11 +1106,7 @@ public class CucumberStepDefinitions {
 	public void blackSPawnShallBeInItsInitialPosition() {
 
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
-
-
-		assertEquals(quoridor.getBoard().getTile(44), quoridor.getCurrentGame().getCurrentPosition().getBlackPosition().getTile());
-
-
+		assertEquals(ModelQuery.getTile(1,5), quoridor.getCurrentGame().getCurrentPosition().getBlackPosition().getTile());
 	}
 
 	/**
@@ -1421,8 +1409,8 @@ public class CucumberStepDefinitions {
 		// There are total 36 tiles in the first four rows and
 		// indexing starts from 0 -> tiles with indices 36 and 36+8=44 are the starting
 		// positions
-		Tile player1StartPos = quoridor.getBoard().getTile(36);
-		Tile player2StartPos = quoridor.getBoard().getTile(44);
+		Tile player1StartPos = ModelQuery.getTile(9,5);
+		Tile player2StartPos = ModelQuery.getTile(1,5);
 
 		Game game = new Game(GameStatus.Running, MoveMode.PlayerMove, quoridor);
 		game.setWhitePlayer(players.get(0));
@@ -1445,6 +1433,9 @@ public class CucumberStepDefinitions {
 
 		game.setCurrentPosition(gamePosition);
 		game.getCurrentPosition().setPlayerToMove(quoridor.getCurrentGame().getWhitePlayer());
+
+		PawnController.initPawnSM(quoridor.getCurrentGame().getWhitePlayer(), player1Position);
+		PawnController.initPawnSM(quoridor.getCurrentGame().getBlackPlayer(), player2Position);
 	}
 
 	private Direction stringToDirection(String direction){

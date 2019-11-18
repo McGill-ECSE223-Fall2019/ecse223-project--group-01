@@ -1,5 +1,13 @@
-/QuoridorGame.ump
-/ca/
-/main/
-/test/
-/default/
+# Ignore Gradle project-specific cache directory
+.gradle
+.idea
+
+# Ignore Gradle build output directory
+build
+ca.mcgill.ecse223.quoridor/
+
+#IDE settings
+.idea
+.settings
+.project
+.classpath
