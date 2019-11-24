@@ -67,7 +67,7 @@ public class InitializeBoardController extends ViewController{
     public Text x1;
     public Text x2;
 
-
+ 
     public void initialize() {
 
         //display player name
@@ -124,7 +124,7 @@ public class InitializeBoardController extends ViewController{
 
     public void switchTimer() {
 
-        if (timeline != null) {
+        if (timeline != null) { 
             timeline.stop();
         }
         // update timerLabel
@@ -136,7 +136,8 @@ public class InitializeBoardController extends ViewController{
             public void handle(ActionEvent t) {
                 Player currentPlayer = ModelQuery.getPlayerToMove();
                 if ((StartNewGameController.timeOver()) || isWallDrop || pawnMoved ) {
-                	
+                	System.out.println("woll " + isWallDrop);
+                	System.out.println("pon " + pawnMoved);
                 	SwitchPlayerController.switchActivePlayer();
                 	isWallDrop = false;
                 	pawnMoved = false;
@@ -175,10 +176,10 @@ public class InitializeBoardController extends ViewController{
 
     public void createNewWall(ActionEvent actionEvent) {
 
-    	if(!isWallDrop && pawnMoved) { //avoids issue with dropping multiple walls before turn ends
+    	if(!isWallDrop && !pawnMoved) { //avoids issue with dropping multiple walls before turn ends
     		
             // Check if there is already a wall in hand
-            // If so just cancel the wall move
+            // If so just cancel the wall move 
 	        if (wallInHand) {
 	            WallController.cancelWallMove();
 	            wallInHand = false;
@@ -417,29 +418,36 @@ public class InitializeBoardController extends ViewController{
             /*For handling pawn move*/
                 if (code.equals(KeyCode.I)) {
                     PawnController.movePawn("up");
+                    pawnMoved = true;
                 }
                 else if (code.equals(KeyCode.K)) {
                     PawnController.movePawn("down");
+                    pawnMoved = true;
                 }
                 else if (code.equals(KeyCode.J)) {
                     PawnController.movePawn("left");
+                    pawnMoved = true;
                 }
                 else if (code.equals(KeyCode.L)) {
                     PawnController.movePawn("right");
+                    pawnMoved = true;
                 }
                 else if (code.equals(KeyCode.U)) {
                     PawnController.movePawn("upleft");
+                    pawnMoved = true;
                 }
                 else if (code.equals(KeyCode.O)) {
                     PawnController.movePawn("upright");
+                    pawnMoved = true;
                 }
                 else if (code.equals(KeyCode.N)) {
                     PawnController.movePawn("downleft");
+                    pawnMoved = true;
                 }
                 else if (code.equals(KeyCode.COMMA)) {
                     PawnController.movePawn("downright");
+                    pawnMoved = true;
                 }
-                pawnMoved = true;
 
             refresh();
         }

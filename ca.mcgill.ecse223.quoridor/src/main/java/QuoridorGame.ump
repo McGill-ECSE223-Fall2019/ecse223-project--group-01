@@ -55,7 +55,8 @@ class Game {
 	0..1 gameAsBlack <@>- 0..1 Player blackPlayer;
 	0..1 gameAsRed <@>- 0..1 Player redPlayer;  
 	0..1 gameAsgreen <@>- 0..1 Player greenPlayer;
-	1 <@>- * Player players; // Add this for four player game
+	boolean isFourPlayer;
+	//1 <@>- * Player players; // Add this for four player games
 }
 
 class GamePosition {

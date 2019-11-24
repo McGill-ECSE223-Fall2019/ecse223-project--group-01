@@ -122,7 +122,7 @@ public class CucumberStepDefinitions {
 	public void aNewGameIsInitializing() throws Throwable {
 		initQuoridorAndBoard();
 		ArrayList<Player> players = createUsersAndPlayers("user1", "user2");
-		Game game = new Game(GameStatus.Initializing, MoveMode.PlayerMove, QuoridorApplication.getQuoridor());
+		Game game = new Game(GameStatus.Initializing, MoveMode.PlayerMove, false, QuoridorApplication.getQuoridor());
 		game.setWhitePlayer(players.get(0));
 		game.setBlackPlayer(players.get(1));
 	}
@@ -1267,9 +1267,7 @@ public class CucumberStepDefinitions {
 
 		/*Quoridor quoridor = QuoridorApplication.getQuoridor();
 		username = User.hasWithName(arg0);
-
 		if(username) {
-
 			System.out.println("The username " + arg0 + " already exists");
 		}
         */
@@ -1360,9 +1358,12 @@ public class CucumberStepDefinitions {
 		 *
 		 */
 		//@formatter:on
-		Player player1 = new Player(new Time(thinkingTime), user1, 9, Direction.Horizontal, ModelQuery.getCurrentGame());
-		Player player2 = new Player(new Time(thinkingTime), user2, 1, Direction.Horizontal, ModelQuery.getCurrentGame());
+		Player player1 = new Player(new Time(thinkingTime), user1, 9, Direction.Horizontal);
+		Player player2 = new Player(new Time(thinkingTime), user2, 1, Direction.Horizontal);
 
+		System.out.println("lodoko");
+		System.out.println(player1);
+		System.out.println(player2);
 		Player[] players = { player1, player2 };
 
 		// Create all walls. Walls with lower ID belong to player1,
@@ -1384,7 +1385,7 @@ public class CucumberStepDefinitions {
 
 	private void createAndInitializeGame(ArrayList<Player> players ) {
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
-		Game game = new Game(GameStatus.Initializing, MoveMode.PlayerMove, quoridor);
+		Game game = new Game(GameStatus.Initializing, MoveMode.PlayerMove, false, quoridor);
 		game.setWhitePlayer(players.get(0));
 		game.setBlackPlayer(players.get(1));
 
@@ -1395,9 +1396,9 @@ public class CucumberStepDefinitions {
 		User user1 = quoridor.addUser("userWhite");
 		User user2 = quoridor.addUser("userBlack");
 		int totalThinkingTime = 180;
-		Player player1 = new Player(new Time(totalThinkingTime), user1, 9, Direction.Horizontal, ModelQuery.getCurrentGame());
-		Player player2 = new Player(new Time(totalThinkingTime), user2, 1, Direction.Horizontal, ModelQuery.getCurrentGame());
-		Game game = new Game(GameStatus.ReadyToStart, MoveMode.PlayerMove, quoridor);
+		Player player1 = new Player(new Time(totalThinkingTime), user1, 9, Direction.Horizontal);
+		Player player2 = new Player(new Time(totalThinkingTime), user2, 1, Direction.Horizontal);
+		Game game = new Game(GameStatus.ReadyToStart, MoveMode.PlayerMove, false, quoridor);
 		game.setBlackPlayer(player2);
 		game.setWhitePlayer(player1);
 
@@ -1412,7 +1413,7 @@ public class CucumberStepDefinitions {
 		Tile player1StartPos = ModelQuery.getTile(9,5);
 		Tile player2StartPos = ModelQuery.getTile(1,5);
 
-		Game game = new Game(GameStatus.Running, MoveMode.PlayerMove, quoridor);
+		Game game = new Game(GameStatus.Running, MoveMode.PlayerMove, false, quoridor);
 		game.setWhitePlayer(players.get(0));
 		game.setBlackPlayer(players.get(1));
 
@@ -1480,6 +1481,5 @@ public class CucumberStepDefinitions {
 		WallMove move = new WallMove(0, 1, player1, board.getTile((row - 1) * 9 + col - 1), game, direction, wall);
 		game.setWallMoveCandidate(move);
 	}
-
 
 }

@@ -1,6 +1,7 @@
 package ca.mcgill.ecse223.quoridor.view;
 
 import ca.mcgill.ecse223.quoridor.controllers.BoardController;
+import ca.mcgill.ecse223.quoridor.controllers.ModelQuery;
 import ca.mcgill.ecse223.quoridor.controllers.PositionController;
 import ca.mcgill.ecse223.quoridor.controllers.StartNewGameController;
 import ca.mcgill.ecse223.quoridor.model.User;
@@ -28,7 +29,7 @@ public class NewGameMenuController extends ViewController {
     public TextField minutes;
     public TextField seconds;
     public Button confirm;
-    public ChoiceBox<String> existingWhiteChoices;
+    public ChoiceBox<String> existingWhiteChoices; 
     public ChoiceBox<String> existingBlackChoices;
     public ChoiceBox<String> existingRedChoices;
     public ChoiceBox<String> existingGreenChoices;
@@ -44,8 +45,8 @@ public class NewGameMenuController extends ViewController {
     public static String secS;
 
     public void initialize() {
-
-        StartNewGameController.initializeGame();
+    	
+        StartNewGameController.initializeGame(); 
         List<User> existingUsers = StartNewGameController.existedUsers();
         
         existingWhiteChoices.setOnAction(e -> whitePlayerName.setText(""));
@@ -236,8 +237,10 @@ public class NewGameMenuController extends ViewController {
             	}
             }
 
-            
             StartNewGameController.initializeGame();
+            if(numberPlayers.getSelectedToggle().equals(fourPlayer)) {
+            	ModelQuery.getCurrentGame().setIsFourPlayer(true);
+            }
             
             //setup user-player connections
             StartNewGameController.whitePlayerChoosesAUsername(whiteName); 

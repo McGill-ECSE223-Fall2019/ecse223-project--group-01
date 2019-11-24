@@ -32,7 +32,7 @@ public class ModelQuery {
     }
     
     public static boolean isFourPlayer() { //TODO
-    	return getCurrentGame().numberOfPlayers() == 4;
+    	return QuoridorApplication.getQuoridor().getCurrentGame().getIsFourPlayer();
     }
 
     public static Board getBoard(){
@@ -114,12 +114,24 @@ public class ModelQuery {
     public static PlayerPosition getBlackPosition(){
         return QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getBlackPosition();
     }
+    
+    public static PlayerPosition getRedPosition(){
+        return QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getRedPosition();
+    }
+    
+    public static PlayerPosition getGreenPosition(){
+        return QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getGreenPosition();
+    }
 
     public static PlayerPosition getPlayerPositionOfPlayerToMove(){
         if (ModelQuery.getPlayerToMove().equals(ModelQuery.getWhitePlayer())) {
             return ModelQuery.getWhitePosition();
         } else if (ModelQuery.getPlayerToMove().equals(ModelQuery.getBlackPlayer())) {
             return ModelQuery.getBlackPosition();
+        } else if (ModelQuery.getPlayerToMove().equals(ModelQuery.getRedPlayer())) {
+        	return ModelQuery.getRedPosition();
+        } else if (ModelQuery.getPlayerToMove().equals(ModelQuery.getGreenPlayer())) {
+        	return ModelQuery.getGreenPosition();
         }
         else{
             return null;

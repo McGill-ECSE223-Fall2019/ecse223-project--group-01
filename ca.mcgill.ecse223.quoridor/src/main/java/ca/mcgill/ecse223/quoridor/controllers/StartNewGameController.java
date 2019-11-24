@@ -21,7 +21,7 @@ public class StartNewGameController {
     private static long timeToSet;
 
 
-    public StartNewGameController(){};
+    public StartNewGameController(){}; 
 
     /**
      * @Author Fulin Huang
@@ -40,7 +40,7 @@ public class StartNewGameController {
         greenPlayerChooseName = false;
         thinkingTimeIsSet=false;
         Quoridor quoridor = QuoridorApplication.getQuoridor();
-        game = new Game(Game.GameStatus.Initializing, Game.MoveMode.PlayerMove, quoridor);
+        game = new Game(Game.GameStatus.Initializing, Game.MoveMode.PlayerMove, false, quoridor);
     }
 
     /**
@@ -63,7 +63,7 @@ public class StartNewGameController {
             whitePlayerChooseName = true;
         }
         int tempThinkingTime = 90;
-        Player player = new Player(new Time(tempThinkingTime), white_user, 9, Direction.Horizontal, ModelQuery.getCurrentGame());
+        Player player = new Player(new Time(tempThinkingTime), white_user, 9, Direction.Horizontal);
         ModelQuery.getCurrentGame().setWhitePlayer(player); //set White player
         ModelQuery.getWhitePlayer().setUser(white_user);
         
@@ -88,7 +88,7 @@ public class StartNewGameController {
             blackPlayerChooseName = true;
         }
         int tempThinkingTime = 90;
-        Player player = new Player(new Time(tempThinkingTime), black_user, 1, Direction.Vertical, ModelQuery.getCurrentGame());
+        Player player = new Player(new Time(tempThinkingTime), black_user, 1, Direction.Vertical);
         ModelQuery.getCurrentGame().setBlackPlayer(player);
         ModelQuery.getBlackPlayer().setUser(black_user);
 
@@ -113,7 +113,7 @@ public class StartNewGameController {
             redPlayerChooseName = true;
         }
         int tempThinkingTime = 90;
-        Player player = new Player(new Time(tempThinkingTime), red_user, 1, Direction.Vertical, ModelQuery.getCurrentGame());
+        Player player = new Player(new Time(tempThinkingTime), red_user, 1, Direction.Vertical);
         ModelQuery.getCurrentGame().setRedPlayer(player);
         ModelQuery.getRedPlayer().setUser(red_user);
 
@@ -138,7 +138,7 @@ public class StartNewGameController {
             greenPlayerChooseName = true;
         }
         int tempThinkingTime = 90;
-        Player player = new Player(new Time(tempThinkingTime), green_user, 1, Direction.Vertical, ModelQuery.getCurrentGame());
+        Player player = new Player(new Time(tempThinkingTime), green_user, 1, Direction.Vertical);
         ModelQuery.getCurrentGame().setGreenPlayer(player);
         ModelQuery.getGreenPlayer().setUser(green_user);
 
@@ -212,7 +212,6 @@ public class StartNewGameController {
         timeToSet = millis;
         timer.scheduleAtFixedRate(new TimerTask() {
             public void run () {
-
                     Player currentPlayer;
                     try {
                         if (timeToSet == 0) {
