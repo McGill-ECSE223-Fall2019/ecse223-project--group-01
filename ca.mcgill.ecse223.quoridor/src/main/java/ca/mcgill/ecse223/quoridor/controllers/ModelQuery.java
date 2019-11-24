@@ -102,9 +102,13 @@ public class ModelQuery {
 
     public static List<PlayerPosition> getAllPlayerPosition(){
         List<PlayerPosition> positions = new ArrayList<>();
-        positions.add(QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getBlackPosition());
         positions.add(QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getWhitePosition());
-        return positions;
+        positions.add(QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getBlackPosition());
+        if(isFourPlayer()) {
+        	positions.add(QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getRedPosition());
+        	positions.add(QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getGreenPosition());
+        }
+        return positions; 
     }
 
     public static PlayerPosition getWhitePosition(){

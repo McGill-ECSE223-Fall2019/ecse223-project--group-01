@@ -417,36 +417,28 @@ public class InitializeBoardController extends ViewController{
         if (pawnInHand){
             /*For handling pawn move*/
                 if (code.equals(KeyCode.I)) {
-                    PawnController.movePawn("up");
-                    pawnMoved = true;
+                    pawnMoved = PawnController.movePawn("up");
                 }
                 else if (code.equals(KeyCode.K)) {
-                    PawnController.movePawn("down");
-                    pawnMoved = true;
+                	pawnMoved = PawnController.movePawn("down");
                 }
                 else if (code.equals(KeyCode.J)) {
-                    PawnController.movePawn("left");
-                    pawnMoved = true;
+                	pawnMoved = PawnController.movePawn("left");
                 }
                 else if (code.equals(KeyCode.L)) {
-                    PawnController.movePawn("right");
-                    pawnMoved = true;
+                	pawnMoved = PawnController.movePawn("right");
                 }
                 else if (code.equals(KeyCode.U)) {
-                    PawnController.movePawn("upleft");
-                    pawnMoved = true;
+                	pawnMoved = PawnController.movePawn("upleft");
                 }
                 else if (code.equals(KeyCode.O)) {
-                    PawnController.movePawn("upright");
-                    pawnMoved = true;
+                	pawnMoved = PawnController.movePawn("upright");
                 }
                 else if (code.equals(KeyCode.N)) {
-                    PawnController.movePawn("downleft");
-                    pawnMoved = true;
+                	pawnMoved = PawnController.movePawn("downleft");
                 }
                 else if (code.equals(KeyCode.COMMA)) {
-                    PawnController.movePawn("downright");
-                    pawnMoved = true;
+                	pawnMoved = PawnController.movePawn("downright");
                 }
 
             refresh();
