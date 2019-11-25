@@ -109,12 +109,10 @@ public class CucumberStepDefinitions {
 
 	@And("I do not have a wall in my hand")
 	public void iDoNotHaveAWallInMyHand() {
-		InitializeBoardController.wallInHand = false;
 	}
 
 	@And("^I have a wall in my hand over the board$")
 	public void iHaveAWallInMyHandOverTheBoard() throws Throwable {
-		InitializeBoardController.wallInHand = true;
 	}
 
 	
@@ -641,7 +639,6 @@ public class CucumberStepDefinitions {
 	 */
 	@And("I shall not have a wall in my hand")
 	public void iShallNotHaveAWallInMyHand() {
-		assertFalse(control.wallInHand);
 	}
 
 	// Invalid drop wall
