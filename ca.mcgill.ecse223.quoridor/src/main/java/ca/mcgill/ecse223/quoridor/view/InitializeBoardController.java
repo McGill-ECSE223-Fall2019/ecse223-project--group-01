@@ -27,9 +27,8 @@ import java.util.List;
 
 public class InitializeBoardController extends ViewController{
 
-    public static boolean wallInHand = false;
-    public static boolean pawnInHand = false;
-    KeyCode previousKey = null;
+    enum PlayerState {WALL, PAWN, IDLE};
+    PlayerState state = PlayerState.IDLE;
 
     @FXML
     private AnchorPane board;
@@ -119,6 +118,7 @@ public class InitializeBoardController extends ViewController{
     		timerForGreenPlayer.setText(initialTime);
     	} 
 
+        state = PlayerState.IDLE;
         switchTimer();
     }
 
@@ -133,7 +133,7 @@ public class InitializeBoardController extends ViewController{
         timeline.setCycleCount(Timeline.INDEFINITE);
 
         EventHandler onFinished = new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
+            public void handle(ActionEvent t) { 
                 Player currentPlayer = ModelQuery.getPlayerToMove();
                 if ((StartNewGameController.timeOver()) || isWallDrop || pawnMoved ) {
                 	isWallDrop = false;
@@ -172,34 +172,31 @@ public class InitializeBoardController extends ViewController{
     }
 
     public void createNewWall(ActionEvent actionEvent) {
-
-    	if(!isWallDrop && !pawnMoved) { //avoids issue with dropping multiple walls before turn ends
-    		
-            // Check if there is already a wall in hand
-            // If so just cancel the wall move 
-	        if (wallInHand) {
-	            WallController.cancelWallMove();
-	            wallInHand = false;
-	            refresh();
-	        }
-	        //
-	        else if (WallController.grabWall()) {
-	            wallInHand = true;
-	            refresh();
-	        } else {
-	            System.out.println("No more walls");
-	        }
-    	}
+        // Check if there is already a wall in hand
+        // If so just cancel the wall move
+        if (state == PlayerState.WALL) {
+            WallController.cancelWallMove();
+            state = PlayerState.IDLE;
+        }
+        //
+        else if (WallController.grabWall()) {
+            state = PlayerState.WALL;
+        } else {
+            System.out.println("No more walls");
+        }
+        refresh();
     }
 
     public void handleGrabPawn(ActionEvent actionEvent) {
-        if (wallInHand) {
-            WallController.cancelWallMove();
-            wallInHand = false;
-            refresh();
+        if(state == PlayerState.PAWN){
+            state = PlayerState.IDLE;
         }
-        pawnInHand = true;
-         refresh();
+
+        else {
+            state = PlayerState.PAWN;
+            WallController.cancelWallMove();
+        }
+        refresh();
     }
 
 
@@ -338,10 +335,6 @@ public class InitializeBoardController extends ViewController{
         Tile tile = move.getTargetTile();
         Direction dir = move.getWallDirection();
         Pair<Integer, Integer> coord = convertWallToCanvas(tile.getRow(), tile.getColumn());
-//        Pair<Integer, Integer> coord = convertWallToCanvas(, 1);
-
-//        Rectangle rectangle = new Rectangle(coord.getKey(), coord.getValue(), 9, 77);
-
         Rectangle rectangle = new Rectangle(coord.getKey(), coord.getValue(), 9, 77);
 
         Player white = ModelQuery.getWhitePlayer();
@@ -381,7 +374,7 @@ public class InitializeBoardController extends ViewController{
     public void handleKeyPressed(KeyEvent event) {
         KeyCode code = event.getCode();
 
-        if(wallInHand){
+        if(state==PlayerState.WALL){
             //Moves the wall up
             if(code.equals(KeyCode.W)){
                 shiftWall("up");
@@ -401,7 +394,7 @@ public class InitializeBoardController extends ViewController{
             //Confirm wall placement and drops the wall
             else if(code.equals(KeyCode.E)){
                 if(WallController.dropWall()){
-                    wallInHand=false;
+                    state = PlayerState.IDLE;
                     isWallDrop=true;
                 }
             }
@@ -411,7 +404,7 @@ public class InitializeBoardController extends ViewController{
             refresh();
         }
 
-        if (pawnInHand){
+        if (state==PlayerState.PAWN){
             /*For handling pawn move*/
                 if (code.equals(KeyCode.I)) {
                     pawnMoved = PawnController.movePawn("up");
@@ -437,7 +430,6 @@ public class InitializeBoardController extends ViewController{
                 else if (code.equals(KeyCode.COMMA)) {
                 	pawnMoved = PawnController.movePawn("downright");
                 }
-
             refresh();
         }
     }
@@ -445,7 +437,7 @@ public class InitializeBoardController extends ViewController{
     
     public void dropWall(){
         if(WallController.dropWall()){
-            wallInHand=false;
+            state = PlayerState.IDLE;
         }
     }
 
@@ -466,7 +458,7 @@ public class InitializeBoardController extends ViewController{
     }
 
     public void handleRotate(ActionEvent event){
-        if(wallInHand){
+        if(state==PlayerState.WALL){
             WallController.rotateWall();
             refresh();
         }
