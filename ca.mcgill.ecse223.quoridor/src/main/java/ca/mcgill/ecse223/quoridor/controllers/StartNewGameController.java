@@ -259,7 +259,6 @@ public class StartNewGameController {
         ModelQuery.getBlackPlayer().setRemainingTime(totalThinkingTime);
 
         if(ModelQuery.isFourPlayer()) {
-
         	ModelQuery.getRedPlayer().setRemainingTime(totalThinkingTime);
         	ModelQuery.getGreenPlayer().setRemainingTime(totalThinkingTime);
         }

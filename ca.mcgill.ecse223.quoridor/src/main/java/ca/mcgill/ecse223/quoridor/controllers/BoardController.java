@@ -65,31 +65,33 @@ public class BoardController {
         for(int i =1; i <= 10; i++){
             ModelQuery.getCurrentGame().getWhitePlayer().addWall(i);
             ModelQuery.getCurrentGame().getBlackPlayer().addWall(10+i);
-     
-	        ModelQuery.getCurrentGame().getCurrentPosition().setPlayerToMove(ModelQuery.getWhitePlayer());
-	
-	        for(Wall wall: ModelQuery.getWhitePlayer().getWalls()){
-	            ModelQuery.getCurrentGame().getCurrentPosition().addWhiteWallsInStock(wall);
-	        }
-	
-	        for(Wall wall: ModelQuery.getBlackPlayer().getWalls()){
-	            ModelQuery.getCurrentGame().getCurrentPosition().addBlackWallsInStock(wall);
-	        }
-	        
-	        
             if(ModelQuery.isFourPlayer()) {
             	ModelQuery.getCurrentGame().getRedPlayer().addWall(20+i);
             	ModelQuery.getCurrentGame().getGreenPlayer().addWall(30+i);
-            	
-    	        for(Wall wall: ModelQuery.getRedPlayer().getWalls()){
-    	            ModelQuery.getCurrentGame().getCurrentPosition().addRedWallsInStock(wall);
-    	        }
-    	        
-    	        for(Wall wall: ModelQuery.getGreenPlayer().getWalls()){
-    	            ModelQuery.getCurrentGame().getCurrentPosition().addGreenWallsInStock(wall);
-    	        }
             }
         }
+     
+        ModelQuery.getCurrentGame().getCurrentPosition().setPlayerToMove(ModelQuery.getWhitePlayer());
+
+        for(Wall wall: ModelQuery.getWhitePlayer().getWalls()){
+            ModelQuery.getCurrentGame().getCurrentPosition().addWhiteWallsInStock(wall);
+        }
+
+        for(Wall wall: ModelQuery.getBlackPlayer().getWalls()){
+            ModelQuery.getCurrentGame().getCurrentPosition().addBlackWallsInStock(wall);
+        }
+        
+        if(ModelQuery.isFourPlayer()) {
+	        for(Wall wall: ModelQuery.getRedPlayer().getWalls()){
+	            ModelQuery.getCurrentGame().getCurrentPosition().addRedWallsInStock(wall);
+	        }
+	        
+	        for(Wall wall: ModelQuery.getGreenPlayer().getWalls()){
+	            ModelQuery.getCurrentGame().getCurrentPosition().addGreenWallsInStock(wall);
+	        }
+        }
+        
+        
 	    return true;
 
     }

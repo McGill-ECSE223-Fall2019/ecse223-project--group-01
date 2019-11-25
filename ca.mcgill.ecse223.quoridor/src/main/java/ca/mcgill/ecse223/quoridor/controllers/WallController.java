@@ -87,12 +87,16 @@ public class WallController {
 
         if(player.equals(ModelQuery.getWhitePlayer())) {
             ModelQuery.getCurrentGame().getCurrentPosition().addWhiteWallsOnBoard(move.getWallPlaced());
+            SwitchPlayerController.switchActivePlayer();
         }else if(player.equals(ModelQuery.getBlackPlayer())){
             ModelQuery.getCurrentGame().getCurrentPosition().addBlackWallsOnBoard(move.getWallPlaced());
+            SwitchPlayerController.switchActivePlayer();
         }else if(player.equals(ModelQuery.getRedPlayer())) {
         	ModelQuery.getCurrentGame().getCurrentPosition().addRedWallsOnBoard(move.getWallPlaced());
+        	SwitchPlayerController.switchActivePlayer();
         }else {
         	ModelQuery.getCurrentGame().getCurrentPosition().addGreenWallsOnBoard(move.getWallPlaced());
+        	SwitchPlayerController.switchActivePlayer();
         }
 
         return true;

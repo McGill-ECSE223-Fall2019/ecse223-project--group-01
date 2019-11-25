@@ -602,7 +602,7 @@ public class CucumberStepDefinitions {
 		Game game = ModelQuery.getCurrentGame();
 		Direction dir = this.stringToDirection(direction);
 		int move_size = game.getMoves().size();
-
+		
 //		Check if at least one move has been registered
 		assertTrue( move_size > 0);
 		Move move = game.getMoves().get(move_size-1);
@@ -627,13 +627,13 @@ public class CucumberStepDefinitions {
 
 		// The wallmove candidate should be gone
 		assertNull(game.getWallMoveCandidate());
+		
 
 		// White should have more walls on board
 		assertEquals(game.getCurrentPosition().getWhiteWallsOnBoard().size(), 2);
 
 		// White should have less walls in stock
         assertEquals(9, game.getCurrentPosition().getWhiteWallsInStock().size());
-
 	}
 
 	/**
@@ -686,7 +686,9 @@ public class CucumberStepDefinitions {
 	    // operating under the assumption that is was white's turn to move
 		Player player1 = ModelQuery.getBlackPlayer();
 		Player playerToMove = ModelQuery.getPlayerToMove();
+
 		assertEquals(playerToMove, player1);
+		//assertEquals(playerToMove, player1);
 	}
 
 	/**
@@ -1267,7 +1269,9 @@ public class CucumberStepDefinitions {
 
 		/*Quoridor quoridor = QuoridorApplication.getQuoridor();
 		username = User.hasWithName(arg0);
+
 		if(username) {
+
 			System.out.println("The username " + arg0 + " already exists");
 		}
         */
@@ -1361,9 +1365,6 @@ public class CucumberStepDefinitions {
 		Player player1 = new Player(new Time(thinkingTime), user1, 9, Direction.Horizontal);
 		Player player2 = new Player(new Time(thinkingTime), user2, 1, Direction.Horizontal);
 
-		System.out.println("lodoko");
-		System.out.println(player1);
-		System.out.println(player2);
 		Player[] players = { player1, player2 };
 
 		// Create all walls. Walls with lower ID belong to player1,
@@ -1401,7 +1402,6 @@ public class CucumberStepDefinitions {
 		Game game = new Game(GameStatus.ReadyToStart, MoveMode.PlayerMove, false, quoridor);
 		game.setBlackPlayer(player2);
 		game.setWhitePlayer(player1);
-
 	}
 
 
@@ -1481,5 +1481,6 @@ public class CucumberStepDefinitions {
 		WallMove move = new WallMove(0, 1, player1, board.getTile((row - 1) * 9 + col - 1), game, direction, wall);
 		game.setWallMoveCandidate(move);
 	}
+
 
 }

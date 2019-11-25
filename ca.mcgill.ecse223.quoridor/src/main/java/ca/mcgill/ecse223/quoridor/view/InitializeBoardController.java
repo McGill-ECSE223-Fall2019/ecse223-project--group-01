@@ -136,9 +136,6 @@ public class InitializeBoardController extends ViewController{
             public void handle(ActionEvent t) {
                 Player currentPlayer = ModelQuery.getPlayerToMove();
                 if ((StartNewGameController.timeOver()) || isWallDrop || pawnMoved ) {
-                	System.out.println("woll " + isWallDrop);
-                	System.out.println("pon " + pawnMoved);
-                	SwitchPlayerController.switchActivePlayer();
                 	isWallDrop = false;
                 	pawnMoved = false;
 
