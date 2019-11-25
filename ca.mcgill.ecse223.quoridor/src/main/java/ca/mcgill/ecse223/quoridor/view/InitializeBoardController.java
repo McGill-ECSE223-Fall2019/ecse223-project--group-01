@@ -133,7 +133,7 @@ public class InitializeBoardController extends ViewController{
         timeline.setCycleCount(Timeline.INDEFINITE);
 
         EventHandler onFinished = new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
+            public void handle(ActionEvent t) { 
                 Player currentPlayer = ModelQuery.getPlayerToMove();
                 if ((StartNewGameController.timeOver()) || isWallDrop || pawnMoved ) {
                 	isWallDrop = false;

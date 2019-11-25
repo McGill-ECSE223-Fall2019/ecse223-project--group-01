@@ -13,16 +13,14 @@ public class SwitchPlayerController {
 	 */
 	
 	public static void switchActivePlayer() {
+		/*
 		Player whitePlayer = ModelQuery.getWhitePlayer();
 		Player blackPlayer = ModelQuery.getBlackPlayer();
 		Player redPlayer = ModelQuery.getRedPlayer();
 		Player greenPlayer = ModelQuery.getGreenPlayer();
 		
-		Player currentPlayer = ModelQuery.getPlayerToMove();
-		
 		if (currentPlayer.equals(whitePlayer)) {
-			//ModelQuery.getWhitePlayer().setRemainingTime(new Time(ModelQuery.getWhitePlayer().getRemainingTime().getTime()-timeSpent.toMillis()));
-			
+			//ModelQuery.getWhitePlayer().setRemainingTime(new Time(ModelQuery.getWhitePlayer().getRemainingTime().getTime()-timeSpent.toMillis()));			
 			QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().setPlayerToMove(currentPlayer.getNextPlayer());
 		} else if (currentPlayer.equals(blackPlayer)) {
 			//ModelQuery.getBlackPlayer().setRemainingTime(new Time(ModelQuery.getBlackPlayer().getRemainingTime().getTime()-timeSpent.toMillis()));
@@ -34,6 +32,12 @@ public class SwitchPlayerController {
 			//ModelQuery.getBlackPlayer().setRemainingTime(new Time(ModelQuery.getGreenPlayer().getRemainingTime().getTime()-timeSpent.toMillis()));
 			QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().setPlayerToMove(currentPlayer.getNextPlayer());
 		}
-	
+		*/
+		
+		Player currentPlayer = ModelQuery.getPlayerToMove();
+		//switch active player
+		QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().setPlayerToMove(currentPlayer.getNextPlayer());
+		//record current gamestate
+		ModelQuery.getCurrentGame().addPosition(ModelQuery.getCurrentPosition());
 	}
 }
