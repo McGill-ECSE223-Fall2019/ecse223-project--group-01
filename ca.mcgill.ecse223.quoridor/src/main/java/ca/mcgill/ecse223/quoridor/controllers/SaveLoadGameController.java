@@ -185,6 +185,7 @@ public class SaveLoadGameController {
                 PawnController.initPawnSM(quoridor.getCurrentGame().getWhitePlayer(), whitePlayerPosition);
 
                 if(!ValidatePositionController.validateOverlappingPawns()){
+                    isSaveMoveValid = false;
                     return false;
                 }
 
@@ -224,8 +225,10 @@ public class SaveLoadGameController {
                             //Moved the pawn before
                             if(wm > 0){
                                 side = GetPawnMoveDirection(whiteMoves.get(wm-1), whiteMoves.get(wm));
-                                if(side.equals(""))
+                                if(side.equals("")) {
+                                    isSaveMoveValid = false;
                                     return false;
+                                }
                                 PawnController.movePawn(side);
                             }
                             //Still at default position
@@ -237,6 +240,7 @@ public class SaveLoadGameController {
                             wm++;
                         } else if (!whiteWalls.isEmpty() && whiteWalls.get(ww)[0] == i + 1) {
                             if(!ExecuteWallMove(whiteWalls, ww, i + 1, ModelQuery.getWhitePlayer())){
+                                isSaveMoveValid = false;
                                 return false;
                             }
                             ww++;
@@ -257,8 +261,10 @@ public class SaveLoadGameController {
                             //Moved the pawn before
                             if(bm > 0){
                                 side = GetPawnMoveDirection(blackMoves.get(wm-1), blackMoves.get(wm));
-                                if(side.equals(""))
+                                if(side.equals("")){
+                                    isSaveMoveValid = false;
                                     return false;
+                                }
                                 PawnController.movePawn(side);
                             }
                             //Still at default position
@@ -270,6 +276,7 @@ public class SaveLoadGameController {
                             bm++;
                         } else if (!blackWalls.isEmpty() && blackWalls.get(bw)[0] == i + 1) {
                             if(!ExecuteWallMove(blackWalls, bw, i + 1, ModelQuery.getBlackPlayer())){
+                                isSaveMoveValid = false;
                                 return false;
                             }
                             bw++;
@@ -350,10 +357,14 @@ public class SaveLoadGameController {
         return true;
     }
 
-    private static boolean ExecutePawnMove(){
-        return true;
-    }
-
+    /**
+     * This helper method will read the new and old move sets and determine
+     * the direction in movement performed by the pawn
+     * @param oldMove   Array of the move coordinates
+     * @param newMove   Array of the move coordinates
+     * @return          String that contains the direction
+     *                  Empty string if an error occured
+     */
     private static String GetPawnMoveDirection(int[] oldMove, int[] newMove){
         //[0] MoveNumber, [1] Row, [2] Column
         if(newMove[1] == oldMove[1] && newMove[2] < oldMove[2]){
