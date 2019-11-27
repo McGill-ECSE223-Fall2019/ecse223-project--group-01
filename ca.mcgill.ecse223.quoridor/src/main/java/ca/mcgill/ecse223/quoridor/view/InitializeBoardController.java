@@ -415,9 +415,7 @@ public class InitializeBoardController extends ViewController{
             //Confirm wall placement and drops the wall
             else if(code.equals(KeyCode.E)){
                 if(WallController.dropWall()){
-                    //wallInHand=false;
                     state = PlayerState.IDLE;
-                    //SwitchPlayerController.switchActivePlayer();
                     isWallDrop=true;
                 }
             }
