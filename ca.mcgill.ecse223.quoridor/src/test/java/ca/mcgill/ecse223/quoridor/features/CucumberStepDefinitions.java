@@ -109,12 +109,10 @@ public class CucumberStepDefinitions {
 
 	@And("I do not have a wall in my hand")
 	public void iDoNotHaveAWallInMyHand() {
-		InitializeBoardController.wallInHand = false;
 	}
 
 	@And("^I have a wall in my hand over the board$")
 	public void iHaveAWallInMyHandOverTheBoard() throws Throwable {
-		InitializeBoardController.wallInHand = true;
 	}
 
 	
@@ -122,7 +120,7 @@ public class CucumberStepDefinitions {
 	public void aNewGameIsInitializing() throws Throwable {
 		initQuoridorAndBoard();
 		ArrayList<Player> players = createUsersAndPlayers("user1", "user2");
-		Game game = new Game(GameStatus.Initializing, MoveMode.PlayerMove, QuoridorApplication.getQuoridor());
+		Game game = new Game(GameStatus.Initializing, MoveMode.PlayerMove, false, QuoridorApplication.getQuoridor());
 		game.setWhitePlayer(players.get(0));
 		game.setBlackPlayer(players.get(1));
 	}
@@ -628,12 +626,12 @@ public class CucumberStepDefinitions {
 		// The wallmove candidate should be gone
 		assertNull(game.getWallMoveCandidate());
 
+
 		// White should have more walls on board
 		assertEquals(game.getCurrentPosition().getWhiteWallsOnBoard().size(), 2);
 
 		// White should have less walls in stock
         assertEquals(9, game.getCurrentPosition().getWhiteWallsInStock().size());
-
 	}
 
 	/**
@@ -641,7 +639,6 @@ public class CucumberStepDefinitions {
 	 */
 	@And("I shall not have a wall in my hand")
 	public void iShallNotHaveAWallInMyHand() {
-		assertFalse(control.wallInHand);
 	}
 
 	// Invalid drop wall
@@ -686,7 +683,9 @@ public class CucumberStepDefinitions {
 	    // operating under the assumption that is was white's turn to move
 		Player player1 = ModelQuery.getBlackPlayer();
 		Player playerToMove = ModelQuery.getPlayerToMove();
+
 		assertEquals(playerToMove, player1);
+		//assertEquals(playerToMove, player1);
 	}
 
 	/**
@@ -1384,7 +1383,7 @@ public class CucumberStepDefinitions {
 
 	private void createAndInitializeGame(ArrayList<Player> players ) {
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
-		Game game = new Game(GameStatus.Initializing, MoveMode.PlayerMove, quoridor);
+		Game game = new Game(GameStatus.Initializing, MoveMode.PlayerMove, false, quoridor);
 		game.setWhitePlayer(players.get(0));
 		game.setBlackPlayer(players.get(1));
 
@@ -1397,10 +1396,9 @@ public class CucumberStepDefinitions {
 		int totalThinkingTime = 180;
 		Player player1 = new Player(new Time(totalThinkingTime), user1, 9, Direction.Horizontal);
 		Player player2 = new Player(new Time(totalThinkingTime), user2, 1, Direction.Horizontal);
-		Game game = new Game(GameStatus.ReadyToStart, MoveMode.PlayerMove, quoridor);
+		Game game = new Game(GameStatus.ReadyToStart, MoveMode.PlayerMove, false, quoridor);
 		game.setBlackPlayer(player2);
 		game.setWhitePlayer(player1);
-
 	}
 
 
@@ -1412,7 +1410,7 @@ public class CucumberStepDefinitions {
 		Tile player1StartPos = ModelQuery.getTile(9,5);
 		Tile player2StartPos = ModelQuery.getTile(1,5);
 
-		Game game = new Game(GameStatus.Running, MoveMode.PlayerMove, quoridor);
+		Game game = new Game(GameStatus.Running, MoveMode.PlayerMove, false, quoridor);
 		game.setWhitePlayer(players.get(0));
 		game.setBlackPlayer(players.get(1));
 
@@ -1484,67 +1482,67 @@ public class CucumberStepDefinitions {
 
 	@cucumber.api.java.en.When("I initiate to load a game in {string}")
 	public void iInitiateToLoadAGameIn(String arg0) {
-		
+
 	}
 
 	@cucumber.api.java.en.And("Each game move is valid")
 	public void eachGameMoveIsValid() {
-		
+
 	}
 
 	@cucumber.api.java.en.And("The game has no final results")
 	public void theGameHasNoFinalResults() {
-		
+
 	}
 
 	@cucumber.api.java.en.Then("It shall be {string}'s turn")
 	public void itShallBeSTurn(String arg0) {
-		
+
 	}
 
 	@cucumber.api.java.en.And("{string} shall be at <p_row>:<p_col>")
 	public void shallBeAtP_row(String arg0) {
-		
+
 	}
 
 	@cucumber.api.java.en.And("{string} shall be at <o_row>:<p_col>")
 	public void shallBeAtO_row(String arg0) {
-		
+
 	}
 
 	@cucumber.api.java.en.And("{string} shall have a <pw_orientation> wall at <pw_row>:<p_col>")
 	public void shallHaveAPw_orientationWallAtPw_row(String arg0) {
-		
+
 	}
 
 	@cucumber.api.java.en.And("{string} shall have a <ow_orientation> wall at <ow_row>:<p_col>")
 	public void shallHaveAOw_orientationWallAtOw_row(String arg0) {
-		
+
 	}
 
 	@cucumber.api.java.en.And("Both players shall have <remaining_walls> in their stacks")
 	public void bothPlayersShallHaveRemaining_wallsInTheirStacks() {
-		
+
 	}
 
 	@cucumber.api.java.en.And("The game has a final result")
 	public void theGameHasAFinalResult() {
-		
+
 	}
 
 	@cucumber.api.java.en.Then("The game shall be in replay mode")
 	public void theGameShallBeInReplayMode() {
-		
+
 	}
 
 	@cucumber.api.java.en.When("I initiate to load a saved game {string}")
 	public void iInitiateToLoadASavedGame(String arg0) {
-		
+
 	}
 
 	@cucumber.api.java.en.And("The game to load has an invalid move")
 	public void theGameToLoadHasAnInvalidMove() {
-		
+
 	}
 
 	@cucumber.api.java.en.Then("The game shall notify the user that the game file is invalid")

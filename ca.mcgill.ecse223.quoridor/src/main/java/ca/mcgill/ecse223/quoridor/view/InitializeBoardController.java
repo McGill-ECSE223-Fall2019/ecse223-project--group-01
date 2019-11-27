@@ -27,26 +27,46 @@ import java.util.List;
 
 public class InitializeBoardController extends ViewController{
 
-    public static boolean wallInHand = false;
-    public static boolean pawnInHand = false;
-    KeyCode previousKey = null;
+    enum PlayerState {WALL, PAWN, IDLE};
+    PlayerState state = PlayerState.IDLE;
 
     @FXML
     private AnchorPane board;
     public Text whitePlayerName;
     public Text blackPlayerName;
+    public Text redPlayerName;
+    public Text greenPlayerName;
+    
     public Text whitePlayerName1;
     public Text blackPlayerName1;
+    public Text redPlayerName1;
+    public Text greenPlayerName1;
+    
     public Label timerForWhitePlayer;
     public Label timerForBlackPlayer;
+    public Label timerForRedPlayer;
+    public Label timerForGreenPlayer;
+    
     public Text whiteNumOfWalls;
     public Text blackNumOfWalls;
+    public Text redNumOfWalls;
+    public Text greenNumOfWalls;
+    
     public Timeline timeline;
+    
     public static boolean playerIsWhite = false;
     public static boolean isWallDrop = false;
+    public static boolean pawnMoved = false;
     public String initialTime;
+    
+    public Circle c1;
+    public Circle c2;
+    public Rectangle r1;
+    public Rectangle r2;
+    public Text x1;
+    public Text x2;
 
-
+ 
     public void initialize() {
 
         //display player name
@@ -57,6 +77,33 @@ public class InitializeBoardController extends ViewController{
         whitePlayerName1.setText(ModelQuery.getWhitePlayer().getUser().getName());
         blackPlayerName1.setText(ModelQuery.getBlackPlayer().getUser().getName());
 
+        //if 4player mode
+        if(ModelQuery.isFourPlayer()) {
+            //display player name
+            redPlayerName.setText(ModelQuery.getRedPlayer().getUser().getName());
+            greenPlayerName.setText(ModelQuery.getGreenPlayer().getUser().getName());
+
+            //display player name on the thinking time section
+            redPlayerName1.setText(ModelQuery.getRedPlayer().getUser().getName());
+            greenPlayerName1.setText(ModelQuery.getGreenPlayer().getUser().getName());
+        } else { //if 2player mode, set 4player content invisible
+        	redPlayerName.setVisible(false);
+        	redPlayerName1.setVisible(false);
+        	redNumOfWalls.setVisible(false);
+        	timerForRedPlayer.setVisible(false);
+        	greenPlayerName.setVisible(false);
+        	greenPlayerName1.setVisible(false);
+        	greenNumOfWalls.setVisible(false);
+        	timerForGreenPlayer.setVisible(false);
+        	c1.setVisible(false);
+        	c2.setVisible(false);
+        	r1.setVisible(false);
+        	r2.setVisible(false);
+        	x1.setVisible(false);
+        	x2.setVisible(false);
+
+        }
+        
         //start the clock once the game is initiated
         StartNewGameController.startTheClock();
 
@@ -65,14 +112,19 @@ public class InitializeBoardController extends ViewController{
 
     	timerForWhitePlayer.setText(initialTime);
     	timerForBlackPlayer.setText(initialTime);
+    	
+    	if(ModelQuery.isFourPlayer()) {
+    		timerForRedPlayer.setText(initialTime);
+    		timerForGreenPlayer.setText(initialTime);
+    	} 
 
-
+        state = PlayerState.IDLE;
         switchTimer();
     }
 
     public void switchTimer() {
 
-        if (timeline != null) {
+        if (timeline != null) { 
             timeline.stop();
         }
         // update timerLabel
@@ -81,31 +133,33 @@ public class InitializeBoardController extends ViewController{
         timeline.setCycleCount(Timeline.INDEFINITE);
 
         EventHandler onFinished = new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
+            public void handle(ActionEvent t) { 
                 Player currentPlayer = ModelQuery.getPlayerToMove();
-                if ((StartNewGameController.timeOver()) || (isWallDrop == true) ) {
-
-                	timerForWhitePlayer.setText(initialTime);
-                	timerForBlackPlayer.setText(initialTime);
-
-                	SwitchPlayerController.switchActivePlayer();
+                if ((StartNewGameController.timeOver()) || isWallDrop || pawnMoved ) {
                 	isWallDrop = false;
+                	pawnMoved = false;
 
+                	refresh();
                 	StartNewGameController.resetTimeToSet();
-                }
-
-
-                //grey out the next player name & count down time for the current player
-                if (currentPlayer.equals(ModelQuery.getWhitePlayer())) {
-                    timerForWhitePlayer.setText(StartNewGameController.toTimeStr());
+                	
                 } else {
-                    timerForBlackPlayer.setText(StartNewGameController.toTimeStr());
-
+                
+                //grey out the next player name & count down time for the current player
+	                if (currentPlayer.equals(ModelQuery.getWhitePlayer())) {
+	                    timerForWhitePlayer.setText(StartNewGameController.toTimeStr());
+	                } else if (currentPlayer.equals(ModelQuery.getBlackPlayer())){
+	                    timerForBlackPlayer.setText(StartNewGameController.toTimeStr());
+	                } else if (currentPlayer.equals(ModelQuery.getRedPlayer())) {
+	                	timerForRedPlayer.setText(StartNewGameController.toTimeStr());
+	                } else if (currentPlayer.equals(ModelQuery.getGreenPlayer())) {
+	                	timerForGreenPlayer.setText(StartNewGameController.toTimeStr());
+	                }
+                
                 }
             }
         };
 
-        timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(1), onFinished));
+        timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(0.25), onFinished));
         timeline.playFromStart();
         refresh();
     }
@@ -118,31 +172,31 @@ public class InitializeBoardController extends ViewController{
     }
 
     public void createNewWall(ActionEvent actionEvent) {
-
         // Check if there is already a wall in hand
         // If so just cancel the wall move
-        if (wallInHand) {
+        if (state == PlayerState.WALL) {
             WallController.cancelWallMove();
-            wallInHand = false;
-            refresh();
+            state = PlayerState.IDLE;
         }
         //
         else if (WallController.grabWall()) {
-            wallInHand = true;
-            refresh();
+            state = PlayerState.WALL;
         } else {
             System.out.println("No more walls");
         }
+        refresh();
     }
 
     public void handleGrabPawn(ActionEvent actionEvent) {
-        if (wallInHand) {
-            WallController.cancelWallMove();
-            wallInHand = false;
-            refresh();
+        if(state == PlayerState.PAWN){
+            state = PlayerState.IDLE;
         }
-        pawnInHand = true;
-         refresh();
+
+        else {
+            state = PlayerState.PAWN;
+            WallController.cancelWallMove();
+        }
+        refresh();
     }
 
 
@@ -150,6 +204,8 @@ public class InitializeBoardController extends ViewController{
         GamePosition position = ModelQuery.getCurrentPosition();
         Player white = ModelQuery.getWhitePlayer();
         Player black = ModelQuery.getBlackPlayer();
+        Player red = ModelQuery.getRedPlayer();
+        Player green = ModelQuery.getGreenPlayer();
 
         // remove all walls and pawns
         board.getChildren().clear();
@@ -158,18 +214,78 @@ public class InitializeBoardController extends ViewController{
         if (position.getPlayerToMove().equals(white)) {
             whitePlayerName.setFill(Color.BLACK);
             blackPlayerName.setFill(Color.LIGHTGRAY);
-        } else {
+            redPlayerName.setFill(Color.LIGHTGRAY);
+            greenPlayerName.setFill(Color.LIGHTGRAY);    
+            
+            whitePlayerName1.setFill(Color.BLACK);
+            blackPlayerName1.setFill(Color.LIGHTGRAY);
+            redPlayerName1.setFill(Color.LIGHTGRAY);
+            greenPlayerName1.setFill(Color.LIGHTGRAY);   
+            
+            whiteNumOfWalls.setFill(Color.BLACK);
+            blackNumOfWalls.setFill(Color.LIGHTGRAY);
+            redNumOfWalls.setFill(Color.LIGHTGRAY);
+            greenNumOfWalls.setFill(Color.LIGHTGRAY);
+        } else if (position.getPlayerToMove().equals(black)){
             whitePlayerName.setFill(Color.LIGHTGRAY);
             blackPlayerName.setFill(Color.BLACK);
+            redPlayerName.setFill(Color.LIGHTGRAY);
+            greenPlayerName.setFill(Color.LIGHTGRAY);
+            
+            whitePlayerName1.setFill(Color.LIGHTGRAY);
+            blackPlayerName1.setFill(Color.BLACK);
+            redPlayerName1.setFill(Color.LIGHTGRAY);
+            greenPlayerName1.setFill(Color.LIGHTGRAY);   
+            
+            whiteNumOfWalls.setFill(Color.LIGHTGRAY);
+            blackNumOfWalls.setFill(Color.BLACK);
+            redNumOfWalls.setFill(Color.LIGHTGRAY);
+            greenNumOfWalls.setFill(Color.LIGHTGRAY);
+        } else if (position.getPlayerToMove().equals(red)){
+            whitePlayerName.setFill(Color.LIGHTGRAY);
+            blackPlayerName.setFill(Color.LIGHTGRAY);
+            redPlayerName.setFill(Color.BLACK);
+            greenPlayerName.setFill(Color.LIGHTGRAY);
+            
+            whitePlayerName1.setFill(Color.LIGHTGRAY);
+            blackPlayerName1.setFill(Color.LIGHTGRAY);
+            redPlayerName1.setFill(Color.BLACK);
+            greenPlayerName1.setFill(Color.LIGHTGRAY);   
+            
+            whiteNumOfWalls.setFill(Color.LIGHTGRAY);
+            blackNumOfWalls.setFill(Color.LIGHTGRAY);
+            redNumOfWalls.setFill(Color.BLACK);
+            greenNumOfWalls.setFill(Color.LIGHTGRAY);
+        } else {
+            whitePlayerName.setFill(Color.LIGHTGRAY);
+            blackPlayerName.setFill(Color.LIGHTGRAY);
+            redPlayerName.setFill(Color.LIGHTGRAY);
+            greenPlayerName.setFill(Color.BLACK);
+            
+            whitePlayerName1.setFill(Color.LIGHTGRAY);
+            blackPlayerName1.setFill(Color.LIGHTGRAY);
+            redPlayerName1.setFill(Color.LIGHTGRAY);
+            greenPlayerName1.setFill(Color.BLACK);   
+            
+            whiteNumOfWalls.setFill(Color.LIGHTGRAY);
+            blackNumOfWalls.setFill(Color.LIGHTGRAY);
+            redNumOfWalls.setFill(Color.LIGHTGRAY);
+            greenNumOfWalls.setFill(Color.BLACK);
         }
 
         // update walls in stock
         whiteNumOfWalls.setText(String.valueOf(position.getWhiteWallsInStock().size()));
         blackNumOfWalls.setText(String.valueOf(position.getBlackWallsInStock().size()));
+        redNumOfWalls.setText(String.valueOf(position.getRedWallsInStock().size()));
+        greenNumOfWalls.setText(String.valueOf(position.getGreenWallsInStock().size()));
 
         // update pawn positions
-        placePawn(position.getWhitePosition(),true);
-        placePawn(position.getBlackPosition(),false);
+        placePawn(position.getWhitePosition(),"w");
+        placePawn(position.getBlackPosition(),"b");
+        if(ModelQuery.isFourPlayer()) {
+        	placePawn(position.getRedPosition(),"r");
+        	placePawn(position.getGreenPosition(),"g");
+        }
 
         // update wall positions
         ModelQuery.getCurrentGame();
@@ -186,21 +302,29 @@ public class InitializeBoardController extends ViewController{
         }
     }
 
-    private void placePawn(PlayerPosition position, boolean isWhite){
+    private void placePawn(PlayerPosition position, String color){
         Tile tile = position.getTile();
 
         Pair<Integer,Integer> coord = convertPawnToCanvas(tile.getRow(),tile.getColumn());
 
         Circle pawn = new Circle();
-        if(isWhite){
+        if(color.equals("w")){
             pawn.setFill(Color.WHITE);
             pawn.setStroke(Color.BLACK);
 
         }
-        else{
+        else if(color.equals("b")){
             pawn.setFill(Color.BLACK);
-
         }
+        else if(color.equals("r")) {
+        	pawn.setFill(Color.RED);
+        	pawn.setStroke(Color.BLACK);
+        }
+        else {
+        	pawn.setFill(Color.GREEN);
+        	pawn.setStroke(Color.BLACK);
+        }
+        
         pawn.setLayoutX(coord.getValue());
         pawn.setLayoutY(coord.getKey());
         pawn.setRadius(8);
@@ -211,10 +335,6 @@ public class InitializeBoardController extends ViewController{
         Tile tile = move.getTargetTile();
         Direction dir = move.getWallDirection();
         Pair<Integer, Integer> coord = convertWallToCanvas(tile.getRow(), tile.getColumn());
-//        Pair<Integer, Integer> coord = convertWallToCanvas(, 1);
-
-//        Rectangle rectangle = new Rectangle(coord.getKey(), coord.getValue(), 9, 77);
-
         Rectangle rectangle = new Rectangle(coord.getKey(), coord.getValue(), 9, 77);
 
         Player white = ModelQuery.getWhitePlayer();
@@ -223,6 +343,15 @@ public class InitializeBoardController extends ViewController{
         if (isWall) {
             rectangle.setFill(Color.GRAY);
         } else {
+            /*if (ModelQuery.getPlayerToMove().equals(ModelQuery.getWhitePlayer())) {
+            	rectangle.setFill(Color.web("#dde8f2"));
+            } else if (ModelQuery.getPlayerToMove().equals(ModelQuery.getBlackPlayer())){
+            	rectangle.setFill(Color.BLACK);
+            } else if (ModelQuery.getPlayerToMove().equals(ModelQuery.getRedPlayer())) {
+            	rectangle.setFill(Color.RED);
+            } else if (ModelQuery.getPlayerToMove().equals(ModelQuery.getGreenPlayer())) {
+            	rectangle.setFill(Color.LIGHTGREEN);
+            }    */
             rectangle.setFill(Color.DEEPSKYBLUE);
         }
 
@@ -245,7 +374,7 @@ public class InitializeBoardController extends ViewController{
     public void handleKeyPressed(KeyEvent event) {
         KeyCode code = event.getCode();
 
-        if(wallInHand){
+        if(state==PlayerState.WALL){
             //Moves the wall up
             if(code.equals(KeyCode.W)){
                 shiftWall("up");
@@ -265,8 +394,7 @@ public class InitializeBoardController extends ViewController{
             //Confirm wall placement and drops the wall
             else if(code.equals(KeyCode.E)){
                 if(WallController.dropWall()){
-                    wallInHand=false;
-                    SwitchPlayerController.switchActivePlayer();
+                    state = PlayerState.IDLE;
                     isWallDrop=true;
                 }
             }
@@ -276,40 +404,40 @@ public class InitializeBoardController extends ViewController{
             refresh();
         }
 
-        if (pawnInHand){
+        if (state==PlayerState.PAWN){
             /*For handling pawn move*/
                 if (code.equals(KeyCode.I)) {
-                    PawnController.movePawn("up");
+                    pawnMoved = PawnController.movePawn("up");
                 }
                 else if (code.equals(KeyCode.K)) {
-                    PawnController.movePawn("down");
+                	pawnMoved = PawnController.movePawn("down");
                 }
                 else if (code.equals(KeyCode.J)) {
-                    PawnController.movePawn("left");
+                	pawnMoved = PawnController.movePawn("left");
                 }
                 else if (code.equals(KeyCode.L)) {
-                    PawnController.movePawn("right");
+                	pawnMoved = PawnController.movePawn("right");
                 }
                 else if (code.equals(KeyCode.U)) {
-                    PawnController.movePawn("upleft");
+                	pawnMoved = PawnController.movePawn("upleft");
                 }
                 else if (code.equals(KeyCode.O)) {
-                    PawnController.movePawn("upright");
+                	pawnMoved = PawnController.movePawn("upright");
                 }
                 else if (code.equals(KeyCode.N)) {
-                    PawnController.movePawn("downleft");
+                	pawnMoved = PawnController.movePawn("downleft");
                 }
                 else if (code.equals(KeyCode.COMMA)) {
-                    PawnController.movePawn("downright");
+                	pawnMoved = PawnController.movePawn("downright");
                 }
-
             refresh();
         }
     }
 
+    
     public void dropWall(){
         if(WallController.dropWall()){
-            wallInHand=false;
+            state = PlayerState.IDLE;
         }
     }
 
@@ -330,7 +458,7 @@ public class InitializeBoardController extends ViewController{
     }
 
     public void handleRotate(ActionEvent event){
-        if(wallInHand){
+        if(state==PlayerState.WALL){
             WallController.rotateWall();
             refresh();
         }
