@@ -88,9 +88,15 @@ public class WallController {
         if(player.equals(ModelQuery.getWhitePlayer())) {
             ModelQuery.getCurrentGame().getCurrentPosition().addWhiteWallsOnBoard(move.getWallPlaced());
             SwitchPlayerController.switchActivePlayer();
-        }else{
+        }else if(player.equals(ModelQuery.getBlackPlayer())){
             ModelQuery.getCurrentGame().getCurrentPosition().addBlackWallsOnBoard(move.getWallPlaced());
             SwitchPlayerController.switchActivePlayer();
+        }else if(player.equals(ModelQuery.getRedPlayer())) {
+        	ModelQuery.getCurrentGame().getCurrentPosition().addRedWallsOnBoard(move.getWallPlaced());
+        	SwitchPlayerController.switchActivePlayer();
+        }else {
+        	ModelQuery.getCurrentGame().getCurrentPosition().addGreenWallsOnBoard(move.getWallPlaced());
+        	SwitchPlayerController.switchActivePlayer();
         }
 
         return true;
@@ -104,8 +110,12 @@ public class WallController {
         }
         if(player.equals(ModelQuery.getWhitePlayer())) {
             ModelQuery.getCurrentGame().getCurrentPosition().addWhiteWallsInStock(move.getWallPlaced());
-        }else{
+        }else if(player.equals(ModelQuery.getBlackPlayer())){
             ModelQuery.getCurrentGame().getCurrentPosition().addBlackWallsInStock(move.getWallPlaced());
+        }else if(player.equals(ModelQuery.getRedPlayer())){
+            ModelQuery.getCurrentGame().getCurrentPosition().addRedWallsInStock(move.getWallPlaced());
+        }else {
+            ModelQuery.getCurrentGame().getCurrentPosition().addGreenWallsInStock(move.getWallPlaced());
         }
         ModelQuery.getCurrentGame().setWallMoveCandidate(null);
         return true;
@@ -135,7 +145,7 @@ public class WallController {
     }
 
     /**
-     * @author Kate Ward
+     * @author Kate Ward & Mark Zhu
      * Attempts to grab wall from stock and hold it in hand above board
      * returns true if successful
      *
@@ -174,8 +184,25 @@ public class WallController {
                 //create wall move candidate
                 WallMove move = new WallMove(moveNum+1, roundNum, player, ModelQuery.getTile(1,1), ModelQuery.getCurrentGame(), Direction.Vertical, wall);
                 ModelQuery.getCurrentGame().setWallMoveCandidate(move);
+                
+            //4player
+            }else if(player.equals(ModelQuery.getRedPlayer()) && ModelQuery.getCurrentGame().getCurrentPosition().getRedWallsInStock().size()>0){
+            	List <Wall> walls = ModelQuery.getCurrentGame().getCurrentPosition().getRedWallsInStock();
+            	Wall wall = walls.get(0);		
+                ModelQuery.getCurrentGame().getCurrentPosition().removeRedWallsInStock(wall);
+                //create wall move candidate
+                WallMove move = new WallMove(moveNum+1, roundNum, player, ModelQuery.getTile(1,1), ModelQuery.getCurrentGame(), Direction.Vertical, wall);
+                ModelQuery.getCurrentGame().setWallMoveCandidate(move);
+                
+            }else if(player.equals(ModelQuery.getGreenPlayer()) && ModelQuery.getCurrentGame().getCurrentPosition().getGreenWallsInStock().size()>0){
+            	List <Wall> walls = ModelQuery.getCurrentGame().getCurrentPosition().getGreenWallsInStock();
+            	Wall wall = walls.get(0);		
+                ModelQuery.getCurrentGame().getCurrentPosition().removeGreenWallsInStock(wall);
+                //create wall move candidate
+                WallMove move = new WallMove(moveNum+1, roundNum, player, ModelQuery.getTile(1,1), ModelQuery.getCurrentGame(), Direction.Vertical, wall);
+                ModelQuery.getCurrentGame().setWallMoveCandidate(move);
             }
-        	//white player nor black player has walls in stock
+        	//no player has walls in stock
             else {
             	return false;
             }

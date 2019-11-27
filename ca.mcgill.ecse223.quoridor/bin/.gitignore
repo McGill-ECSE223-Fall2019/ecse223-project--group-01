@@ -11,3 +11,5 @@ ca.mcgill.ecse223.quoridor/
 .settings
 .project
 .classpath
+/main/
+/test/
