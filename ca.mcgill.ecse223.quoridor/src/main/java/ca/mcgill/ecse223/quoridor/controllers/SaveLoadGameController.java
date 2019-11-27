@@ -94,6 +94,7 @@ public class SaveLoadGameController {
         PlayerPosition whitePlayerPosition = null;
         PlayerPosition blackPlayerPosition = null;
         List<GamePosition> positions = ModelQuery.getCurrentGame().getPositions();
+        int movesTotal = 0;
         //Reading the savefile
         if(saveFile.exists()){
             try {
@@ -162,6 +163,7 @@ public class SaveLoadGameController {
                         isSaveMoveValid = false;
                         return false;
                     }
+                    movesTotal ++;
                 }
 
                 //.Setting initialize pawn position
@@ -209,6 +211,38 @@ public class SaveLoadGameController {
                 //How to know if the pawn is jumping or moving one tile?
                 //.Using a for loop, executing the moves (creating a function that will simulate the players making their moves for one line)
 
+                //Check the lists of each player and see if
+                int wm = 0, ww = 0, bm = 0, bw = 0;
+                for(int i = 0; i < movesTotal; i++){
+                    //i+1 is the moveNumber
+                    if(whiteMoves.get(wm)[0] == i+1){
+                        //execute move
+                        wm++;
+                    }
+
+                    else if(whiteWalls.get(ww)[0] == i+1){
+                        //execute move
+                        ww++;
+                    }
+
+                    else{
+                        return false;
+                    }
+
+                    if(blackMoves.get(bm)[0] == i+1){
+                        //execute move
+                        bm++;
+                    }
+                    else if(blackWalls.get(bw)[0] == i+1){
+                        //execute move
+                        bw++;
+                    }
+                    else{
+                        return false;
+                    }
+
+
+                }
                 /* CODE DUMP FOR LATER */
                 Tile pos = new Tile(whiteMoveCoord[1], whiteMoveCoord[0], loadGameBoard());
                 //pawn move/jump if the size of whiteMoveCoord is 2
