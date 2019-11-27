@@ -1482,4 +1482,72 @@ public class CucumberStepDefinitions {
 	}
 
 
+	@cucumber.api.java.en.When("I initiate to load a game in {string}")
+	public void iInitiateToLoadAGameIn(String arg0) {
+		
+	}
+
+	@cucumber.api.java.en.And("Each game move is valid")
+	public void eachGameMoveIsValid() {
+		
+	}
+
+	@cucumber.api.java.en.And("The game has no final results")
+	public void theGameHasNoFinalResults() {
+		
+	}
+
+	@cucumber.api.java.en.Then("It shall be {string}'s turn")
+	public void itShallBeSTurn(String arg0) {
+		
+	}
+
+	@cucumber.api.java.en.And("{string} shall be at <p_row>:<p_col>")
+	public void shallBeAtP_row(String arg0) {
+		
+	}
+
+	@cucumber.api.java.en.And("{string} shall be at <o_row>:<p_col>")
+	public void shallBeAtO_row(String arg0) {
+		
+	}
+
+	@cucumber.api.java.en.And("{string} shall have a <pw_orientation> wall at <pw_row>:<p_col>")
+	public void shallHaveAPw_orientationWallAtPw_row(String arg0) {
+		
+	}
+
+	@cucumber.api.java.en.And("{string} shall have a <ow_orientation> wall at <ow_row>:<p_col>")
+	public void shallHaveAOw_orientationWallAtOw_row(String arg0) {
+		
+	}
+
+	@cucumber.api.java.en.And("Both players shall have <remaining_walls> in their stacks")
+	public void bothPlayersShallHaveRemaining_wallsInTheirStacks() {
+		
+	}
+
+	@cucumber.api.java.en.And("The game has a final result")
+	public void theGameHasAFinalResult() {
+		
+	}
+
+	@cucumber.api.java.en.Then("The game shall be in replay mode")
+	public void theGameShallBeInReplayMode() {
+		
+	}
+
+	@cucumber.api.java.en.When("I initiate to load a saved game {string}")
+	public void iInitiateToLoadASavedGame(String arg0) {
+		
+	}
+
+	@cucumber.api.java.en.And("The game to load has an invalid move")
+	public void theGameToLoadHasAnInvalidMove() {
+		
+	}
+
+	@cucumber.api.java.en.Then("The game shall notify the user that the game file is invalid")
+	public void theGameShallNotifyTheUserThatTheGameFileIsInvalid() {
+	}
 }
