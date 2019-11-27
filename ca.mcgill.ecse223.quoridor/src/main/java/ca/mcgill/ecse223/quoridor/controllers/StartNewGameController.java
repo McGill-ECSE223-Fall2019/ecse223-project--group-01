@@ -19,7 +19,7 @@ public class StartNewGameController {
     private static long timeToSet;
 
 
-    public StartNewGameController(){};
+    public StartNewGameController(){}
 
     /**
      * @Author Fulin Huang
