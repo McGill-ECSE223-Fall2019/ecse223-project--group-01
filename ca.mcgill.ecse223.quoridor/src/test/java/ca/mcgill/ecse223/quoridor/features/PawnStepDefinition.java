@@ -164,7 +164,7 @@ public class PawnStepDefinition {
         }
     }
 
-    private Player stringToPlayer(String playerColor){
+    public static Player stringToPlayer(String playerColor){
         switch (playerColor) {
             case "white": {
                 return ModelQuery.getWhitePlayer();
