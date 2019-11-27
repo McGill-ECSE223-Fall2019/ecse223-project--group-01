@@ -208,61 +208,81 @@ public class SaveLoadGameController {
                     gamePosition.addBlackWallsInStock(wall);
                 }
 
-                //How to know if the pawn is jumping or moving one tile?
-                //.Using a for loop, executing the moves (creating a function that will simulate the players making their moves for one line)
 
+                QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().setPlayerToMove(ModelQuery.getWhitePlayer());
+
+                //How to know if the pawn is jumping or moving one tile?
+
+                //.Using a for loop, executing the moves (creating a function that will simulate the players making their moves for one line)
                 //Check the lists of each player and see if
                 int wm = 0, ww = 0, bm = 0, bw = 0;
-                for(int i = 0; i < movesTotal; i++){
+                for(int i = 0; i < movesTotal; i++) {
                     //i+1 is the moveNumber
-                    if(whiteMoves.get(wm)[0] == i+1){
-                        //execute move
-                        wm++;
+                    if(ModelQuery.getPlayerToMove() == ModelQuery.getWhitePlayer()) {
+                        if (!whiteMoves.isEmpty() && whiteMoves.get(wm)[0] == i + 1) {
+                            String side;
+                            //Moved the pawn before
+                            if(wm > 0){
+                                side = GetPawnMoveDirection(whiteMoves.get(wm-1), whiteMoves.get(wm));
+                                if(side.equals(""))
+                                    return false;
+                                PawnController.movePawn(side);
+                            }
+                            //Still at default position
+                            else{
+                                int[] defaultPos = {0,9,5};
+                                side = GetPawnMoveDirection(defaultPos,whiteMoves.get(wm));
+                                PawnController.movePawn(side);
+                            }
+                            wm++;
+                        } else if (!whiteWalls.isEmpty() && whiteWalls.get(ww)[0] == i + 1) {
+                            if(!ExecuteWallMove(whiteWalls, ww, i + 1, ModelQuery.getWhitePlayer())){
+                                return false;
+                            }
+                            ww++;
+                        } else {
+                            return false;
+                        }
+                        SwitchPlayerController.switchActivePlayer();
                     }
-
-                    else if(whiteWalls.get(ww)[0] == i+1){
-                        //execute move
-                        ww++;
-                    }
-
                     else{
+                        //White player must always move first, so if PlayerToMove isn't white player, then somethign went wrong
                         return false;
                     }
 
-                    if(blackMoves.get(bm)[0] == i+1){
-                        //execute move
-                        bm++;
-                    }
-                    else if(blackWalls.get(bw)[0] == i+1){
-                        //execute move
-                        bw++;
+                    //After doing the if statement above, it should run the if statement below since it would be black player's turn
+                    if(ModelQuery.getPlayerToMove() == ModelQuery.getBlackPlayer()) {
+                        if (!blackMoves.isEmpty() && blackMoves.get(bm)[0] == i + 1) {
+                            String side;
+                            //Moved the pawn before
+                            if(bm > 0){
+                                side = GetPawnMoveDirection(blackMoves.get(wm-1), blackMoves.get(wm));
+                                if(side.equals(""))
+                                    return false;
+                                PawnController.movePawn(side);
+                            }
+                            //Still at default position
+                            else{
+                                int[] defaultPos = {0,1,5};
+                                side = GetPawnMoveDirection(defaultPos,blackMoves.get(bm));
+                                PawnController.movePawn(side);
+                            }
+                            bm++;
+                        } else if (!blackWalls.isEmpty() && blackWalls.get(bw)[0] == i + 1) {
+                            if(!ExecuteWallMove(blackWalls, bw, i + 1, ModelQuery.getBlackPlayer())){
+                                return false;
+                            }
+                            bw++;
+                        } else {
+                            return false;
+                        }
+                        SwitchPlayerController.switchActivePlayer();
                     }
                     else{
+                        //If statement is not executed, therefore somethign went wrong
                         return false;
                     }
-
-
                 }
-                /* CODE DUMP FOR LATER */
-                Tile pos = new Tile(whiteMoveCoord[1], whiteMoveCoord[0], loadGameBoard());
-                //pawn move/jump if the size of whiteMoveCoord is 2
-                if(whiteMoveCoord.length == 2){
-                    whitePlayerPosition = new PlayerPosition(quoridor.getCurrentGame().getWhitePlayer(), pos);
-                }
-
-                //wall drop if the size of whiteMoveCoord is 3
-                else if(whiteMoveCoord.length == 3){
-                    Direction wallDir = convertToDir(whiteMoveCoord[2]);
-                    whiteWall = new WallMove(Integer.parseInt(moveNumber), (Integer.parseInt(moveNumber) * 2 - 1), ModelQuery.getWhitePlayer(), pos, ModelQuery.getCurrentGame(),wallDir,ModelQuery.getCurrentGame().getWhitePlayer().getWall(Integer.parseInt(moveNumber)));
-                }
-
-                else{
-                    isSaveMoveValid = false;
-                    return false;
-                }
-                /* END OF CODE DUMP */
-
-
             } catch (FileNotFoundException e) {
                 //File not found error
                 e.printStackTrace();
@@ -274,7 +294,6 @@ public class SaveLoadGameController {
             }
 
         }
-
         return true;
     }
 
@@ -291,29 +310,80 @@ public class SaveLoadGameController {
         StartNewGameController.blackPlayerChooseAUsername(blackUser);
     }
 
-    private static boolean SetMoveInformation(Player player, String moveInfo){
-        //Wall move
-        if(moveInfo.length() == 3){
-
-        }
-
-        //Player move
-        else if(moveInfo.length() == 2){
-
-        }
-
-        //Error
-        else{
+    /**
+     * This helper method will move the wall at a given position
+     * @param walls
+     * @param index
+     * @param moveNumber
+     * @param player
+     * @return
+     */
+    private static boolean ExecuteWallMove(List<int[]> walls, int index, int moveNumber, Player player){
+        Direction wallDir = convertToDir(walls.get(index)[3]);
+        if(!ValidatePositionController.validateWallPosition(walls.get(index)[2], walls.get(index)[1], wallDir)){
+            isPositionValid = false;
             return false;
         }
 
+        Player whitePlayer = ModelQuery.getWhitePlayer();
+        Player blackPlayer = ModelQuery.getBlackPlayer();
+        Tile wallTile = new Tile(walls.get(index)[2], walls.get(index)[1], ModelQuery.getBoard());
+        Game currentGame = ModelQuery.getCurrentGame();
+
+        WallMove wallmove;
+        int roundNum = 0;
+        if(player.equals(ModelQuery.getWhitePlayer())){
+            Wall dropWall = ModelQuery.getCurrentGame().getCurrentPosition().getWhiteWallsInStock().get(index);
+            roundNum = moveNumber * 2 - 1;
+            wallmove = new WallMove(moveNumber, roundNum, whitePlayer, wallTile, currentGame, wallDir, dropWall);
+            loadWall(wallmove,ModelQuery.getWhitePlayer());
+        }
+        else if(player.equals(ModelQuery.getBlackPlayer())){
+            Wall dropWall = ModelQuery.getCurrentGame().getCurrentPosition().getBlackWallsInStock().get(index);
+            roundNum = moveNumber * 2;
+            wallmove = new WallMove(moveNumber, roundNum, blackPlayer, wallTile, currentGame, wallDir, dropWall);
+            loadWall(wallmove,ModelQuery.getBlackPlayer());
+        }
+        else{
+            return false;
+        }
         return true;
     }
 
-    private static boolean ExecuteMove(){
+    private static boolean ExecutePawnMove(){
         return true;
+    }
+
+    private static String GetPawnMoveDirection(int[] oldMove, int[] newMove){
+        //[0] MoveNumber, [1] Row, [2] Column
+        if(newMove[1] == oldMove[1] && newMove[2] < oldMove[2]){
+            return "up";
+        }
+        else if(newMove[1] > oldMove[1] && newMove[2] < oldMove[2]){
+            return "upright";
+        }
+        else if(newMove[1] < oldMove[1] && newMove[2] < oldMove[2]){
+            return "upleft";
+        }
+        else if(newMove[1] > oldMove[1] && newMove[2] == newMove[2]){
+            return "right";
+        }
+        else if(newMove[1] < oldMove[1] && newMove[2] == newMove[2]){
+            return "left";
+        }
+        else if(newMove[1] > oldMove[1] && newMove[2] > oldMove[2]){
+            return "downright";
+        }
+        else if(newMove[1] < oldMove[1] && newMove[2] < oldMove[2]){
+            return "downleft";
+        }
+        else if(newMove[1] == oldMove[1] && newMove[2] > oldMove[2]){
+            return "down";
+        }
+        else{
+            return "";
+        }
     }
 }
 
 //TODO: implement a warning when the move doesn't make sense, for example pawn jumped 4 tiles
-//TODO: setting the initial positions of the pawns E9, E1
