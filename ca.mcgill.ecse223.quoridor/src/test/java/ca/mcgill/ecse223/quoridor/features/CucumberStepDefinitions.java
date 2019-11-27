@@ -1001,10 +1001,12 @@ public class CucumberStepDefinitions {
 	@Given("The player to move is {string}")
 	public void thePlayerToMoveIs(String playerColor) {
 		if(playerColor.equals("white")){
-			ModelQuery.getCurrentGame().getCurrentPosition().setPlayerToMove(ModelQuery.getWhitePlayer());
+			playerToMove = ModelQuery.getWhitePlayer();
+			ModelQuery.getCurrentGame().getCurrentPosition().setPlayerToMove(playerToMove);
 		}
 		else{
-			ModelQuery.getCurrentGame().getCurrentPosition().setPlayerToMove(ModelQuery.getBlackPlayer());
+			playerToMove = ModelQuery.getBlackPlayer();
+			ModelQuery.getCurrentGame().getCurrentPosition().setPlayerToMove(playerToMove);
 		}
 		originalPlayerColor = playerColor;
 	}
@@ -1477,6 +1479,56 @@ public class CucumberStepDefinitions {
 		WallMove move = new WallMove(0, 1, player1, board.getTile((row - 1) * 9 + col - 1), game, direction, wall);
 		game.setWallMoveCandidate(move);
 	}
+
+
+	/**
+	 * @author Jason Lau
+	 */
+
+	private Player playerToMove;
+		private Player winningPlayer;
+
+//		@Given("The player to move is {string}")
+//		public void nextPlayerToMove(String arg0){
+//			Quoridor quoridor = QuoridorApplication.getQuoridor();
+//			if(arg0.equals("white")){
+//				playerToMove = quoridor.getCurrentGame().getWhitePlayer();
+//			}
+//			else if(arg0.equals("black")){
+//				playerToMove = quoridor.getCurrentGame().getBlackPlayer();
+//			}
+//		}
+
+		@When("Player initates to resign")
+		public void playerInitatesToResign() {
+			try {
+				winningPlayer = playerToMove.getNextPlayer();
+				ResignGameController.setWinner(winningPlayer);
+
+			}
+			catch(UnsupportedOperationException e){
+				throw new PendingException();
+			}
+
+		}
+
+
+
+		@Then("Game result shall be {string}")
+		public void gameResultShallBe(String arg0) {
+			Quoridor quoridor = QuoridorApplication.getQuoridor();
+			if (arg0.equals("BlackWon")){
+				Assert.assertEquals(winningPlayer,quoridor.getCurrentGame().getBlackPlayer());
+			}
+			else if (arg0.equals("WhiteWon")){
+				Assert.assertEquals(winningPlayer,quoridor.getCurrentGame().getWhitePlayer());
+			}
+		}
+
+		@And("The game shall no longer be running")
+		public void theGameShallNoLongerBeRunning() {
+//        Assert.assertEquals();
+		}
 
 
 }
