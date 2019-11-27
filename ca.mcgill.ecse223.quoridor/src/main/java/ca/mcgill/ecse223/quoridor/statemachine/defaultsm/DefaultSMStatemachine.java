@@ -309,43 +309,43 @@ public class DefaultSMStatemachine implements IDefaultSMStatemachine {
 	}
 	
 	private boolean check_main_region_PawnState_Vertical__choice_0_tr0_tr0() {
-		return (operationCallback.pawnGetRow()>=3 && operationCallback.pawnGetRow()<=7);
+		return (sCIPawn.getTargetRow()>=3 && sCIPawn.getTargetRow()<=7);
 	}
 	
 	private boolean check_main_region_PawnState_Vertical__choice_0_tr1_tr1() {
-		return operationCallback.pawnGetRow()==1;
+		return sCIPawn.getTargetRow()==1;
 	}
 	
 	private boolean check_main_region_PawnState_Vertical__choice_0_tr2_tr2() {
-		return operationCallback.pawnGetRow()==2;
+		return sCIPawn.getTargetRow()==2;
 	}
 	
 	private boolean check_main_region_PawnState_Vertical__choice_0_tr3_tr3() {
-		return operationCallback.pawnGetRow()==8;
+		return sCIPawn.getTargetRow()==8;
 	}
 	
 	private boolean check_main_region_PawnState_Vertical__choice_0_tr4_tr4() {
-		return operationCallback.pawnGetRow()==9;
+		return sCIPawn.getTargetRow()==9;
 	}
 	
 	private boolean check_main_region_PawnState_Horizontal__choice_0_tr0_tr0() {
-		return operationCallback.pawnGetCol()==1;
+		return sCIPawn.getTargetCol()==1;
 	}
 	
 	private boolean check_main_region_PawnState_Horizontal__choice_0_tr1_tr1() {
-		return (operationCallback.pawnGetCol()>=3 && operationCallback.pawnGetCol()<=7);
+		return (sCIPawn.getTargetCol()>=3 && sCIPawn.getTargetCol()<=7);
 	}
 	
 	private boolean check_main_region_PawnState_Horizontal__choice_0_tr2_tr2() {
-		return operationCallback.pawnGetCol()==2;
+		return sCIPawn.getTargetCol()==2;
 	}
 	
 	private boolean check_main_region_PawnState_Horizontal__choice_0_tr3_tr3() {
-		return operationCallback.pawnGetCol()==8;
+		return sCIPawn.getTargetCol()==8;
 	}
 	
 	private boolean check_main_region_PawnState_Horizontal__choice_0_tr4_tr4() {
-		return operationCallback.pawnGetCol()==9;
+		return sCIPawn.getTargetCol()==9;
 	}
 	
 	private void effect_main_region_PawnState_Vertical__choice_0_tr0() {

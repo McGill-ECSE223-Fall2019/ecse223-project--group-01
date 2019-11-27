@@ -7,7 +7,7 @@ class PawnBehavior {
     0..1 -> 0..1 Game currentGame;
     0..1 -> 0..1 Player player;
 
-    pawnSM {
+    pawnSM {e
     }
 
     // Returns the current row number of the pawn
