@@ -998,16 +998,16 @@ public class CucumberStepDefinitions {
 	String originalPlayerColor;
 	String nextPlayerColor;
 
-	@Given("The player to move is {string}")
-	public void thePlayerToMoveIs(String playerColor) {
-		if(playerColor.equals("white")){
-			ModelQuery.getCurrentGame().getCurrentPosition().setPlayerToMove(ModelQuery.getWhitePlayer());
-		}
-		else{
-			ModelQuery.getCurrentGame().getCurrentPosition().setPlayerToMove(ModelQuery.getBlackPlayer());
-		}
-		originalPlayerColor = playerColor;
-	}
+//	@Given("The player to move is {string}")
+//	public void thePlayerToMoveIs(String playerColor) {
+//		if(playerColor.equals("white")){
+//			ModelQuery.getCurrentGame().getCurrentPosition().setPlayerToMove(ModelQuery.getWhitePlayer());
+//		}
+//		else{
+//			ModelQuery.getCurrentGame().getCurrentPosition().setPlayerToMove(ModelQuery.getBlackPlayer());
+//		}
+//		originalPlayerColor = playerColor;
+//	}
 
 	//@author: Mark Zhu
 	@And("The clock of {string} is running")
@@ -1298,15 +1298,95 @@ public class CucumberStepDefinitions {
 
 	/************** Phase Two Features ***************/
 
+	/* Identify Game Won */
+	Player currentPlayer;
+	String player;
+	boolean validClock = false;
+	int rowVal;
+	int colVal;
+    @Given("Player {string} has just completed his move")
+	public void givenPlayerHasJustCompletedHisMove(String arg0) {
+		if (arg0.equals("white")) {
+			currentPlayer = ModelQuery.getWhitePlayer();
+			PawnController.movePawn("left");
+		}
+		else if (arg0.equals("black")) {
+			currentPlayer = ModelQuery.getBlackPlayer();
+			PawnController.movePawn("left");
+		}
+	}
+
+	@And ("The new position of {string} is {int}:{int}")
+	public void theNewPositionOfPlayerIs(String arg0, int row, int col) {
+    	rowVal = row;
+    	colVal = col;
+    	player = arg0;
+		Tile tile = ModelQuery.getTile(row, col);
+		if (arg0.equals("white")) {
+			ModelQuery.getCurrentGame().getCurrentPosition().getWhitePosition().setTile(tile);
+		}
+		else if(arg0.equals("black")) {
+			ModelQuery.getCurrentGame().getCurrentPosition().getBlackPosition().setTile(tile);
+		}
+	}
+
+	@And ("The clock of {string} is more than zero")
+	public void theClockOfPlayerIsMoreThanZero(String arg0) {
+    	Time newThinkingTime = new Time(180);
+		if (arg0.equals("white")) {
+			ModelQuery.getWhitePlayer().setRemainingTime(newThinkingTime);
+		}
+		else if (arg0.equals("black")) {
+			ModelQuery.getBlackPlayer().setRemainingTime(newThinkingTime);
+		}
+	}
+
+	@When ("Checking of game result is initated")
+	public void checkOfGameResultIsInitiated() {
+		// TODO: GUI Step
+
+	}
+
+	@Then ("Game result shall be {string}")
+	public void gameResultShallBe (String arg0) {
+		String result = EndGameController.checkPawnPosition(player, rowVal, colVal);
+		assertEquals(arg0, result);
+
+	}
+
+	@And ("The game shall no longer be running")
+	public void theGameShallNotLongerBeRunning () {
+		//TODO: GUI Step
+		// TODO: Add comment: We make sure it is no longer the game view
+	}
+
+
+	@When ("The clock of {string} counts down to zero")
+	public void theClockOfPlayerCountsDownToZero(String arg0) {
+    	player = arg0;
+    	// Try setting the remaining time to zero
+		Time newThinkingTime = new Time(0);
+		if (player.equals("white")) {
+			ModelQuery.getWhitePlayer().setRemainingTime(newThinkingTime);
+		}
+		else if (player.equals("black")) {
+			ModelQuery.getBlackPlayer().setRemainingTime(newThinkingTime);
+		}
+
+		//TODO: GUI step to check
+	}
+
 	/* Report Final Result */
 	@When("The game is no longer running")
 	public void theGameIsNoLongerRunning() {
-		EndGameController.GameNotRun();
+		//TODO : GUI step
+
 	}
 
 	@Then("The final result shall be displayed")
 	public void theFinalResultShallBeDisplayed() {
 		//TODO: GUI Step
+
 	}
 
 	@And("White's clock shall not be counting down")
@@ -1329,90 +1409,16 @@ public class CucumberStepDefinitions {
 		//TODO: GUI step
 	}
 
-	Player currentPlayer;
-	boolean validClock = false;
-	/* Identify Game Won */
-    @Given("Player {string} has just completed his move")
-	public void givenPlayerHasJustCompletedHisMove(String arg0) {
-		if (arg0.equals("white")) {
-			currentPlayer = ModelQuery.getWhitePlayer();
-			PawnController.movePawn("left");
+	@Given("The player to move is {string}")
+	public void thePlayerToMoveIs(String playerColor) {
+		if(playerColor.equals("white")){
+			ModelQuery.getCurrentGame().getCurrentPosition().setPlayerToMove(ModelQuery.getWhitePlayer());
 		}
-		else if (arg0.equals("black")) {
-			currentPlayer = ModelQuery.getBlackPlayer();
-			PawnController.movePawn("left");
+		else{
+			ModelQuery.getCurrentGame().getCurrentPosition().setPlayerToMove(ModelQuery.getBlackPlayer());
 		}
+		originalPlayerColor = playerColor;
 	}
-
-	@And ("The new position of {string} is {row}:{col}")
-	public void theNewPositionOfPlayerIs(String arg0, int row, int col) {
-		Tile tile = ModelQuery.getTile(row, col);
-		if (arg0.equals("white")) {
-			ModelQuery.getCurrentGame().getCurrentPosition().getWhitePosition().setTile(tile);
-		}
-		else if(arg0.equals("black")) {
-			ModelQuery.getCurrentGame().getCurrentPosition().getBlackPosition().setTile(tile);
-		}
-	}
-
-	@And ("The clock of {string} is more than zero")
-	public void theClockOfPlayerIsMoreThanZero(String arg0) {
-		if (arg0.equals("white")) {
-			if (Long.parseLong(ModelQuery.getWhitePlayer().getRemainingTime().toString()) > 0) {
-				validClock = true;
-			}
-		}
-		else if (arg0.equals("black")) {
-			if (Long.parseLong(ModelQuery.getBlackPlayer().getRemainingTime().toString()) > 0) {
-				validClock = true;
-			}
-		}
-	}
-
-	@When ("Checking of game result is initated")
-	public void checkOfGameResultIsInitiated() {
-		if (validClock) {
-			
-		}
-	}
-
-	@Then ("Game result shall be {string}")
-	public void gameResultSallBe (String result) {
-    	// TODO: Check result type: string or enum
-	}
-
-
-	@Given ("Player {string} has just completed his move")
-	public void playerHasJustCompletedHisMove(Player player) {
-
-	}
-
-//	@And ("The new position of \"<player>\" is <row>:<col>")
-//	public void theNewPositionOfPlayerIs(Player player, int row, int col) {
-//    	Same method as above
-//	}
-
-//	@When ("Checking of game result is initated")
-//	same method as above
-
-	@Then ("Game result shall be {string}")
-	public void gameResultShallBe (String result) {
-
-	}
-
-	@And ("The game shall no longer be running")
-	public void theGameShallNotLongerBeRunning () {
-
-	}
-
-
-	@Given ("The player to move is {string}")
-	public void thePlayerToMoveIs(Player player) {
-
-	}
-
-
-
 
 
 
@@ -1599,4 +1605,6 @@ public class CucumberStepDefinitions {
 		WallMove move = new WallMove(0, 1, player1, board.getTile((row - 1) * 9 + col - 1), game, direction, wall);
 		game.setWallMoveCandidate(move);
 	}
+
+
 }
