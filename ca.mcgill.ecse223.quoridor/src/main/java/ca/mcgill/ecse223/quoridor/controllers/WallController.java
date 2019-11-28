@@ -81,7 +81,6 @@ public class WallController {
             return false;
         }
 
-
         ModelQuery.getCurrentGame().addMove(move);
         ModelQuery.getCurrentGame().setWallMoveCandidate(null);
 

@@ -24,6 +24,7 @@ import javafx.util.Pair;
 public class ReplayModeController extends ViewController{
 	
 	private int stepNumber = 0;
+	List<GamePosition> listPositions = ModelQuery.getCurrentGame().getPositions();
 	
 	@FXML
     private AnchorPane board;
@@ -48,27 +49,31 @@ public class ReplayModeController extends ViewController{
     public Text greenNumOfWalls;
 	
 	public void initialize() {
-		
+		refresh();
 	}
 	
 	public void handleForwardStep(ActionEvent actionEvent) {
-		
+		stepNumber++;
+		refresh();
 	}
 	
 	public void handleBackStep(ActionEvent actionEvent) {
-		
+		stepNumber--;
+		refresh();
 	}
 	
 	public void handleStartSkip(ActionEvent actionEvent) {
-		
+		stepNumber=0;
+		refresh();
 	}
 	
 	public void handleEndSkip(ActionEvent actionEvent) {
-		
+		stepNumber=listPositions.size()-1;
+		refresh();
 	}
 	
-    public void refresh() {
-        GamePosition position = ModelQuery.getCurrentPosition();
+    public void refresh() { 	
+        GamePosition position = listPositions.get(stepNumber);
         Player white = ModelQuery.getWhitePlayer();
         Player black = ModelQuery.getBlackPlayer();
         Player red = ModelQuery.getRedPlayer();
