@@ -7,6 +7,7 @@ import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -14,11 +15,14 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Text;
+import javafx.stage.Popup;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.util.Pair;
 
@@ -43,6 +47,7 @@ public class InitializeBoardController extends ViewController{
     public Timeline timeline;
     public static boolean playerIsWhite = false;
     public static boolean isWallDrop = false;
+    public static boolean isPawnMoved = false;
     public String initialTime;
 
 
@@ -82,15 +87,27 @@ public class InitializeBoardController extends ViewController{
         EventHandler onFinished = new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
                 Player currentPlayer = ModelQuery.getPlayerToMove();
-                if ((StartNewGameController.timeOver()) || (isWallDrop == true) ) {
 
+                if ((StartNewGameController.timeOver()) || isWallDrop || isPawnMoved) {
                 	timerForWhitePlayer.setText(initialTime);
                 	timerForBlackPlayer.setText(initialTime);
 
                 	SwitchPlayerController.switchActivePlayer();
                 	isWallDrop = false;
+                	isPawnMoved = false;
 
                 	StartNewGameController.resetTimeToSet();
+                }
+                //TODO: MODIFY: time counts to zero/white reaches row = 9 or black reach row = 1
+                //TODO: FIX issue: pop up multiple windows
+                else if  (EndGameController.checkGameStatus(currentPlayer).equals("whiteWon")) {
+                    showStage("White Player Wins!");
+                    //TODO: ADD POP UP WINDOW
+                    //TODO: CHANGE TO END GAME PAGE
+                }
+                else if (EndGameController.checkGameStatus(currentPlayer).equals("blackWon")) {
+                    showStage("Black player Wins!");
+
                 }
 
 
@@ -363,5 +380,18 @@ public class InitializeBoardController extends ViewController{
             Alert errorAlert = new Alert(Alert.AlertType.ERROR);
             errorAlert.setContentText("Missing file name");
         }
+    }
+
+    public static void showStage(String message){
+        Stage newStage = new Stage();
+        VBox comp = new VBox();
+        TextField nameField = new TextField("Game End!");
+        TextField phoneNumber = new TextField(message);
+        comp.getChildren().add(nameField);
+        comp.getChildren().add(phoneNumber);
+
+        Scene stageScene = new Scene(comp, 300, 300);
+        newStage.setScene(stageScene);
+        newStage.show();
     }
 }

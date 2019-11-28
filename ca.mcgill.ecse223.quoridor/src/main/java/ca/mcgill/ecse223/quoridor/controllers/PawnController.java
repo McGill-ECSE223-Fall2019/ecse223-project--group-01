@@ -3,6 +3,7 @@ package ca.mcgill.ecse223.quoridor.controllers;
 import ca.mcgill.ecse223.quoridor.model.*;
 import ca.mcgill.ecse223.quoridor.statemachine.defaultsm.DefaultSMStatemachine;
 import ca.mcgill.ecse223.quoridor.statemachine.defaultsm.IDefaultSMStatemachine;
+import ca.mcgill.ecse223.quoridor.view.InitializeBoardController;
 
 import java.util.List;
 
@@ -240,7 +241,8 @@ public class PawnController {
         if (sm.getSCIPawn().isRaisedMoveCompleted()) {
             Tile target = ModelQuery.getTile((int) sm.getSCIPawn().getTargetRow(), (int) sm.getSCIPawn().getTargetCol());
             playerPosition.setTile(target);
-            SwitchPlayerController.switchActivePlayer();
+//            SwitchPlayerController.switchActivePlayer();
+            InitializeBoardController.isPawnMoved = true;
             return true;
         } else {
             return false;
