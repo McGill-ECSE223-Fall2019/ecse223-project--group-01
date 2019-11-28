@@ -364,7 +364,85 @@ public class CucumberStepDefinitions {
 		assertEquals(false, fileChanged);
 	}
 
+	/**
+	 * @author Kevin Li
+	 */
+	@When("I initiate to load a game in {string}")
+	public void iInitiateToLoadAGameIn(String filename) {
+		try {
+			SaveLoadGameController.fileLoad(filename, "white", "black");
+		}catch(java.lang.UnsupportedOperationException e) {
+			throw new PendingException();
+		}
+	}
 
+	/**
+	 * @author Kevin Li
+	 */
+	@And("Each game move is valid")
+	public void eachGameMoveIsValid() {
+		try{
+			Assert.assertEquals(true, SaveLoadGameController.isSaveMoveValid);
+		} catch(java.lang.UnsupportedOperationException e){
+			throw new PendingException();
+		}
+	}
+
+	/**
+	 * @author Kevin Li
+	 */
+	@And("The game has no final results")
+	public void theGameHasNoFinalResults() {
+		//UI
+	}
+
+	/**
+	 * @author Kevin Li
+	 */
+	@And("The game has a final result")
+	public void theGameHasAFinalResult() {
+		//UI
+	}
+
+	/**
+	 * @author Kevin Li
+	 */
+	@Then("The game shall be in replay mode")
+	public void theGameShallBeInReplayMode() {
+		//How to do this
+	}
+
+	/**
+	 * @author Kevin Li
+	 */
+	@When("I initiate to load a saved game {string}")
+	public void iInitiateToLoadASavedGame(String filename) {
+		try {
+			SaveLoadGameController.fileLoad(filename, "white", "black");
+		}catch(java.lang.UnsupportedOperationException e) {
+			throw new PendingException();
+		}
+	}
+
+	/**
+	 * @author Kevin Li
+	 */
+	@And("The game to load has an invalid move")
+	public void theGameToLoadHasAnInvalidMove() {
+		try{
+			Assert.assertEquals(false, SaveLoadGameController.isSaveMoveValid);
+		} catch(java.lang.UnsupportedOperationException e){
+			throw new PendingException();
+		}
+	}
+
+	/**
+	 * @author Kevin Li
+	 */
+	@Then("The game shall notify the user that the game file is invalid")
+	public void theGameShallNotifyTheUserThatTheGameFileIsInvalid() {
+		//UI
+	}
 
 
 	/*scenario:Initiate a new game*/
@@ -600,7 +678,7 @@ public class CucumberStepDefinitions {
 		Game game = ModelQuery.getCurrentGame();
 		Direction dir = this.stringToDirection(direction);
 		int move_size = game.getMoves().size();
-		
+
 //		Check if at least one move has been registered
 		assertTrue( move_size > 0);
 		Move move = game.getMoves().get(move_size-1);
@@ -625,7 +703,7 @@ public class CucumberStepDefinitions {
 
 		// The wallmove candidate should be gone
 		assertNull(game.getWallMoveCandidate());
-		
+
 
 		// White should have more walls on board
 		assertEquals(game.getCurrentPosition().getWhiteWallsOnBoard().size(), 2);
@@ -1478,6 +1556,4 @@ public class CucumberStepDefinitions {
 		WallMove move = new WallMove(0, 1, player1, board.getTile((row - 1) * 9 + col - 1), game, direction, wall);
 		game.setWallMoveCandidate(move);
 	}
-
-
 }

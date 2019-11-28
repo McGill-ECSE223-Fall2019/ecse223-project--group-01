@@ -12,6 +12,7 @@ import java.util.List;
  * for the save position feature and the load position feature for Quoridor gameplay.
  * @author Kevin
  */
+@SuppressWarnings("Duplicates")
 public class PositionController {
 
     public static boolean isPositionValid = true;
@@ -132,7 +133,7 @@ public class PositionController {
      * @throws java.lang.UnsupportedOperationException
      */
     public static boolean loadGame(String filename, String whiteUser, String blackUser) throws java.lang.UnsupportedOperationException, IOException {
-        File saveFile = new File("./" + filename);
+        File saveFile = new File(saveLocation + filename);
         Quoridor quoridor = QuoridorApplication.getQuoridor();
 
         //Make game running
@@ -286,7 +287,7 @@ public class PositionController {
 
                     WallMove wallmove = new WallMove(moveNum, roundNum,whitePlayer, wallTile, currentGame, wallDir, dropWall);
 
-                   loadWall(wallmove,ModelQuery.getWhitePlayer());
+                    loadWall(wallmove,ModelQuery.getWhitePlayer());
                 }
 
                 for(int i = 0; i < blackWalls.size(); i++){
@@ -343,7 +344,7 @@ public class PositionController {
      * @param direction     the direction of the wall
      * @return              the save format of the direction
      */
-    private static String convertWallDir(Direction direction){
+    public static String convertWallDir(Direction direction){
         switch(direction){
             case Horizontal:
                 return "h";
@@ -376,7 +377,7 @@ public class PositionController {
      * @return int[]            [0] COLUMN
      *                          [1] ROW
      */
-    private static int[] posToInt(String playerPosition){
+    public static int[] posToInt(String playerPosition){
         //.Note [0]: always a letter, [1]: always a number
         char[] char_arr = playerPosition.toCharArray();
 
@@ -413,7 +414,7 @@ public class PositionController {
      * @param listOfWalls   the list of walls
      * @return              String that will have the appropriate save format
      */
-    private static String writeWallInfo(int index, List<Wall> listOfWalls){
+    public static String writeWallInfo(int index, List<Wall> listOfWalls){
         Wall wall = listOfWalls.get(index);
         Tile wallTile = wall.getMove().getTargetTile(); //gets the coordinate of the wall
         String orientation = convertWallDir(wall.getMove().getWallDirection()); //gets the orientation of the wall
@@ -426,7 +427,7 @@ public class PositionController {
         return wallPosition;
     }
 
-    private static boolean loadWall(WallMove move, Player player){
+    public static boolean loadWall(WallMove move, Player player){
         ModelQuery.getCurrentGame().addMove(move);
         ModelQuery.getCurrentGame().setWallMoveCandidate(null);
 
@@ -448,14 +449,14 @@ public class PositionController {
      * @return          true if it is within the board range
      *                  false if it is outside of the board
      */
-    private static boolean validatePositionInRange(int row, int col){
+    public static boolean validatePositionInRange(int row, int col){
         if (row < 1 || row > 9 || col < 1 || col > 9) {
             return false;
         }
         return true;
     }
 
-    private static Board loadGameBoard() {
+    public static Board loadGameBoard() {
         Quoridor quoridor = QuoridorApplication.getQuoridor();
         Board board;
         if (quoridor.getBoard() == null) {

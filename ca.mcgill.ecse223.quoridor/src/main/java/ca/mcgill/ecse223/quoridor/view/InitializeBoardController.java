@@ -172,27 +172,6 @@ public class InitializeBoardController extends ViewController{
     }
 
     public void createNewWall(ActionEvent actionEvent) {
-/*
-<<<<<<< HEAD
-    	if(!isWallDrop && !pawnMoved) { //avoids issue with dropping multiple walls before turn ends
-    		
-            // Check if there is already a wall in hand
-            // If so just cancel the wall move 
-	        if (wallInHand) {
-	            WallController.cancelWallMove();
-	            wallInHand = false;
-	            refresh();
-	        }
-	        //
-	        else if (WallController.grabWall()) {
-	            wallInHand = true;
-	            refresh();
-	        } else {
-	            System.out.println("No more walls");
-	        }
-    	}
-=======
-*/
         // Check if there is already a wall in hand
         // If so just cancel the wall move
         if (state == PlayerState.WALL) {
