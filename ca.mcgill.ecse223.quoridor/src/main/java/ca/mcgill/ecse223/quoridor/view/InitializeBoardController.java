@@ -7,10 +7,7 @@ import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
@@ -27,8 +24,8 @@ import java.util.List;
 
 public class InitializeBoardController extends ViewController{
 
-    enum PlayerState {WALL, PAWN, IDLE};
-    PlayerState state = PlayerState.IDLE;
+    public enum PlayerState {WALL, PAWN, IDLE};
+    public PlayerState state = PlayerState.IDLE;
 
     @FXML
     private AnchorPane board;
@@ -51,7 +48,11 @@ public class InitializeBoardController extends ViewController{
     public Text blackNumOfWalls;
     public Text redNumOfWalls;
     public Text greenNumOfWalls;
-    
+
+    public Button grabWallBtn;
+    public Button rotateWallBtn;
+    public Button backBtn;
+
     public Timeline timeline;
     
     public static boolean playerIsWhite = false;
