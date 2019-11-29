@@ -1,8 +1,12 @@
 package ca.mcgill.ecse223.quoridor.view;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import ca.mcgill.ecse223.quoridor.controllers.ModelQuery;
+import ca.mcgill.ecse223.quoridor.controllers.PositionController;
+import ca.mcgill.ecse223.quoridor.controllers.SaveLoadGameController;
 import ca.mcgill.ecse223.quoridor.model.Direction;
 import ca.mcgill.ecse223.quoridor.model.GamePosition;
 import ca.mcgill.ecse223.quoridor.model.Player;
@@ -11,7 +15,9 @@ import ca.mcgill.ecse223.quoridor.model.Tile;
 import ca.mcgill.ecse223.quoridor.model.Wall;
 import ca.mcgill.ecse223.quoridor.model.WallMove;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -19,12 +25,13 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import javafx.util.Pair;
 
 public class ReplayModeController extends ViewController{
 	
 	private int stepNumber = 0;
-	List<GamePosition> listPositions = ModelQuery.getCurrentGame().getPositions();
+	List<GamePosition> listPositions;
 	
 	@FXML
     private AnchorPane board;
@@ -48,25 +55,47 @@ public class ReplayModeController extends ViewController{
     public Text redNumOfWalls;
     public Text greenNumOfWalls;
 	
+    
 	public void initialize() {
+        final FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open Resource File");
+        File file = fileChooser.showOpenDialog(Main.getCurrentStage());
+        if (file == null) {
+        	changePage("/fxml/Menu.fxml");
+        } else {
+    		whitePlayerName.setText(file.getName());
+			try {
+				SaveLoadGameController.fileLoad(file.getName(), "xx", "yy");
+			} catch (UnsupportedOperationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}     
+		}   
+        
+        listPositions = ModelQuery.getCurrentGame().getPositions();
 		refresh();
 	}
+
 	
+	@FXML
 	public void handleForwardStep(ActionEvent actionEvent) {
 		stepNumber++;
 		refresh();
 	}
 	
+	@FXML
 	public void handleBackStep(ActionEvent actionEvent) {
-		stepNumber--;
+		//stepNumber--;
 		refresh();
 	}
 	
+	@FXML
 	public void handleStartSkip(ActionEvent actionEvent) {
 		stepNumber=0;
 		refresh();
 	}
 	
+	@FXML
 	public void handleEndSkip(ActionEvent actionEvent) {
 		stepNumber=listPositions.size()-1;
 		refresh();

@@ -9,7 +9,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#handleKeyPressed" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ca.mcgill.ecse223.quoridor.view.InitializeBoardController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ca.mcgill.ecse223.quoridor.view.ReplayModeController">
    <children>
       <Text fx:id="whitePlayerName" layoutX="35.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PLAYER 1" wrappingWidth="107.151118046875">
          <font>
@@ -146,7 +146,7 @@
             <AnchorPane fx:id="board" prefHeight="380.0" prefWidth="378.0" />
          </children>
       </AnchorPane>
-      <Button layoutX="444.0" layoutY="236.0" mnemonicParsing="false" onAction="#handleFrontStep" prefHeight="39.0" prefWidth="152.0" text="Forward Step">
+      <Button layoutX="444.0" layoutY="236.0" mnemonicParsing="false" onAction="#handleForwardStep" prefHeight="39.0" prefWidth="152.0" text="Forward Step">
          <font>
             <Font size="18.0" />
          </font>

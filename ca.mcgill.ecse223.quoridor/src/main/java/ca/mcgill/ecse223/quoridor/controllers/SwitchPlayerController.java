@@ -75,7 +75,7 @@ public class SwitchPlayerController {
 			wallClone.setOwner(ModelQuery.getBlackPlayer());
 			clone.addBlackWallsOnBoard(wallClone);
 		}
-		
+		/*
 		for(Wall whiteWall: ModelQuery.getCurrentPosition().getWhiteWallsInStock()) {
 			Wall wallClone = new Wall(id*40+wallCounter++, ModelQuery.getWhitePlayer());
 			wallClone.setMove(whiteWall.getMove());
@@ -89,7 +89,7 @@ public class SwitchPlayerController {
 			wallClone.setOwner(ModelQuery.getBlackPlayer());
 			clone.addBlackWallsInStock(wallClone);
 		}
-		
+		*/
 		if(ModelQuery.isFourPlayer()) {
 			redPlayerPos = new PlayerPosition(ModelQuery.getCurrentGame().getRedPlayer(), current.getRedPosition().getTile());
 			greenPlayerPos = new PlayerPosition(ModelQuery.getCurrentGame().getGreenPlayer(), current.getGreenPosition().getTile());
@@ -109,7 +109,7 @@ public class SwitchPlayerController {
 				wallClone.setOwner(ModelQuery.getGreenPlayer());
 				clone.addGreenWallsOnBoard(wallClone);
 			}
-			
+			/*
 			for(Wall redWall: ModelQuery.getCurrentPosition().getRedWallsInStock()) {
 				Wall wallClone = new Wall(id*40+wallCounter++, ModelQuery.getRedPlayer());
 				wallClone.setMove(redWall.getMove());
@@ -122,7 +122,7 @@ public class SwitchPlayerController {
 				wallClone.setMove(greenWall.getMove());
 				wallClone.setOwner(ModelQuery.getGreenPlayer());
 				clone.addGreenWallsInStock(wallClone);
-			}
+			}*/
 		}
 		
 		return clone;
