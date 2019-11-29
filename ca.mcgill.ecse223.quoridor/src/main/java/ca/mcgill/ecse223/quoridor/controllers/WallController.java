@@ -1,7 +1,10 @@
 package ca.mcgill.ecse223.quoridor.controllers;
+
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
+import ca.mcgill.ecse223.quoridor.WallGraph;
 import ca.mcgill.ecse223.quoridor.model.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class WallController {
