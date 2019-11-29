@@ -49,6 +49,8 @@ public class InitializeBoardController extends ViewController{
     public static boolean isWallDrop = false;
     public static boolean isPawnMoved = false;
     public String initialTime;
+    public static boolean whiteWon = false;
+    public static boolean blackWon = false;
 
 
     public void initialize() {
@@ -99,16 +101,17 @@ public class InitializeBoardController extends ViewController{
                 	StartNewGameController.resetTimeToSet();
                 }
                 //TODO: MODIFY: time counts to zero/white reaches row = 9 or black reach row = 1
-                //TODO: FIX issue: pop up multiple windows
-                else if  (EndGameController.checkGameStatus(currentPlayer).equals("whiteWon")) {
-                    showStage("White Player Wins!");
-                    //TODO: ADD POP UP WINDOW
-                    //TODO: CHANGE TO END GAME PAGE
-                }
-                else if (EndGameController.checkGameStatus(currentPlayer).equals("blackWon")) {
-                    showStage("Black player Wins!");
+                else if  (PawnController.whiteWonCheck) {
+                    whiteWon = true;
+                    //TODO: Stop timer
 
                 }
+                else if (PawnController.blackWonCheck) {
+                    blackWon = true;
+                    //TODO: Stop timer
+
+                }
+                //TODO: timer should not count again once it reaches zero
 
 
                 //grey out the next player name & count down time for the current player
@@ -200,6 +203,18 @@ public class InitializeBoardController extends ViewController{
         if(ModelQuery.getWallMoveCandidate()!=null){
             WallMove move = ModelQuery.getWallMoveCandidate();
             placeWall(move, true);
+        }
+
+        // check if one of the player wins
+        if (whiteWon) {
+            ModelQuery.getCurrentGame().setWinningPlayer(ModelQuery.getWhitePlayer());
+            changePage("/fxml/EndScene.fxml");
+            whiteWon = false; //avoid change page all the time
+        }
+        else if (blackWon) {
+            ModelQuery.getCurrentGame().setWinningPlayer(ModelQuery.getBlackPlayer());
+            changePage("/fxml/EndScene.fxml");
+            blackWon = false;
         }
     }
 

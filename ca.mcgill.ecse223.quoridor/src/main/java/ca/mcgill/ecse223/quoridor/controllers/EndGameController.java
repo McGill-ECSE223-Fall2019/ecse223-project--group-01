@@ -80,6 +80,8 @@ public class EndGameController {
         long whiteRemainingTime = whiteDate.getTime();
         Tile whiteTile = ModelQuery.getCurrentGame().getCurrentPosition().getWhitePosition().getTile();
         Tile blackTile = ModelQuery.getCurrentGame().getCurrentPosition().getBlackPosition().getTile();
+        System.out.println(whiteTile.getRow());
+        System.out.println(whiteTile.getColumn());
 
         Player whitePlayer = ModelQuery.getWhitePlayer();
         Player blackPlayer = ModelQuery.getBlackPlayer();
