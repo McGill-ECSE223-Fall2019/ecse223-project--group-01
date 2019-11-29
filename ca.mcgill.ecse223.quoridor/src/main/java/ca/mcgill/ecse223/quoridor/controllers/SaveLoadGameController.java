@@ -14,7 +14,7 @@ import static ca.mcgill.ecse223.quoridor.controllers.PositionController.*;
  *
  * This class will also be borrowing the helper methods that were defined
  * in the PositionController class
- * @author Kevin
+ * @author Kevin & Kate
  */
 @SuppressWarnings("ALL")
 public class SaveLoadGameController {
@@ -76,10 +76,75 @@ public class SaveLoadGameController {
         //Use the methods defined below to turn them into save template and append to file
 
 
+        int numPlayers;
+        if(ModelQuery.isFourPlayer()) {
+            numPlayers = 4;
+        } else {
+            numPlayers = 2;
+        }
+
+        int moveCounter = 1;
+        int roundCounter = 0;
+
+        for(Move move: listOfMoves) {
+            roundCounter++;
+            Tile tile = move.getTargetTile();
+
+            char columnLetter = 'e';
+            switch(tile.getColumn()) {
+                case 1:
+                    columnLetter = 'a';
+                    break;
+                case 2:
+                    columnLetter = 'b';
+                    break;
+                case 3:
+                    columnLetter = 'c';
+                    break;
+                case 4:
+                    columnLetter = 'd';
+                    break;
+                case 5:
+                    columnLetter = 'e';
+                    break;
+                case 6:
+                    columnLetter = 'f';
+                    break;
+                case 7:
+                    columnLetter = 'g';
+                    break;
+                case 8:
+                    columnLetter = 'h';
+                    break;
+                case 9:
+                    columnLetter = 'i';
+                    break;
+            }
 
 
-        //.****Not finished yet
-        output.append("\n");
+            if(move.getPlayer().hasGameAsWhite()) { //if player is white
+                output.write(moveCounter++ + ". ");
+                output.write(columnLetter+""+tile.getRow());
+            } else {
+                output.write(columnLetter+""+tile.getRow());
+            }
+
+            if(move instanceof WallMove) {
+                if (((WallMove) move).getWallDirection().equals(Direction.Horizontal)) {
+                    output.write("h ");
+                } else {
+                    output.write("v ");
+                }
+            } else {
+                output.write(" ");
+            }
+
+
+            if(roundCounter==numPlayers) {
+                output.write("\n");
+                roundCounter=0;
+            }
+        }
         output.close();
         //.Write the move number
 
@@ -93,7 +158,7 @@ public class SaveLoadGameController {
      *         false    the game loads inccorectly
      * @throws java.lang.UnsupportedOperationException
      */
-    public static boolean fileLoad(String filename, String whiteUser, String blackUser){
+    public static boolean fileLoad(String filename, String whiteUser, String blackUser) throws java.lang.UnsupportedOperationException, IOException{
         File saveFile = new File(saveLocation + filename);
         Quoridor quoridor = QuoridorApplication.getQuoridor();
 

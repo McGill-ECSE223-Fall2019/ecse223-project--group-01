@@ -271,6 +271,7 @@ public class NewGameMenuController extends ViewController {
         }
     }
 
+    @SuppressWarnings("Duplicates")
     public void handleLoadPosition(ActionEvent actionEvent) {
         // confirm button
         Window page = confirm.getScene().getWindow();
