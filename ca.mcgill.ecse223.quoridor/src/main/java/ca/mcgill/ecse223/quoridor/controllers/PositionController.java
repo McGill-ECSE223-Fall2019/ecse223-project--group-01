@@ -143,6 +143,8 @@ public class PositionController {
 
         PlayerPosition whitePlayerPosition = null;
         PlayerPosition blackPlayerPosition = null;
+        PlayerPosition redPlayerPosition = null;
+        PlayerPosition greenPlayerPosition = null;
         List<GamePosition> positions = ModelQuery.getCurrentGame().getPositions();
 
 
@@ -223,12 +225,25 @@ public class PositionController {
                 }
 
                 GamePosition gameposition = new GamePosition(positions.size()+1, whitePlayerPosition, blackPlayerPosition, quoridor.getCurrentGame().getWhitePlayer(), quoridor.getCurrentGame());
+                if(ModelQuery.isFourPlayer()) {
+                	gameposition.setRedPosition(redPlayerPosition);
+                	gameposition.setGreenPosition(greenPlayerPosition);
+                }
+                
                 quoridor.getCurrentGame().setCurrentPosition(gameposition);
                 quoridor.getCurrentGame().getCurrentPosition().setWhitePosition(whitePlayerPosition);
                 quoridor.getCurrentGame().getCurrentPosition().setBlackPosition(blackPlayerPosition);
+                if(ModelQuery.isFourPlayer()) {
+                	ModelQuery.getCurrentGame().getCurrentPosition().setRedPosition(redPlayerPosition);
+                	ModelQuery.getCurrentGame().getCurrentPosition().setGreenPosition(greenPlayerPosition);
+                }
 
-                PawnController.initPawnSM(quoridor.getCurrentGame().getBlackPlayer(), blackPlayerPosition);
                 PawnController.initPawnSM(quoridor.getCurrentGame().getWhitePlayer(), whitePlayerPosition);
+                PawnController.initPawnSM(quoridor.getCurrentGame().getBlackPlayer(), blackPlayerPosition);
+                if(ModelQuery.isFourPlayer()) {
+                    PawnController.initPawnSM(quoridor.getCurrentGame().getRedPlayer(), redPlayerPosition);
+                    PawnController.initPawnSM(quoridor.getCurrentGame().getGreenPlayer(), greenPlayerPosition);
+                }
                 if(!ValidatePositionController.validateOverlappingPawns()){
                     return false;
                 }
