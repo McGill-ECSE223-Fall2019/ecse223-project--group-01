@@ -141,5 +141,9 @@ public class ModelQuery {
             return null;
         }
     }
-    
+
+    public static Move getLastPlayedMove(){
+        int size = ModelQuery.getMoves().size();
+        return ModelQuery.getMoves().get(size-1);
+    }
 }
