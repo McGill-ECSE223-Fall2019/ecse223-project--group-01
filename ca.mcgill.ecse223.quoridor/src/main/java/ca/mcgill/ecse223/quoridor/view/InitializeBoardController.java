@@ -290,7 +290,7 @@ public class InitializeBoardController extends ViewController{
         // update wall positions
         ModelQuery.getCurrentGame();
         List<Wall> walls = ModelQuery.getAllWallsOnBoard();
-
+        
         for (Wall wall : walls) {
             placeWall(wall.getMove(), false);
         }
@@ -511,9 +511,9 @@ public class InitializeBoardController extends ViewController{
         if(input.getText() != null && input.getText().length() != 0) {
             filename = input.getText();
 
-            if (!SaveLoadGameController.fileSave(filename +".mov")) {
+            if (!PositionController.saveGame(filename +".mov", ModelQuery.getPlayerToMove())) {
                 Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-                if (!SaveLoadGameController.isSaveMoveValid)
+                if (!PositionController.isPositionValid)
                     errorAlert.setContentText("The current game save is invalid");
                 else
                     errorAlert.setContentText("There was an error in saving your game");
@@ -522,7 +522,7 @@ public class InitializeBoardController extends ViewController{
             }
             else{
                 Alert successAlert = new Alert(Alert.AlertType.CONFIRMATION);
-                successAlert.setContentText("Game successfully saved in: " +filename +".mov");
+                successAlert.setContentText("Game is successfully saved in: " +filename +".mov");
                 successAlert.showAndWait();
             }
         }

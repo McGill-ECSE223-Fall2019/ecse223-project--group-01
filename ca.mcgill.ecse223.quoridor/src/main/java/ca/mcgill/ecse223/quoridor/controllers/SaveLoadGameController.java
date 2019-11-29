@@ -123,6 +123,7 @@ public class SaveLoadGameController {
 
                     //Split the information gained from the file
                     String[] categorySplit = line.split(". "); //[0] Move Number, [1] White Move + Black Move
+                    System.out.print("potato " + categorySplit);
                     String moveNumber = categorySplit[0];
                     String[] moveInfo = categorySplit[1].split(" "); //[0] White Move, [1] Black Move
                     //Summary: Information extracted == Move number, White Move, Black Move
