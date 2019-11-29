@@ -187,7 +187,7 @@ public class SaveLoadGameController {
                     /* Reading the data from the save file and turning them into something that can be understood by our game*/
 
                     //Split the information gained from the file
-                    String[] categorySplit = line.split(". "); //[0] Move Number, [1] White Move + Black Move
+                    String[] categorySplit = line.split("\\. "); //require double brackets because of unwanted regex: [0] Move Number, [1] White Move + Black Move
                     String moveNumber = categorySplit[0];
                     String[] moveInfo = categorySplit[1].split(" "); //[0] White Move, [1] Black Move
                     //Summary: Information extracted == Move number, White Move, Black Move
@@ -242,6 +242,10 @@ public class SaveLoadGameController {
                 }
 
                 //.Setting initialize pawn position
+
+                if (ModelQuery.getBoard()== null){
+                    BoardController.initializeBoard();
+                }
                 //White pawn will start at E9
                 Tile whiteDefaultPos = new Tile(9,5,ModelQuery.getBoard());
                 whitePlayerPosition = new PlayerPosition(ModelQuery.getWhitePlayer(), whiteDefaultPos);
@@ -308,7 +312,7 @@ public class SaveLoadGameController {
                             }
                             //Still at default position
                             else{
-                                int[] defaultPos = {0,9,5};
+                                int[] defaultPos = {0,5,9};
                                 side = GetPawnMoveDirection(defaultPos,whiteMoves.get(wm));
                                 PawnController.movePawn(side);
                             }
@@ -318,11 +322,13 @@ public class SaveLoadGameController {
                                 isSaveMoveValid = false;
                                 return false;
                             }
+                            else{
+                                SwitchPlayerController.switchActivePlayer();
+                            }
                             ww++;
                         } else {
                             return false;
                         }
-                        SwitchPlayerController.switchActivePlayer();
                     }
                     else{
                         //White player must always move first, so if PlayerToMove isn't white player, then somethign went wrong
@@ -344,7 +350,7 @@ public class SaveLoadGameController {
                             }
                             //Still at default position
                             else{
-                                int[] defaultPos = {0,1,5};
+                                int[] defaultPos = {0,5,1};
                                 side = GetPawnMoveDirection(defaultPos,blackMoves.get(bm));
                                 PawnController.movePawn(side);
                             }
@@ -353,6 +359,9 @@ public class SaveLoadGameController {
                             if(!ExecuteWallMove(blackWalls, bw, i + 1, ModelQuery.getBlackPlayer())){
                                 isSaveMoveValid = false;
                                 return false;
+                            }
+                            else{
+                                SwitchPlayerController.switchActivePlayer();
                             }
                             bw++;
                         } else {

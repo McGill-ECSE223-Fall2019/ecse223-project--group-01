@@ -2,6 +2,9 @@ package ca.mcgill.ecse223.quoridor.view;
 import ca.mcgill.ecse223.quoridor.controllers.PositionController;
 import ca.mcgill.ecse223.quoridor.controllers.SaveLoadGameController;
 import ca.mcgill.ecse223.quoridor.controllers.StartNewGameController;
+import ca.mcgill.ecse223.quoridor.model.User;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -28,8 +31,17 @@ public class LoadGameController extends ViewController{
     public ChoiceBox<String> existingRedChoices;
     public ChoiceBox<String> existingGreenChoices;
     public ChoiceDialog<String> existingSavedPosition;
+    public ToggleGroup numberPlayers;
+    public RadioButton twoPlayer;
+    public RadioButton fourPlayer;
     List<String> saveFiles;
     public String saveLocation = ".\\";
+
+    @SuppressWarnings("Duplicates")
+    public void initialize() {
+        StartNewGameController.initializeGame();
+        List<User> existingUsers = StartNewGameController.existedUsers();
+    }
 
     public void handleBackToMenu(ActionEvent actionEvent) {
         changePage("/fxml/Menu.fxml");
@@ -46,7 +58,7 @@ public class LoadGameController extends ViewController{
     @SuppressWarnings("Duplicates")
     public void handleContinueGame(ActionEvent actionEvent) {
         // confirm button
-        Window page = confirm.getScene().getWindow();
+       // Window page = confirm.getScene().getWindow();
         boolean readyTostart = true;
         String error = "";
         String whiteName;
@@ -59,49 +71,8 @@ public class LoadGameController extends ViewController{
         // confirm that all fields have been set
         // validate white player name
 
-        if (whitePlayerName.getText().equals("") && existingWhiteChoices.getValue() == null) {
-            error += "White name not set \n";
-            readyTostart = false;
-        } else if (!whitePlayerName.getText().equals("") && StartNewGameController.usernameExists(whitePlayerName.getText())) {
-            error += "White username already exists \n";
-            readyTostart = false;
-        }
-
-        //validate black player name
-        if (blackPlayerName.getText().equals("") && existingBlackChoices.getValue() == null) {
-            error += "Black player name not set \n";
-            readyTostart = false;
-        } else if (!blackPlayerName.getText().equals("") && StartNewGameController.usernameExists(blackPlayerName.getText())) {
-            error += "Black username already exists \n";
-            readyTostart = false;
-        }
-
-        // validate thinking time
-        if (seconds.getText().equals("") || minutes.getText().equals("")) {
-            error += "Thinking time not set";
-            readyTostart = false;
-        } else if (!isInteger(seconds.getText()) || !isInteger(minutes.getText())) {
-            error += "Thinking time is not a whole number";
-            readyTostart = false;
-        } else if (Integer.parseInt(seconds.getText()) > 60 || Integer.parseInt(seconds.getText()) < 0 || Integer.parseInt(minutes.getText()) < 0) {
-            error += "Invalid numbers given for Thinking time";
-            readyTostart = false;
-        }
-
         // All good begin initialization process
         if (readyTostart) {
-            if(blackPlayerName.getText().equals("")){
-                blackName = existingBlackChoices.getValue();
-            }
-            else{
-                blackName = blackPlayerName.getText();
-            }
-            if(whitePlayerName.getText().equals("")){
-                whiteName = existingWhiteChoices.getValue();
-            }
-            else{
-                whiteName = whitePlayerName.getText();
-            }
 
             //add all savefiles into a list
             File directory = new File("./");
@@ -157,9 +128,9 @@ public class LoadGameController extends ViewController{
             }
         }
         // Display errors
-        else {
-            AlertHelper.showAlert(Alert.AlertType.ERROR, page, "Error", error);
-        }
+        //else {
+        //    AlertHelper.showAlert(Alert.AlertType.ERROR, page, "Error", error);
+        //}
     }
 
     public void handleReplayMode(ActionEvent actionEvent) {

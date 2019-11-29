@@ -247,7 +247,9 @@ public class PawnController {
 
             // Update the player position
             playerPosition.setTile(target);
-            SwitchPlayerController.switchActivePlayer();
+            if(ModelQuery.getPlayerToMove().getNextPlayer() != null){
+                SwitchPlayerController.switchActivePlayer();
+            }
             return true;
         } else {
             return false;

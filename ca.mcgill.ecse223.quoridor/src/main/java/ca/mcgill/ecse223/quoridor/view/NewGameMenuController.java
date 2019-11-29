@@ -44,6 +44,7 @@ public class NewGameMenuController extends ViewController {
     public static String minS;
     public static String secS;
 
+    @SuppressWarnings("Duplicates")
     public void initialize() {
     	
         StartNewGameController.initializeGame(); 

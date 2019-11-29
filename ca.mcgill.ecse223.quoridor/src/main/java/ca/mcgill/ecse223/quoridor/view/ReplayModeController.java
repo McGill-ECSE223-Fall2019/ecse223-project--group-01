@@ -69,8 +69,10 @@ public class ReplayModeController extends ViewController{
 			} catch (UnsupportedOperationException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}     
-		}   
+			} catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         
         //listPositions = ModelQuery.getCurrentGame().getPositions();
 		//refresh();
