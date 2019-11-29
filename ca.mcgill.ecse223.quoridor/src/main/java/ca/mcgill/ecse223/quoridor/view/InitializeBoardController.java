@@ -90,7 +90,7 @@ public class InitializeBoardController extends ViewController{
             public void handle(ActionEvent t) {
                 Player currentPlayer = ModelQuery.getPlayerToMove();
 
-                if ((StartNewGameController.timeOver()) || isWallDrop || isPawnMoved) {
+                if (isWallDrop || isPawnMoved) {
                 	timerForWhitePlayer.setText(initialTime);
                 	timerForBlackPlayer.setText(initialTime);
 
@@ -100,19 +100,27 @@ public class InitializeBoardController extends ViewController{
 
                 	StartNewGameController.resetTimeToSet();
                 }
+                else if (StartNewGameController.timeOver()) {
+                    System.out.println(currentPlayer.getUser().getName());
+                    System.out.println(ModelQuery.getWhitePlayer().getUser().getName());
+                    System.out.println(ModelQuery.getBlackPlayer().getUser().getName());
+                    if(currentPlayer.equals(ModelQuery.getWhitePlayer())) {
+                        whiteWon = true;
+                    }
+                    else if (currentPlayer.equals(ModelQuery.getBlackPlayer())) {
+                        blackWon = true;
+                    }
+                    refresh();
+                }
                 //TODO: MODIFY: time counts to zero/white reaches row = 9 or black reach row = 1
                 else if  (PawnController.whiteWonCheck) {
                     whiteWon = true;
-                    //TODO: Stop timer
 
                 }
                 else if (PawnController.blackWonCheck) {
                     blackWon = true;
-                    //TODO: Stop timer
-
                 }
                 //TODO: timer should not count again once it reaches zero
-
 
                 //grey out the next player name & count down time for the current player
                 if (currentPlayer.equals(ModelQuery.getWhitePlayer())) {
@@ -208,11 +216,14 @@ public class InitializeBoardController extends ViewController{
         // check if one of the player wins
         if (whiteWon) {
             ModelQuery.getCurrentGame().setWinningPlayer(ModelQuery.getWhitePlayer());
+            timeline.stop();
             changePage("/fxml/EndScene.fxml");
-            whiteWon = false; //avoid change page all the time
+            whiteWon = false; //avoid refreshing page all the time
+
         }
         else if (blackWon) {
             ModelQuery.getCurrentGame().setWinningPlayer(ModelQuery.getBlackPlayer());
+            timeline.stop();
             changePage("/fxml/EndScene.fxml");
             blackWon = false;
         }

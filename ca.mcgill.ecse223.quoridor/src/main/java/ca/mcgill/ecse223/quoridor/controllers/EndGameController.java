@@ -12,27 +12,25 @@ public class EndGameController {
 
     public EndGameController() {}
 
-    /**
-     *
-     * @return player that wins the game
-     */
-    public static Player endGame() {
-        Player player = null;
+    public static void gameIsNoLongerRun() {
+        Player winPlayer;
 
-        return player;
-    }
-
-    /**
-     * Updates game status. If black player won, update status to BlackWon
-     * If white player won, update status to WhiteWon
-     */
-    public static void GameNotRun() {
-        if (endGame().equals(ModelQuery.getBlackPlayer())) {        //black player wins
-            ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.BlackWon);
-        } else {
-            ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.WhiteWon);
+        try {
+            winPlayer = ModelQuery.getCurrentGame().getWinningPlayer();
+        } catch (NullPointerException e) {
+            winPlayer = null;
+            System.out.println("There's no winning player yet!");
         }
-
+        Player whitePlayer = ModelQuery.getWhitePlayer();
+        Player blackPlayer = ModelQuery.getBlackPlayer();
+        if (winPlayer != null) {
+            if (winPlayer.equals(whitePlayer)) {
+                ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.WhiteWon);
+            }
+            else if (winPlayer.equals(blackPlayer)) {
+                ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.BlackWon);
+            }
+        }
     }
 
     public static String checkPawnPosition(String player, int row, int col) {

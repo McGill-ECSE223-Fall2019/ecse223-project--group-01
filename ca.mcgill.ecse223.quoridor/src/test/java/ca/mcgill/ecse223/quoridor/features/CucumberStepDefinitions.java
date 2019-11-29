@@ -1301,7 +1301,6 @@ public class CucumberStepDefinitions {
 	/* Identify Game Won */
 	Player currentPlayer;
 	String player;
-	boolean validClock = false;
 	int rowVal;
 	int colVal;
     @Given("Player {string} has just completed his move")
@@ -1379,8 +1378,10 @@ public class CucumberStepDefinitions {
 	/* Report Final Result */
 	@When("The game is no longer running")
 	public void theGameIsNoLongerRunning() {
-		//TODO : GUI step
-
+		Player player = ModelQuery.getCurrentGame().getWhitePlayer();
+		ModelQuery.getCurrentGame().setWinningPlayer(player);
+		EndGameController.gameIsNoLongerRun();
+		//TODO : Fix null pointer exception!
 	}
 
 	@Then("The final result shall be displayed")
@@ -1409,6 +1410,7 @@ public class CucumberStepDefinitions {
 		//TODO: GUI step
 	}
 
+	/* Resign game */
 	@Given("The player to move is {string}")
 	public void thePlayerToMoveIs(String playerColor) {
 		if(playerColor.equals("white")){
