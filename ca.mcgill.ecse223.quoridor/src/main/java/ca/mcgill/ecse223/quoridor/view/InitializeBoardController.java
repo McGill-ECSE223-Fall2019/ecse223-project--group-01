@@ -511,9 +511,9 @@ public class InitializeBoardController extends ViewController{
         if(input.getText() != null && input.getText().length() != 0) {
             filename = input.getText();
 
-            if (!PositionController.saveGame(filename +".mov", ModelQuery.getPlayerToMove())) {
+            if (!SaveLoadGameController.fileSave(filename +".mov")) {
                 Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-                if (!PositionController.isPositionValid)
+                if (!SaveLoadGameController.isSaveMoveValid)
                     errorAlert.setContentText("The current game save is invalid");
                 else
                     errorAlert.setContentText("There was an error in saving your game");

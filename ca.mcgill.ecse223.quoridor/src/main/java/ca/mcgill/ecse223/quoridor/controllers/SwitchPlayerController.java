@@ -40,12 +40,13 @@ public class SwitchPlayerController {
 		}
 		*/
 		
+		//record current gamestate
+		ModelQuery.getCurrentGame().addPosition(deepCopyPosition());
+		
 		Player currentPlayer = ModelQuery.getPlayerToMove();
 		//switch active player
 		QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().setPlayerToMove(currentPlayer.getNextPlayer());
 		
-		//record current gamestate
-		ModelQuery.getCurrentGame().addPosition(deepCopyPosition());
 		//Wall d = ModelQuery.getWhiteWallsOnBoard().get(0);
 		//System.out.println(d.getMove());
 	}

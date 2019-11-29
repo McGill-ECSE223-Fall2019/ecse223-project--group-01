@@ -74,10 +74,36 @@ public class SaveLoadGameController {
 
         //After being able to store all the moves and move numbers into a list,
         //Use the methods defined below to turn them into save template and append to file
+        
+        
+        int numPlayers;
+        if(ModelQuery.isFourPlayer()) {
+        	numPlayers = 4;
+        } else {
+        	numPlayers = 2;
+        }
 
-
-
-
+        int moveCounter = 1;
+        int roundCounter = 0;
+        
+        for(Move move: listOfMoves) {
+        	roundCounter++;
+        	if(move.getPlayer().hasGameAsWhite()) { //if player is white
+        		output.write(moveCounter++ + ". ");
+        		Tile tile = move.getTargetTile();
+        		output.write(tile.getColumn());
+        		//output.write(tile.getColumn()+tile.getRow()+" ");
+        	} else {
+        		Tile tile = move.getTargetTile();
+        		output.write(tile.getColumn());
+        		//output.write(tile.getColumn()+tile.getRow()+" ");
+        	}
+        	if(roundCounter==numPlayers) {
+        		output.write("\n");
+        	}
+        }
+        
+        
         //.****Not finished yet
         output.append("\n");
         output.close();
@@ -123,7 +149,6 @@ public class SaveLoadGameController {
 
                     //Split the information gained from the file
                     String[] categorySplit = line.split(". "); //[0] Move Number, [1] White Move + Black Move
-                    System.out.print("potato " + categorySplit);
                     String moveNumber = categorySplit[0];
                     String[] moveInfo = categorySplit[1].split(" "); //[0] White Move, [1] Black Move
                     //Summary: Information extracted == Move number, White Move, Black Move

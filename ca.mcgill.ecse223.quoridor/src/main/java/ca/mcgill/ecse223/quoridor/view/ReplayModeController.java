@@ -72,8 +72,8 @@ public class ReplayModeController extends ViewController{
 			}     
 		}   
         
-        listPositions = ModelQuery.getCurrentGame().getPositions();
-		refresh();
+        //listPositions = ModelQuery.getCurrentGame().getPositions();
+		//refresh();
 	}
 
 	
