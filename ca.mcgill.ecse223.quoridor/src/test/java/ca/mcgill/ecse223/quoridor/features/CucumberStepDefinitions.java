@@ -828,6 +828,24 @@ public class CucumberStepDefinitions {
 		// TODO GUI step
 	}
 
+	/*
+	 * Scenario: Enter replay mode
+	 * @author Kate Ward
+	 */
+	@When("I initiate replay mode")
+	public void initiateReplayMode() {
+		
+	}
+	
+	@Then("The game shall be in replay mode")
+	public void isReplayMode() {
+	}
+	
+	@Given("The game is in replay mode")
+	public void gameInReplayMode() {
+		
+	}
+	
 	//grab wall
 	//scenario start wall placement
 	/**
