@@ -271,7 +271,7 @@ public class PawnController {
         if( Math.abs(target.getRow()-source.getRow())<=1 && Math.abs(target.getColumn()-source.getColumn())<=1 ) {
             newMove = new StepMove(moveNum,roundNum,ModelQuery.getPlayerToMove(),target,ModelQuery.getCurrentGame());
         }else{
-            newMove = new StepMove(moveNum,roundNum,ModelQuery.getPlayerToMove(),target,ModelQuery.getCurrentGame());
+            newMove = new JumpMove(moveNum,roundNum,ModelQuery.getPlayerToMove(),target,ModelQuery.getCurrentGame());
         }
         return newMove;
     }
