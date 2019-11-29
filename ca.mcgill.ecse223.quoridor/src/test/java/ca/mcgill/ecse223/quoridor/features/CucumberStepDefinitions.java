@@ -1356,7 +1356,6 @@ public class CucumberStepDefinitions {
 	@And ("The game shall no longer be running")
 	public void theGameShallNotLongerBeRunning () {
 		//TODO: GUI Step
-		// TODO: Add comment: We make sure it is no longer the game view
 	}
 
 
@@ -1403,11 +1402,15 @@ public class CucumberStepDefinitions {
 	@And("White shall be unable to move")
 	public void whiteShallBeUnableToMove() {
 		//TODO: GUI Step
+		assertEquals(false, InitializeBoardController.enableMovePawn);
+		assertEquals(false, InitializeBoardController.enableDropWall);
 	}
 
 	@And("Black shall be unable to move")
 	public void blackShallBeUnableToMove() {
 		//TODO: GUI step
+		assertEquals(false, InitializeBoardController.enableDropWall);
+		assertEquals(false, InitializeBoardController.enableMovePawn);
 	}
 
 	/* Resign game */

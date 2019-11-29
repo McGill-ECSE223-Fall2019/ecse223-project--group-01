@@ -7,7 +7,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ca.mcgill.ecse223.quoridor.view.EndSceneController">
    <children>
-      <Text fx:id="winnerPlayer" layoutX="225.0" layoutY="114.0" strokeType="OUTSIDE" strokeWidth="0.0" text="WINS">
+      <Text layoutX="329.0" layoutY="117.0" strokeType="OUTSIDE" strokeWidth="0.0" text="wins!">
          <font>
             <Font size="60.0" />
          </font>
@@ -15,5 +15,10 @@
       <Button fx:id="Button1" layoutX="225.0" layoutY="192.0" mnemonicParsing="false" onAction="#handleSaveGame" prefHeight="38.0" prefWidth="149.0" text="Save" />
       <Button fx:id="Button11" layoutX="225.0" layoutY="317.0" mnemonicParsing="false" onAction="#handleBackToMenu" prefHeight="38.0" prefWidth="149.0" text="Menu" />
       <Button fx:id="Button12" layoutX="225.0" layoutY="252.0" mnemonicParsing="false" onAction="#handlePlayAgain" prefHeight="38.0" prefWidth="149.0" text="Play Again" />
+      <Text fx:id="winnerPlayer" layoutX="147.0" layoutY="117.0" strokeType="OUTSIDE" strokeWidth="0.0" text="WINS">
+         <font>
+            <Font size="60.0" />
+         </font>
+      </Text>
    </children>
 </AnchorPane>

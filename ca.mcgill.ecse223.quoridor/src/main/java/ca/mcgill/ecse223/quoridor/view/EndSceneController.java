@@ -15,9 +15,9 @@ public class EndSceneController extends ViewController{
 
     public void initialize() {
         String winnerName = ModelQuery.getCurrentGame().getWinningPlayer().getUser().getName();
-        winnerPlayer.setText(winnerName + " wins!");
-        winnerPlayer.setX(winnerPlayer.getX() + winnerPlayer.getLayoutBounds().getWidth() / 4);
-        winnerPlayer.setY(winnerPlayer.getY() + winnerPlayer.getLayoutBounds().getHeight() / 4);
+        winnerPlayer.setText(winnerName);
+        winnerPlayer.setTextAlignment(TextAlignment.CENTER);
+
     }
 
     @FXML
