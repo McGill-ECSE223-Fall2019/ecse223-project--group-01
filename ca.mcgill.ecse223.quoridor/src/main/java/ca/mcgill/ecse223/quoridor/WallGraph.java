@@ -5,24 +5,17 @@ import java.util.LinkedList;
 
 public class WallGraph {
 
-    private int V;
-    private static WallGraph graph_instance;
+    private int V = 81;
 
+
+    // array of linked lists
     private LinkedList<Integer> adj[];
 
     public WallGraph(){
-        V = 81;
         this.adj = new LinkedList[81];
         for(int i = 0; i<81 ;i++){
             this.adj[i] = new LinkedList<>();
         }
-    }
-
-    public static WallGraph getWallGraph(){
-        if(graph_instance==null){
-            graph_instance = new WallGraph();
-        }
-        return graph_instance;
     }
 
     public void addEdge(int v, int w){
@@ -34,9 +27,12 @@ public class WallGraph {
         this.adj[w].removeFirstOccurrence(v);
     }
 
+
     // prints BFS traversal from a given source s
-    void BFS(int s)
+    // stops if reaches target row or col
+    public boolean reachesDest(int s, int dest_row,int dest_col)
     {
+        int row,col = 0;
         // Mark all the vertices as not visited(By default
         // set as false)
         boolean visited[] = new boolean[V];
@@ -47,13 +43,17 @@ public class WallGraph {
         // Mark the current node as visited and enqueue it
         visited[s]=true;
         queue.add(s);
-
         while (queue.size() != 0)
         {
             // Dequeue a vertex from queue and print it
             s = queue.poll();
             System.out.print(s+" ");
+            col = s%9+1;
+            row = s/9 +1;
 
+            if(row==dest_row || col== dest_col){
+                return true;
+            }
             // Get all adjacent vertices of the dequeued vertex s
             // If a adjacent has not been visited, then mark it
             // visited and enqueue it
@@ -68,5 +68,6 @@ public class WallGraph {
                 }
             }
         }
+        return false;
     }
 }

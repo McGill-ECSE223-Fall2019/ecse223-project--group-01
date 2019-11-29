@@ -74,16 +74,12 @@ public class WallController {
      */
     public static Boolean dropWall() throws UnsupportedOperationException{
         WallMove move = ModelQuery.getWallMoveCandidate();
-
-//        List<Wall> placedWalls = ModelQuery.getAllWallsOnBoard();
         Player player = ModelQuery.getPlayerToMove();
-
 
         // validate no overlap
         if(!ValidatePositionController.validateWallPosition(move.getTargetTile().getRow(),move.getTargetTile().getColumn(),move.getWallDirection())){
             return false;
         }
-
 
         ModelQuery.getCurrentGame().addMove(move);
         ModelQuery.getCurrentGame().setWallMoveCandidate(null);
@@ -101,7 +97,7 @@ public class WallController {
         	ModelQuery.getCurrentGame().getCurrentPosition().addGreenWallsOnBoard(move.getWallPlaced());
         	SwitchPlayerController.switchActivePlayer();
         }
-
+        updateGraph();
         return true;
     }
 
@@ -214,9 +210,9 @@ public class WallController {
         return true;
     }
 
-    private static void initGraph(){
-        List<Wall> placedWalls = ModelQuery.getAllWallsOnBoard();
+    public static void initGraph(){
 
+        List<Wall> placedWalls = ModelQuery.getAllWallsOnBoard();
         WallGraph graph = new WallGraph();
         // create graph
         for(int i =0 ; i<81; i++){
@@ -225,7 +221,19 @@ public class WallController {
                 graph.addEdge(i, neighbor);
             }
         }
-        // add cuts
+
+        // add cuts (if the game was loaded in)
+        for (Wall wall: placedWalls){
+            int[][] cuts = getWallCuts(wall);
+            graph.cutEdge(cuts[0][0],cuts[0][1]);
+            graph.cutEdge(cuts[1][0],cuts[1][1]);
+        }
+        ModelQuery.getCurrentPosition().setWallGraph(graph);
+    }
+
+    public static void updateGraph(){
+        WallGraph graph = ModelQuery.getCurrentPosition().getWallGraph();
+        List<Wall> placedWalls = ModelQuery.getAllWallsOnBoard();
         for (Wall wall: placedWalls){
             int[][] cuts = getWallCuts(wall);
             graph.cutEdge(cuts[0][0],cuts[0][1]);
@@ -276,5 +284,38 @@ public class WallController {
         }
 
         return cuts;
+    }
+
+    /**
+     * This method if the current wall move candidate blocks player paths
+     *
+     * @return A list of players for which a path exists
+     */
+    public static List<Player> pathExistsForPlayers(){
+        List<PlayerPosition> playerList = ModelQuery.getAllPlayerPosition();
+        List<Player> res = new ArrayList<>();
+        GamePosition position = ModelQuery.getCurrentPosition();
+        for(PlayerPosition pos: playerList){
+            Destination dest = pos.getPlayer().getDestination();
+            int tile_index = tileToIndex(pos.getTile());
+            if(dest.getDirection().equals(Direction.Horizontal)){
+                if(position.getWallGraph().reachesDest(tile_index, dest.getTargetNumber(), -1)){
+                    res.add(pos.getPlayer());
+                }
+            }else{
+                if(position.getWallGraph().reachesDest(tile_index,-1, dest.getTargetNumber())){
+                    res.add(pos.getPlayer());
+                }
+            }
+        }
+        return res;
+    }
+
+    private static int coordToIndex(int row,int col){
+        return 0;
+    }
+
+    private static int tileToIndex(Tile tile){
+        return 9*(tile.getRow()-1)+tile.getColumn()-1;
     }
 }
