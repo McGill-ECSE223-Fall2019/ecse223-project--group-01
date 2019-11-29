@@ -58,18 +58,28 @@ public class SaveLoadGameController {
         }
 
         //.Get the list of move history
-        List<Move> listOfMoves = QuoridorApplication.getQuoridor().getCurrentGame().getMoves();
-
+        List<Move> listOfMoves = ModelQuery.getMoves();
         /* NOT SURE IF THIS PART OF THE CODE WORKS*/
         //.*Not going into for loop, because there is nothing in listOfMoves
+        List<int[]> whiteMoves = new ArrayList();
+        List<int[]> blackMoves = new ArrayList();
+
         for(int i = 0; i < listOfMoves.size(); i++){
             Move move = listOfMoves.get(i);
-            int moveNumber = move.getRoundNumber();
-            move.getNextMove();
-            //.****Not finished yet
-            output.append("\n");
-
+            int moveNumber = move.getMoveNumber();
+            Tile target = move.getTargetTile();
+            int[] whiteCoordinates = {target.getRow(), target.getColumn()};
         }
+
+
+        //After being able to store all the moves and move numbers into a list,
+        //Use the methods defined below to turn them into save template and append to file
+
+
+
+
+        //.****Not finished yet
+        output.append("\n");
         output.close();
         //.Write the move number
 
@@ -301,6 +311,10 @@ public class SaveLoadGameController {
             }
 
         }
+        else{
+            //File doesn't exist
+            return false;
+        }
         return true;
     }
 
@@ -395,6 +409,51 @@ public class SaveLoadGameController {
             return "";
         }
     }
+
+    /**
+     * This helper method will convert the coordinates for wall move into board coordinate string [ColumnRowOrientation]
+     * @param col   this is the column coordinate
+     * @param row   this is the row coordinate
+     * @param dir   this is the orientation of the wall
+     * @return      String that follows the coordinate template
+     */
+    private static String convertWallCoord(int col, int row, int dir){
+        char columnLetter = (char)(col + 96);
+        String orientation = convertWallDir(convertToDir(dir));
+        return String.valueOf(columnLetter)+Integer.toString(row)+orientation;
+    }
+
+    /**
+     * This helper method will convert the coordinates for mvoe pawn into board coordinate string [ColumnRow]
+     * @param col   this is the column coordinate
+     * @param row   this is the row coordinate
+     * @return      String that follows the coordinate template
+     */
+    private static String convertPawnCoord(int col, int row){
+        char columnLetter = (char)(col + 96);
+        return String.valueOf(columnLetter)+Integer.toString(row);
+    }
+
+    /**
+     * This helper method will convert a integer move number into a string
+     * @param moveNum   this is the move number
+     * @return          String that represents the moven umber
+     */
+    private static String convertMoveNum(int moveNum){
+        return Integer.toString(moveNum);
+    }
+
+    /**
+     * This helper method will convert all the move information and move number into a saveGame template
+     * @param moveNum       the move Number
+     * @param whiteMove     White player move, either move pawn or drop wall
+     * @param blackMove     Black player move, either move pawn or drop wall
+     * @return              String that follows the save game template
+     */
+    private static String convertLine(String moveNum, String whiteMove, String blackMove){
+        return moveNum + ". " + whiteMove + " " + blackMove;
+    }
+
 }
 
 //TODO: implement a warning when the move doesn't make sense, for example pawn jumped 4 tiles

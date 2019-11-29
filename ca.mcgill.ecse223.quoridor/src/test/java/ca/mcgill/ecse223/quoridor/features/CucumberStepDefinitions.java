@@ -19,10 +19,7 @@ import java.io.IOException;
 import java.sql.Time;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -135,19 +132,7 @@ public class CucumberStepDefinitions {
 	 * Call the methods of the controller that will manipulate the model once they
 	 * are implemented
 	 *
-	/**
-	 * @author Kevin Li
 	 */
-	@When("I initiate to load a saved game {string}")
-	public void iInitiateToLoadASavedGameFilename(String filename) {
-		try {
-			PositionController.loadGame(filename, "white", "black");
-		}catch(java.lang.UnsupportedOperationException e) {
-			throw new PendingException();
-		}catch(java.io.IOException e){
-			throw new PendingException();
-		}
-	}
 
 	/**
 	 * @author Kevin Li
@@ -166,8 +151,7 @@ public class CucumberStepDefinitions {
 	 */
 	@Then("It shall be {string}'s turn")
 	public void itShallBe(String player) {
-		Quoridor quoridor = QuoridorApplication.getQuoridor();
-		Player expectedPlayer = quoridor.getCurrentGame().getBlackPlayer();
+		Player expectedPlayer = ModelQuery.getPlayerToMove();
 		assertEquals(player,expectedPlayer.getUser().getName());
 	}
 
@@ -370,7 +354,7 @@ public class CucumberStepDefinitions {
 	@When("I initiate to load a game in {string}")
 	public void iInitiateToLoadAGameIn(String filename) {
 		try {
-			SaveLoadGameController.fileLoad(filename, "white", "black");
+			LoadGameOrPosition(filename);
 		}catch(java.lang.UnsupportedOperationException e) {
 			throw new PendingException();
 		}
@@ -1555,5 +1539,24 @@ public class CucumberStepDefinitions {
 
 		WallMove move = new WallMove(0, 1, player1, board.getTile((row - 1) * 9 + col - 1), game, direction, wall);
 		game.setWallMoveCandidate(move);
+	}
+
+	private void LoadGameOrPosition(String filename){
+		String extension = "";
+		int i = filename.lastIndexOf('.');
+		if (i > 0) {
+			extension = filename.substring(i+1);
+		}
+
+		if(extension.equals("dat")){
+			try {
+				PositionController.loadGame(filename, "white", "black");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		else if(extension.equals("mov")){
+			SaveLoadGameController.fileLoad(filename, "white", "black");
+		}
 	}
 }
