@@ -405,6 +405,8 @@ public class CucumberStepDefinitions {
 			SaveLoadGameController.fileLoad(filename, "white", "black");
 		}catch(java.lang.UnsupportedOperationException e) {
 			throw new PendingException();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -835,10 +837,6 @@ public class CucumberStepDefinitions {
 	@When("I initiate replay mode")
 	public void initiateReplayMode() {
 		
-	}
-	
-	@Then("The game shall be in replay mode")
-	public void isReplayMode() {
 	}
 	
 	@Given("The game is in replay mode")
@@ -1574,7 +1572,11 @@ public class CucumberStepDefinitions {
 			}
 		}
 		else if(extension.equals("mov")){
-			SaveLoadGameController.fileLoad(filename, "white", "black");
+			try {
+				SaveLoadGameController.fileLoad(filename, "white", "black");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 }
