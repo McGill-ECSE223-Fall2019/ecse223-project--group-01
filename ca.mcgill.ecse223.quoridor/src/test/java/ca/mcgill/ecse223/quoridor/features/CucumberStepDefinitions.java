@@ -19,10 +19,7 @@ import java.io.IOException;
 import java.sql.Time;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -135,19 +132,7 @@ public class CucumberStepDefinitions {
 	 * Call the methods of the controller that will manipulate the model once they
 	 * are implemented
 	 *
-	/**
-	 * @author Kevin Li
 	 */
-	@When("I initiate to load a saved game {string}")
-	public void iInitiateToLoadASavedGameFilename(String filename) {
-		try {
-			PositionController.loadGame(filename, "white", "black");
-		}catch(java.lang.UnsupportedOperationException e) {
-			throw new PendingException();
-		}catch(java.io.IOException e){
-			throw new PendingException();
-		}
-	}
 
 	/**
 	 * @author Kevin Li
@@ -166,8 +151,7 @@ public class CucumberStepDefinitions {
 	 */
 	@Then("It shall be {string}'s turn")
 	public void itShallBe(String player) {
-		Quoridor quoridor = QuoridorApplication.getQuoridor();
-		Player expectedPlayer = quoridor.getCurrentGame().getBlackPlayer();
+		Player expectedPlayer = ModelQuery.getPlayerToMove();
 		assertEquals(player,expectedPlayer.getUser().getName());
 	}
 
@@ -364,7 +348,85 @@ public class CucumberStepDefinitions {
 		assertEquals(false, fileChanged);
 	}
 
+	/**
+	 * @author Kevin Li
+	 */
+	@When("I initiate to load a game in {string}")
+	public void iInitiateToLoadAGameIn(String filename) {
+		try {
+			LoadGameOrPosition(filename);
+		}catch(java.lang.UnsupportedOperationException e) {
+			throw new PendingException();
+		}
+	}
 
+	/**
+	 * @author Kevin Li
+	 */
+	@And("Each game move is valid")
+	public void eachGameMoveIsValid() {
+		try{
+			Assert.assertEquals(true, SaveLoadGameController.isSaveMoveValid);
+		} catch(java.lang.UnsupportedOperationException e){
+			throw new PendingException();
+		}
+	}
+
+	/**
+	 * @author Kevin Li
+	 */
+	@And("The game has no final results")
+	public void theGameHasNoFinalResults() {
+		//UI
+	}
+
+	/**
+	 * @author Kevin Li
+	 */
+	@And("The game has a final result")
+	public void theGameHasAFinalResult() {
+		//UI
+	}
+
+	/**
+	 * @author Kevin Li
+	 */
+	@Then("The game shall be in replay mode")
+	public void theGameShallBeInReplayMode() {
+		//How to do this
+	}
+
+	/**
+	 * @author Kevin Li
+	 */
+	@When("I initiate to load a saved game {string}")
+	public void iInitiateToLoadASavedGame(String filename) {
+		try {
+			SaveLoadGameController.fileLoad(filename, "white", "black");
+		}catch(java.lang.UnsupportedOperationException e) {
+			throw new PendingException();
+		}
+	}
+
+	/**
+	 * @author Kevin Li
+	 */
+	@And("The game to load has an invalid move")
+	public void theGameToLoadHasAnInvalidMove() {
+		try{
+			Assert.assertEquals(false, SaveLoadGameController.isSaveMoveValid);
+		} catch(java.lang.UnsupportedOperationException e){
+			throw new PendingException();
+		}
+	}
+
+	/**
+	 * @author Kevin Li
+	 */
+	@Then("The game shall notify the user that the game file is invalid")
+	public void theGameShallNotifyTheUserThatTheGameFileIsInvalid() {
+		//UI
+	}
 
 
 	/*scenario:Initiate a new game*/
@@ -600,7 +662,7 @@ public class CucumberStepDefinitions {
 		Game game = ModelQuery.getCurrentGame();
 		Direction dir = this.stringToDirection(direction);
 		int move_size = game.getMoves().size();
-		
+
 //		Check if at least one move has been registered
 		assertTrue( move_size > 0);
 		Move move = game.getMoves().get(move_size-1);
@@ -625,7 +687,7 @@ public class CucumberStepDefinitions {
 
 		// The wallmove candidate should be gone
 		assertNull(game.getWallMoveCandidate());
-		
+
 
 		// White should have more walls on board
 		assertEquals(game.getCurrentPosition().getWhiteWallsOnBoard().size(), 2);
@@ -766,6 +828,24 @@ public class CucumberStepDefinitions {
 		// TODO GUI step
 	}
 
+	/*
+	 * Scenario: Enter replay mode
+	 * @author Kate Ward
+	 */
+	@When("I initiate replay mode")
+	public void initiateReplayMode() {
+		
+	}
+	
+	@Then("The game shall be in replay mode")
+	public void isReplayMode() {
+	}
+	
+	@Given("The game is in replay mode")
+	public void gameInReplayMode() {
+		
+	}
+	
 	//grab wall
 	//scenario start wall placement
 	/**
@@ -1479,5 +1559,22 @@ public class CucumberStepDefinitions {
 		game.setWallMoveCandidate(move);
 	}
 
+	private void LoadGameOrPosition(String filename){
+		String extension = "";
+		int i = filename.lastIndexOf('.');
+		if (i > 0) {
+			extension = filename.substring(i+1);
+		}
 
+		if(extension.equals("dat")){
+			try {
+				PositionController.loadGame(filename, "white", "black");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		else if(extension.equals("mov")){
+			SaveLoadGameController.fileLoad(filename, "white", "black");
+		}
+	}
 }

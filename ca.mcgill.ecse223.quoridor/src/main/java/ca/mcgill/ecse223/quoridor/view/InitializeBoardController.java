@@ -1,5 +1,6 @@
 package ca.mcgill.ecse223.quoridor.view;
 
+import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 import ca.mcgill.ecse223.quoridor.controllers.*;
 import ca.mcgill.ecse223.quoridor.model.*;
 import javafx.animation.KeyFrame;
@@ -7,10 +8,7 @@ import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
@@ -27,8 +25,8 @@ import java.util.List;
 
 public class InitializeBoardController extends ViewController{
 
-    enum PlayerState {WALL, PAWN, IDLE};
-    PlayerState state = PlayerState.IDLE;
+    public enum PlayerState {WALL, PAWN, IDLE};
+    public PlayerState state = PlayerState.IDLE;
 
     @FXML
     private AnchorPane board;
@@ -51,7 +49,11 @@ public class InitializeBoardController extends ViewController{
     public Text blackNumOfWalls;
     public Text redNumOfWalls;
     public Text greenNumOfWalls;
-    
+
+    public Button grabWallBtn;
+    public Button rotateWallBtn;
+    public Button backBtn;
+
     public Timeline timeline;
     
     public static boolean playerIsWhite = false;
@@ -290,7 +292,7 @@ public class InitializeBoardController extends ViewController{
         // update wall positions
         ModelQuery.getCurrentGame();
         List<Wall> walls = ModelQuery.getAllWallsOnBoard();
-
+        
         for (Wall wall : walls) {
             placeWall(wall.getMove(), false);
         }
@@ -489,6 +491,40 @@ public class InitializeBoardController extends ViewController{
             else{
                 Alert successAlert = new Alert(Alert.AlertType.CONFIRMATION);
                 successAlert.setContentText("Positions is successfully saved in: " +filename +".dat");
+                successAlert.showAndWait();
+            }
+        }
+        else{
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+            errorAlert.setContentText("Missing file name");
+        }
+    }
+    
+    public void handleSaveGame(ActionEvent actionEvent) {
+        String filename;
+        TextInputDialog textInput = new TextInputDialog();
+
+        textInput.setTitle("Saving game");
+        textInput.getDialogPane().setContentText("Name of save file");
+
+        TextField input = textInput.getEditor();
+        textInput.showAndWait();
+
+        if(input.getText() != null && input.getText().length() != 0) {
+            filename = input.getText();
+
+            if (!SaveLoadGameController.fileSave(filename +".mov")) {
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                if (!SaveLoadGameController.isSaveMoveValid)
+                    errorAlert.setContentText("The current game save is invalid");
+                else
+                    errorAlert.setContentText("There was an error in saving your game");
+                errorAlert.setHeaderText("Error in loading Game");
+                errorAlert.showAndWait();
+            }
+            else{
+                Alert successAlert = new Alert(Alert.AlertType.CONFIRMATION);
+                successAlert.setContentText("Game is successfully saved in: " +filename +".mov");
                 successAlert.showAndWait();
             }
         }
