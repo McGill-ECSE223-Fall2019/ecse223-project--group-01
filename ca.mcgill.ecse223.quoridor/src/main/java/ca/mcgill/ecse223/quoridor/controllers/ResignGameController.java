@@ -7,12 +7,16 @@ import ca.mcgill.ecse223.quoridor.model.Quoridor;
 
 public class ResignGameController {
 
-    public static void setWinner(Player player) throws UnsupportedOperationException{
+    /**
+     * @author Jason Lau
+     *
+     * This method set the game state to either WhiteWon or BlackWon depends on the player who resigns
+     * @throws UnsupportedOperationException
+     */
+    public static void resign() throws UnsupportedOperationException{
 
         Quoridor quoridor = QuoridorApplication.getQuoridor();
-
-//        quoridor.getCurrentGame().getWhitePlayer();
-       ModelQuery.getCurrentGame().setWinningPlayer(player);
+        Player player = ModelQuery.getPlayerToMove();
 
        if (player.getNextPlayer().equals( "white")){
            quoridor.getCurrentGame().setGameStatus(Game.GameStatus.BlackWon);

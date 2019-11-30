@@ -1484,27 +1484,14 @@ public class CucumberStepDefinitions {
 	/**
 	 * @author Jason Lau
 	 */
-
 	private Player playerToMove;
 		private Player winningPlayer;
-
-//		@Given("The player to move is {string}")
-//		public void nextPlayerToMove(String arg0){
-//			Quoridor quoridor = QuoridorApplication.getQuoridor();
-//			if(arg0.equals("white")){
-//				playerToMove = quoridor.getCurrentGame().getWhitePlayer();
-//			}
-//			else if(arg0.equals("black")){
-//				playerToMove = quoridor.getCurrentGame().getBlackPlayer();
-//			}
-//		}
 
 		@When("Player initates to resign")
 		public void playerInitatesToResign() {
 			try {
-				winningPlayer = playerToMove.getNextPlayer();
-				ResignGameController.setWinner(winningPlayer);
-
+				winningPlayer = ModelQuery.getPlayerToMove().getNextPlayer();
+				ResignGameController.resign();
 			}
 			catch(UnsupportedOperationException e){
 				throw new PendingException();
