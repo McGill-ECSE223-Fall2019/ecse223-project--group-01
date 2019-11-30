@@ -74,6 +74,8 @@ class GamePosition {
 	0..1 -> * Wall greenWallsOnBoard;
 	0..1 -> * Wall redWallsInStock;
 	0..1 -> * Wall greenWallsInStock;
+	depend ca.mcgill.ecse223.quoridor.WallGraph;
+	lazy WallGraph wallGraph;
 }
 
 class Destination {

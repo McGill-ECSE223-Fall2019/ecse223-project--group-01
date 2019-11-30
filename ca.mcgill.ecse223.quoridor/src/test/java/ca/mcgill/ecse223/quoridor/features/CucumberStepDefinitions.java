@@ -103,8 +103,7 @@ public class CucumberStepDefinitions {
 			playerIdx++;
 			playerIdx = playerIdx % 2;
 		}
-		System.out.println();
-
+		Game game = ModelQuery.getCurrentGame();
 	}
 
 	@And("I do not have a wall in my hand")
@@ -1359,8 +1358,8 @@ public class CucumberStepDefinitions {
 		 *
 		 */
 		//@formatter:on
-		Player player1 = new Player(new Time(thinkingTime), user1, 9, Direction.Horizontal);
-		Player player2 = new Player(new Time(thinkingTime), user2, 1, Direction.Horizontal);
+		Player player1 = new Player(new Time(thinkingTime), user1, 1, Direction.Horizontal);
+		Player player2 = new Player(new Time(thinkingTime), user2, 9, Direction.Horizontal);
 
 		Player[] players = { player1, player2 };
 
@@ -1434,6 +1433,9 @@ public class CucumberStepDefinitions {
 
 		PawnController.initPawnSM(quoridor.getCurrentGame().getWhitePlayer(), player1Position);
 		PawnController.initPawnSM(quoridor.getCurrentGame().getBlackPlayer(), player2Position);
+
+
+		WallController.initGraph();
 	}
 
 	private Direction stringToDirection(String direction){
