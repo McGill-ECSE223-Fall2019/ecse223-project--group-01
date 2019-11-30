@@ -216,7 +216,6 @@ public class InitializeBoardController extends ViewController{
 
         refresh();
 
-
     }
     public String checkPawnPostition(Double x, Double y, PlayerPosition playerPosition){
         Tile tile = null;
@@ -290,6 +289,7 @@ public class InitializeBoardController extends ViewController{
                 	isPawnMoved = false;
 
                 	StartNewGameController.resetTimeToSet();
+                	refresh();
                 }
                 else if (StartNewGameController.timeOver()) {
                     if(EndGameController.checkGameStatus(currentPlayer).equals("whiteWon")) {
