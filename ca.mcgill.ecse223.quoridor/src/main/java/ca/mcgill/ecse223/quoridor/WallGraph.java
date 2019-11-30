@@ -22,19 +22,21 @@ public class WallGraph {
         this.adj[v].add(w);
     }
 
+    public void addEdgeUndirected(int v, int w){
+        this.adj[v].add(w);
+        this.adj[w].add(v);
+    }
+
     public void cutEdge(int v, int w){
         this.adj[v].removeFirstOccurrence(w);
         this.adj[w].removeFirstOccurrence(v);
     }
 
 
-    // prints BFS traversal from a given source s
-    // stops if reaches target row or col
     public boolean reachesDest(int s, int dest_row,int dest_col)
     {
         int row,col = 0;
-        // Mark all the vertices as not visited(By default
-        // set as false)
+        // Mark all the vertices as not visited
         boolean visited[] = new boolean[V];
 
         // Create a queue for BFS
@@ -47,16 +49,12 @@ public class WallGraph {
         {
             // Dequeue a vertex from queue and print it
             s = queue.poll();
-            System.out.print(s+" ");
             col = s%9+1;
             row = s/9 +1;
 
             if(row==dest_row || col== dest_col){
                 return true;
             }
-            // Get all adjacent vertices of the dequeued vertex s
-            // If a adjacent has not been visited, then mark it
-            // visited and enqueue it
             Iterator<Integer> i = adj[s].listIterator();
             while (i.hasNext())
             {

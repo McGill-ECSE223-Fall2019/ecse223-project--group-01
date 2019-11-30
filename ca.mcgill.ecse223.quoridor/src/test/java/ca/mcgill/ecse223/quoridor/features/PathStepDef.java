@@ -2,8 +2,7 @@ package ca.mcgill.ecse223.quoridor.features;
 
 import ca.mcgill.ecse223.quoridor.controllers.ModelQuery;
 import ca.mcgill.ecse223.quoridor.controllers.WallController;
-import ca.mcgill.ecse223.quoridor.model.Player;
-import ca.mcgill.ecse223.quoridor.model.Tile;
+import ca.mcgill.ecse223.quoridor.model.*;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -11,7 +10,6 @@ import io.cucumber.java.en.When;
 
 import java.util.List;
 
-import static ca.mcgill.ecse223.quoridor.controllers.WallController.*;
 import static org.junit.Assert.assertEquals;
 
 public class PathStepDef {
@@ -20,12 +18,7 @@ public class PathStepDef {
 
     @Given("A {string} wall move candidate exists at position {int}:{int}")
     public void aWallMoveCandidateExistsAtPositionFrow(String dir, int row,int col) {
-        grabWall();
-        moveWall(row,col);
-        if(dir.equals("Horizontal")){
-            rotateWall();
-        }
-        dropWall();
+        setupWallMoveCandidates(row,col,stringToDirection(dir));
     }
 
     @And("The black player is located at {int}:{int}")
@@ -68,4 +61,29 @@ public class PathStepDef {
                 break;
         }
     }
+
+    private void setupWallMoveCandidates(int row, int col, Direction direction) {
+        Player player1 = ModelQuery.getWhitePlayer();
+        Board board = ModelQuery.getBoard();
+        Game game = ModelQuery.getCurrentGame();
+        Wall wall = player1.getWall(3);
+
+        WallMove move = new WallMove(0, 1, player1, board.getTile((row - 1) * 9 + col - 1), game, direction, wall);
+        game.setWallMoveCandidate(move);
+    }
+
+    private Direction stringToDirection(String direction){
+        switch (direction){
+            case "horizontal":{
+                return Direction.Horizontal;
+            }
+            case "vertical":{
+                return Direction.Vertical;
+            }
+            default:{
+                return null;
+            }
+        }
+    }
+
 }

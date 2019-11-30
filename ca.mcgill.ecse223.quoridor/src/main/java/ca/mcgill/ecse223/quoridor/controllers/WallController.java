@@ -81,6 +81,11 @@ public class WallController {
             return false;
         }
 
+        int numberOfPaths = pathExistsForPlayers().size();
+        if(numberOfPaths<2 || (ModelQuery.isFourPlayer() && numberOfPaths<4)){
+            return false;
+        }
+
         ModelQuery.getCurrentGame().addMove(move);
         ModelQuery.getCurrentGame().setWallMoveCandidate(null);
 
@@ -97,7 +102,6 @@ public class WallController {
         	ModelQuery.getCurrentGame().getCurrentPosition().addGreenWallsOnBoard(move.getWallPlaced());
         	SwitchPlayerController.switchActivePlayer();
         }
-        updateGraph();
         return true;
     }
 
@@ -264,36 +268,43 @@ public class WallController {
     private  static int[][] getWallCuts(Wall wall){
         int[][] cuts= new int[2][2];
         WallMove move = wall.getMove();
-        int row = move.getTargetTile().getRow() - 1;
-        int col = move.getTargetTile().getColumn() - 1;
+        int row = move.getTargetTile().getRow();
+        int col = move.getTargetTile().getColumn();
         Direction dir = wall.getMove().getWallDirection();
 
         if(dir == Direction.Vertical){
-            cuts[0][0] = 9*(row+1)+col;
-            cuts[0][1] = 9*(row+1)+col+1;
+            cuts[0][0] = coordToIndex(row,col);
+            cuts[0][1] = coordToIndex(row,col+1);
 
-            cuts[1][0] = 9*(row+2)+col;
-            cuts[1][1] = 9*(row+2)+col+1;
+            cuts[1][0] = coordToIndex(row+1,col);;
+            cuts[1][1] = coordToIndex(row+1,col+1);;
         }
         else{
-            cuts[0][0] = 9*(row)+col+1;
-            cuts[0][1] = 9*(row+1)+col+1;
+            cuts[0][0] = coordToIndex(row,col);;
+            cuts[0][1] = coordToIndex(row+1,col);;
 
-            cuts[1][0] = 9*(row)+col+2;
-            cuts[1][1] = 9*(row+1)+col+2;
+            cuts[1][0] = coordToIndex(row,col+1);;
+            cuts[1][1] = coordToIndex(row+1,col+1);;
         }
-
         return cuts;
     }
 
-    /**
+    /**@author Tritin Truong
      * This method if the current wall move candidate blocks player paths
      *
      * @return A list of players for which a path exists
      */
     public static List<Player> pathExistsForPlayers(){
+        WallGraph graph = ModelQuery.getCurrentPosition().getWallGraph();
         List<PlayerPosition> playerList = ModelQuery.getAllPlayerPosition();
         List<Player> res = new ArrayList<>();
+        updateGraph();
+
+        // cut the wall graph at the position
+        int[][] cuts = getWallCuts(ModelQuery.getWallMoveCandidate().getWallPlaced());
+        graph.cutEdge(cuts[0][0],cuts[0][1]);
+        graph.cutEdge(cuts[1][0],cuts[1][1]);
+
         GamePosition position = ModelQuery.getCurrentPosition();
         for(PlayerPosition pos: playerList){
             Destination dest = pos.getPlayer().getDestination();
@@ -308,11 +319,14 @@ public class WallController {
                 }
             }
         }
+        //remove the cut
+        graph.addEdgeUndirected(cuts[0][0],cuts[0][1]);
+        graph.addEdgeUndirected(cuts[1][0],cuts[1][1]);
         return res;
     }
 
     private static int coordToIndex(int row,int col){
-        return 0;
+        return 9*(row-1)+col-1;
     }
 
     private static int tileToIndex(Tile tile){
