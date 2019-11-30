@@ -27,6 +27,13 @@ import java.util.List;
 
 public class InitializeBoardController extends ViewController{
 
+    public void handleResignGame(ActionEvent actionEvent) {
+
+            ResignGameController.resign();
+            refresh();
+        }
+
+
     enum PlayerState {WALL, PAWN, IDLE};
     PlayerState state = PlayerState.IDLE;
 

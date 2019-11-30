@@ -53,7 +53,7 @@
             <Font size="18.0" />
          </font>
       </Button>
-      <Button layoutX="442.0" layoutY="377.0" mnemonicParsing="false" onAction="#handleBackToMenu" prefHeight="39.0" prefWidth="152.0" text="Back to Menu">
+      <Button layoutX="442.0" layoutY="377.0" mnemonicParsing="false" onAction="#handleResignGame" prefHeight="39.0" prefWidth="152.0" text="Resign">
          <font>
             <Font size="18.0" />
          </font>
@@ -200,6 +200,11 @@
       <Text layoutX="379.0" layoutY="441.0" strokeType="OUTSIDE" strokeWidth="0.0" text="i" wrappingWidth="9.0" />
 
       <Button layoutX="442.0" layoutY="268.0" mnemonicParsing="false" onAction="#handleGrabPawn" prefHeight="39.0" prefWidth="152.0" text="Pawn">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Button>
+      <Button layoutX="442.0" layoutY="433.0" mnemonicParsing="false" onAction="#handleBackToMenu" prefHeight="39.0" prefWidth="152.0" text="Back to Menu">
          <font>
             <Font size="18.0" />
          </font>
