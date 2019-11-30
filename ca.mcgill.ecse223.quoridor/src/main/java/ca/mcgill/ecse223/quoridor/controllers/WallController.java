@@ -1,7 +1,10 @@
 package ca.mcgill.ecse223.quoridor.controllers;
+
 import ca.mcgill.ecse223.quoridor.QuoridorApplication;
+import ca.mcgill.ecse223.quoridor.WallGraph;
 import ca.mcgill.ecse223.quoridor.model.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class WallController {
@@ -71,16 +74,17 @@ public class WallController {
      */
     public static Boolean dropWall() throws UnsupportedOperationException{
         WallMove move = ModelQuery.getWallMoveCandidate();
-
-//        List<Wall> placedWalls = ModelQuery.getAllWallsOnBoard();
         Player player = ModelQuery.getPlayerToMove();
-
 
         // validate no overlap
         if(!ValidatePositionController.validateWallPosition(move.getTargetTile().getRow(),move.getTargetTile().getColumn(),move.getWallDirection())){
             return false;
         }
 
+        int numberOfPaths = pathExistsForPlayers().size();
+        if(numberOfPaths<2 || (ModelQuery.isFourPlayer() && numberOfPaths<4)){
+            return false;
+        }
 
         ModelQuery.getCurrentGame().addMove(move);
         ModelQuery.getCurrentGame().setWallMoveCandidate(null);
@@ -88,11 +92,16 @@ public class WallController {
         if(player.equals(ModelQuery.getWhitePlayer())) {
             ModelQuery.getCurrentGame().getCurrentPosition().addWhiteWallsOnBoard(move.getWallPlaced());
             SwitchPlayerController.switchActivePlayer();
-        }else{
+        }else if(player.equals(ModelQuery.getBlackPlayer())){
             ModelQuery.getCurrentGame().getCurrentPosition().addBlackWallsOnBoard(move.getWallPlaced());
             SwitchPlayerController.switchActivePlayer();
+        }else if(player.equals(ModelQuery.getRedPlayer())) {
+        	ModelQuery.getCurrentGame().getCurrentPosition().addRedWallsOnBoard(move.getWallPlaced());
+        	SwitchPlayerController.switchActivePlayer();
+        }else {
+        	ModelQuery.getCurrentGame().getCurrentPosition().addGreenWallsOnBoard(move.getWallPlaced());
+        	SwitchPlayerController.switchActivePlayer();
         }
-
         return true;
     }
 
@@ -104,8 +113,12 @@ public class WallController {
         }
         if(player.equals(ModelQuery.getWhitePlayer())) {
             ModelQuery.getCurrentGame().getCurrentPosition().addWhiteWallsInStock(move.getWallPlaced());
-        }else{
+        }else if(player.equals(ModelQuery.getBlackPlayer())){
             ModelQuery.getCurrentGame().getCurrentPosition().addBlackWallsInStock(move.getWallPlaced());
+        }else if(player.equals(ModelQuery.getRedPlayer())){
+            ModelQuery.getCurrentGame().getCurrentPosition().addRedWallsInStock(move.getWallPlaced());
+        }else {
+            ModelQuery.getCurrentGame().getCurrentPosition().addGreenWallsInStock(move.getWallPlaced());
         }
         ModelQuery.getCurrentGame().setWallMoveCandidate(null);
         return true;
@@ -135,7 +148,7 @@ public class WallController {
     }
 
     /**
-     * @author Kate Ward
+     * @author Kate Ward & Mark Zhu
      * Attempts to grab wall from stock and hold it in hand above board
      * returns true if successful
      *
@@ -148,8 +161,8 @@ public class WallController {
         int moveNum;
         int roundNum;
         if (movesSize>0) {
-            moveNum = ModelQuery.getMoves().get(movesSize-1).getMoveNumber();
-            roundNum = ModelQuery.getMoves().get(movesSize-1).getRoundNumber();
+            roundNum = ModelQuery.getMoves().get(movesSize-1).getRoundNumber()+1;
+            moveNum = roundNum/2;
         }
         else {
             moveNum = 0;
@@ -164,7 +177,7 @@ public class WallController {
         		Wall wall = walls.get(0);		//get(0) null for some reason
                 ModelQuery.getCurrentGame().getCurrentPosition().removeWhiteWallsInStock(wall);
                 //create wall move candidate
-                WallMove move = new WallMove(moveNum+1, roundNum+1, player, ModelQuery.getTile(1,1), ModelQuery.getCurrentGame(), Direction.Vertical, wall);
+                WallMove move = new WallMove(moveNum, roundNum, player, ModelQuery.getTile(1,1), ModelQuery.getCurrentGame(), Direction.Vertical, wall);
                 ModelQuery.getCurrentGame().setWallMoveCandidate(move);
                 
             }else if(player.equals(ModelQuery.getBlackPlayer()) && ModelQuery.getCurrentGame().getCurrentPosition().getBlackWallsInStock().size()>0){
@@ -172,15 +185,151 @@ public class WallController {
             	Wall wall = walls.get(0);		//get(0) null for some reason
                 ModelQuery.getCurrentGame().getCurrentPosition().removeBlackWallsInStock(wall);
                 //create wall move candidate
-                WallMove move = new WallMove(moveNum+1, roundNum, player, ModelQuery.getTile(1,1), ModelQuery.getCurrentGame(), Direction.Vertical, wall);
+                WallMove move = new WallMove(moveNum, roundNum, player, ModelQuery.getTile(1,1), ModelQuery.getCurrentGame(), Direction.Vertical, wall);
+                ModelQuery.getCurrentGame().setWallMoveCandidate(move);
+                
+            //4player
+            }else if(player.equals(ModelQuery.getRedPlayer()) && ModelQuery.getCurrentGame().getCurrentPosition().getRedWallsInStock().size()>0){
+            	List <Wall> walls = ModelQuery.getCurrentGame().getCurrentPosition().getRedWallsInStock();
+            	Wall wall = walls.get(0);		
+                ModelQuery.getCurrentGame().getCurrentPosition().removeRedWallsInStock(wall);
+                //create wall move candidate
+                WallMove move = new WallMove(moveNum, roundNum, player, ModelQuery.getTile(1,1), ModelQuery.getCurrentGame(), Direction.Vertical, wall);
+                ModelQuery.getCurrentGame().setWallMoveCandidate(move);
+                
+            }else if(player.equals(ModelQuery.getGreenPlayer()) && ModelQuery.getCurrentGame().getCurrentPosition().getGreenWallsInStock().size()>0){
+            	List <Wall> walls = ModelQuery.getCurrentGame().getCurrentPosition().getGreenWallsInStock();
+            	Wall wall = walls.get(0);		
+                ModelQuery.getCurrentGame().getCurrentPosition().removeGreenWallsInStock(wall);
+                //create wall move candidate
+                WallMove move = new WallMove(moveNum, roundNum, player, ModelQuery.getTile(1,1), ModelQuery.getCurrentGame(), Direction.Vertical, wall);
                 ModelQuery.getCurrentGame().setWallMoveCandidate(move);
             }
-        	//white player nor black player has walls in stock
+        	//no player has walls in stock
             else {
             	return false;
             }
     	}
     	
         return true;
+    }
+
+    public static void initGraph(){
+
+        List<Wall> placedWalls = ModelQuery.getAllWallsOnBoard();
+        WallGraph graph = new WallGraph();
+        // create graph
+        for(int i =0 ; i<81; i++){
+            List<Integer> neighbors = getNeighbhors(i);
+            for( int neighbor: neighbors) {
+                graph.addEdge(i, neighbor);
+            }
+        }
+
+        // add cuts (if the game was loaded in)
+        for (Wall wall: placedWalls){
+            int[][] cuts = getWallCuts(wall);
+            graph.cutEdgeUndirected(cuts[0][0],cuts[0][1]);
+            graph.cutEdgeUndirected(cuts[1][0],cuts[1][1]);
+        }
+        ModelQuery.getCurrentPosition().setWallGraph(graph);
+    }
+
+    public static void updateGraph(){
+        WallGraph graph = ModelQuery.getCurrentPosition().getWallGraph();
+        List<Wall> placedWalls = ModelQuery.getAllWallsOnBoard();
+        for (Wall wall: placedWalls){
+            int[][] cuts = getWallCuts(wall);
+            graph.cutEdgeUndirected(cuts[0][0],cuts[0][1]);
+            graph.cutEdgeUndirected(cuts[1][0],cuts[1][1]);
+        }
+    }
+
+    private static List<Integer> getNeighbhors(int tile_index){
+        int row = Math.floorDiv(tile_index, 9);
+        int col = tile_index % 9;
+
+        ArrayList<Integer> neighbhors = new ArrayList();
+        if(row>0){
+            neighbhors.add(9*(row-1)+col);
+        }
+        if(row<8){
+            neighbhors.add(9*(row+1)+col);
+        }
+        if(col>0){
+            neighbhors.add(9*row + col-1);
+        }
+        if(col<8){
+            neighbhors.add(9*row + col+1);
+        }
+        return neighbhors;
+    }
+
+    private  static int[][] getWallCuts(Wall wall){
+        int[][] cuts= new int[2][2];
+        WallMove move = wall.getMove();
+        int row = move.getTargetTile().getRow();
+        int col = move.getTargetTile().getColumn();
+        Direction dir = wall.getMove().getWallDirection();
+
+        if(dir == Direction.Vertical){
+            cuts[0][0] = coordToIndex(row,col);
+            cuts[0][1] = coordToIndex(row,col+1);
+
+            cuts[1][0] = coordToIndex(row+1,col);;
+            cuts[1][1] = coordToIndex(row+1,col+1);;
+        }
+        else{
+            cuts[0][0] = coordToIndex(row,col);;
+            cuts[0][1] = coordToIndex(row+1,col);;
+
+            cuts[1][0] = coordToIndex(row,col+1);;
+            cuts[1][1] = coordToIndex(row+1,col+1);;
+        }
+        return cuts;
+    }
+
+    /**@author Tritin Truong
+     * This method if the current wall move candidate blocks player paths
+     *
+     * @return A list of players for which a path exists
+     */
+    public static List<Player> pathExistsForPlayers(){
+        WallGraph graph = ModelQuery.getCurrentPosition().getWallGraph();
+        List<PlayerPosition> playerList = ModelQuery.getAllPlayerPosition();
+        List<Player> res = new ArrayList<>();
+        updateGraph();
+
+        // cut the wall graph at the position
+        int[][] cuts = getWallCuts(ModelQuery.getWallMoveCandidate().getWallPlaced());
+        graph.cutEdgeUndirected(cuts[0][0],cuts[0][1]);
+        graph.cutEdgeUndirected(cuts[1][0],cuts[1][1]);
+
+        GamePosition position = ModelQuery.getCurrentPosition();
+        for(PlayerPosition pos: playerList){
+            Destination dest = pos.getPlayer().getDestination();
+            int tile_index = tileToIndex(pos.getTile());
+            if(dest.getDirection().equals(Direction.Horizontal)){
+                if(position.getWallGraph().reachesDest(tile_index, dest.getTargetNumber(), -1)>=0){
+                    res.add(pos.getPlayer());
+                }
+            }else{
+                if(position.getWallGraph().reachesDest(tile_index,-1, dest.getTargetNumber())>=0){
+                    res.add(pos.getPlayer());
+                }
+            }
+        }
+        //remove the cut
+        graph.addEdgeUndirected(cuts[0][0],cuts[0][1]);
+        graph.addEdgeUndirected(cuts[1][0],cuts[1][1]);
+        return res;
+    }
+
+    private static int coordToIndex(int row,int col){
+        return 9*(row-1)+col-1;
+    }
+
+    private static int tileToIndex(Tile tile){
+        return 9*(tile.getRow()-1)+tile.getColumn()-1;
     }
 }
