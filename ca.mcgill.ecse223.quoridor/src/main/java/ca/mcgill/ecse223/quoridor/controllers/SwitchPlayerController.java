@@ -46,7 +46,7 @@ public class SwitchPlayerController {
 		Player currentPlayer = ModelQuery.getPlayerToMove();
 		//switch active player
 		QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().setPlayerToMove(currentPlayer.getNextPlayer());
-		
+
 		//Wall d = ModelQuery.getWhiteWallsOnBoard().get(0);
 		//System.out.println(d.getMove());
 	}

@@ -26,7 +26,7 @@ public class SaveLoadGameController {
 
     /**
      * Attempts to create or overwrite a saved game.
-     * The save game will contain the move number, player 1's move and player 2's move
+     * The save game will contain the move number, player 1's move and player 2's move.
      *
      * @param filename      the name of the savefile
      * @return true         the game saved correctly
@@ -159,6 +159,7 @@ public class SaveLoadGameController {
      * @throws java.lang.UnsupportedOperationException
      */
     public static boolean fileLoad(String filename, String whiteUser, String blackUser) throws java.lang.UnsupportedOperationException, IOException{
+        NukeData();
         File saveFile = new File(saveLocation + filename);
         Quoridor quoridor = QuoridorApplication.getQuoridor();
 
@@ -166,6 +167,7 @@ public class SaveLoadGameController {
 
         //Making the game run
         PrepareGame(whiteUser, blackUser);
+        SetNextPlayers();
         PlayerPosition whitePlayerPosition = null;
         PlayerPosition blackPlayerPosition = null;
         List<GamePosition> positions = ModelQuery.getCurrentGame().getPositions();
@@ -243,9 +245,7 @@ public class SaveLoadGameController {
 
                 //.Setting initialize pawn position
 
-                if (ModelQuery.getBoard()== null){
-                    BoardController.initializeBoard();
-                }
+                 BoardController.initializeBoard();
                 //White pawn will start at E9
                 Tile whiteDefaultPos = new Tile(9,5,ModelQuery.getBoard());
                 whitePlayerPosition = new PlayerPosition(ModelQuery.getWhitePlayer(), whiteDefaultPos);
@@ -263,31 +263,22 @@ public class SaveLoadGameController {
                 PawnController.initPawnSM(quoridor.getCurrentGame().getBlackPlayer(), blackPlayerPosition);
                 PawnController.initPawnSM(quoridor.getCurrentGame().getWhitePlayer(), whitePlayerPosition);
 
+                if (gamePosition.getBlackWallsInStock().size() == 0 || gamePosition.getWhiteWallsInStock().size() == 0){
+                    //AddWalls for players
+                    for(int j = 1; j <= 10; j++){
+                        Wall wall = Wall.getWithId(j);
+                        gamePosition.addWhiteWallsInStock(wall);
+                    }
+                    for(int j = 1; j <= 10; j++){
+                        Wall wall = Wall.getWithId(j + 10);
+                        gamePosition.addBlackWallsInStock(wall);
+                    }
+                }
+
                 if(!ValidatePositionController.validateOverlappingPawns()){
                     isSaveMoveValid = false;
                     return false;
                 }
-
-                //.Add the walls for each player
-                if(Wall.getWithId(1)==null){
-                    for(int i =1; i <= 10; i++){
-                        ModelQuery.getCurrentGame().getWhitePlayer().addWall(i);
-                    }
-                    for(int j = 11; j <= 20; j++) {
-                        ModelQuery.getCurrentGame().getBlackPlayer().addWall(j);
-                    }
-                }
-
-                //AddWalls for players
-                for(int j = 1; j <= 10; j++){
-                    Wall wall = Wall.getWithId(j);
-                    gamePosition.addWhiteWallsInStock(wall);
-                }
-                for(int j = 1; j <= 10; j++){
-                    Wall wall = Wall.getWithId(j + 10);
-                    gamePosition.addBlackWallsInStock(wall);
-                }
-
 
                 QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().setPlayerToMove(ModelQuery.getWhitePlayer());
 
@@ -341,7 +332,7 @@ public class SaveLoadGameController {
                             String side;
                             //Moved the pawn before
                             if(bm > 0){
-                                side = GetPawnMoveDirection(blackMoves.get(wm-1), blackMoves.get(wm));
+                                side = GetPawnMoveDirection(blackMoves.get(bm-1), blackMoves.get(bm));
                                 if(side.equals("")){
                                     isSaveMoveValid = false;
                                     return false;
@@ -367,7 +358,6 @@ public class SaveLoadGameController {
                         } else {
                             return false;
                         }
-                        SwitchPlayerController.switchActivePlayer();
                     }
                     else{
                         //If statement is not executed, therefore somethign went wrong
@@ -528,6 +518,26 @@ public class SaveLoadGameController {
         return moveNum + ". " + whiteMove + " " + blackMove;
     }
 
+    private static void SetNextPlayers(){
+        ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.ReadyToStart);
+        ModelQuery.getWhitePlayer().setNextPlayer(ModelQuery.getBlackPlayer());
+        ModelQuery.getBlackPlayer().setNextPlayer(ModelQuery.getWhitePlayer());
+    }
+
+    public static void NukeData(){
+        if(ModelQuery.getCurrentGame()!=null){
+            QuoridorApplication.getQuoridor().getCurrentGame().delete();
+        }
+        if(QuoridorApplication.getQuoridor().getBoard()!=null){
+            QuoridorApplication.getQuoridor().getBoard().delete();
+        }
+        int counter = 0;
+        for(int i = 0;i<1000;i++){
+            if(Wall.getWithId(counter)!=null){
+                Wall.getWithId(counter).delete();
+            }
+        }
+    }
 }
 
 //TODO: implement a warning when the move doesn't make sense, for example pawn jumped 4 tiles
