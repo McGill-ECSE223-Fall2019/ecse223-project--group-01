@@ -8,34 +8,17 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
-import org.testfx.framework.junit5.ApplicationTest;
 
 import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 
-public class GameStatusStepDefinition extends ApplicationTest {
+public class GameStatusStepDefinition {
     InitializeBoardController controller;
     private Button button;
-
-    @Override
-    public void start (Stage stage) throws Exception {
-        FXMLLoader fxmlLoader = new FXMLLoader((getClass().getResource("InitializeBoard.fxml")));
-        Parent root1 = (Parent) fxmlLoader.load();
-        controller = (InitializeBoardController) fxmlLoader.getController();
-        button  = controller.grabWallBtn;
-        stage.setTitle("Quit Game");
-        stage.setScene(new Scene(root1));
-        stage.show();
-        stage.toFront();
-    }
 
     @Given("The following moves were executed:")
     public void theFollowingMovesWereExecuted(io.cucumber.datatable.DataTable dataTable) {
@@ -102,10 +85,6 @@ public class GameStatusStepDefinition extends ApplicationTest {
     @Test
     @And("The game shall no longer be running")
     public void theGameShallNoLongerBeRunning() {
-//        clickOn(button);
-//        Assertions.assertThat(lookup("#grabWallBtn").queryAs(Button.class)).hasText("click me!");
-//        assertEquals(InitializeBoardController.PlayerState.PAWN, controller.state);
-//        assertNull(ModelQuery.getCurrentGame().getCurrentPosition().getPlayerToMove());
     }
 
     private Player stringToPlayer(String playerColor){
