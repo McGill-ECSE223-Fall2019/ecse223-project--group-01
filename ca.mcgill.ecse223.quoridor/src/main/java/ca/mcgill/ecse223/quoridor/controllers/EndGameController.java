@@ -1,12 +1,7 @@
 package ca.mcgill.ecse223.quoridor.controllers;
 
-import ca.mcgill.ecse223.quoridor.QuoridorApplication;
-import ca.mcgill.ecse223.quoridor.model.Game;
 import ca.mcgill.ecse223.quoridor.model.Player;
-import ca.mcgill.ecse223.quoridor.model.Quoridor;
 import ca.mcgill.ecse223.quoridor.model.Tile;
-import ca.mcgill.ecse223.quoridor.view.InitializeBoardController;
-import jdk.javadoc.internal.tool.Start;
 
 import java.util.Date;
 

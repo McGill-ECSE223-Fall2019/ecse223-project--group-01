@@ -22,7 +22,6 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Text;
-import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.util.Pair;
@@ -216,11 +215,6 @@ public class InitializeBoardController extends ViewController{
                 validMoved =false ;
 
             }
-//            if(!validMoved){
-//                System.out.println("HIIIEIEIEI");
-//                AlertHelper.newPopUpWindow(Alert.AlertType.CONFIRMATION, "Alert", "Are you sure you want to quit the game?");
-//                validMoved = true;
-//            }
         }
 
         refresh();
@@ -293,7 +287,6 @@ public class InitializeBoardController extends ViewController{
                 	timerForWhitePlayer.setText(initialTime);
                 	timerForBlackPlayer.setText(initialTime);
 
-                	SwitchPlayerController.switchActivePlayer();
                 	isWallDrop = false;
                 	isPawnMoved = false;
 
@@ -309,6 +302,7 @@ public class InitializeBoardController extends ViewController{
                     }
                     refresh();
                 }
+
 
 
 
@@ -565,7 +559,6 @@ public class InitializeBoardController extends ViewController{
     public void handleKeyPressed(KeyEvent event) {
         KeyCode code = event.getCode();
         if(code.equals(KeyCode.DIGIT1)) {
-
             if (state == PlayerState.WALL) {
                 WallController.cancelWallMove();
                 state = PlayerState.IDLE;
@@ -579,13 +572,8 @@ public class InitializeBoardController extends ViewController{
             }
         }
         if (code.equals(KeyCode.DIGIT2)) {
-            if (state == PlayerState.PAWN) {
-                state = PlayerState.IDLE;
-            } else {
-                state = PlayerState.PAWN;
-                WallController.cancelWallMove();
-            }
-
+            state = PlayerState.PAWN;
+            WallController.cancelWallMove();
         }
 
 
@@ -610,7 +598,6 @@ public class InitializeBoardController extends ViewController{
             else if(code.equals(KeyCode.E)){
                 if(WallController.dropWall()){
                     state = PlayerState.IDLE;
-                    SwitchPlayerController.switchActivePlayer();
                     isWallDrop=true;
                 }
                 else{

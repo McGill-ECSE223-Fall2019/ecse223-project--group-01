@@ -241,7 +241,7 @@ public class PawnController {
         if (sm.getSCIPawn().isRaisedMoveCompleted()) {
             Tile target = ModelQuery.getTile((int) sm.getSCIPawn().getTargetRow(), (int) sm.getSCIPawn().getTargetCol());
             playerPosition.setTile(target);
-//            SwitchPlayerController.switchActivePlayer();
+            SwitchPlayerController.switchActivePlayer();
             InitializeBoardController.isPawnMoved = true;
 
             return true;
