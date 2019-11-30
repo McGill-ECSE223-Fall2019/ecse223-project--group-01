@@ -298,7 +298,7 @@ public class InitializeBoardController extends ViewController{
                     }
                     refresh();
                 }
-                //TODO: timer should not count again once it reaches zero
+
 
 
                 //grey out the next player name & count down time for the current player
