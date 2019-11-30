@@ -229,8 +229,8 @@ public class WallController {
         // add cuts (if the game was loaded in)
         for (Wall wall: placedWalls){
             int[][] cuts = getWallCuts(wall);
-            graph.cutEdge(cuts[0][0],cuts[0][1]);
-            graph.cutEdge(cuts[1][0],cuts[1][1]);
+            graph.cutEdgeUndirected(cuts[0][0],cuts[0][1]);
+            graph.cutEdgeUndirected(cuts[1][0],cuts[1][1]);
         }
         ModelQuery.getCurrentPosition().setWallGraph(graph);
     }
@@ -240,8 +240,8 @@ public class WallController {
         List<Wall> placedWalls = ModelQuery.getAllWallsOnBoard();
         for (Wall wall: placedWalls){
             int[][] cuts = getWallCuts(wall);
-            graph.cutEdge(cuts[0][0],cuts[0][1]);
-            graph.cutEdge(cuts[1][0],cuts[1][1]);
+            graph.cutEdgeUndirected(cuts[0][0],cuts[0][1]);
+            graph.cutEdgeUndirected(cuts[1][0],cuts[1][1]);
         }
     }
 
@@ -302,19 +302,19 @@ public class WallController {
 
         // cut the wall graph at the position
         int[][] cuts = getWallCuts(ModelQuery.getWallMoveCandidate().getWallPlaced());
-        graph.cutEdge(cuts[0][0],cuts[0][1]);
-        graph.cutEdge(cuts[1][0],cuts[1][1]);
+        graph.cutEdgeUndirected(cuts[0][0],cuts[0][1]);
+        graph.cutEdgeUndirected(cuts[1][0],cuts[1][1]);
 
         GamePosition position = ModelQuery.getCurrentPosition();
         for(PlayerPosition pos: playerList){
             Destination dest = pos.getPlayer().getDestination();
             int tile_index = tileToIndex(pos.getTile());
             if(dest.getDirection().equals(Direction.Horizontal)){
-                if(position.getWallGraph().reachesDest(tile_index, dest.getTargetNumber(), -1)){
+                if(position.getWallGraph().reachesDest(tile_index, dest.getTargetNumber(), -1)>=0){
                     res.add(pos.getPlayer());
                 }
             }else{
-                if(position.getWallGraph().reachesDest(tile_index,-1, dest.getTargetNumber())){
+                if(position.getWallGraph().reachesDest(tile_index,-1, dest.getTargetNumber())>=0){
                     res.add(pos.getPlayer());
                 }
             }
