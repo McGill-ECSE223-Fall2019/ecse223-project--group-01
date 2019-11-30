@@ -5,11 +5,10 @@
 # Ignore Gradle build output directory
 build
 ca.mcgill.ecse223.quoridor/
+bin
 
 #IDE settings
 .idea
 .settings
 .project
 .classpath
-/main/
-/test/
