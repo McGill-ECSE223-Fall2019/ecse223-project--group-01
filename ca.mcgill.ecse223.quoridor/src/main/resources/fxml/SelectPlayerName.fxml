@@ -68,17 +68,17 @@
             <Font size="15.0" />
          </font>
       </Text>
-      <Text fill="#cc4e4e" layoutX="254.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Move Pawn: I, K, J, L" wrappingWidth="167.0">
+      <Text fill="#cc4e4e" layoutX="254.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Move Pawn: Mouse click OR I, K, J, L" wrappingWidth="260.9999694824219">
          <font>
             <Font size="15.0" />
          </font>
       </Text>
-      <Text fill="#cc4e4e" layoutX="254.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Diagonal Move Pawn:  U,O, N, &quot;,&quot;" wrappingWidth="235.0">
+      <Text fill="#cc4e4e" layoutX="254.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Diagonal Move Pawn:  Mouse click OR U,O, N, &quot;,&quot;" wrappingWidth="347.15107989990236">
          <font>
             <Font size="15.0" />
          </font>
       </Text>
-      <Text fill="#cc4e4e" layoutX="254.0" layoutY="67.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Jump Pawn: Press &quot;Shift&quot; then use Move Pawn Keys" wrappingWidth="323.0">
+      <Text fill="#cc4e4e" layoutX="254.0" layoutY="67.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Jump Pawn: Mouse clock OR Press &quot;Shift&quot; then use Move Pawn Keys" wrappingWidth="323.0">
          <font>
             <Font size="15.0" />
          </font>

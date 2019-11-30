@@ -55,6 +55,7 @@ public class InitializeBoardController extends ViewController{
     public static boolean whiteWon = false;
     public static boolean blackWon = false;
     public  PlayerPosition playerPosition ;
+    public static boolean validMoved = false;
     public Rectangle rect1;
     public Rectangle rect2;
     public Rectangle rect3;
@@ -171,9 +172,7 @@ public class InitializeBoardController extends ViewController{
         Double x = rec.getLayoutX();
         Double y = rec.getLayoutY();
         playerPosition = ModelQuery.getPlayerPositionOfPlayerToMove();
-
-
-
+        validMoved=true;
 
         System.out.println("ID : "+z+" X: "+x+" Y: "+y);
 
@@ -184,34 +183,44 @@ public class InitializeBoardController extends ViewController{
         if (state==PlayerState.PAWN) {
             String curDirection = checkPawnPostition(x, y, playerPosition);
 
+
+
             if (curDirection.equals("up")) {
-                PawnController.movePawn("up");
+
+                 //   AlertHelper.error(Alert.AlertType.ERROR, "Alert", "INVALID MOVE");
+                validMoved = PawnController.movePawn("up");
             }
             else if (curDirection.equals("down")) {
-                PawnController.movePawn("down");
+                validMoved =  PawnController.movePawn("down");
             }
             else if (curDirection.equals("left")) {
-                PawnController.movePawn("left");
+                validMoved = PawnController.movePawn("left");
             }
             else if (curDirection.equals("right")) {
-                PawnController.movePawn("right");
+                validMoved =  PawnController.movePawn("right");
             }
             else if (curDirection.equals("upright")) {
-                PawnController.movePawn("upright");
+                validMoved = PawnController.movePawn("upright");
             }
             else if (curDirection.equals("upleft")) {
-                PawnController.movePawn("upleft");
+                validMoved = PawnController.movePawn("upleft");
             }
             else if (curDirection.equals("downleft")) {
-                PawnController.movePawn("downleft");
+                validMoved = PawnController.movePawn("downleft");
             }
             else if (curDirection.equals("downright")) {
-                PawnController.movePawn("downright");
+                validMoved = PawnController.movePawn("downright");
             }
             else if(curDirection.equals("error")){
-                System.out.println("ERROR");
-            }
+                System.out.println("error");
+                validMoved =false ;
 
+            }
+//            if(!validMoved){
+//                System.out.println("HIIIEIEIEI");
+//                AlertHelper.newPopUpWindow(Alert.AlertType.CONFIRMATION, "Alert", "Are you sure you want to quit the game?");
+//                validMoved = true;
+//            }
         }
 
         refresh();
@@ -555,6 +564,30 @@ public class InitializeBoardController extends ViewController{
     @FXML
     public void handleKeyPressed(KeyEvent event) {
         KeyCode code = event.getCode();
+        if(code.equals(KeyCode.DIGIT1)) {
+
+            if (state == PlayerState.WALL) {
+                WallController.cancelWallMove();
+                state = PlayerState.IDLE;
+            }
+            //
+            else if (WallController.grabWall()) {
+                state = PlayerState.WALL;
+            } else {
+                AlertHelper.newPopUpWindow(Alert.AlertType.ERROR,"Alert","NO MORE WALLS IN STOCK");
+                System.out.println("No more walls");
+            }
+        }
+        if (code.equals(KeyCode.DIGIT2)) {
+            if (state == PlayerState.PAWN) {
+                state = PlayerState.IDLE;
+            } else {
+                state = PlayerState.PAWN;
+                WallController.cancelWallMove();
+            }
+
+        }
+
 
         if(state==PlayerState.WALL){
             //Moves the wall up
@@ -579,6 +612,9 @@ public class InitializeBoardController extends ViewController{
                     state = PlayerState.IDLE;
                     SwitchPlayerController.switchActivePlayer();
                     isWallDrop=true;
+                }
+                else{
+                    AlertHelper.newPopUpWindow(Alert.AlertType.ERROR, "Alert", "INVALID WALL PLACEMENT");
                 }
             }
             else if(code.equals(KeyCode.R)){

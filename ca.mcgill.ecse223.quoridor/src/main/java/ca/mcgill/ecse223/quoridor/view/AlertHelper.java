@@ -20,7 +20,7 @@ public class AlertHelper {
         alert.show();
     }
 
-    public static void newPopUpWindow(AlertType alertType, Window page, String title, String message) {
+    public static void newPopUpWindow(AlertType alertType, String title, String message) {
 
         Alert alert = new Alert(alertType);
         alert.setHeaderText(null);
@@ -28,11 +28,21 @@ public class AlertHelper {
         alert.setContentText(message);
 
         Optional<ButtonType> result = alert.showAndWait();
-      if(result.get() == ButtonType.OK){
-            Platform.exit();
+        if(alertType.equals(AlertType.CONFIRMATION)) {
+            if (result.get() == ButtonType.OK) {
+                Platform.exit();
+            }
         }
 
 
-  }
-}
+    }
 
+//    public static void error(AlertType alertType, String title, String message) {
+//
+//        Alert alert = new Alert(alertType);
+//        alert.setHeaderText(null);
+//        alert.setTitle(title);
+//        alert.setContentText(message);
+//
+//    }
+    }
