@@ -196,15 +196,25 @@ public class InitializeBoardController extends ViewController{
             else if (curDirection.equals("right")) {
                 PawnController.movePawn("right");
             }
+            else if (curDirection.equals("upright")) {
+                PawnController.movePawn("upright");
+            }
+            else if (curDirection.equals("upleft")) {
+                PawnController.movePawn("upleft");
+            }
+            else if (curDirection.equals("downleft")) {
+                PawnController.movePawn("downleft");
+            }
+            else if (curDirection.equals("downright")) {
+                PawnController.movePawn("downright");
+            }
             else if(curDirection.equals("error")){
                 System.out.println("ERROR");
             }
 
-
         }
 
-
-                refresh();
+        refresh();
 
 
     }
@@ -212,54 +222,46 @@ public class InitializeBoardController extends ViewController{
         Tile tile = null;
         String direction= null;
 
-        if(playerPosition.getPlayer().equals(ModelQuery.getWhitePlayer())){
-            tile = playerPosition.getTile();
-        }
-        else if (playerPosition.getPlayer().equals(ModelQuery.getBlackPlayer())){
-           tile = playerPosition.getTile();
-        }
+        Player currentPlayer = ModelQuery.getPlayerToMove();
+        tile = playerPosition.getTile();
+        String playerName = playerPosition.getPlayer().getUser().getName();
 
         Pair<Integer,Integer> coord = convertPawnToCanvas(tile.getRow(),tile.getColumn());
 
         Double pawnX = (double)coord.getValue();
         Double pawnY = (double)coord.getKey();
 
-
             /*For handling pawn move*/
             System.out.println("PawnX : "+pawnX+ " PawnY: "+pawnY);
 
-
-                if (x-pawnX == -17 && y-pawnY == -60) {
+                if ((x-pawnX == -17 && y-pawnY == -60) || (pawnX-x==17 && pawnY - y == 103)) {  //jump or move pawn
                     direction = "up";
                 }
-                else if ( pawnX-x == 17 && pawnY-y == -17) {
+                else if ((pawnX-x == 17 && pawnY-y == -26) || (pawnX-x == 17 && pawnY-y == -69)) {
                     direction = "down";
                 }
-                else if(pawnX-x == -60 && y-pawnY == -17){
+                else if((pawnX-x == 60 && pawnY-y == 17) || (pawnX-x == 103 && pawnY-y == 17)){
                     direction = "left";
                 }
-               else  if(x-pawnX== 60 && y-pawnY == -17){
+                else  if((pawnX-x== -26 && pawnY-y == 17) || pawnX-x == -69 && pawnY-y == 17){
                     direction = "right";
+                 }
+                else if (pawnX-x== 60 && pawnY-y == 60) {
+                   direction = "upleft";
+                }
+                else if (pawnX-x == -26 && pawnY-y == 60) {
+                   direction = "upright";
+                }
+                else if (pawnX-x == 60 && pawnY-y == -26) {
+                    direction = "downleft";
+                }
+                else if (pawnX-x == -26 && pawnY-y == -26) {
+                    direction = "downright";
                 }
                 else {
                     direction = "error";
                     }
                     System.out.println("Direction = "+direction);
-    //
-//                else if (code.equals(KeyCode.U)) {
-//                    PawnController.movePawn("upleft");
-//                }
-//                else if (code.equals(KeyCode.O)) {
-//                    PawnController.movePawn("upright");
-//                }
-//                else if (code.equals(KeyCode.N)) {
-//                    PawnController.movePawn("downleft");
-//                }
-//                else if (code.equals(KeyCode.COMMA)) {
-//                    PawnController.movePawn("downright");
-//                }
-
-
 
         return  direction;
 
