@@ -161,8 +161,8 @@ public class WallController {
         int moveNum;
         int roundNum;
         if (movesSize>0) {
-            moveNum = ModelQuery.getMoves().get(movesSize-1).getMoveNumber();
-            roundNum = ModelQuery.getMoves().get(movesSize-1).getRoundNumber();
+            roundNum = ModelQuery.getMoves().get(movesSize-1).getRoundNumber()+1;
+            moveNum = roundNum/2;
         }
         else {
             moveNum = 0;
@@ -177,7 +177,7 @@ public class WallController {
         		Wall wall = walls.get(0);		//get(0) null for some reason
                 ModelQuery.getCurrentGame().getCurrentPosition().removeWhiteWallsInStock(wall);
                 //create wall move candidate
-                WallMove move = new WallMove(moveNum+1, roundNum+1, player, ModelQuery.getTile(1,1), ModelQuery.getCurrentGame(), Direction.Vertical, wall);
+                WallMove move = new WallMove(moveNum, roundNum, player, ModelQuery.getTile(1,1), ModelQuery.getCurrentGame(), Direction.Vertical, wall);
                 ModelQuery.getCurrentGame().setWallMoveCandidate(move);
                 
             }else if(player.equals(ModelQuery.getBlackPlayer()) && ModelQuery.getCurrentGame().getCurrentPosition().getBlackWallsInStock().size()>0){
@@ -185,7 +185,7 @@ public class WallController {
             	Wall wall = walls.get(0);		//get(0) null for some reason
                 ModelQuery.getCurrentGame().getCurrentPosition().removeBlackWallsInStock(wall);
                 //create wall move candidate
-                WallMove move = new WallMove(moveNum+1, roundNum, player, ModelQuery.getTile(1,1), ModelQuery.getCurrentGame(), Direction.Vertical, wall);
+                WallMove move = new WallMove(moveNum, roundNum, player, ModelQuery.getTile(1,1), ModelQuery.getCurrentGame(), Direction.Vertical, wall);
                 ModelQuery.getCurrentGame().setWallMoveCandidate(move);
                 
             //4player
@@ -194,7 +194,7 @@ public class WallController {
             	Wall wall = walls.get(0);		
                 ModelQuery.getCurrentGame().getCurrentPosition().removeRedWallsInStock(wall);
                 //create wall move candidate
-                WallMove move = new WallMove(moveNum+1, roundNum, player, ModelQuery.getTile(1,1), ModelQuery.getCurrentGame(), Direction.Vertical, wall);
+                WallMove move = new WallMove(moveNum, roundNum, player, ModelQuery.getTile(1,1), ModelQuery.getCurrentGame(), Direction.Vertical, wall);
                 ModelQuery.getCurrentGame().setWallMoveCandidate(move);
                 
             }else if(player.equals(ModelQuery.getGreenPlayer()) && ModelQuery.getCurrentGame().getCurrentPosition().getGreenWallsInStock().size()>0){
@@ -202,7 +202,7 @@ public class WallController {
             	Wall wall = walls.get(0);		
                 ModelQuery.getCurrentGame().getCurrentPosition().removeGreenWallsInStock(wall);
                 //create wall move candidate
-                WallMove move = new WallMove(moveNum+1, roundNum, player, ModelQuery.getTile(1,1), ModelQuery.getCurrentGame(), Direction.Vertical, wall);
+                WallMove move = new WallMove(moveNum, roundNum, player, ModelQuery.getTile(1,1), ModelQuery.getCurrentGame(), Direction.Vertical, wall);
                 ModelQuery.getCurrentGame().setWallMoveCandidate(move);
             }
         	//no player has walls in stock
