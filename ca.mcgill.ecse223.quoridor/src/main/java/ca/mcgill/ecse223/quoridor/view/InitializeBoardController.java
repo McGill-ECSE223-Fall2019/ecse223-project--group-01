@@ -26,6 +26,10 @@ public class InitializeBoardController extends ViewController{
 
     public enum PlayerState {WALL, PAWN, IDLE};
     public PlayerState state = PlayerState.IDLE;
+    public void handleResignGame(ActionEvent actionEvent) {
+        ResignGameController.resign();
+        refresh();
+    }
 
     @FXML
     private AnchorPane board;
@@ -33,17 +37,17 @@ public class InitializeBoardController extends ViewController{
     public Text blackPlayerName;
     public Text redPlayerName;
     public Text greenPlayerName;
-    
+
     public Text whitePlayerName1;
     public Text blackPlayerName1;
     public Text redPlayerName1;
     public Text greenPlayerName1;
-    
+
     public Label timerForWhitePlayer;
     public Label timerForBlackPlayer;
     public Label timerForRedPlayer;
     public Label timerForGreenPlayer;
-    
+
     public Text whiteNumOfWalls;
     public Text blackNumOfWalls;
     public Text redNumOfWalls;
@@ -54,12 +58,12 @@ public class InitializeBoardController extends ViewController{
     public Button backBtn;
 
     public Timeline timeline;
-    
+
     public static boolean playerIsWhite = false;
     public static boolean isWallDrop = false;
     public static boolean pawnMoved = false;
     public String initialTime;
-    
+
     public Circle c1;
     public Circle c2;
     public Rectangle r1;
@@ -67,7 +71,7 @@ public class InitializeBoardController extends ViewController{
     public Text x1;
     public Text x2;
 
- 
+
     public void initialize() {
 
         //display player name
@@ -104,7 +108,7 @@ public class InitializeBoardController extends ViewController{
         	x2.setVisible(false);
 
         }
-        
+
         //start the clock once the game is initiated
         StartNewGameController.startTheClock();
 
@@ -113,11 +117,11 @@ public class InitializeBoardController extends ViewController{
 
     	timerForWhitePlayer.setText(initialTime);
     	timerForBlackPlayer.setText(initialTime);
-    	
+
     	if(ModelQuery.isFourPlayer()) {
     		timerForRedPlayer.setText(initialTime);
     		timerForGreenPlayer.setText(initialTime);
-    	} 
+    	}
 
         state = PlayerState.IDLE;
         switchTimer();
@@ -125,7 +129,7 @@ public class InitializeBoardController extends ViewController{
 
     public void switchTimer() {
 
-        if (timeline != null) { 
+        if (timeline != null) {
             timeline.stop();
         }
         // update timerLabel
@@ -134,7 +138,7 @@ public class InitializeBoardController extends ViewController{
         timeline.setCycleCount(Timeline.INDEFINITE);
 
         EventHandler onFinished = new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) { 
+            public void handle(ActionEvent t) {
                 Player currentPlayer = ModelQuery.getPlayerToMove();
                 if ((StartNewGameController.timeOver()) || isWallDrop || pawnMoved ) {
                 	isWallDrop = false;
@@ -142,9 +146,9 @@ public class InitializeBoardController extends ViewController{
 
                 	refresh();
                 	StartNewGameController.resetTimeToSet();
-                	
+
                 } else {
-                
+
                 //grey out the next player name & count down time for the current player
 	                if (currentPlayer.equals(ModelQuery.getWhitePlayer())) {
 	                    timerForWhitePlayer.setText(StartNewGameController.toTimeStr());
@@ -155,7 +159,7 @@ public class InitializeBoardController extends ViewController{
 	                } else if (currentPlayer.equals(ModelQuery.getGreenPlayer())) {
 	                	timerForGreenPlayer.setText(StartNewGameController.toTimeStr());
 	                }
-                
+
                 }
             }
         };
@@ -216,13 +220,13 @@ public class InitializeBoardController extends ViewController{
             whitePlayerName.setFill(Color.BLACK);
             blackPlayerName.setFill(Color.LIGHTGRAY);
             redPlayerName.setFill(Color.LIGHTGRAY);
-            greenPlayerName.setFill(Color.LIGHTGRAY);    
-            
+            greenPlayerName.setFill(Color.LIGHTGRAY);
+
             whitePlayerName1.setFill(Color.BLACK);
             blackPlayerName1.setFill(Color.LIGHTGRAY);
             redPlayerName1.setFill(Color.LIGHTGRAY);
-            greenPlayerName1.setFill(Color.LIGHTGRAY);   
-            
+            greenPlayerName1.setFill(Color.LIGHTGRAY);
+
             whiteNumOfWalls.setFill(Color.BLACK);
             blackNumOfWalls.setFill(Color.LIGHTGRAY);
             redNumOfWalls.setFill(Color.LIGHTGRAY);
@@ -232,12 +236,12 @@ public class InitializeBoardController extends ViewController{
             blackPlayerName.setFill(Color.BLACK);
             redPlayerName.setFill(Color.LIGHTGRAY);
             greenPlayerName.setFill(Color.LIGHTGRAY);
-            
+
             whitePlayerName1.setFill(Color.LIGHTGRAY);
             blackPlayerName1.setFill(Color.BLACK);
             redPlayerName1.setFill(Color.LIGHTGRAY);
-            greenPlayerName1.setFill(Color.LIGHTGRAY);   
-            
+            greenPlayerName1.setFill(Color.LIGHTGRAY);
+
             whiteNumOfWalls.setFill(Color.LIGHTGRAY);
             blackNumOfWalls.setFill(Color.BLACK);
             redNumOfWalls.setFill(Color.LIGHTGRAY);
@@ -247,12 +251,12 @@ public class InitializeBoardController extends ViewController{
             blackPlayerName.setFill(Color.LIGHTGRAY);
             redPlayerName.setFill(Color.BLACK);
             greenPlayerName.setFill(Color.LIGHTGRAY);
-            
+
             whitePlayerName1.setFill(Color.LIGHTGRAY);
             blackPlayerName1.setFill(Color.LIGHTGRAY);
             redPlayerName1.setFill(Color.BLACK);
-            greenPlayerName1.setFill(Color.LIGHTGRAY);   
-            
+            greenPlayerName1.setFill(Color.LIGHTGRAY);
+
             whiteNumOfWalls.setFill(Color.LIGHTGRAY);
             blackNumOfWalls.setFill(Color.LIGHTGRAY);
             redNumOfWalls.setFill(Color.BLACK);
@@ -262,12 +266,12 @@ public class InitializeBoardController extends ViewController{
             blackPlayerName.setFill(Color.LIGHTGRAY);
             redPlayerName.setFill(Color.LIGHTGRAY);
             greenPlayerName.setFill(Color.BLACK);
-            
+
             whitePlayerName1.setFill(Color.LIGHTGRAY);
             blackPlayerName1.setFill(Color.LIGHTGRAY);
             redPlayerName1.setFill(Color.LIGHTGRAY);
-            greenPlayerName1.setFill(Color.BLACK);   
-            
+            greenPlayerName1.setFill(Color.BLACK);
+
             whiteNumOfWalls.setFill(Color.LIGHTGRAY);
             blackNumOfWalls.setFill(Color.LIGHTGRAY);
             redNumOfWalls.setFill(Color.LIGHTGRAY);
@@ -325,7 +329,7 @@ public class InitializeBoardController extends ViewController{
         	pawn.setFill(Color.GREEN);
         	pawn.setStroke(Color.BLACK);
         }
-        
+
         pawn.setLayoutX(coord.getValue());
         pawn.setLayoutY(coord.getKey());
         pawn.setRadius(8);
@@ -435,7 +439,7 @@ public class InitializeBoardController extends ViewController{
         }
     }
 
-    
+
     public void dropWall(){
         if(WallController.dropWall()){
             state = PlayerState.IDLE;
