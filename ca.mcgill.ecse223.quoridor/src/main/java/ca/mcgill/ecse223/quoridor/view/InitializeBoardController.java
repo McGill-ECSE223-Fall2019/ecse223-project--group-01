@@ -174,11 +174,35 @@ public class InitializeBoardController extends ViewController{
         Double y = rec.getLayoutY();
         playerPosition = ModelQuery.getPlayerPositionOfPlayerToMove();
 
-        System.out.println("ID : "+z+" X: "+x+" Y: "+y);
-        if(checkPawnPostition(x,y, playerPosition).equals("up")){
-            PawnController.movePawn("up");
-        }
 
+
+
+        System.out.println("ID : "+z+" X: "+x+" Y: "+y);
+
+
+
+
+        if (state==PlayerState.PAWN) {
+            String curDirection = checkPawnPostition(x, y, playerPosition);
+
+            if (curDirection.equals("up")) {
+                PawnController.movePawn("up");
+            }
+            else if (curDirection.equals("down")) {
+                PawnController.movePawn("down");
+            }
+            else if (curDirection.equals("left")) {
+                PawnController.movePawn("left");
+            }
+            else if (curDirection.equals("right")) {
+                PawnController.movePawn("right");
+            }
+            else if(curDirection.equals("error")){
+                System.out.println("ERROR");
+            }
+
+
+        }
 
 
                 refresh();
@@ -200,22 +224,28 @@ public class InitializeBoardController extends ViewController{
         Double pawnX = (double)coord.getValue();
         Double pawnY = (double)coord.getKey();
 
-        if (state==PlayerState.PAWN){
-            /*For handling pawn move*/
 
-                if (x-pawnX == -17 && y -pawnY == -60) {
+            /*For handling pawn move*/
+            System.out.println("PawnX : "+pawnX+ " PawnY: "+pawnY);
+
+
+                if (x-pawnX == -17 && y-pawnY == -60) {
                     direction = "up";
                 }
-
-//                else if (code.equals(KeyCode.K)) {
-//                    PawnController.movePawn("down");
-//                }
-//                else if (code.equals(KeyCode.J)) {
-//                    PawnController.movePawn("left");
-//                }
-//                else if (code.equals(KeyCode.L)) {
-//                    PawnController.movePawn("right");
-//                }
+                else if ( pawnX-x == 17 && pawnY-y == -17) {
+                    direction = "down";
+                }
+                else if(pawnX-x == -60 && y-pawnY == -17){
+                    direction = "left";
+                }
+               else  if(x-pawnX== 60 && y-pawnY == -17){
+                    direction = "right";
+                }
+                else {
+                    direction = "error";
+                    }
+                    System.out.println("Direction = "+direction);
+    //
 //                else if (code.equals(KeyCode.U)) {
 //                    PawnController.movePawn("upleft");
 //                }
@@ -229,9 +259,8 @@ public class InitializeBoardController extends ViewController{
 //                    PawnController.movePawn("downright");
 //                }
 
-        }
-        System.out.println("PawnX : "+pawnX+ " PawnY: "+pawnY);
-        System.out.println("Direction = "+direction);
+
+
         return  direction;
 
     }
