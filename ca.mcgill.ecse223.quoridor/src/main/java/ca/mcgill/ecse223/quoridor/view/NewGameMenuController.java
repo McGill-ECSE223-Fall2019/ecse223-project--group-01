@@ -366,11 +366,8 @@ public class NewGameMenuController extends ViewController {
                     errorAlert.setContentText("The saved positions were unable to be loaded");
                     errorAlert.showAndWait();
                 }
-                else{
-                    /* Playing the Battle music */
-                    MusicController.playEpicMusic();
+                else
                     changePage("/fxml/InitializeBoard.fxml");
-                }
             } catch (IOException e) {
                 Alert errorAlert = new Alert(Alert.AlertType.ERROR);
                 errorAlert.setHeaderText("Error in loading Position");
