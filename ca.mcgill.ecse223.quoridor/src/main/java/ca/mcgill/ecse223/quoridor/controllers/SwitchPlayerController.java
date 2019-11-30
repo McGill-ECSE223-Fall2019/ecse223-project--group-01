@@ -18,6 +18,8 @@ public class SwitchPlayerController {
 	 * @return A string representing the color of the player that ends as active
 	 */
 	
+	private static int wallIdCounter = 0;
+	
 	public static void switchActivePlayer() {
 		/*
 		Player whitePlayer = ModelQuery.getWhitePlayer();
@@ -60,7 +62,7 @@ public class SwitchPlayerController {
 		GamePosition current = ModelQuery.getCurrentPosition();
 		
 		int id = ModelQuery.getCurrentGame().getPositions().size()+1;
-		int wallCounter = 0;
+
 		PlayerPosition whitePlayerPos =  new PlayerPosition(ModelQuery.getCurrentGame().getWhitePlayer(), current.getWhitePosition().getTile());
 		PlayerPosition blackPlayerPos =  new PlayerPosition(ModelQuery.getCurrentGame().getBlackPlayer(), current.getBlackPosition().getTile());
 		PlayerPosition redPlayerPos;
@@ -81,7 +83,7 @@ public class SwitchPlayerController {
 		Player greenClone;
 		
 		for(Wall whiteWall: ModelQuery.getWhiteWallsOnBoard()) {
-			Wall wallClone = new Wall(id*40+wallCounter++, whiteClone);
+			Wall wallClone = new Wall(id*40+wallIdCounter++, whiteClone);
 			WallMove mov = whiteWall.getMove();
 			WallMove moveClone = new WallMove(mov.getMoveNumber(),mov.getRoundNumber(),mov.getPlayer(),mov.getTargetTile(),mov.getGame(),mov.getWallDirection(),wallClone);
 			wallClone.setOwner(whiteClone);
@@ -89,7 +91,7 @@ public class SwitchPlayerController {
 		}
 		
 		for(Wall blackWall: ModelQuery.getBlackWallsOnBoard()) {
-			Wall wallClone = new Wall(id*40+wallCounter++, blackClone);
+			Wall wallClone = new Wall(id*40+wallIdCounter++, blackClone);
 			WallMove mov = blackWall.getMove();
 			WallMove moveClone = new WallMove(mov.getMoveNumber(),mov.getRoundNumber(),mov.getPlayer(),mov.getTargetTile(),mov.getGame(),mov.getWallDirection(),wallClone);
 			wallClone.setOwner(blackClone);
@@ -97,14 +99,14 @@ public class SwitchPlayerController {
 		}
 		
 		for(Wall whiteWall: ModelQuery.getCurrentPosition().getWhiteWallsInStock()) {
-			Wall wallClone = new Wall(id*40+wallCounter++, whiteClone);
+			Wall wallClone = new Wall(id*40+wallIdCounter++, whiteClone);
 			//wallClone.setMove(whiteWall.getMove());
 			wallClone.setOwner(whiteClone);
 			clone.addWhiteWallsInStock(wallClone);
 		}
 		
 		for(Wall blackWall: ModelQuery.getCurrentPosition().getBlackWallsOnBoard()) {
-			Wall wallClone = new Wall(id*40+wallCounter++, blackClone);
+			Wall wallClone = new Wall(id*40+wallIdCounter++, blackClone);
 			//wallClone.setMove(blackWall.getMove());
 			wallClone.setOwner(ModelQuery.getBlackPlayer());
 			clone.addBlackWallsInStock(wallClone);
@@ -119,7 +121,7 @@ public class SwitchPlayerController {
 			clone.setGreenPosition(greenPlayerPos);
 			
 			for(Wall redWall: ModelQuery.getRedWallsOnBoard()) {
-				Wall wallClone = new Wall(id*40+wallCounter++, redClone);
+				Wall wallClone = new Wall(id*40+wallIdCounter++, redClone);
 				WallMove mov = redWall.getMove();
 				WallMove moveClone = new WallMove(mov.getMoveNumber(),mov.getRoundNumber(),mov.getPlayer(),mov.getTargetTile(),mov.getGame(),mov.getWallDirection(),wallClone);
 				wallClone.setOwner(redClone);
@@ -127,7 +129,7 @@ public class SwitchPlayerController {
 			}
 			
 			for(Wall greenWall: ModelQuery.getGreenWallsOnBoard()) {
-				Wall wallClone = new Wall(id*40+wallCounter++, greenClone);
+				Wall wallClone = new Wall(id*40+wallIdCounter++, greenClone);
 				WallMove mov = greenWall.getMove();
 				WallMove moveClone = new WallMove(mov.getMoveNumber(),mov.getRoundNumber(),mov.getPlayer(),mov.getTargetTile(),mov.getGame(),mov.getWallDirection(),wallClone);
 				wallClone.setOwner(greenClone);
@@ -135,13 +137,13 @@ public class SwitchPlayerController {
 			}
 			
 			for(Wall redWall: ModelQuery.getCurrentPosition().getRedWallsInStock()) {
-				Wall wallClone = new Wall(id*40+wallCounter++, redClone);
+				Wall wallClone = new Wall(id*40+wallIdCounter++, redClone);
 				wallClone.setOwner(redClone);
 				clone.addRedWallsInStock(wallClone);
 			}
 			
 			for(Wall greenWall: ModelQuery.getCurrentPosition().getGreenWallsOnBoard()) {
-				Wall wallClone = new Wall(id*40+wallCounter++, greenClone);
+				Wall wallClone = new Wall(id*40+wallIdCounter++, greenClone);
 				wallClone.setOwner(greenClone);
 				clone.addGreenWallsInStock(wallClone);
 			}
