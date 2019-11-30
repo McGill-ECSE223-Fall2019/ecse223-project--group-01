@@ -9,7 +9,6 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import javafx.scene.control.Button;
-import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Map;
@@ -59,14 +58,14 @@ public class GameStatusStepDefinition {
 
         // get move number and round number
         int num_moves = ModelQuery.getCurrentGame().getMoves().size();
-        StepMove last_move =(StepMove) ModelQuery.getCurrentGame().getMove(num_moves-1);
+        StepMove last_move = (StepMove) ModelQuery.getCurrentGame().getMove(num_moves - 1);
 
         int turn = last_move.getMoveNumber();
-        int round =last_move.getRoundNumber();
+        int round = last_move.getRoundNumber();
 
-        Tile target = ModelQuery.getTile(row,col);
+        Tile target = ModelQuery.getTile(row, col);
 
-        StepMove move = new StepMove(turn,round,current_player,target,game);
+        StepMove move = new StepMove(turn, round, current_player, target, game);
 
         // add it to the list
         game.addMove(move);
@@ -82,12 +81,11 @@ public class GameStatusStepDefinition {
         assertEquals(stringToStatus(arg0), ModelQuery.getCurrentGame().getGameStatus());
     }
 
-    @Test
     @And("The game shall no longer be running")
     public void theGameShallNoLongerBeRunning() {
     }
 
-    private Player stringToPlayer(String playerColor){
+    private Player stringToPlayer(String playerColor) {
         switch (playerColor) {
             case "white": {
                 return ModelQuery.getWhitePlayer();
@@ -101,15 +99,21 @@ public class GameStatusStepDefinition {
         }
     }
 
-    private Game.GameStatus stringToStatus(String status){
-        switch (status){
-            case "Drawn":{
+    private Game.GameStatus stringToStatus(String status) {
+        switch (status) {
+            case "Drawn": {
                 return Game.GameStatus.Draw;
             }
-            case "Pending":{
+            case "Pending": {
                 return Game.GameStatus.Running;
             }
-            default:{
+            case "BlackWon": {
+                return Game.GameStatus.BlackWon;
+            }
+            case "WhiteWon": {
+                return Game.GameStatus.WhiteWon;
+            }
+            default: {
                 return null;
             }
         }
