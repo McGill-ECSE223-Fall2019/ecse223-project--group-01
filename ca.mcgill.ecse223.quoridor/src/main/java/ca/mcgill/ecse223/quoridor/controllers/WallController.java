@@ -5,6 +5,7 @@ import ca.mcgill.ecse223.quoridor.WallGraph;
 import ca.mcgill.ecse223.quoridor.model.*;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class WallController {
@@ -323,6 +324,58 @@ public class WallController {
         graph.addEdgeUndirected(cuts[0][0],cuts[0][1]);
         graph.addEdgeUndirected(cuts[1][0],cuts[1][1]);
         return res;
+    }
+
+
+    public static void updatePlayerDistances(){
+        WallGraph wallGraph = ModelQuery.getCurrentPosition().getWallGraph();
+        updateGraph();
+        List<PlayerPosition> positions = ModelQuery.getAllPlayerPosition();
+        List<LinkedList<Integer>> adjacencyLists = new ArrayList<>();
+        List<Integer> distances = new ArrayList<>();
+
+        // Storing the adjacency lists for each tile
+        for(PlayerPosition position : positions){
+            Tile source = position.getTile();
+            LinkedList<Integer> adjacents =  wallGraph.getAdjacent(tileToIndex(source));
+            for(int i = 0; i< adjacents.size(); i++){
+                //stopping the neighbhors from going in
+                wallGraph.cutEdge(adjacents.get(i), tileToIndex(source));
+
+                // putting the jumps
+                for(int k = i+1; k<adjacents.size(); k++){
+                    wallGraph.addEdgeUndirected(adjacents.get(i),adjacents.get(k));
+                }
+            }
+        }
+
+        int distance = 0;
+        for(PlayerPosition pos: positions){
+            Destination dest = pos.getPlayer().getDestination();
+            int tile_index = tileToIndex(pos.getTile());
+            if(dest.getDirection().equals(Direction.Horizontal)){
+                distance = wallGraph.reachesDest(tile_index, dest.getTargetNumber(), -1);
+                distances.add(distance);
+            }else{
+                distance = wallGraph.reachesDest(tile_index,-1, dest.getTargetNumber());
+                distances.add(distance);
+            }
+        }
+
+        for(PlayerPosition position : positions){
+            Tile source = position.getTile();
+            LinkedList<Integer> adjacents =  wallGraph.getAdjacent(tileToIndex(source));
+            for(int i = 0; i< adjacents.size(); i++){
+                // re adding the neighbhors
+                wallGraph.addEdge(adjacents.get(i), tileToIndex(source));
+
+                //removing the umps
+                for(int k = i+1; k<adjacents.size(); k++){
+                    wallGraph.cutEdgeUndirected(adjacents.get(i),adjacents.get(k));
+                }
+            }
+        }
+
     }
 
     private static int coordToIndex(int row,int col){
