@@ -14,27 +14,6 @@ public class EndGameController {
 
     public EndGameController() {}
 
-    public static void gameIsNoLongerRun() {
-        Player winPlayer;
-
-        try {
-            winPlayer = ModelQuery.getCurrentGame().getWinningPlayer();
-        } catch (NullPointerException e) {
-            winPlayer = null;
-            System.out.println("There's no winning player yet!");
-        }
-        Player whitePlayer = ModelQuery.getWhitePlayer();
-        Player blackPlayer = ModelQuery.getBlackPlayer();
-        if (winPlayer != null) {
-            if (winPlayer.equals(whitePlayer)) {
-                ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.WhiteWon);
-            }
-            else if (winPlayer.equals(blackPlayer)) {
-                ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.BlackWon);
-            }
-        }
-    }
-
     public static String checkPawnPosition(String player, int row, int col) {
         String result = "";
 
@@ -53,14 +32,14 @@ public class EndGameController {
         long blackRemainingTime = blackTime.getTime();
 
         if (player.equals("white") && whiteRemainingTime > 0) {
-            if (whiteTile.getRow() == 9 && whiteTile.getColumn() <= 9 && whiteTile.getColumn() >= 1) {
+            if (row == 9 && col <= 9 && col >= 1) {
                 result = "whiteWon";
             } else {
                 result = "pending";
             }
         }
         else if (player.equals("black") && blackRemainingTime > 0) {
-            if (blackTile.getRow() == 1 && blackTile.getColumn() <= 9 && blackTile.getColumn() >= 1) {
+            if (row == 1 && col <= 9 && col >= 1) {
                 result = "blackWon";
             } else {
                 result = "pending";
