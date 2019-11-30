@@ -1,4 +1,5 @@
 package ca.mcgill.ecse223.quoridor.view;
+import ca.mcgill.ecse223.quoridor.controllers.MusicController;
 import ca.mcgill.ecse223.quoridor.controllers.PositionController;
 import ca.mcgill.ecse223.quoridor.controllers.SaveLoadGameController;
 import ca.mcgill.ecse223.quoridor.controllers.StartNewGameController;
@@ -111,8 +112,11 @@ public class LoadGameController extends ViewController{
                     errorAlert.setContentText("The saved game were unable to be loaded");
                     errorAlert.showAndWait();
                 }
-                else
+                else{
+                    /* Playing the Battle music */
+                    MusicController.playEpicMusic();
                     changePage("/fxml/InitializeBoard.fxml");
+                }
             } catch (IOException e) {
                 Alert errorAlert = new Alert(Alert.AlertType.ERROR);
                 errorAlert.setHeaderText("Error in loading game");

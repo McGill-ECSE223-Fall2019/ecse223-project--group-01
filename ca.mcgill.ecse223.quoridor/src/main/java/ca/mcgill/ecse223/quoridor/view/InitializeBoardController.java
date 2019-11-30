@@ -168,6 +168,7 @@ public class InitializeBoardController extends ViewController{
 
     public void handleBackToMenu(ActionEvent actionEvent) {
         timeline.stop();
+        MusicController.playMainMenu();
         changePage("/fxml/Menu.fxml");
 
     }

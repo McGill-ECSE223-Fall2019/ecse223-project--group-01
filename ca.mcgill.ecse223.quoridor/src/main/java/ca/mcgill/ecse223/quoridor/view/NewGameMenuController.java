@@ -1,9 +1,6 @@
 package ca.mcgill.ecse223.quoridor.view;
 
-import ca.mcgill.ecse223.quoridor.controllers.BoardController;
-import ca.mcgill.ecse223.quoridor.controllers.ModelQuery;
-import ca.mcgill.ecse223.quoridor.controllers.PositionController;
-import ca.mcgill.ecse223.quoridor.controllers.StartNewGameController;
+import ca.mcgill.ecse223.quoridor.controllers.*;
 import ca.mcgill.ecse223.quoridor.model.User;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -255,6 +252,8 @@ public class NewGameMenuController extends ViewController {
             secS = seconds.getText();
             StartNewGameController.setTotalThinkingTime(Integer.parseInt(minutes.getText()), Integer.parseInt(seconds.getText()));
             BoardController.initializeBoard();
+            /* Playing the Battle music */
+            MusicController.playEpicMusic();
             changePage("/fxml/InitializeBoard.fxml");
         }
         // Display errors
@@ -367,8 +366,11 @@ public class NewGameMenuController extends ViewController {
                     errorAlert.setContentText("The saved positions were unable to be loaded");
                     errorAlert.showAndWait();
                 }
-                else
+                else{
+                    /* Playing the Battle music */
+                    MusicController.playEpicMusic();
                     changePage("/fxml/InitializeBoard.fxml");
+                }
             } catch (IOException e) {
                 Alert errorAlert = new Alert(Alert.AlertType.ERROR);
                 errorAlert.setHeaderText("Error in loading Position");
