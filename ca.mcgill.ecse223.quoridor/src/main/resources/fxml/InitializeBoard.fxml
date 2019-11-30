@@ -11,19 +11,19 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#handleKeyPressed" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ca.mcgill.ecse223.quoridor.view.InitializeBoardController">
    <children>
-      <Text fx:id="blackPlayerName" layoutX="55.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PLAYER 1" wrappingWidth="107.151118046875">
+      <Text fx:id="whitePlayerName" layoutX="35.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PLAYER 1" wrappingWidth="107.151118046875">
          <font>
             <Font size="20.0" />
          </font>
       </Text>
-      <Circle layoutX="34.0" layoutY="22.0" radius="8.0" stroke="BLACK" strokeType="INSIDE" />
-      <Rectangle arcHeight="5.0" arcWidth="5.0" height="33.0" layoutX="173.0" layoutY="5.0" stroke="BLACK" strokeType="INSIDE" width="9.0" />
-      <Text layoutX="194.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="x" wrappingWidth="35.151102788085936">
+      <Circle fill="#dde8f2" layoutX="26.0" layoutY="23.0" radius="8.0" stroke="BLACK" strokeType="INSIDE" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#dde8f2" height="33.0" layoutX="133.0" layoutY="6.0" stroke="BLACK" strokeType="INSIDE" width="9.0" />
+      <Text layoutX="142.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="x" wrappingWidth="35.151102788085936">
          <font>
             <Font size="20.0" />
          </font>
       </Text>
-      <Text fx:id="blackNumOfWalls" layoutX="211.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="10" wrappingWidth="35.151102788085936">
+      <Text fx:id="whiteNumOfWalls" layoutX="157.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="10" wrappingWidth="35.151102788085936">
          <font>
             <Font size="20.0" />
          </font>
@@ -33,27 +33,32 @@
             <Font size="20.0" />
          </font>
       </Text>
-      <Text fx:id="blackPlayerName1" layoutX="413.0" layoutY="98.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" text="PLAYER 1" wrappingWidth="107.151118046875">
+      <Text fx:id="whitePlayerName1" layoutX="413.0" layoutY="98.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" text="PLAYER 1" wrappingWidth="107.151118046875">
          <font>
             <Font size="20.0" />
          </font>
       </Text>
-      <Text fx:id="whitePlayerName1" layoutX="413.0" layoutY="135.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PLAYER 2" wrappingWidth="107.151118046875">
+      <Text fx:id="blackPlayerName1" layoutX="413.0" layoutY="135.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PLAYER 2" wrappingWidth="107.151118046875">
          <font>
             <Font size="20.0" />
          </font>
       </Text>
-      <Button layoutX="442.0" layoutY="216.0" mnemonicParsing="false" onAction="#handleRotate" prefHeight="39.0" prefWidth="152.0" text="Rotate Wall (R)">
+      <Button fx:id="rotateWallBtn" layoutX="444.0" layoutY="281.0" mnemonicParsing="false" onAction="#handleRotate" prefHeight="39.0" prefWidth="152.0" text="Rotate Wall (R)">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
-      <Button layoutX="442.0" layoutY="322.0" mnemonicParsing="false" onAction="#handleSavePosition" prefHeight="39.0" prefWidth="152.0" text="Save Position">
+      <Button layoutX="444.0" layoutY="375.0" mnemonicParsing="false" onAction="#handleSavePosition" prefHeight="39.0" prefWidth="152.0" text="Save Position">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
-      <Button layoutX="442.0" layoutY="377.0" mnemonicParsing="false" onAction="#handleBackToMenu" prefHeight="39.0" prefWidth="152.0" text="Back to Menu">
+      <Button layoutX="442.0" layoutY="377.0" mnemonicParsing="false" onAction="#handleResignGame" prefHeight="39.0" prefWidth="152.0" text="Resign">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Button>
+      <Button fx:id="backBtn" layoutX="444.0" layoutY="420.0" mnemonicParsing="false" onAction="#handleBackToMenu" prefHeight="39.0" prefWidth="152.0" text="Back to Menu">
          <font>
             <Font size="18.0" />
          </font>
@@ -232,39 +237,93 @@
 
 
       </AnchorPane>
-      <Button layoutX="442.0" layoutY="163.0" mnemonicParsing="false" onAction="#createNewWall" prefHeight="39.0" prefWidth="152.0" text="Wall">
+      <Button fx:id="grabWallBtn" layoutX="444.0" layoutY="231.0" mnemonicParsing="false" onAction="#createNewWall" prefHeight="39.0" prefWidth="152.0" text="Wall">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
-      <Label fx:id="timerForBlackPlayer" layoutX="533.0" layoutY="79.0" prefHeight="23.0" prefWidth="61.0" style="-fx-border-color: #000000;" text="   11:30" textAlignment="CENTER">
+      <Label fx:id="timerForWhitePlayer" layoutX="533.0" layoutY="79.0" prefHeight="23.0" prefWidth="61.0" style="-fx-border-color: #000000;" text="   11:30" textAlignment="CENTER">
          <font>
             <Font size="15.0" />
          </font>
       </Label>
-      <Label fx:id="timerForWhitePlayer" layoutX="533.0" layoutY="116.0" prefHeight="23.0" prefWidth="61.0" style="-fx-border-color: #000000;" text="   12:30" textAlignment="CENTER">
+      <Label fx:id="timerForBlackPlayer" layoutX="533.0" layoutY="116.0" prefHeight="23.0" prefWidth="61.0" style="-fx-border-color: #000000;" text="   12:30" textAlignment="CENTER">
          <font>
             <Font size="15.0" />
          </font>
       </Label>
-      <Text fx:id="whitePlayerName" layoutX="55.0" layoutY="478.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PLAYER 2" wrappingWidth="107.151118046875">
+      <Text fx:id="blackPlayerName" layoutX="35.0" layoutY="477.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PLAYER 2" wrappingWidth="107.151118046875">
          <font>
             <Font size="20.0" />
          </font>
       </Text>
-      <Circle fill="WHITE" layoutX="34.0" layoutY="470.0" radius="8.0" stroke="BLACK" strokeType="INSIDE" />
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="33.0" layoutX="175.0" layoutY="453.0" stroke="BLACK" strokeType="INSIDE" width="9.0" />
-      <Text layoutX="196.0" layoutY="477.0" strokeType="OUTSIDE" strokeWidth="0.0" text="x" wrappingWidth="35.151102788085936">
+      <Circle layoutX="26.0" layoutY="470.0" radius="8.0" stroke="BLACK" strokeType="INSIDE" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" height="33.0" layoutX="133.0" layoutY="454.0" stroke="BLACK" strokeType="INSIDE" width="9.0" />
+      <Text layoutX="142.0" layoutY="477.0" strokeType="OUTSIDE" strokeWidth="0.0" text="x" wrappingWidth="35.151102788085936">
          <font>
             <Font size="20.0" />
          </font>
       </Text>
-      <Text fx:id="whiteNumOfWalls" layoutX="213.0" layoutY="478.0" strokeType="OUTSIDE" strokeWidth="0.0" text="10" wrappingWidth="35.151102788085936">
+      <Text fx:id="blackNumOfWalls" layoutX="159.0" layoutY="477.0" strokeType="OUTSIDE" strokeWidth="0.0" text="10" wrappingWidth="35.151102788085936">
          <font>
             <Font size="20.0" />
          </font>
       </Text>
       <PointLight fx:id="whitePlayerLight" color="CHARTREUSE" layoutX="249.0" layoutY="30.0" lightOn="true" />
+      <Text fx:id="greenPlayerName1" layoutX="413.0" layoutY="203.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PLAYER 4" wrappingWidth="107.151118046875">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
+      <Text fx:id="redPlayerName1" layoutX="413.0" layoutY="170.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PLAYER 3" wrappingWidth="107.151118046875">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
+      <Label fx:id="timerForGreenPlayer" layoutX="533.0" layoutY="185.0" prefHeight="23.0" prefWidth="61.0" style="-fx-border-color: #000000;" text="   14:30" textAlignment="CENTER">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <Label fx:id="timerForRedPlayer" layoutX="533.0" layoutY="150.0" prefHeight="23.0" prefWidth="61.0" style="-fx-border-color: #000000;" text="   13:30" textAlignment="CENTER">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <Circle fx:id="c1" fill="RED" layoutX="241.0" layoutY="23.0" radius="8.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="c2" fill="LIGHTGREEN" layoutX="241.0" layoutY="471.0" radius="8.0" stroke="BLACK" strokeType="INSIDE" />
+      <Text fx:id="redPlayerName" layoutX="249.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PLAYER 3" wrappingWidth="107.151118046875">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
+      <Text fx:id="greenPlayerName" layoutX="249.0" layoutY="478.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PLAYER 4" wrappingWidth="107.151118046875">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
+      <Text layoutX="356.0" layoutY="477.0" strokeType="OUTSIDE" strokeWidth="0.0" text="x" wrappingWidth="35.151102788085936" fx:id="x2">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
+      <Text layoutX="356.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="x" wrappingWidth="35.151102788085936" fx:id="x1">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
+      <Rectangle fx:id="r2" arcHeight="5.0" arcWidth="5.0" fill="LIGHTGREEN" height="33.0" layoutX="347.0" layoutY="454.0" stroke="BLACK" strokeType="INSIDE" width="9.0" />
+      <Rectangle fx:id="r1" arcHeight="5.0" arcWidth="5.0" fill="RED" height="33.0" layoutX="346.0" layoutY="5.0" stroke="BLACK" strokeType="INSIDE" width="9.0" />
+      <Text fx:id="greenNumOfWalls" layoutX="370.0" layoutY="478.0" strokeType="OUTSIDE" strokeWidth="0.0" text="10" wrappingWidth="35.151102788085936">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
+      <Text fx:id="redNumOfWalls" layoutX="370.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="10" wrappingWidth="35.151102788085936">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
 
       <Text layoutX="9.0" layoutY="68.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1" wrappingWidth="9.0" />
       <Text layoutX="10.0" layoutY="112.0" strokeType="OUTSIDE" strokeWidth="0.0" text="2" wrappingWidth="9.0" />
@@ -285,11 +344,10 @@
       <Text layoutX="331.0" layoutY="442.0" strokeType="OUTSIDE" strokeWidth="0.0" text="h" wrappingWidth="9.0" />
       <Text layoutX="379.0" layoutY="441.0" strokeType="OUTSIDE" strokeWidth="0.0" text="i" wrappingWidth="9.0" />
 
-      <Button layoutX="442.0" layoutY="268.0" mnemonicParsing="false" onAction="#handleGrabPawn" prefHeight="39.0" prefWidth="152.0" text="Pawn">
+      <Button layoutX="444.0" layoutY="327.0" mnemonicParsing="false" onAction="#handleGrabPawn" prefHeight="39.0" prefWidth="152.0" text="Pawn">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
-
    </children>
 </AnchorPane>

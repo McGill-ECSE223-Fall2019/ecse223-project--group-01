@@ -37,13 +37,13 @@ class Player {
 	Time remainingTime;
 	1 owner <@>- 0..10 Wall walls; 
 	0..1 -> 0..1 Player nextPlayer; // Alternates between white and black
-
+	
 	depend ca.mcgill.ecse223.quoridor.statemachine.defaultsm.DefaultSMStatemachine;
 	lazy DefaultSMStatemachine statemachine;
 }
 
 class Game {
-	enum GameStatus { Initializing, ReadyToStart, Running, WhiteWon, BlackWon, Draw, Replay };
+	enum GameStatus { Initializing, ReadyToStart, Running, WhiteWon, BlackWon, RedWon, GreenWon, Draw, Replay };
 	GameStatus gameStatus;
 	enum MoveMode { WallMove, PlayerMove};
 	MoveMode moveMode;
@@ -53,19 +53,29 @@ class Game {
 	0..1 <@>- 0..1 WallMove wallMoveCandidate; // placeholder for a wall move which is not yet finalized
 	0..1 gameAsWhite <@>- 0..1 Player whitePlayer;  
 	0..1 gameAsBlack <@>- 0..1 Player blackPlayer;
-	0..1 gameAsWinner <@>- 0..1 Player winningPlayer;
-//	1 <@>- * Player players; // Add this for four player game
+	0..1 gameAsRed <@>- 0..1 Player redPlayer;  
+	0..1 gameAsGreen <@>- 0..1 Player greenPlayer;
+	boolean isFourPlayer;
+	//1 <@>- * Player players; // Add this for four player games
 }
 
 class GamePosition {
 	unique Integer id;
 	0..1 whiteInGame <@>- 1 PlayerPosition whitePosition;
 	0..1 blackInGame <@>- 1 PlayerPosition blackPosition;
+	0..1 redInGame <@>- 0..1 PlayerPosition redPosition;
+	0..1 greenInGame <@>- 0..1 PlayerPosition greenPosition;
 	0..1 -> 1 Player playerToMove;
 	0..1 -> * Wall whiteWallsOnBoard;
 	0..1 -> * Wall blackWallsOnBoard;
 	0..1 -> * Wall whiteWallsInStock;
 	0..1 -> * Wall blackWallsInStock;
+	0..1 -> * Wall redWallsOnBoard;
+	0..1 -> * Wall greenWallsOnBoard;
+	0..1 -> * Wall redWallsInStock;
+	0..1 -> * Wall greenWallsInStock;
+	depend ca.mcgill.ecse223.quoridor.WallGraph;
+	lazy WallGraph wallGraph;
 }
 
 class Destination {
@@ -100,4 +110,3 @@ class PlayerPosition {
 	* -> 1 Player player; 
 	* -> 1 Tile tile; 
 }
-

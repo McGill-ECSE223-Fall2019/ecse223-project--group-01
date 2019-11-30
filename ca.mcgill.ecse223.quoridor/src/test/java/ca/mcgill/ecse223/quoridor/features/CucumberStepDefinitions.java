@@ -120,7 +120,7 @@ public class CucumberStepDefinitions {
 	public void aNewGameIsInitializing() throws Throwable {
 		initQuoridorAndBoard();
 		ArrayList<Player> players = createUsersAndPlayers("user1", "user2");
-		Game game = new Game(GameStatus.Initializing, MoveMode.PlayerMove, QuoridorApplication.getQuoridor());
+		Game game = new Game(GameStatus.Initializing, MoveMode.PlayerMove, false, QuoridorApplication.getQuoridor());
 		game.setWhitePlayer(players.get(0));
 		game.setBlackPlayer(players.get(1));
 	}
@@ -626,12 +626,12 @@ public class CucumberStepDefinitions {
 		// The wallmove candidate should be gone
 		assertNull(game.getWallMoveCandidate());
 
+
 		// White should have more walls on board
 		assertEquals(game.getCurrentPosition().getWhiteWallsOnBoard().size(), 2);
 
 		// White should have less walls in stock
         assertEquals(9, game.getCurrentPosition().getWhiteWallsInStock().size());
-
 	}
 
 	/**
@@ -683,7 +683,9 @@ public class CucumberStepDefinitions {
 	    // operating under the assumption that is was white's turn to move
 		Player player1 = ModelQuery.getBlackPlayer();
 		Player playerToMove = ModelQuery.getPlayerToMove();
+
 		assertEquals(playerToMove, player1);
+		//assertEquals(playerToMove, player1);
 	}
 
 	/**
@@ -998,27 +1000,13 @@ public class CucumberStepDefinitions {
 	String originalPlayerColor;
 	String nextPlayerColor;
 
-
-//	@Given("The player to move is {string}")
-//	public void thePlayerToMoveIs(String playerColor) {
-//		if(playerColor.equals("white")){
-//			ModelQuery.getCurrentGame().getCurrentPosition().setPlayerToMove(ModelQuery.getWhitePlayer());
-//		}
-//		else{
-//			ModelQuery.getCurrentGame().getCurrentPosition().setPlayerToMove(ModelQuery.getBlackPlayer());
-//		}
-//		originalPlayerColor = playerColor;
-//	}
-
 	@Given("The player to move is {string}")
 	public void thePlayerToMoveIs(String playerColor) {
 		if(playerColor.equals("white")){
-			playerToMove = ModelQuery.getWhitePlayer();
-			ModelQuery.getCurrentGame().getCurrentPosition().setPlayerToMove(playerToMove);
+			ModelQuery.getCurrentGame().getCurrentPosition().setPlayerToMove(ModelQuery.getWhitePlayer());
 		}
 		else{
-			playerToMove = ModelQuery.getBlackPlayer();
-			ModelQuery.getCurrentGame().getCurrentPosition().setPlayerToMove(playerToMove);
+			ModelQuery.getCurrentGame().getCurrentPosition().setPlayerToMove(ModelQuery.getBlackPlayer());
 		}
 		originalPlayerColor = playerColor;
 	}
@@ -1554,8 +1542,8 @@ public class CucumberStepDefinitions {
 		 *
 		 */
 		//@formatter:on
-		Player player1 = new Player(new Time(thinkingTime), user1, 9, Direction.Horizontal);
-		Player player2 = new Player(new Time(thinkingTime), user2, 1, Direction.Horizontal);
+		Player player1 = new Player(new Time(thinkingTime), user1, 1, Direction.Horizontal);
+		Player player2 = new Player(new Time(thinkingTime), user2, 9, Direction.Horizontal);
 
 		Player[] players = { player1, player2 };
 
@@ -1578,7 +1566,7 @@ public class CucumberStepDefinitions {
 
 	private void createAndInitializeGame(ArrayList<Player> players ) {
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
-		Game game = new Game(GameStatus.Initializing, MoveMode.PlayerMove, quoridor);
+		Game game = new Game(GameStatus.Initializing, MoveMode.PlayerMove, false, quoridor);
 		game.setWhitePlayer(players.get(0));
 		game.setBlackPlayer(players.get(1));
 
@@ -1591,10 +1579,9 @@ public class CucumberStepDefinitions {
 		int totalThinkingTime = 180;
 		Player player1 = new Player(new Time(totalThinkingTime), user1, 9, Direction.Horizontal);
 		Player player2 = new Player(new Time(totalThinkingTime), user2, 1, Direction.Horizontal);
-		Game game = new Game(GameStatus.ReadyToStart, MoveMode.PlayerMove, quoridor);
+		Game game = new Game(GameStatus.ReadyToStart, MoveMode.PlayerMove, false, quoridor);
 		game.setBlackPlayer(player2);
 		game.setWhitePlayer(player1);
-
 	}
 
 
@@ -1606,7 +1593,7 @@ public class CucumberStepDefinitions {
 		Tile player1StartPos = ModelQuery.getTile(9,5);
 		Tile player2StartPos = ModelQuery.getTile(1,5);
 
-		Game game = new Game(GameStatus.Running, MoveMode.PlayerMove, quoridor);
+		Game game = new Game(GameStatus.Running, MoveMode.PlayerMove, false, quoridor);
 		game.setWhitePlayer(players.get(0));
 		game.setBlackPlayer(players.get(1));
 
@@ -1630,6 +1617,9 @@ public class CucumberStepDefinitions {
 
 		PawnController.initPawnSM(quoridor.getCurrentGame().getWhitePlayer(), player1Position);
 		PawnController.initPawnSM(quoridor.getCurrentGame().getBlackPlayer(), player2Position);
+
+
+		WallController.initGraph();
 	}
 
 	private Direction stringToDirection(String direction){
@@ -1676,4 +1666,16 @@ public class CucumberStepDefinitions {
 	}
 
 
+	/**
+	 * @author Jason Lau
+	 */
+	@When("Player initates to resign")
+	public void playerInitatesToResign() {
+		try {
+			ResignGameController.resign();
+		}
+		catch(UnsupportedOperationException e){
+			throw new PendingException();
+		}
+	}
 }
