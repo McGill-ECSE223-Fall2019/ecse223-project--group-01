@@ -10,10 +10,6 @@ public interface IDefaultSMStatemachine extends IStatemachine {
 		
 		public boolean isValidJump(String side);
 		
-		public long pawnGetRow();
-		
-		public long pawnGetCol();
-		
 	}
 	
 	public void setInternalOperationCallback(InternalOperationCallback operationCallback);
@@ -37,6 +33,8 @@ public interface IDefaultSMStatemachine extends IStatemachine {
 		public void raiseLeft();
 		
 		public void raiseRight();
+		
+		public boolean isRaisedVerticalTransitioned();
 		
 		public boolean isRaisedMoveCompleted();
 		

@@ -174,16 +174,6 @@ public class PawnController {
             private boolean isPathValidJump(Tile source, Tile dest, Tile enemyTile) {
                 return isPawnBlocking(enemyTile) && !isWallBlocking(source, enemyTile) && !isWallBlocking(enemyTile, dest) && !isPawnBlocking(dest);
             }
-
-            @Override
-            public long pawnGetRow() {
-                return position.getTile().getRow();
-            }
-
-            @Override
-            public long pawnGetCol() {
-                return position.getTile().getColumn();
-            }
         };
 
         statemachine.setInternalOperationCallback(internalCallback);
