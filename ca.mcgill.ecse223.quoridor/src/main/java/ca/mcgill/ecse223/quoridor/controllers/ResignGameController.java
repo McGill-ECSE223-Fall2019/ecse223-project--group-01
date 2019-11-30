@@ -18,10 +18,10 @@ public class ResignGameController {
         Quoridor quoridor = QuoridorApplication.getQuoridor();
         Player player = ModelQuery.getPlayerToMove();
 
-       if (player.getNextPlayer().equals( "white")){
+       if (player.getNextPlayer().equals(ModelQuery.getBlackPlayer())){
            quoridor.getCurrentGame().setGameStatus(Game.GameStatus.BlackWon);
        }
-       else  if (player.getNextPlayer().equals( "black")){
+       else  if (player.getNextPlayer().equals( ModelQuery.getWhitePlayer())){
             quoridor.getCurrentGame().setGameStatus(Game.GameStatus.WhiteWon);
         }
 

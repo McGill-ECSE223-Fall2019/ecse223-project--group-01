@@ -1002,12 +1002,10 @@ public class CucumberStepDefinitions {
 	@Given("The player to move is {string}")
 	public void thePlayerToMoveIs(String playerColor) {
 		if(playerColor.equals("white")){
-			playerToMove = ModelQuery.getWhitePlayer();
-			ModelQuery.getCurrentGame().getCurrentPosition().setPlayerToMove(playerToMove);
+			ModelQuery.getCurrentGame().getCurrentPosition().setPlayerToMove(ModelQuery.getWhitePlayer());
 		}
 		else{
-			playerToMove = ModelQuery.getBlackPlayer();
-			ModelQuery.getCurrentGame().getCurrentPosition().setPlayerToMove(playerToMove);
+			ModelQuery.getCurrentGame().getCurrentPosition().setPlayerToMove(ModelQuery.getBlackPlayer());
 		}
 		originalPlayerColor = playerColor;
 	}
@@ -1488,37 +1486,15 @@ public class CucumberStepDefinitions {
 	 * @author Jason Lau
 	 */
 	private Player playerToMove;
-		private Player winningPlayer;
+	private Player winningPlayer;
 
-		@When("Player initates to resign")
-		public void playerInitatesToResign() {
-			try {
-				winningPlayer = ModelQuery.getPlayerToMove().getNextPlayer();
-				ResignGameController.resign();
-			}
-			catch(UnsupportedOperationException e){
-				throw new PendingException();
-			}
-
+	@When("Player initates to resign")
+	public void playerInitatesToResign() {
+		try {
+			ResignGameController.resign();
 		}
-
-
-
-		@Then("Game result shall be {string}")
-		public void gameResultShallBe(String arg0) {
-			Quoridor quoridor = QuoridorApplication.getQuoridor();
-			if (arg0.equals("BlackWon")){
-				Assert.assertEquals(winningPlayer,quoridor.getCurrentGame().getBlackPlayer());
-			}
-			else if (arg0.equals("WhiteWon")){
-				Assert.assertEquals(winningPlayer,quoridor.getCurrentGame().getWhitePlayer());
-			}
+		catch(UnsupportedOperationException e){
+			throw new PendingException();
 		}
-
-		@And("The game shall no longer be running")
-		public void theGameShallNoLongerBeRunning() {
-//        Assert.assertEquals();
-		}
-
-
+	}
 }
