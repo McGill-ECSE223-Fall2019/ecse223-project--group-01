@@ -1462,8 +1462,6 @@ public class CucumberStepDefinitions {
 				ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.BlackWon);
 			}
 		}
-		InitializeBoardController.enableMovePawn = false;
-		InitializeBoardController.enableDropWall = false;
 
 	}
 
@@ -1486,15 +1484,13 @@ public class CucumberStepDefinitions {
 	@And("White shall be unable to move")
 	public void whiteShallBeUnableToMove() {
 		//TODO: GUI Step
-		assertEquals(false, InitializeBoardController.enableMovePawn);
-		assertEquals(false, InitializeBoardController.enableDropWall);
+
 	}
 
 	@And("Black shall be unable to move")
 	public void blackShallBeUnableToMove() {
 		//TODO: GUI step
-		assertEquals(false, InitializeBoardController.enableDropWall);
-		assertEquals(false, InitializeBoardController.enableMovePawn);
+
 	}
 
 
