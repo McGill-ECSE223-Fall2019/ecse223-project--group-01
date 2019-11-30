@@ -16,7 +16,7 @@ public class StartNewGameController {
     private static boolean thinkingTimeIsSet = false;
     private static long millis;
     private static Timer timer;
-    private static long timeToSet;
+    public static long timeToSet;
 
 
     public StartNewGameController(){}

@@ -14,7 +14,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -31,24 +30,6 @@ import java.util.List;
 
 
 public class InitializeBoardController extends ViewController{
-
-
-
-    public void printSomething(MouseEvent mouseEvent) {
-        System.out.println("Hello");
-    }
-
-    public void printSomething1(MouseEvent mouseEvent) {
-        System.out.println("Bye");
-    }
-
-    public void printSomething3(MouseEvent mouseEvent) {
-        System.out.println("Binyuan");
-    }
-
-    public void printSomething2(MouseEvent mouseEvent) {
-        System.out.println("test");
-    }
 
     enum PlayerState {WALL, PAWN, IDLE};
     PlayerState state = PlayerState.IDLE;
@@ -70,6 +51,8 @@ public class InitializeBoardController extends ViewController{
     public String initialTime;
     public static boolean whiteWon = false;
     public static boolean blackWon = false;
+    public static boolean enableMovePawn = true;
+    public static boolean enableDropWall = true;
     public Rectangle rect1;
     public Rectangle rect2;
     public Rectangle rect3;
@@ -78,8 +61,6 @@ public class InitializeBoardController extends ViewController{
 
 
     public void initialize() {
-
-
 
         //display player name
         whitePlayerName.setText(ModelQuery.getWhitePlayer().getUser().getName());
@@ -100,8 +81,6 @@ public class InitializeBoardController extends ViewController{
 
         state = PlayerState.IDLE;
         switchTimer();
-
-
     }
 
     public void switchTimer() {
@@ -118,7 +97,7 @@ public class InitializeBoardController extends ViewController{
             public void handle(ActionEvent t) {
                 Player currentPlayer = ModelQuery.getPlayerToMove();
 
-                if ((StartNewGameController.timeOver()) || isWallDrop || isPawnMoved) {
+                if (isWallDrop || isPawnMoved) {
                 	timerForWhitePlayer.setText(initialTime);
                 	timerForBlackPlayer.setText(initialTime);
 
@@ -128,16 +107,14 @@ public class InitializeBoardController extends ViewController{
 
                 	StartNewGameController.resetTimeToSet();
                 }
-                //TODO: MODIFY: time counts to zero/white reaches row = 9 or black reach row = 1
-                else if  (PawnController.whiteWonCheck) {
-                    whiteWon = true;
-                    //TODO: Stop timer
-
-                }
-                else if (PawnController.blackWonCheck) {
-                    blackWon = true;
-                    //TODO: Stop timer
-
+                else if (StartNewGameController.timeOver()) {
+                    if(EndGameController.checkGameStatus(currentPlayer).equals("whiteWon")) {
+                        whiteWon = true;
+                    }
+                    else if (EndGameController.checkGameStatus(currentPlayer).equals("blackWon")) {
+                        blackWon = true;
+                    }
+                    refresh();
                 }
                 //TODO: timer should not count again once it reaches zero
 
@@ -198,7 +175,7 @@ public class InitializeBoardController extends ViewController{
         GamePosition position = ModelQuery.getCurrentPosition();
         Player white = ModelQuery.getWhitePlayer();
         Player black = ModelQuery.getBlackPlayer();
-
+        Player currentPlayer = ModelQuery.getPlayerToMove();
         // remove all walls and pawns
         board.getChildren().clear();
 
@@ -215,7 +192,6 @@ public class InitializeBoardController extends ViewController{
             whitePlayerName.setFill(Color.LIGHTGRAY);
             blackPlayerName.setFill(Color.BLACK);
         }
-
 
         // update walls in stock
         whiteNumOfWalls.setText(String.valueOf(position.getWhiteWallsInStock().size()));
@@ -242,13 +218,20 @@ public class InitializeBoardController extends ViewController{
         // check if one of the player wins
         if (whiteWon) {
             ModelQuery.getCurrentGame().setWinningPlayer(ModelQuery.getWhitePlayer());
+            timeline.stop();
             changePage("/fxml/EndScene.fxml");
-            whiteWon = false; //avoid change page all the time
+            whiteWon = false; //avoid refreshing page all the time
+            enableMovePawn = false;
+            enableDropWall = false;
+
         }
         else if (blackWon) {
             ModelQuery.getCurrentGame().setWinningPlayer(ModelQuery.getBlackPlayer());
+            timeline.stop();
             changePage("/fxml/EndScene.fxml");
             blackWon = false;
+            enableMovePawn = false;
+            enableDropWall = false;
         }
     }
 
@@ -308,38 +291,41 @@ public class InitializeBoardController extends ViewController{
         KeyCode code = event.getCode();
 
         if(state==PlayerState.WALL){
-            //Moves the wall up
-            if(code.equals(KeyCode.W)){
-                shiftWall("up");
-            }
-            //Moves the wall left
-            else if(code.equals(KeyCode.A)){
-                shiftWall("left");
-            }
-            //Moves the wall down
-            else if(code.equals(KeyCode.S)){
-                shiftWall("down");
-            }
-            //Moves the wall right
-            else if(code.equals(KeyCode.D)){
-                shiftWall("right");
-            }
-            //Confirm wall placement and drops the wall
-            else if(code.equals(KeyCode.E)){
-                if(WallController.dropWall()){
-                    state = PlayerState.IDLE;
-                    SwitchPlayerController.switchActivePlayer();
-                    isWallDrop=true;
+            if (enableDropWall) {
+                //Moves the wall up
+                if(code.equals(KeyCode.W)){
+                    shiftWall("up");
                 }
+                //Moves the wall left
+                else if(code.equals(KeyCode.A)){
+                    shiftWall("left");
+                }
+                //Moves the wall down
+                else if(code.equals(KeyCode.S)){
+                    shiftWall("down");
+                }
+                //Moves the wall right
+                else if(code.equals(KeyCode.D)){
+                    shiftWall("right");
+                }
+                //Confirm wall placement and drops the wall
+                else if(code.equals(KeyCode.E)){
+                    if(WallController.dropWall()){
+                        state = PlayerState.IDLE;
+                        SwitchPlayerController.switchActivePlayer();
+                        isWallDrop=true;
+                    }
+                }
+                else if(code.equals(KeyCode.R)){
+                    WallController.rotateWall();
+                }
+                refresh();
             }
-            else if(code.equals(KeyCode.R)){
-                WallController.rotateWall();
-            }
-            refresh();
         }
 
         if (state==PlayerState.PAWN){
             /*For handling pawn move*/
+            if (enableMovePawn) {
                 if (code.equals(KeyCode.I)) {
                     PawnController.movePawn("up");
                 }
@@ -364,8 +350,10 @@ public class InitializeBoardController extends ViewController{
                 else if (code.equals(KeyCode.COMMA)) {
                     PawnController.movePawn("downright");
                 }
-            refresh();
+                refresh();
+            }
         }
+
     }
 
     public void dropWall(){
@@ -443,5 +431,4 @@ public class InitializeBoardController extends ViewController{
         newStage.setScene(stageScene);
         newStage.show();
     }
-
 }

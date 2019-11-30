@@ -9,9 +9,6 @@ import java.util.List;
 
 public class PawnController {
 
-    public static boolean whiteWonCheck = false;
-    public static boolean blackWonCheck = false;
-
     /**
      * @author Tritin Truong, Kevin Li, Jason Lau
      * @param player
@@ -246,13 +243,7 @@ public class PawnController {
             playerPosition.setTile(target);
 //            SwitchPlayerController.switchActivePlayer();
             InitializeBoardController.isPawnMoved = true;
-            Player currentPlayer = ModelQuery.getPlayerToMove();
-            if (EndGameController.checkGameStatus(currentPlayer).equals("whiteWon")) {
-                whiteWonCheck = true;
-            }
-            else if (EndGameController.checkGameStatus(currentPlayer).equals("blackWon")) {
-                blackWonCheck = true;
-            }
+
             return true;
         } else {
             return false;
