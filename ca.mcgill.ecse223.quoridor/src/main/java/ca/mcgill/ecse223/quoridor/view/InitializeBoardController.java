@@ -14,6 +14,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -30,6 +31,24 @@ import java.util.List;
 
 
 public class InitializeBoardController extends ViewController{
+
+
+
+    public void printSomething(MouseEvent mouseEvent) {
+        System.out.println("Hello");
+    }
+
+    public void printSomething1(MouseEvent mouseEvent) {
+        System.out.println("Bye");
+    }
+
+    public void printSomething3(MouseEvent mouseEvent) {
+        System.out.println("Binyuan");
+    }
+
+    public void printSomething2(MouseEvent mouseEvent) {
+        System.out.println("test");
+    }
 
     enum PlayerState {WALL, PAWN, IDLE};
     PlayerState state = PlayerState.IDLE;
@@ -51,9 +70,16 @@ public class InitializeBoardController extends ViewController{
     public String initialTime;
     public static boolean whiteWon = false;
     public static boolean blackWon = false;
+    public Rectangle rect1;
+    public Rectangle rect2;
+    public Rectangle rect3;
+    public Rectangle rect4;
+    public Circle testCircle;
 
 
     public void initialize() {
+
+
 
         //display player name
         whitePlayerName.setText(ModelQuery.getWhitePlayer().getUser().getName());
@@ -74,6 +100,8 @@ public class InitializeBoardController extends ViewController{
 
         state = PlayerState.IDLE;
         switchTimer();
+
+
     }
 
     public void switchTimer() {
@@ -174,6 +202,11 @@ public class InitializeBoardController extends ViewController{
         // remove all walls and pawns
         board.getChildren().clear();
 
+        board.getChildren().add(rect1);
+        board.getChildren().add(rect2);
+
+
+
         // update player turn
         if (position.getPlayerToMove().equals(white)) {
             whitePlayerName.setFill(Color.BLACK);
@@ -182,6 +215,7 @@ public class InitializeBoardController extends ViewController{
             whitePlayerName.setFill(Color.LIGHTGRAY);
             blackPlayerName.setFill(Color.BLACK);
         }
+
 
         // update walls in stock
         whiteNumOfWalls.setText(String.valueOf(position.getWhiteWallsInStock().size()));
@@ -409,4 +443,5 @@ public class InitializeBoardController extends ViewController{
         newStage.setScene(stageScene);
         newStage.show();
     }
+
 }

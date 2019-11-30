@@ -143,8 +143,94 @@
             <Rectangle arcHeight="5.0" arcWidth="5.0" cache="true" disable="true" fill="WHITE" height="34.0" layoutX="344.0" layoutY="346.0" smooth="false" stroke="#ffffffc9" strokeType="INSIDE" width="34.0" />
             <Rectangle arcHeight="5.0" arcWidth="5.0" cache="true" disable="true" fill="WHITE" height="34.0" smooth="false" stroke="#ffffffc9" strokeType="INSIDE" width="34.0" />
             <Circle fill="WHITE" layoutX="189.0" layoutY="363.0" radius="10.0" smooth="false" stroke="#ffffffc9" strokeType="INSIDE" />
-            <AnchorPane fx:id="board" prefHeight="380.0" prefWidth="378.0" />
+            <AnchorPane fx:id="board" prefHeight="380.0" prefWidth="378.0">
+               <children>
+                  <Rectangle fx:id="rect1" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect2" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="43.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect3" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="86.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect4" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="129.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect11" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="172.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect21" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="215.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect31" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="258.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect41" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="301.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect411" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="344.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect12" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutY="43.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect22" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="43.0" layoutY="43.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect32" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="86.0" layoutY="43.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect42" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="129.0" layoutY="43.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect111" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="172.0" layoutY="43.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect211" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="215.0" layoutY="43.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect311" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="258.0" layoutY="43.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect412" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="301.0" layoutY="43.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect4111" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="344.0" layoutY="43.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect13" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutY="86.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect23" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="43.0" layoutY="86.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect33" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="86.0" layoutY="86.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect43" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="129.0" layoutY="86.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect112" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="172.0" layoutY="86.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect212" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="215.0" layoutY="86.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect312" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="258.0" layoutY="86.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect413" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="301.0" layoutY="86.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect4112" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="344.0" layoutY="86.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect14" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutY="129.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect24" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="43.0" layoutY="129.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect34" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="86.0" layoutY="129.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect44" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="129.0" layoutY="129.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect113" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="172.0" layoutY="129.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect213" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="215.0" layoutY="129.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect313" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="258.0" layoutY="129.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect414" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="301.0" layoutY="129.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect4113" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="344.0" layoutY="129.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect15" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutY="172.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect25" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="43.0" layoutY="172.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect35" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="86.0" layoutY="172.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect45" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="129.0" layoutY="172.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect114" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="172.0" layoutY="172.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect214" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="215.0" layoutY="172.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect314" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="258.0" layoutY="172.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect415" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="301.0" layoutY="172.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect4114" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="344.0" layoutY="172.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect16" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutY="215.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect26" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="43.0" layoutY="215.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect36" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="86.0" layoutY="215.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect46" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="129.0" layoutY="215.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect115" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="172.0" layoutY="215.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect215" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="215.0" layoutY="215.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect315" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="258.0" layoutY="215.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect416" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="301.0" layoutY="215.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect4115" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="344.0" layoutY="215.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect17" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutY="258.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect27" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="43.0" layoutY="258.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect37" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="86.0" layoutY="258.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect47" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="129.0" layoutY="258.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect116" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="172.0" layoutY="258.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect216" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="215.0" layoutY="258.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect316" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="258.0" layoutY="258.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect417" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="301.0" layoutY="258.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect4116" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="344.0" layoutY="258.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect18" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutY="302.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect28" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="43.0" layoutY="302.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect38" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="86.0" layoutY="302.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect48" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="129.0" layoutY="302.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect117" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="172.0" layoutY="302.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect217" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="215.0" layoutY="302.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect317" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="258.0" layoutY="302.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect418" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="301.0" layoutY="302.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect4117" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="344.0" layoutY="302.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect181" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutY="345.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect281" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="43.0" layoutY="345.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect381" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="86.0" layoutY="345.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect481" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="129.0" layoutY="345.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect1171" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="172.0" layoutY="345.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect2171" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="215.0" layoutY="345.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect3171" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="258.0" layoutY="345.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect4181" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="301.0" layoutY="345.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect41171" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="344.0" layoutY="345.0" onMouseClicked="#printSomething" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+               </children>
+            </AnchorPane>
          </children>
+
+
       </AnchorPane>
       <Button layoutX="442.0" layoutY="163.0" mnemonicParsing="false" onAction="#createNewWall" prefHeight="39.0" prefWidth="152.0" text="Wall">
          <font>
