@@ -370,8 +370,6 @@ public class InitializeBoardController extends ViewController{
                 Player currentPlayer = ModelQuery.getPlayerToMove();
 
                 if (isWallDrop || isPawnMoved) {
-                	timerForWhitePlayer.setText(initialTime);
-                	timerForBlackPlayer.setText(initialTime);
                     GameStatusController.checkWin();
                     checkStatus();
                 	isWallDrop = false;

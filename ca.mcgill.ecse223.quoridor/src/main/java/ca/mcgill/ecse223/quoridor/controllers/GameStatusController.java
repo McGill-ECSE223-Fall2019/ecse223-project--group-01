@@ -94,12 +94,13 @@ public class GameStatusController {
             else if (ModelQuery.getBlackPlayer().getRemainingTime().getTime() <= 0) {
                 ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.WhiteWon);
             }
-            else if (ModelQuery.getRedPlayer().getRemainingTime().getTime() <= 0) {
-                ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.WhiteWon);
-            }
             else if (ModelQuery.getGreenPlayer().getRemainingTime().getTime() <= 0) {
-                ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.BlackWon);
+                ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.RedWon);
             }
+            else if (ModelQuery.getRedPlayer().getRemainingTime().getTime() <= 0) {
+                ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.GreenWon);
+            }
+
             else if (player.getNextPlayer().equals(whitePlayer) && ModelQuery.getWhitePlayer().getRemainingTime().getTime() > 0) {
                 if (whiteTile.getRow() == whitePlayer.getDestination().getTargetNumber()) {
                     ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.WhiteWon);
