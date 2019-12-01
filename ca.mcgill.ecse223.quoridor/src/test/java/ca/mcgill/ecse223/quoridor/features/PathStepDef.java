@@ -1,5 +1,6 @@
 package ca.mcgill.ecse223.quoridor.features;
 
+import ca.mcgill.ecse223.quoridor.QuoridorApplication;
 import ca.mcgill.ecse223.quoridor.controllers.ModelQuery;
 import ca.mcgill.ecse223.quoridor.controllers.WallController;
 import ca.mcgill.ecse223.quoridor.model.*;
@@ -86,4 +87,10 @@ public class PathStepDef {
         }
     }
 
+
+    @And("The game has a final result")
+    public void theGameHasAFinalResult() {
+        Quoridor quoridor = QuoridorApplication.getQuoridor();
+        Game.GameStatus status =quoridor.getCurrentGame().getGameStatus();
+    }
 }

@@ -1497,4 +1497,67 @@ public class CucumberStepDefinitions {
 			throw new PendingException();
 		}
 	}
+
+    @When("I initiate replay mode")
+    public void iInitiateReplayMode() {
+		try{
+			ReplayModeController.enterReplayMode();
+		}
+		catch(UnsupportedOperationException e){
+			throw new PendingException();
+		}
+    }
+	@Then("The game shall be in replay mode")
+	public void theGameShallBeInReplayMode(GameStatus gameStatus) {
+		GameStatus status = ModelQuery.getCurrentGame().getGameStatus();
+		assertEquals(gameStatus, status);
+	}
+
+	@Given("The game is replay mode")
+	public void theGameIsReplayMode() {
+
+		ReplayModeController.enterReplayMode();
+	}
+
+	@Given("The following moves have been played in game:")
+	public void theFollowingMovesHaveBeenPlayedInGame() {
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+		List<Move> moves= quoridor.getCurrentGame().getMoves();
+	}
+
+	@And("The game does not have a final result")
+	public void theGameDoesNotHaveAFinalResult() {
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+		quoridor.getCurrentGame().setGameStatus(GameStatus.Running);
+
+	}
+
+	@And("The next move is <movno>.<rndno>")
+	public void theNextMoveIsMovnoRndno(int arg0, int arg1) {
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+		WallController.moveWall(arg0,arg1);
+	}
+
+	@When("I initiate to continue game")
+	public void iInitiateToContinueGame() {
+		try{
+			ReplayModeController.continueGame();
+		}
+		catch(UnsupportedOperationException e){
+			throw new PendingException();
+		}
+	}
+
+	@And("The remaining moves of the game shall be removed")
+	public void theRemainingMovesOfTheGameShallBeRemoved() {
+		List<Move> move= null;
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+		quoridor.getCurrentGame().delete();
+	}
+
+
+	@And("I shall be notified that finished games cannot be continued")
+	public void iShallBeNotifiedThatFinishedGamesCannotBeContinued() {
+		//TODO GUI STEPS
+	}
 }
