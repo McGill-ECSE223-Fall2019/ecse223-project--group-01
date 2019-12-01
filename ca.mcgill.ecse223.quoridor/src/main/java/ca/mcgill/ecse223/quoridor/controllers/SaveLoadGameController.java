@@ -419,13 +419,13 @@ public class SaveLoadGameController {
         int roundNum = 0;
         if(player.equals(ModelQuery.getWhitePlayer())){
             Wall dropWall = ModelQuery.getCurrentGame().getCurrentPosition().getWhiteWallsInStock().get(index);
-            roundNum = moveNumber * 2 - 1;
+            roundNum = 1;
             wallmove = new WallMove(moveNumber, roundNum, whitePlayer, wallTile, currentGame, wallDir, dropWall);
             loadWall(wallmove,ModelQuery.getWhitePlayer());
         }
         else if(player.equals(ModelQuery.getBlackPlayer())){
             Wall dropWall = ModelQuery.getCurrentGame().getCurrentPosition().getBlackWallsInStock().get(index);
-            roundNum = moveNumber * 2;
+            roundNum = 2;
             wallmove = new WallMove(moveNumber, roundNum, blackPlayer, wallTile, currentGame, wallDir, dropWall);
             loadWall(wallmove,ModelQuery.getBlackPlayer());
         }
