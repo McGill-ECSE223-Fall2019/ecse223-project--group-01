@@ -62,7 +62,9 @@ public class EndSceneController extends ViewController{
     }
 
     public void handlePlayAgain (ActionEvent actionEvent) {
-
+        MusicController.playChooseYourChar();
+        MusicController.playMainMenu();
+        changePage("/fxml/SelectPlayerName.fxml");
     }
 
     public void handleBackToMenu(ActionEvent actionEvent) {
