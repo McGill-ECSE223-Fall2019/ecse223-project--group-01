@@ -44,11 +44,12 @@ public class InitializeBoardController extends ViewController{
         ButtonType buttonTypeTwo = new ButtonType("Save Game");
         ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
 
+        alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo, buttonTypeCancel);
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == buttonTypeOne){
-            // ... user chose "One"
-        } else if (result.get() == buttonTypeTwo) {
             handleSavePosition();
+        } else if (result.get() == buttonTypeTwo) {
+            //add save game option
         } else {
             // ... user chose CANCEL or closed the dialog
         }
