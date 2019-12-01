@@ -37,11 +37,32 @@ public class LoadGameController extends ViewController{
     public RadioButton fourPlayer;
     List<String> saveFiles;
     public String saveLocation = ".\\";
+    //Default names
+    public static String loadWhiteName;
+    public static String loadBlackName;
 
     @SuppressWarnings("Duplicates")
     public void initialize() {
         StartNewGameController.initializeGame();
         List<User> existingUsers = StartNewGameController.existedUsers();
+
+        existingWhiteChoices.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
+                loadWhiteName = (existingWhiteChoices.getItems().get((Integer) number2));
+            }
+        });
+        existingBlackChoices.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+            public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
+                loadBlackName = (existingWhiteChoices.getItems().get((Integer) number2));
+            }
+        });
+
+        for (User user : existingUsers) {
+            existingWhiteChoices.getItems().add(user.getName());
+            existingBlackChoices.getItems().add(user.getName());
+        }
+
+
     }
 
     public void handleBackToMenu(ActionEvent actionEvent) {
@@ -105,8 +126,21 @@ public class LoadGameController extends ViewController{
             /* ------------------------- HARD CODED THE THINKING TIME FOR NOW ------------------------- */
             StartNewGameController.setTotalThinkingTime(1, 30);
             try {
-            /* ------------------------- HARD CODED THE PLAYER NAMES FOR NOW ------------------------- */
-                if(!SaveLoadGameController.fileLoad(filename, "Cops","Gang Member")){
+                String wname;
+                String bname;
+                if(loadWhiteName != null){
+                    wname = loadWhiteName;
+                }
+                else{
+                    wname = "White";
+                }
+                if(loadBlackName != null){
+                    bname = loadBlackName;
+                }
+                else{
+                    bname = "Black";
+                }
+                if(!SaveLoadGameController.fileLoad(filename, wname,bname)){
                     Alert errorAlert = new Alert(Alert.AlertType.ERROR);
                     errorAlert.setHeaderText("Unable to load game");
                     errorAlert.setContentText("The saved game were unable to be loaded");
