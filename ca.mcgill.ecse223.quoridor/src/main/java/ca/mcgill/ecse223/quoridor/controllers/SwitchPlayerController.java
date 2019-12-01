@@ -18,6 +18,8 @@ public class SwitchPlayerController {
 	 * @return A string representing the color of the player that ends as active
 	 */
 	
+	private static int id = 100;
+	
 	public static void switchActivePlayer() {
 		/*
 		Player whitePlayer = ModelQuery.getWhitePlayer();
@@ -57,9 +59,10 @@ public class SwitchPlayerController {
 	 * @return A deep copy of the current game position
 	 */
 	public static GamePosition deepCopyPosition() {
+		
+		//throw new RuntimeException("c "+ModelQuery.getCurrentPosition().getWhiteWallsInStock().size());
 		GamePosition current = ModelQuery.getCurrentPosition();
 		
-		int id = ModelQuery.getCurrentGame().getPositions().size()+1;
 		int wallCounter = 0;
 		PlayerPosition whitePlayerPos =  new PlayerPosition(ModelQuery.getCurrentGame().getWhitePlayer(), current.getWhitePosition().getTile());
 		PlayerPosition blackPlayerPos =  new PlayerPosition(ModelQuery.getCurrentGame().getBlackPlayer(), current.getBlackPosition().getTile());
@@ -80,12 +83,18 @@ public class SwitchPlayerController {
 		Player redClone;
 		Player greenClone;
 		
+		
+		int whiteWallBoard = 0;
+		int blackWallBoard = 0;
+		
 		for(Wall whiteWall: ModelQuery.getWhiteWallsOnBoard()) {
 			Wall wallClone = new Wall(id*40+wallCounter++, whiteClone);
 			WallMove mov = whiteWall.getMove();
 			WallMove moveClone = new WallMove(mov.getMoveNumber(),mov.getRoundNumber(),mov.getPlayer(),mov.getTargetTile(),mov.getGame(),mov.getWallDirection(),wallClone);
 			wallClone.setOwner(whiteClone);
 			clone.addWhiteWallsOnBoard(wallClone);
+			
+			whiteWallBoard++;
 		}
 		
 		for(Wall blackWall: ModelQuery.getBlackWallsOnBoard()) {
@@ -94,21 +103,36 @@ public class SwitchPlayerController {
 			WallMove moveClone = new WallMove(mov.getMoveNumber(),mov.getRoundNumber(),mov.getPlayer(),mov.getTargetTile(),mov.getGame(),mov.getWallDirection(),wallClone);
 			wallClone.setOwner(blackClone);
 			clone.addBlackWallsOnBoard(wallClone);
+			
+			blackWallBoard++;
 		}
 		
-		for(Wall whiteWall: ModelQuery.getCurrentPosition().getWhiteWallsInStock()) {
+		while(whiteWallBoard < 10) {
 			Wall wallClone = new Wall(id*40+wallCounter++, whiteClone);
-			//wallClone.setMove(whiteWall.getMove());
+			clone.addWhiteWallsInStock(wallClone);
+			
+			whiteWallBoard++;
+		}
+		
+		while(blackWallBoard < 10) {
+			Wall wallClone = new Wall(id*40+wallCounter++, blackClone);
+			clone.addBlackWallsInStock(wallClone);
+			
+			blackWallBoard++;
+		}
+		/*for(Wall whiteWall: ModelQuery.getCurrentPosition().getWhiteWallsInStock()) {
+			Wall wallClone = new Wall(id*40+wallCounter++, whiteClone);
+			wallClone.setMove(whiteWall.getMove());
 			wallClone.setOwner(whiteClone);
 			clone.addWhiteWallsInStock(wallClone);
 		}
 		
-		for(Wall blackWall: ModelQuery.getCurrentPosition().getBlackWallsOnBoard()) {
+		for(Wall blackWall: ModelQuery.getCurrentPosition().getBlackWallsInStock()) {
 			Wall wallClone = new Wall(id*40+wallCounter++, blackClone);
 			//wallClone.setMove(blackWall.getMove());
 			wallClone.setOwner(ModelQuery.getBlackPlayer());
 			clone.addBlackWallsInStock(wallClone);
-		}
+		}*/
 		
 		if(ModelQuery.isFourPlayer()) {
 			redPlayerPos = new PlayerPosition(ModelQuery.getCurrentGame().getRedPlayer(), current.getRedPosition().getTile());
@@ -147,6 +171,7 @@ public class SwitchPlayerController {
 			}
 		}
 		
+		id++;
 		return clone;
 	}
 }
