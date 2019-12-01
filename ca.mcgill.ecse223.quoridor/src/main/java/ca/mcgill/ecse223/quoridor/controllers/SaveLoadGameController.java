@@ -22,7 +22,7 @@ public class SaveLoadGameController {
     public static boolean isSaveMoveValid = true;
 
     //This variable is the save location of the .mov files
-    static String saveLocation = "./";
+    static String saveLocation = "";
 
     /**
      * Attempts to create or overwrite a saved game.
@@ -290,7 +290,7 @@ public class SaveLoadGameController {
                 for(int i = 0; i < movesTotal; i++) {
                     //i+1 is the moveNumber
                     if(ModelQuery.getPlayerToMove() == ModelQuery.getWhitePlayer()) {
-                        if (!whiteMoves.isEmpty() && whiteMoves.get(wm)[0] == i + 1) {
+                        if (!whiteMoves.isEmpty() && whiteMoves.size() > wm && whiteMoves.get(wm)[0] == i + 1) {
                             String side;
                             //Moved the pawn before
                             if(wm > 0){
@@ -308,7 +308,7 @@ public class SaveLoadGameController {
                                 PawnController.movePawn(side);
                             }
                             wm++;
-                        } else if (!whiteWalls.isEmpty() && whiteWalls.get(ww)[0] == i + 1) {
+                        } else if (!whiteWalls.isEmpty() && whiteWalls.size() > ww && whiteWalls.get(ww)[0] == i + 1) {
                             if(!ExecuteWallMove(whiteWalls, ww, i + 1, ModelQuery.getWhitePlayer())){
                                 isSaveMoveValid = false;
                                 return false;
@@ -328,7 +328,7 @@ public class SaveLoadGameController {
 
                     //After doing the if statement above, it should run the if statement below since it would be black player's turn
                     if(ModelQuery.getPlayerToMove() == ModelQuery.getBlackPlayer()) {
-                        if (!blackMoves.isEmpty() && blackMoves.get(bm)[0] == i + 1) {
+                        if (!blackMoves.isEmpty() && blackMoves.size() > bm && blackMoves.get(bm)[0] == i + 1) {
                             String side;
                             //Moved the pawn before
                             if(bm > 0){
@@ -346,7 +346,7 @@ public class SaveLoadGameController {
                                 PawnController.movePawn(side);
                             }
                             bm++;
-                        } else if (!blackWalls.isEmpty() && blackWalls.get(bw)[0] == i + 1) {
+                        } else if (!blackWalls.isEmpty() && blackWalls.size() > bw && blackWalls.get(bw)[0] == i + 1) {
                             if(!ExecuteWallMove(blackWalls, bw, i + 1, ModelQuery.getBlackPlayer())){
                                 isSaveMoveValid = false;
                                 return false;
