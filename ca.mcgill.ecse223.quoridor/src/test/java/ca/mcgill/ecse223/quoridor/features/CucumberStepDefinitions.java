@@ -103,7 +103,8 @@ public class CucumberStepDefinitions {
 			playerIdx++;
 			playerIdx = playerIdx % 2;
 		}
-		Game game = ModelQuery.getCurrentGame();
+		System.out.println();
+
 	}
 
 	@And("I do not have a wall in my hand")
@@ -1010,6 +1011,7 @@ public class CucumberStepDefinitions {
 		originalPlayerColor = playerColor;
 	}
 
+
 	//@author: Mark Zhu
 	@And("The clock of {string} is running")
 	public void currentClockRunning(String playerColor) {
@@ -1221,11 +1223,8 @@ public class CucumberStepDefinitions {
 		}
 
 		else if( arg0.equals("black")){
-
 			assertEquals(arg1, quoridor.getCurrentGame().getBlackPlayer().getUser().getName());
 		}
-
-
 	}
 
 	/**
@@ -1297,6 +1296,10 @@ public class CucumberStepDefinitions {
 
 	}
 
+	/************** Phase Two Features ***************/
+
+
+
 
 	// ***********************************************
 	// Clean up
@@ -1338,7 +1341,7 @@ public class CucumberStepDefinitions {
 		}
 	}
 
-	private ArrayList<Player> createUsersAndPlayers(String userName1, String userName2) {
+	public ArrayList<Player> createUsersAndPlayers(String userName1, String userName2) {
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
 		User user1 = quoridor.addUser(userName1);
 		User user2 = quoridor.addUser(userName2);
@@ -1393,8 +1396,8 @@ public class CucumberStepDefinitions {
 		User user1 = quoridor.addUser("userWhite");
 		User user2 = quoridor.addUser("userBlack");
 		int totalThinkingTime = 180;
-		Player player1 = new Player(new Time(totalThinkingTime), user1, 9, Direction.Horizontal);
-		Player player2 = new Player(new Time(totalThinkingTime), user2, 1, Direction.Horizontal);
+		Player player1 = new Player(new Time(totalThinkingTime), user1, 1, Direction.Horizontal);
+		Player player2 = new Player(new Time(totalThinkingTime), user2, 9, Direction.Horizontal);
 		Game game = new Game(GameStatus.ReadyToStart, MoveMode.PlayerMove, false, quoridor);
 		game.setBlackPlayer(player2);
 		game.setWhitePlayer(player1);
@@ -1485,9 +1488,6 @@ public class CucumberStepDefinitions {
 	/**
 	 * @author Jason Lau
 	 */
-	private Player playerToMove;
-	private Player winningPlayer;
-
 	@When("Player initates to resign")
 	public void playerInitatesToResign() {
 		try {
