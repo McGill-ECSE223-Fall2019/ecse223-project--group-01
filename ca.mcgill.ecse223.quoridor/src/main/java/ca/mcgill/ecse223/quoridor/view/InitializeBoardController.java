@@ -27,10 +27,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.util.Pair;
 
-import java.sql.SQLOutput;
 import java.util.List;
-
-import static ca.mcgill.ecse223.quoridor.controllers.GameStatusController.checkGameStatus;
 
 
 public class InitializeBoardController extends ViewController{
@@ -375,7 +372,7 @@ public class InitializeBoardController extends ViewController{
                 if (isWallDrop || isPawnMoved) {
                 	timerForWhitePlayer.setText(initialTime);
                 	timerForBlackPlayer.setText(initialTime);
-                    EndGameController.checkWin();
+                    GameStatusController.checkWin();
                     checkStatus();
                 	isWallDrop = false;
                 	isPawnMoved = false;
@@ -383,7 +380,7 @@ public class InitializeBoardController extends ViewController{
                 	refresh();
                 }
                 else if (StartNewGameController.timeOver()) {
-                    EndGameController.checkWin();
+                    GameStatusController.checkWin();
                     checkStatus();
                     refresh();
                 }else {
