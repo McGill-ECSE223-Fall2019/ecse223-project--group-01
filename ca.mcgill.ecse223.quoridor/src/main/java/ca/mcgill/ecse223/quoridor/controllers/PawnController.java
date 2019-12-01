@@ -3,6 +3,7 @@ package ca.mcgill.ecse223.quoridor.controllers;
 import ca.mcgill.ecse223.quoridor.model.*;
 import ca.mcgill.ecse223.quoridor.statemachine.defaultsm.DefaultSMStatemachine;
 import ca.mcgill.ecse223.quoridor.statemachine.defaultsm.IDefaultSMStatemachine;
+import ca.mcgill.ecse223.quoridor.view.InitializeBoardController;
 
 import java.util.List;
 
@@ -238,6 +239,8 @@ public class PawnController {
             // Update the player position
             playerPosition.setTile(target);
             SwitchPlayerController.switchActivePlayer();
+            InitializeBoardController.isPawnMoved = true;
+
             return true;
         } else {
             return false;

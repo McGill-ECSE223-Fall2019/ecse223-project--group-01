@@ -10,6 +10,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import javafx.scene.control.Button;
 
+import java.sql.Time;
 import java.util.List;
 import java.util.Map;
 
@@ -19,6 +20,11 @@ public class GameStatusStepDefinition {
     InitializeBoardController controller;
     private Button button;
 
+    /**
+     *
+     * @author Tritin Truong
+     * @param dataTable
+     */
     @Given("The following moves were executed:")
     public void theFollowingMovesWereExecuted(io.cucumber.datatable.DataTable dataTable) {
         List<Map<String, String>> valueMaps = dataTable.asMaps();
@@ -42,12 +48,12 @@ public class GameStatusStepDefinition {
         }
     }
 
-    @Given("Player {string} has just completed his move")
-    public void playerHasJustCompletedHisMove(String arg0) {
-        Player player = stringToPlayer(arg0);
-        ModelQuery.getCurrentPosition().setPlayerToMove(player);
-    }
-
+    /**
+     * @author Tritin Truong
+     * @param arg0 black/white player
+     * @param row row number
+     * @param col column number
+     */
     @And("The last move of {string} is pawn move to {int}:{int}")
     public void theLastMoveOfIsPawnMoveToRow(String arg0, int row, int col) {
 //        Getting the game
@@ -71,19 +77,152 @@ public class GameStatusStepDefinition {
         game.addMove(move);
     }
 
+    /**
+     * @author Tritin Truong, Fulin Huang
+     */
     @When("Checking of game result is initated")
     public void checkingOfGameResultIsInitated() {
         GameStatusController.checkGameStatus();
     }
 
+    /**
+     * @author Tritin Truong
+     * @param arg0 game status of the game
+     */
     @Then("Game result shall be {string}")
     public void gameResultShallBe(String arg0) {
         assertEquals(stringToStatus(arg0), ModelQuery.getCurrentGame().getGameStatus());
     }
 
-    @And("The game shall no longer be running")
-    public void theGameShallNoLongerBeRunning() {
+    /* Identify Game Won */
+    Player currentPlayer;
+    String player;
+    int rowVal;
+
+    /**
+     *
+     * @author Fulin Huang
+     * @param arg0 white/black player
+     */
+    @Given("Player {string} has just completed his move")
+    public void givenPlayerHasJustCompletedHisMove(String arg0) {
+        if (arg0.equals("white")) {
+            currentPlayer = ModelQuery.getWhitePlayer();
+            ModelQuery.getCurrentPosition().setPlayerToMove(currentPlayer.getNextPlayer());
+        }
+        else if (arg0.equals("black")) {
+            currentPlayer = ModelQuery.getBlackPlayer();
+            ModelQuery.getCurrentPosition().setPlayerToMove(currentPlayer.getNextPlayer());
+        }
     }
+
+    /**
+     * @author Fulin Huang
+     *
+     * @param arg0 black/white player
+     * @param row row number
+     * @param col column number
+     */
+    @And ("The new position of {string} is {int}:{int}")
+    public void theNewPositionOfPlayerIs(String arg0, int row, int col) {
+        rowVal = 10 - row;
+        player = arg0;
+        Tile tile = ModelQuery.getTile(rowVal, col);
+        if (arg0.equals("white")) {
+            ModelQuery.getCurrentGame().getCurrentPosition().getWhitePosition().setTile(tile);
+        }
+        else if(arg0.equals("black")) {
+            ModelQuery.getCurrentGame().getCurrentPosition().getBlackPosition().setTile(tile);
+        }
+    }
+
+    /**
+     * @author Fulin Huang
+     * @param arg0 black/white player
+     */
+    @And ("The clock of {string} is more than zero")
+    public void theClockOfPlayerIsMoreThanZero(String arg0) {
+        Time newThinkingTime = new Time(180);
+        if (arg0.equals("white")) {
+            ModelQuery.getWhitePlayer().setRemainingTime(newThinkingTime);
+        }
+        else if (arg0.equals("black")) {
+            ModelQuery.getBlackPlayer().setRemainingTime(newThinkingTime);
+        }
+    }
+
+
+    /**
+     * @author Fulin Huang
+     */
+    @And ("The game shall no longer be running")
+    public void theGameShallNoLongerBeRunning () {
+        //TODO: GUI Step
+    }
+
+    /**
+     * @author Fulin Huang
+     * @param arg0 black/white player
+     */
+    @When ("The clock of {string} counts down to zero")
+    public void theClockOfPlayerCountsDownToZero(String arg0) {
+        player = arg0;
+        // Try setting the remaining time to zero
+        Time newThinkingTime = new Time(0);
+        if (player.equals("white")) {
+            ModelQuery.getWhitePlayer().setRemainingTime(newThinkingTime);
+        }
+        else if (player.equals("black")) {
+            ModelQuery.getBlackPlayer().setRemainingTime(newThinkingTime);
+        }
+        GameStatusController.checkGameStatus();
+    }
+
+
+    /**
+     * @author Fulin Huang
+     *
+     */
+    @Then("The final result shall be displayed")
+    public void theFinalResultShallBeDisplayed() {
+        //TODO: GUI Step
+
+    }
+
+    /**
+     * @author Fulin Huang
+     */
+    @And("White's clock shall not be counting down")
+    public void whiteSClockShallNotBeCountingDown() {
+        //TODO: GUI Step
+    }
+
+    /**
+     * @author Fulin Huang
+     */
+    @And("Black's clock shall not be counting down")
+    public void blackSClockShallNotBeCountingDown() {
+        //TODO: GUI Step
+    }
+
+    /**
+     * @author Fulin Huang
+     */
+    @And("White shall be unable to move")
+    public void whiteShallBeUnableToMove() {
+        //TODO: GUI Step
+
+    }
+
+    /**
+     * @author Fulin Huang
+     */
+    @And("Black shall be unable to move")
+    public void blackShallBeUnableToMove() {
+        //TODO: GUI step
+
+    }
+
 
     private Player stringToPlayer(String playerColor) {
         switch (playerColor) {
@@ -101,15 +240,19 @@ public class GameStatusStepDefinition {
 
     private Game.GameStatus stringToStatus(String status) {
         switch (status) {
+            case "drawn":
             case "Drawn": {
                 return Game.GameStatus.Draw;
             }
+            case "pending":
             case "Pending": {
                 return Game.GameStatus.Running;
             }
+            case "blackWon":
             case "BlackWon": {
                 return Game.GameStatus.BlackWon;
             }
+            case "whiteWon":
             case "WhiteWon": {
                 return Game.GameStatus.WhiteWon;
             }

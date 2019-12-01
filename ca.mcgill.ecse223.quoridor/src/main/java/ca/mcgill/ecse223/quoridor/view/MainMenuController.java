@@ -21,8 +21,8 @@ public class MainMenuController extends ViewController{
 
     public void handleQuitGame(ActionEvent actionEvent) {
 
-        Window page = Button12.getScene().getWindow();
-        AlertHelper.newPopUpWindow(Alert.AlertType.CONFIRMATION, page, "Alert", "Are you sure you want to quit the game?");
+
+        AlertHelper.newPopUpWindow(Alert.AlertType.CONFIRMATION, "Alert", "Are you sure you want to quit the game?");
         // popUpWindow("/fxml/QuitTheGame.fxml");
     }
 }
