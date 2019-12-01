@@ -59,6 +59,8 @@ public class CucumberStepDefinitions {
 		QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().setPlayerToMove(currentPlayer);
 	}
 
+	
+	
 	@Given("The following walls exist:")
 	public void theFollowingWallsExist(io.cucumber.datatable.DataTable dataTable) {
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
@@ -120,6 +122,7 @@ public class CucumberStepDefinitions {
 		game.setWhitePlayer(players.get(0));
 		game.setBlackPlayer(players.get(1));
 	}
+	
 
 	// ***********************************************
 	// Scenario and scenario outline step definitions
@@ -387,13 +390,6 @@ public class CucumberStepDefinitions {
 		//UI
 	}
 
-	/**
-	 * @author Kevin Li
-	 */
-	@Then("The game shall be in replay mode")
-	public void theGameShallBeInReplayMode() {
-		//How to do this
-	}
 
 	/**
 	 * @author Kevin Li
@@ -818,7 +814,7 @@ public class CucumberStepDefinitions {
 		} catch (UnsupportedOperationException e) {
 			throw new PendingException();
 		}
-	}
+	} 
 
 
 	/**
@@ -829,19 +825,180 @@ public class CucumberStepDefinitions {
 		// TODO GUI step
 	}
 
+	
+	/**
+	 * @author Kevin Li
+	 */
+	@Then("The game shall be in replay mode")
+	public void theGameShallBeInReplayMode() {
+		//How to do this
+	}
+	
 	/*
 	 * Scenario: Enter replay mode
 	 * @author Kate Ward
 	 */
-	@When("I initiate replay mode")
-	public void initiateReplayMode() {
+	@Given("The game is replay mode")
+	public void theGameIsReplayMode() {
+		initQuoridorAndBoard();
+		ArrayList<Player> createUsersAndPlayers = createUsersAndPlayers("user1", "user2");
+		createAndStartGame(createUsersAndPlayers);
+		for(Player player: createUsersAndPlayers) {
+			for(int i =0;i<10;i++) {
+				player.getWall(0).delete();
+			}
+		}
+		//throw new RuntimeException("far " + createUsersAndPlayers.get(1).getWalls());
+	}
+	
+	@Given("The following moves have been played in game:")
+	public void theFollowingMovesHaveBeenPlayedInGame(io.cucumber.datatable.DataTable dataTable) {
+		Quoridor quoridor = QuoridorApplication.getQuoridor();
+		//throw new RuntimeException("ff");
+		List<Map<String, String>> valueMaps = dataTable.asMaps();
+		int wallId = 100;
+		// keys: mv, rnd, mov
+		Player[] players = { quoridor.getCurrentGame().getWhitePlayer(), quoridor.getCurrentGame().getBlackPlayer() };
+		Player curr = players[0];
 		
+		
+		for(Map<String, String> map: valueMaps) {
+			curr = ModelQuery.getCurrentPosition().getPlayerToMove();
+			Integer mvNum = Integer.decode(map.get("mv"));
+			Integer rnd = Integer.decode(map.get("rnd"));
+			String mv = map.get("move");
+			Move move;
+
+			int index = 0; //(wrow - 1) * 9 + wcol - 1
+			if(mv.charAt(0)=='a'){
+				index = (mv.charAt(1) - 49) * 9;
+			} else if(mv.charAt(0)=='b'){
+				index = (mv.charAt(1) - 49) * 9 + 1;
+			} else if(mv.charAt(0)=='c'){
+				index = (mv.charAt(1) - 49) * 9 + 2;
+			} else if(mv.charAt(0)=='d'){
+				index = (mv.charAt(1) - 49) * 9 + 3;
+			} else if(mv.charAt(0)=='e'){
+				index = (mv.charAt(1) - 49) * 9 + 4;
+			} else if(mv.charAt(0)=='f'){
+				index = (mv.charAt(1) - 49) * 9 + 5;
+			} else if(mv.charAt(0)=='g'){
+				index = (mv.charAt(1) - 49) * 9 + 6;
+			} else if(mv.charAt(0)=='h'){
+				index = (mv.charAt(1) - 49) * 9 + 7;
+			} else if(mv.charAt(0)=='i'){
+				index = (mv.charAt(1) - 49) * 9 + 8;
+			} 
+			
+			Tile tile = ModelQuery.getBoard().getTile(index);
+			
+			if(mv.length()==2) {
+				move = new JumpMove(mvNum, rnd, curr, tile, ModelQuery.getCurrentGame());
+			} else {
+				Direction direction = Direction.Horizontal;
+				switch (mv.charAt(2)) {
+				case 'h':
+					direction = Direction.Horizontal;
+					break;
+				case 'v':
+					direction = Direction.Vertical;
+					break;
+				}
+				Wall wall = new Wall(wallId++, curr);
+				move = new WallMove(mvNum, rnd, curr, tile, ModelQuery.getCurrentGame(), direction, wall);
+			}
+			SwitchPlayerController.switchActivePlayer();
+		}
+		//throw new RuntimeException("x " + ModelQuery.getCurrentGame().getPositions());
+	}
+	
+	@When("I initiate replay mode")
+	public void iInitiateReplayMode() {
+		//throw new RuntimeException("raar");
 	}
 	
 	@Given("The game is in replay mode")
-	public void gameInReplayMode() {
+	public void theGameIsInReplayMode() {
+		initQuoridorAndBoard();
+		ArrayList<Player> createUsersAndPlayers = createUsersAndPlayers("user1", "user2");
+		createAndStartGame(createUsersAndPlayers);
+		for(Player player: createUsersAndPlayers) {
+			for(int i =0;i<10;i++) {
+				player.getWall(0).delete();
+			}
+		}
+		//throw new RuntimeException("far " + createUsersAndPlayers.get(1).getWalls());
+	}
+	
+	@And("The game does not have a final result")
+	public void theGameDoesNotHaveAFinalResult() {
 		
 	}
+	
+	int index;
+	
+	@And("The next move is {int}.{int}")
+	public void theNextMoveIs(int mov, int rnd) {
+		List<GamePosition> listPos = ModelQuery.getCurrentGame().getPositions();
+		index = (mov-1)*2+rnd-1;
+		if (index<0) index=0;
+		
+		assertEquals((mov-1)*2+rnd,index+1);
+		//GamePosition pos = listPos.get(index);
+		//throw new RuntimeException("f\n "+listPos.get(1).getWhitePosition().getTile());
+		//throw new RuntimeException("\n "+ModelQuery.getBoard().getTile(67));
+	}
+	
+	@When("Step backward is initiated")
+	public void stepBackwardsInitiated() {
+		index--;
+		if(index<0) index = 0;
+	}
+	
+	@Then("The next move shall be {int}.{int}")
+	public void nextMoveShallBe(int mov, int rnd) {
+		GamePosition nextPos = ModelQuery.getCurrentGame().getPositions().get(index);
+		Player nextPlayer;
+		if(rnd==1) {
+			nextPlayer = ModelQuery.getBlackPlayer();
+		} else {
+			nextPlayer = ModelQuery.getWhitePlayer();
+		}
+		assertEquals((mov-1)*2+rnd-1,index);
+	}
+	
+	@And("White player's position shall be \\({int},{int})")
+	public void whitePlayerPositionShallBe(int row, int col) {
+		assertEquals(ModelQuery.getCurrentGame().getPositions().get(index).getWhitePosition().getTile().getRow(),row);
+		assertEquals(ModelQuery.getCurrentGame().getPositions().get(index).getWhitePosition().getTile().getColumn(),col);
+	}
+	
+	@And("Black player's position shall be \\({int},{int})")
+	public void blackPlayerPositionShallBe(int row, int col) {
+		assertEquals(ModelQuery.getCurrentGame().getPositions().get(index).getBlackPosition().getTile().getRow(),row);
+		assertEquals(ModelQuery.getCurrentGame().getPositions().get(index).getBlackPosition().getTile().getColumn(),col);
+	}
+	
+	@And("White has {int} on stock")
+	public void whiteHasNumWallsOnStock(int num) {
+		assertEquals(ModelQuery.getCurrentGame().getPositions().get(index).getWhiteWallsInStock().size(),num);
+	}
+	
+	@And("Black has {int} on stock")
+	public void blackHasNumWallsOnStock(int num) {
+		assertEquals(ModelQuery.getCurrentGame().getPositions().get(index).getBlackWallsInStock().size(),num);
+	}
+	
+	@When("I initiate to continue game")
+	public void iInitiateToContinueGame() {
+		
+	}
+	
+	@And("The remaining moves of the game shall be removed")
+	public void theRemainingMovesOfTheGameShallBeRemoved() {
+		
+	}
+	
 	
 	//grab wall
 	//scenario start wall placement
