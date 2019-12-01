@@ -172,6 +172,91 @@ public class LoadGameController extends ViewController{
     }
 
     public void handleReplayMode(ActionEvent actionEvent) {
-        changePage("/fxml/ReplayMode.fxml");
+        // confirm button
+        // Window page = confirm.getScene().getWindow();
+         boolean readyTostart = true;
+         String error = "";
+         String whiteName;
+         String blackName;
+         String filename;
+
+         //.Open a list of saved games
+
+
+         // confirm that all fields have been set
+         // validate white player name
+
+         // All good begin initialization process
+         if (readyTostart) {
+
+             //add all savefiles into a list
+             File directory = new File("./");
+             File[] saveFiles = directory.listFiles((d,name) -> name.endsWith(".mov"));
+             List<String> listOfSaves = new ArrayList<>();
+             for(File file: saveFiles){
+                 listOfSaves.add(file.getName());
+             }
+
+             //make those savefiles appear in the ChoiceBox
+             existingSavedPosition = new ChoiceDialog<String>("",listOfSaves);
+             existingSavedPosition.setTitle("List of saved games");
+             existingSavedPosition.setHeaderText("Choose a saved game file to load");
+
+
+             //get repsonse value
+             Optional<String> result = existingSavedPosition.showAndWait();
+             if(result.isPresent()){
+                 filename = result.get();
+             }
+             else{
+                 Alert loadWarning = new Alert(Alert.AlertType.WARNING);
+                 loadWarning.setHeaderText("Missing selection");
+                 loadWarning.setContentText("Missing selection of save game file");
+                 loadWarning.showAndWait();
+                 filename = null;
+             }
+
+             /* ------------------------- HARD CODED THE THINKING TIME FOR NOW ------------------------- */
+             StartNewGameController.setTotalThinkingTime(1, 30);
+             try {
+                 String wname;
+                 String bname;
+                 if(loadWhiteName != null){
+                     wname = loadWhiteName;
+                 }
+                 else{
+                     wname = "White";
+                 }
+                 if(loadBlackName != null){
+                     bname = loadBlackName;
+                 }
+                 else{
+                     bname = "Black";
+                 }
+                 if(!SaveLoadGameController.fileLoad(filename, wname,bname)){
+                     Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                     errorAlert.setHeaderText("Unable to load game");
+                     errorAlert.setContentText("The saved game were unable to be loaded");
+                     errorAlert.showAndWait();
+                 }
+                 else{
+                     /* Playing the Battle music */
+                     //MusicController.playEpicMusic();
+                     changePage("/fxml/ReplayMode.fxml");
+                 }
+             } catch (IOException e) {
+                 Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                 errorAlert.setHeaderText("Error in loading game");
+                 errorAlert.setContentText("There was an error in loading your game");
+                 errorAlert.showAndWait();
+                 e.printStackTrace();
+             } catch (NullPointerException e) {
+                 Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                 errorAlert.setHeaderText("Error in loading game");
+                 errorAlert.setContentText("There are no save files");
+                 errorAlert.showAndWait();
+
+             }
+         }   	
     }
 }

@@ -1,110 +1,207 @@
 package ca.mcgill.ecse223.quoridor.view;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-
-import ca.mcgill.ecse223.quoridor.controllers.ModelQuery;
-import ca.mcgill.ecse223.quoridor.controllers.PositionController;
-import ca.mcgill.ecse223.quoridor.controllers.SaveLoadGameController;
-import ca.mcgill.ecse223.quoridor.model.Direction;
-import ca.mcgill.ecse223.quoridor.model.GamePosition;
-import ca.mcgill.ecse223.quoridor.model.Player;
-import ca.mcgill.ecse223.quoridor.model.PlayerPosition;
-import ca.mcgill.ecse223.quoridor.model.Tile;
-import ca.mcgill.ecse223.quoridor.model.Wall;
-import ca.mcgill.ecse223.quoridor.model.WallMove;
+import ca.mcgill.ecse223.quoridor.controllers.*;
+import ca.mcgill.ecse223.quoridor.model.*;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Text;
-import javafx.stage.FileChooser;
+import javafx.util.Duration;
 import javafx.util.Pair;
 
+import java.util.ArrayList;
+import java.util.List;
+
+
 public class ReplayModeController extends ViewController{
+
+	int stepNumber = 0;
+	List<GamePosition> listPositions = ModelQuery.getCurrentGame().getPositions();
 	
-	private int stepNumber = 0;
-	List<GamePosition> listPositions;
-	
-	@FXML
+    public enum PlayerState {WALL, PAWN, IDLE};
+    public PlayerState state = PlayerState.IDLE;
+
+    @FXML
     private AnchorPane board;
     public Text whitePlayerName;
     public Text blackPlayerName;
     public Text redPlayerName;
     public Text greenPlayerName;
-    
+
     public Text whitePlayerName1;
     public Text blackPlayerName1;
     public Text redPlayerName1;
     public Text greenPlayerName1;
-    
+
     public Label timerForWhitePlayer;
     public Label timerForBlackPlayer;
     public Label timerForRedPlayer;
     public Label timerForGreenPlayer;
-    
+
     public Text whiteNumOfWalls;
     public Text blackNumOfWalls;
     public Text redNumOfWalls;
     public Text greenNumOfWalls;
-	
-    
-	public void initialize() {
-        final FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Open Resource File");
-        File file = fileChooser.showOpenDialog(Main.getCurrentStage());
-        if (file == null) {
-        	changePage("/fxml/Menu.fxml");
-        } else {
-    		whitePlayerName.setText(file.getName());
-			try {
-				SaveLoadGameController.fileLoad(file.getName(), "xx", "yy");
-			} catch (UnsupportedOperationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        
-        //listPositions = ModelQuery.getCurrentGame().getPositions();
-		//refresh();
-	}
 
-	
-	@FXML
-	public void handleForwardStep(ActionEvent actionEvent) {
-		stepNumber++;
-		refresh();
-	}
-	
-	@FXML
-	public void handleBackStep(ActionEvent actionEvent) {
-		//stepNumber--;
-		refresh();
-	}
-	
-	@FXML
-	public void handleStartSkip(ActionEvent actionEvent) {
-		stepNumber=0;
-		refresh();
-	}
-	
-	@FXML
-	public void handleEndSkip(ActionEvent actionEvent) {
-		stepNumber=listPositions.size()-1;
-		refresh();
-	}
-	
-    public void refresh() { 	
-        GamePosition position = listPositions.get(stepNumber);
+    public Button grabWallBtn;
+    public Button rotateWallBtn;
+    public Button backBtn;
+
+    public Timeline timeline;
+
+    public static boolean playerIsWhite = false;
+    public static boolean isWallDrop = false;
+    public static boolean pawnMoved = false;
+    public String initialTime;
+
+    public Circle c1;
+    public Circle c2;
+    public Rectangle r1;
+    public Rectangle r2;
+    public Text x1;
+    public Text x2;
+
+
+    public void initialize() {
+    	//System.out.println("NUMBER OF POSITIONS " + listPositions.size());
+        //display player name
+        whitePlayerName.setText(ModelQuery.getWhitePlayer().getUser().getName());
+        blackPlayerName.setText(ModelQuery.getBlackPlayer().getUser().getName());
+
+        //display player name on the thinking time section
+        whitePlayerName1.setText(ModelQuery.getWhitePlayer().getUser().getName());
+        blackPlayerName1.setText(ModelQuery.getBlackPlayer().getUser().getName());
+
+        //if 4player mode
+        if(ModelQuery.isFourPlayer()) {
+            //display player name
+            redPlayerName.setText(ModelQuery.getRedPlayer().getUser().getName());
+            greenPlayerName.setText(ModelQuery.getGreenPlayer().getUser().getName());
+
+            //display player name on the thinking time section
+            redPlayerName1.setText(ModelQuery.getRedPlayer().getUser().getName());
+            greenPlayerName1.setText(ModelQuery.getGreenPlayer().getUser().getName());
+        } else { //if 2player mode, set 4player content invisible
+        	redPlayerName.setVisible(false);
+        	redPlayerName1.setVisible(false);
+        	redNumOfWalls.setVisible(false);
+        	timerForRedPlayer.setVisible(false);
+        	greenPlayerName.setVisible(false);
+        	greenPlayerName1.setVisible(false);
+        	greenNumOfWalls.setVisible(false);
+        	timerForGreenPlayer.setVisible(false);
+        	c1.setVisible(false);
+        	c2.setVisible(false);
+        	r1.setVisible(false);
+        	r2.setVisible(false);
+        	x1.setVisible(false);
+        	x2.setVisible(false);
+
+        }
+
+        //start the clock once the game is initiated
+        StartNewGameController.startTheClock();
+
+        //record the time set per turn
+        initialTime = StartNewGameController.toTimeStr();
+
+    	timerForWhitePlayer.setText(initialTime);
+    	timerForBlackPlayer.setText(initialTime);
+
+    	if(ModelQuery.isFourPlayer()) {
+    		timerForRedPlayer.setText(initialTime);
+    		timerForGreenPlayer.setText(initialTime);
+    	}
+
+        state = PlayerState.IDLE;
+        switchTimer();
+    }
+
+    public void switchTimer() {
+
+        // update timerLabel
+        //timerForWhitePlayer.setText(StartNewGameController.toTimeStr());
+        timeline = new Timeline();
+        timeline.setCycleCount(Timeline.INDEFINITE);
+
+        EventHandler onFinished = new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {
+                Player currentPlayer = ModelQuery.getPlayerToMove();
+                if ((StartNewGameController.timeOver()) || isWallDrop || pawnMoved ) {
+                	isWallDrop = false;
+                	pawnMoved = false;
+
+                	refresh();
+                	StartNewGameController.resetTimeToSet();
+
+                } else {
+
+                //grey out the next player name & count down time for the current player
+	                if (currentPlayer.equals(ModelQuery.getWhitePlayer())) {
+	                    timerForWhitePlayer.setText(StartNewGameController.toTimeStr());
+	                } else if (currentPlayer.equals(ModelQuery.getBlackPlayer())){
+	                    timerForBlackPlayer.setText(StartNewGameController.toTimeStr());
+	                } else if (currentPlayer.equals(ModelQuery.getRedPlayer())) {
+	                	timerForRedPlayer.setText(StartNewGameController.toTimeStr());
+	                } else if (currentPlayer.equals(ModelQuery.getGreenPlayer())) {
+	                	timerForGreenPlayer.setText(StartNewGameController.toTimeStr());
+	                }
+
+                }
+            }
+        };
+
+        timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(0.25), onFinished));
+        timeline.playFromStart();
+        if (timeline != null) {
+            timeline.stop();
+        }
+        refresh();
+    }
+
+
+    public void createNewWall(ActionEvent actionEvent) {
+        // Check if there is already a wall in hand
+        // If so just cancel the wall move
+        if (state == PlayerState.WALL) {
+            WallController.cancelWallMove();
+            state = PlayerState.IDLE;
+        }
+        //
+        else if (WallController.grabWall()) {
+            state = PlayerState.WALL;
+        } else {
+            System.out.println("No more walls");
+        }
+        refresh();
+    }
+
+    public void handleGrabPawn(ActionEvent actionEvent) {
+        if(state == PlayerState.PAWN){
+            state = PlayerState.IDLE;
+        }
+
+        else {
+            state = PlayerState.PAWN;
+            WallController.cancelWallMove();
+        }
+        refresh();
+    }
+
+
+    public void refresh() {
+        //GamePosition position = ModelQuery.getCurrentPosition();
+    	GamePosition position = listPositions.get(stepNumber);
         Player white = ModelQuery.getWhitePlayer();
         Player black = ModelQuery.getBlackPlayer();
         Player red = ModelQuery.getRedPlayer();
@@ -118,13 +215,13 @@ public class ReplayModeController extends ViewController{
             whitePlayerName.setFill(Color.BLACK);
             blackPlayerName.setFill(Color.LIGHTGRAY);
             redPlayerName.setFill(Color.LIGHTGRAY);
-            greenPlayerName.setFill(Color.LIGHTGRAY);    
-            
+            greenPlayerName.setFill(Color.LIGHTGRAY);
+
             whitePlayerName1.setFill(Color.BLACK);
             blackPlayerName1.setFill(Color.LIGHTGRAY);
             redPlayerName1.setFill(Color.LIGHTGRAY);
-            greenPlayerName1.setFill(Color.LIGHTGRAY);   
-            
+            greenPlayerName1.setFill(Color.LIGHTGRAY);
+
             whiteNumOfWalls.setFill(Color.BLACK);
             blackNumOfWalls.setFill(Color.LIGHTGRAY);
             redNumOfWalls.setFill(Color.LIGHTGRAY);
@@ -134,12 +231,12 @@ public class ReplayModeController extends ViewController{
             blackPlayerName.setFill(Color.BLACK);
             redPlayerName.setFill(Color.LIGHTGRAY);
             greenPlayerName.setFill(Color.LIGHTGRAY);
-            
+
             whitePlayerName1.setFill(Color.LIGHTGRAY);
             blackPlayerName1.setFill(Color.BLACK);
             redPlayerName1.setFill(Color.LIGHTGRAY);
-            greenPlayerName1.setFill(Color.LIGHTGRAY);   
-            
+            greenPlayerName1.setFill(Color.LIGHTGRAY);
+
             whiteNumOfWalls.setFill(Color.LIGHTGRAY);
             blackNumOfWalls.setFill(Color.BLACK);
             redNumOfWalls.setFill(Color.LIGHTGRAY);
@@ -149,12 +246,12 @@ public class ReplayModeController extends ViewController{
             blackPlayerName.setFill(Color.LIGHTGRAY);
             redPlayerName.setFill(Color.BLACK);
             greenPlayerName.setFill(Color.LIGHTGRAY);
-            
+
             whitePlayerName1.setFill(Color.LIGHTGRAY);
             blackPlayerName1.setFill(Color.LIGHTGRAY);
             redPlayerName1.setFill(Color.BLACK);
-            greenPlayerName1.setFill(Color.LIGHTGRAY);   
-            
+            greenPlayerName1.setFill(Color.LIGHTGRAY);
+
             whiteNumOfWalls.setFill(Color.LIGHTGRAY);
             blackNumOfWalls.setFill(Color.LIGHTGRAY);
             redNumOfWalls.setFill(Color.BLACK);
@@ -164,12 +261,12 @@ public class ReplayModeController extends ViewController{
             blackPlayerName.setFill(Color.LIGHTGRAY);
             redPlayerName.setFill(Color.LIGHTGRAY);
             greenPlayerName.setFill(Color.BLACK);
-            
+
             whitePlayerName1.setFill(Color.LIGHTGRAY);
             blackPlayerName1.setFill(Color.LIGHTGRAY);
             redPlayerName1.setFill(Color.LIGHTGRAY);
-            greenPlayerName1.setFill(Color.BLACK);   
-            
+            greenPlayerName1.setFill(Color.BLACK);
+
             whiteNumOfWalls.setFill(Color.LIGHTGRAY);
             blackNumOfWalls.setFill(Color.LIGHTGRAY);
             redNumOfWalls.setFill(Color.LIGHTGRAY);
@@ -191,9 +288,10 @@ public class ReplayModeController extends ViewController{
         }
 
         // update wall positions
-        ModelQuery.getCurrentGame();
-        List<Wall> walls = ModelQuery.getAllWallsOnBoard();
-
+        List<Wall> walls = new ArrayList<>();
+        walls.addAll(position.getWhiteWallsOnBoard());
+        walls.addAll(position.getBlackWallsOnBoard());
+        
         for (Wall wall : walls) {
             placeWall(wall.getMove(), false);
         }
@@ -203,8 +301,10 @@ public class ReplayModeController extends ViewController{
             WallMove move = ModelQuery.getWallMoveCandidate();
             placeWall(move, true);
         }
+        
+        //System.out.println("step number " + stepNumber);
     }
-	
+
     private void placePawn(PlayerPosition position, String color){
         Tile tile = position.getTile();
 
@@ -227,7 +327,7 @@ public class ReplayModeController extends ViewController{
         	pawn.setFill(Color.GREEN);
         	pawn.setStroke(Color.BLACK);
         }
-        
+
         pawn.setLayoutX(coord.getValue());
         pawn.setLayoutY(coord.getKey());
         pawn.setRadius(8);
@@ -272,6 +372,39 @@ public class ReplayModeController extends ViewController{
 
         board.getChildren().add(rectangle);
     }
+
+	
+	@FXML
+	public void handleForwardStep(ActionEvent actionEvent) {
+		if(stepNumber<listPositions.size()-1) {
+			stepNumber++;
+			if(stepNumber==1) stepNumber++;
+		}
+		refresh();
+	}
+	
+	@FXML
+	public void handleBackStep(ActionEvent actionEvent) {
+		if(stepNumber>0) {
+			stepNumber--;
+			if(stepNumber==1) stepNumber--;
+		}
+		refresh();
+	}
+	
+	@FXML
+	public void handleStartSkip(ActionEvent actionEvent) {
+		stepNumber=0;
+		refresh();
+	}
+	
+	@FXML
+	public void handleEndSkip(ActionEvent actionEvent) {
+		stepNumber=1;
+		refresh();
+	}
+	
+   
     
     private Pair<Integer, Integer> convertPawnToCanvas(int row, int col) {
         int x = (row - 1) * 43 + 17;
@@ -286,6 +419,8 @@ public class ReplayModeController extends ViewController{
     }
     
     public void handleBackToMenu(ActionEvent actionEvent) {
+    	timeline.stop();
+    	ModelQuery.getCurrentGame().delete(); //delete the previous game
         changePage("/fxml/Menu.fxml");
     }
 }
