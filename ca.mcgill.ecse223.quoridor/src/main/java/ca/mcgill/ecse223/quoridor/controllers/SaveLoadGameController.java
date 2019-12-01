@@ -217,28 +217,30 @@ public class SaveLoadGameController {
                         return false;
                     }
 
-                    //Black Player Move Info
-                    int[] blackMoveCoord = posToInt(moveInfo[1]); //Turning it into game understandable data
+                    if(moveInfo.length != 1){
+                        //Black Player Move Info
+                        int[] blackMoveCoord = posToInt(moveInfo[1]); //Turning it into game understandable data
 
-                    //Validate position here
-                    if (!validatePositionInRange(blackMoveCoord[1], blackMoveCoord[0])) {
-                        isSaveMoveValid = false;
-                        return false;
-                    }
+                        //Validate position here
+                        if (!validatePositionInRange(blackMoveCoord[1], blackMoveCoord[0])) {
+                            isSaveMoveValid = false;
+                            return false;
+                        }
 
-                    //It is a pawn move
-                    if (blackMoveCoord.length == 2) {
-                        int[] info = {Integer.parseInt(moveNumber), blackMoveCoord[0], blackMoveCoord[1]};
-                        blackMoves.add(info);
-                    }
-                    //It is a wall move
-                    else if (blackMoveCoord.length == 3) {
-                        int[] info = {Integer.parseInt(moveNumber), blackMoveCoord[0], blackMoveCoord[1], blackMoveCoord[2]};
-                        blackWalls.add(info);
-                    } else {
-                        //something went wrong
-                        isSaveMoveValid = false;
-                        return false;
+                        //It is a pawn move
+                        if (blackMoveCoord.length == 2) {
+                            int[] info = {Integer.parseInt(moveNumber), blackMoveCoord[0], blackMoveCoord[1]};
+                            blackMoves.add(info);
+                        }
+                        //It is a wall move
+                        else if (blackMoveCoord.length == 3) {
+                            int[] info = {Integer.parseInt(moveNumber), blackMoveCoord[0], blackMoveCoord[1], blackMoveCoord[2]};
+                            blackWalls.add(info);
+                        } else {
+                            //something went wrong
+                            isSaveMoveValid = false;
+                            return false;
+                        }
                     }
                     movesTotal ++;
                 }
@@ -355,8 +357,6 @@ public class SaveLoadGameController {
                                 SwitchPlayerController.switchActivePlayer();
                             }
                             bw++;
-                        } else {
-                            return false;
                         }
                     }
                     else{
