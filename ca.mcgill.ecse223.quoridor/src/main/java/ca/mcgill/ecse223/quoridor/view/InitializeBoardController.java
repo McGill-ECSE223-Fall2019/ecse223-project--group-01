@@ -29,12 +29,10 @@ import javafx.util.Pair;
 
 import java.util.List;
 
-import static ca.mcgill.ecse223.quoridor.controllers.GameStatusController.checkGameStatus;
-
 
 public class InitializeBoardController extends ViewController{
 
-    enum PlayerState {WALL, PAWN, IDLE, WHITEWON, BLACKWON};
+    enum PlayerState {WALL, PAWN, IDLE, WHITEWON, BLACKWON, REDWON, GREENWON};
     public PlayerState state = PlayerState.IDLE;
     public void handleResignGame(ActionEvent actionEvent) {
         ResignGameController.resign();
@@ -76,8 +74,6 @@ public class InitializeBoardController extends ViewController{
     public static boolean isWallDrop = false;
     public static boolean isPawnMoved = false;
     public String initialTime;
-    public static boolean whiteWon = false;
-    public static boolean blackWon = false;
     boolean pawnMoved = false;
     public  PlayerPosition playerPosition ;
     public static boolean validMoved = false;
@@ -253,6 +249,7 @@ public class InitializeBoardController extends ViewController{
 
                  //   AlertHelper.error(Alert.AlertType.ERROR, "Alert", "INVALID MOVE");
                 validMoved = PawnController.movePawn("up");
+
             }
             else if (curDirection.equals("down")) {
                 validMoved =  PawnController.movePawn("down");
@@ -285,6 +282,30 @@ public class InitializeBoardController extends ViewController{
         refresh();
 
     }
+
+    public void checkStatus () {
+        // check if one of the player wins
+        if (ModelQuery.getCurrentGame().getGameStatus().equals(Game.GameStatus.WhiteWon)) {
+            ModelQuery.getCurrentGame().setWinningPlayer(ModelQuery.getWhitePlayer());
+            state = PlayerState.WHITEWON;
+        }
+        else if (ModelQuery.getCurrentGame().getGameStatus().equals(Game.GameStatus.BlackWon)) {
+            ModelQuery.getCurrentGame().setWinningPlayer(ModelQuery.getBlackPlayer());
+            state = PlayerState.BLACKWON;
+        }
+        else if (ModelQuery.getCurrentGame().getGameStatus().equals(Game.GameStatus.RedWon)) {
+            ModelQuery.getCurrentGame().setWinningPlayer(ModelQuery.getRedPlayer());
+            state = PlayerState.REDWON;
+        }
+        else if (ModelQuery.getCurrentGame().getGameStatus().equals(Game.GameStatus.GreenWon)) {
+            ModelQuery.getCurrentGame().setWinningPlayer(ModelQuery.getGreenPlayer());
+            state = PlayerState.GREENWON;
+        } else {
+            ModelQuery.getCurrentGame().setWinningPlayer(null);
+        }
+        refresh();
+    }
+
     public String checkPawnPostition(Double x, Double y, PlayerPosition playerPosition){
         Tile tile = null;
         String direction= null;
@@ -351,27 +372,29 @@ public class InitializeBoardController extends ViewController{
                 if (isWallDrop || isPawnMoved) {
                 	timerForWhitePlayer.setText(initialTime);
                 	timerForBlackPlayer.setText(initialTime);
-
+                    GameStatusController.checkWin();
+                    checkStatus();
                 	isWallDrop = false;
                 	isPawnMoved = false;
-
                 	StartNewGameController.resetTimeToSet();
                 	refresh();
                 }
                 else if (StartNewGameController.timeOver()) {
-                    checkGameStatus();
+                    GameStatusController.checkWin();
+                    checkStatus();
                     refresh();
-                }else{
-                //grey out the next player name & count down time for the current player
-	                if (currentPlayer.equals(ModelQuery.getWhitePlayer())) {
-	                    timerForWhitePlayer.setText(StartNewGameController.toTimeStr());
-	                } else if (currentPlayer.equals(ModelQuery.getBlackPlayer())){
-	                    timerForBlackPlayer.setText(StartNewGameController.toTimeStr());
-	                } else if (currentPlayer.equals(ModelQuery.getRedPlayer())) {
-	                	timerForRedPlayer.setText(StartNewGameController.toTimeStr());
-	                } else if (currentPlayer.equals(ModelQuery.getGreenPlayer())) {
-	                	timerForGreenPlayer.setText(StartNewGameController.toTimeStr());
-	                }
+                }else {
+                    //grey out the next player name & count down time for the current player
+                    if (currentPlayer.equals(ModelQuery.getWhitePlayer())) {
+                        timerForWhitePlayer.setText(StartNewGameController.toTimeStr());
+                    } else if (currentPlayer.equals(ModelQuery.getBlackPlayer())) {
+                        timerForBlackPlayer.setText(StartNewGameController.toTimeStr());
+                    } else if (currentPlayer.equals(ModelQuery.getRedPlayer())) {
+                        timerForRedPlayer.setText(StartNewGameController.toTimeStr());
+                    } else if (currentPlayer.equals(ModelQuery.getGreenPlayer())) {
+                        timerForGreenPlayer.setText(StartNewGameController.toTimeStr());
+                    }
+
                 }
             }
         };
@@ -600,21 +623,22 @@ public class InitializeBoardController extends ViewController{
             placeWall(move, true);
         }
 
-        GameStatusController.checkGameStatus();
-        // check if one of the player wins
-        if (ModelQuery.getCurrentGame().getGameStatus()== Game.GameStatus.WhiteWon) {
-            ModelQuery.getCurrentGame().setWinningPlayer(ModelQuery.getWhitePlayer());
+        //update game status and stop timer
+        if (state == PlayerState.WHITEWON) {
             timeline.stop();
-            state = PlayerState.WHITEWON; //Player will no longer able to place pawn or wall
             changePage("/fxml/EndScene.fxml");
-            whiteWon = false; //avoid refreshing page all the time
         }
-        else if (ModelQuery.getCurrentGame().getGameStatus()== Game.GameStatus.BlackWon) {
-            ModelQuery.getCurrentGame().setWinningPlayer(ModelQuery.getBlackPlayer());
+        else if (state == PlayerState.BLACKWON) {
             timeline.stop();
-            state = PlayerState.BLACKWON;
             changePage("/fxml/EndScene.fxml");
-            blackWon = false;
+        }
+        else if (state == PlayerState.REDWON) {
+            timeline.stop();
+            changePage("/fxml/EndScene.fxml");
+        }
+        else if (state == PlayerState.GREENWON) {
+            timeline.stop();
+            changePage("/fxml/EndScene.fxml");
         }
     }
 

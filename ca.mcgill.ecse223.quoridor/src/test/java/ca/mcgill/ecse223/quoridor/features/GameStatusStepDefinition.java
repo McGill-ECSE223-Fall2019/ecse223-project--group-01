@@ -93,22 +93,21 @@ public class GameStatusStepDefinition {
     public void givenPlayerHasJustCompletedHisMove(String arg0) {
         if (arg0.equals("white")) {
             currentPlayer = ModelQuery.getWhitePlayer();
-            ModelQuery.getCurrentPosition().setPlayerToMove(currentPlayer);
+            ModelQuery.getCurrentPosition().setPlayerToMove(currentPlayer.getNextPlayer());
 //			PawnController.movePawn("left");
         }
         else if (arg0.equals("black")) {
             currentPlayer = ModelQuery.getBlackPlayer();
-            ModelQuery.getCurrentPosition().setPlayerToMove(currentPlayer);
+            ModelQuery.getCurrentPosition().setPlayerToMove(currentPlayer.getNextPlayer());
 //			PawnController.movePawn("left");
         }
     }
 
     @And ("The new position of {string} is {int}:{int}")
     public void theNewPositionOfPlayerIs(String arg0, int row, int col) {
-        rowVal = row;
-        colVal = col;
+        rowVal = 10 - row;
         player = arg0;
-        Tile tile = ModelQuery.getTile(row, col);
+        Tile tile = ModelQuery.getTile(rowVal, col);
         if (arg0.equals("white")) {
             ModelQuery.getCurrentGame().getCurrentPosition().getWhitePosition().setTile(tile);
         }

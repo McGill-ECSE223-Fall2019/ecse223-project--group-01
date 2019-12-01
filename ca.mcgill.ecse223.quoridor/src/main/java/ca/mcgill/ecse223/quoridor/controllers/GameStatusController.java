@@ -1,21 +1,14 @@
 package ca.mcgill.ecse223.quoridor.controllers;
 
-import ca.mcgill.ecse223.quoridor.model.Game;
-import ca.mcgill.ecse223.quoridor.model.Move;
-import ca.mcgill.ecse223.quoridor.model.WallMove;
+import ca.mcgill.ecse223.quoridor.model.*;
 
 import java.util.List;
 
-import static ca.mcgill.ecse223.quoridor.controllers.EndGameController.checkWin;
-
 public class GameStatusController {
     public static void checkGameStatus(){
-        // TODO check for draw
         checkDraw();
         checkWin();
-        // TODO check for win
     }
-
 
     public static boolean checkDraw(){
         List<Move> moves = ModelQuery.getCurrentGame().getMoves();
@@ -57,6 +50,75 @@ public class GameStatusController {
             return true;
         }else{
             return false;
+        }
+    }
+
+    public static void checkWin() {
+        Player player = ModelQuery.getPlayerToMove();
+
+        Tile whiteTile = ModelQuery.getCurrentGame().getCurrentPosition().getWhitePosition().getTile();
+        Tile blackTile = ModelQuery.getCurrentGame().getCurrentPosition().getBlackPosition().getTile();
+
+        Player whitePlayer = ModelQuery.getWhitePlayer();
+        Player blackPlayer = ModelQuery.getBlackPlayer();
+
+        if (!ModelQuery.isFourPlayer()) {
+            if (ModelQuery.getWhitePlayer().getRemainingTime().getTime() <= 0) {
+
+                ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.BlackWon);
+            }else if (ModelQuery.getBlackPlayer().getRemainingTime().getTime() <=0) {
+                    ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.WhiteWon);
+
+            }
+            else if (player.getNextPlayer().equals(whitePlayer) && ModelQuery.getWhitePlayer().getRemainingTime().getTime() > 0) {
+                if (whiteTile.getRow() == whitePlayer.getDestination().getTargetNumber()) {
+                    ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.WhiteWon);
+                }
+            }else if (player.getNextPlayer().equals(blackPlayer) && ModelQuery.getBlackPlayer().getRemainingTime().getTime() > 0) {
+                if (blackTile.getRow() == blackPlayer.getDestination().getTargetNumber()) {
+                    ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.BlackWon);
+                }
+            }
+
+        }
+        else {
+            Player redPlayer = ModelQuery.getRedPlayer();
+            Player greenPlayer = ModelQuery.getGreenPlayer();
+
+            Tile redTile = ModelQuery.getCurrentGame().getCurrentPosition().getRedPosition().getTile();
+            Tile greenTile = ModelQuery.getCurrentGame().getCurrentPosition().getGreenPosition().getTile();
+
+            if (ModelQuery.getWhitePlayer().getRemainingTime().getTime() <= 0) {
+                ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.BlackWon);
+            }
+            else if (ModelQuery.getBlackPlayer().getRemainingTime().getTime() <= 0) {
+                ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.WhiteWon);
+            }
+            else if (ModelQuery.getRedPlayer().getRemainingTime().getTime() <= 0) {
+                ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.WhiteWon);
+            }
+            else if (ModelQuery.getGreenPlayer().getRemainingTime().getTime() <= 0) {
+                ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.BlackWon);
+            }
+            else if (player.getNextPlayer().equals(whitePlayer) && ModelQuery.getWhitePlayer().getRemainingTime().getTime() > 0) {
+                if (whiteTile.getRow() == whitePlayer.getDestination().getTargetNumber()) {
+                    ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.WhiteWon);
+                }
+            }else if (player.getNextPlayer().equals(blackPlayer) && ModelQuery.getBlackPlayer().getRemainingTime().getTime() > 0) {
+                if (blackTile.getRow() == blackPlayer.getDestination().getTargetNumber()) {
+                    ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.BlackWon);
+                }
+            }
+            else if (player.getNextPlayer().equals(redPlayer) && ModelQuery.getRedPlayer().getRemainingTime().getTime() > 0) {
+                if (redTile.getRow() == redPlayer.getDestination().getTargetNumber()) {
+                    ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.RedWon);
+                }
+            }
+            else if (player.getNextPlayer().equals(greenPlayer) && ModelQuery.getGreenPlayer().getRemainingTime().getTime() > 0) {
+                if (greenTile.getRow() == greenPlayer.getDestination().getTargetNumber()) {
+                    ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.GreenWon);
+                }
+            }
         }
     }
 }
