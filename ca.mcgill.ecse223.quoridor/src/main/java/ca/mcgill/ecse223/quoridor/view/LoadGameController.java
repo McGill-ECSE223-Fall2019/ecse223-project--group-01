@@ -10,6 +10,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Window;
+import jdk.javadoc.internal.tool.Start;
 
 import java.io.File;
 import java.io.IOException;
@@ -124,7 +125,6 @@ public class LoadGameController extends ViewController{
             }
 
             /* ------------------------- HARD CODED THE THINKING TIME FOR NOW ------------------------- */
-            StartNewGameController.setTotalThinkingTime(1, 30);
             try {
                 String wname;
                 String bname;
@@ -140,6 +140,9 @@ public class LoadGameController extends ViewController{
                 else{
                     bname = "Black";
                 }
+                StartNewGameController.whitePlayerChoosesAUsername(wname);
+                StartNewGameController.blackPlayerChooseAUsername(bname);
+                StartNewGameController.setTotalThinkingTime(1, 30);
                 if(!SaveLoadGameController.fileLoad(filename, wname,bname)){
                     Alert errorAlert = new Alert(Alert.AlertType.ERROR);
                     errorAlert.setHeaderText("Unable to load game");
