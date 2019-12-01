@@ -1,6 +1,5 @@
 package ca.mcgill.ecse223.quoridor.view;
 import ca.mcgill.ecse223.quoridor.controllers.MusicController;
-import ca.mcgill.ecse223.quoridor.controllers.PositionController;
 import ca.mcgill.ecse223.quoridor.controllers.SaveLoadGameController;
 import ca.mcgill.ecse223.quoridor.controllers.StartNewGameController;
 import ca.mcgill.ecse223.quoridor.model.User;
@@ -9,8 +8,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.stage.Window;
-import jdk.javadoc.internal.tool.Start;
+
 
 import java.io.File;
 import java.io.IOException;

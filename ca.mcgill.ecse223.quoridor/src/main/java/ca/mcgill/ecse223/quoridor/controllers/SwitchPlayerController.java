@@ -65,6 +65,7 @@ public class SwitchPlayerController {
 		
 		int wallCounter = 0;
 		PlayerPosition whitePlayerPos =  new PlayerPosition(ModelQuery.getCurrentGame().getWhitePlayer(), current.getWhitePosition().getTile());
+		//System.out.println("hre " + current.getWhitePosition().getTile().getRow());
 		PlayerPosition blackPlayerPos =  new PlayerPosition(ModelQuery.getCurrentGame().getBlackPlayer(), current.getBlackPosition().getTile());
 		PlayerPosition redPlayerPos;
 		PlayerPosition greenPlayerPos;
