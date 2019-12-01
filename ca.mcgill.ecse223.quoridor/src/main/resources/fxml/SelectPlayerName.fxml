@@ -60,7 +60,7 @@
             <Font size="25.0" />
          </font>
       </Text>
-      <Text layoutX="320.0" layoutY="45.0" strokeType="OUTSIDE" strokeWidth="0.0" text="RED" textAlignment="CENTER" wrappingWidth="100.0">
+      <Text fill="#cc4e4e" layoutX="254.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Move Pawn: I, K, J, L" wrappingWidth="167.0">
          <font>
             <Font size="25.0" />
          </font>

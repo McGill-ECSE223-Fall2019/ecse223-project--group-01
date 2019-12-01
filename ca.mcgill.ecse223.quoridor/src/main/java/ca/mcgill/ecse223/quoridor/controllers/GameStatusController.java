@@ -6,11 +6,13 @@ import ca.mcgill.ecse223.quoridor.model.WallMove;
 
 import java.util.List;
 
-public class GameStatusController {
-    public static boolean checkGameStatus(){
-        // TODO check for draw
-        return checkDraw();
+import static ca.mcgill.ecse223.quoridor.controllers.EndGameController.checkWin;
 
+public class GameStatusController {
+    public static void checkGameStatus(){
+        // TODO check for draw
+        checkDraw();
+        checkWin();
         // TODO check for win
     }
 
