@@ -91,6 +91,26 @@ public class MusicController {
         }
 
     }
+
+    public static void playEndGameMusic(){
+        try{
+            File musicPath = new File(".\\src\\main\\resources\\music\\Game.wav");
+            if(clip != null)
+                clip.stop();
+            if(musicPath.exists()){
+                AudioInputStream audioInput = AudioSystem.getAudioInputStream(musicPath);
+                clip = AudioSystem.getClip();
+                clip.open(audioInput);
+                clip.start();
+            }
+            else{
+                System.out.println("Can't find file");
+            }
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+    }
     public static void stopAllMusic(){
         if(clip != null){
             clip.stop();
