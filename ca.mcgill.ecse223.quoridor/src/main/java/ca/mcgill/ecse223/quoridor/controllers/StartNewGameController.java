@@ -18,10 +18,10 @@ public class StartNewGameController {
     private static boolean thinkingTimeIsSet = false;
     private static long millis;
     private static Timer timer;
-    private static long timeToSet;
+    public static long timeToSet;
 
 
-    public StartNewGameController(){}; 
+    public StartNewGameController(){};
 
     /**
      * @Author Fulin Huang
@@ -63,10 +63,10 @@ public class StartNewGameController {
             whitePlayerChooseName = true;
         }
         int tempThinkingTime = 90;
-        Player player = new Player(new Time(tempThinkingTime), white_user, 9, Direction.Horizontal);
+        Player player = new Player(new Time(tempThinkingTime), white_user, 1, Direction.Horizontal);
         ModelQuery.getCurrentGame().setWhitePlayer(player); //set White player
         ModelQuery.getWhitePlayer().setUser(white_user);
-        
+
         isReadyToStart(); //check if players chose name and if total thinking time is set
     }
 
@@ -88,13 +88,13 @@ public class StartNewGameController {
             blackPlayerChooseName = true;
         }
         int tempThinkingTime = 90;
-        Player player = new Player(new Time(tempThinkingTime), black_user, 1, Direction.Vertical);
+        Player player = new Player(new Time(tempThinkingTime), black_user, 9, Direction.Vertical);
         ModelQuery.getCurrentGame().setBlackPlayer(player);
         ModelQuery.getBlackPlayer().setUser(black_user);
 
         isReadyToStart();  //check if players chose name and if total thinking time is set
     }
-    
+
     /**
      * @Author Fulin Huang & Mark Zhu
      *
@@ -119,7 +119,7 @@ public class StartNewGameController {
 
         isReadyToStart();  //check if players chose name and if total thinking time is set
     }
-    
+
     /**
      * @Author Fulin Huang & Mark Zhu
      *
@@ -144,7 +144,7 @@ public class StartNewGameController {
 
         isReadyToStart();  //check if players chose name and if total thinking time is set
     }
-    
+
     /**
      * @Author Fulin Huang & Mark Zhu
      *
@@ -159,13 +159,13 @@ public class StartNewGameController {
     		dummyUser = UserController.newUsername("");
     	}
 
-    	
+
         User red_user = dummyUser;
         int tempThinkingTime = 90;
         Player redDummy = new Player(new Time(tempThinkingTime), red_user, 1, Direction.Vertical, ModelQuery.getCurrentGame());
         ModelQuery.getCurrentGame().setRedPlayer(redDummy);
         ModelQuery.getRedPlayer().setUser(red_user);
-        
+
         User green_user = dummyUser;
         Player greenDummy = new Player(new Time(tempThinkingTime), green_user, 1, Direction.Vertical, ModelQuery.getCurrentGame());
         ModelQuery.getCurrentGame().setGreenPlayer(greenDummy);
@@ -212,10 +212,11 @@ public class StartNewGameController {
         timeToSet = millis;
         timer.scheduleAtFixedRate(new TimerTask() {
             public void run () {
+
                     Player currentPlayer;
                     try {
                         if (timeToSet == 0) {
-                        	//System.out.println("00:00 time left!");
+//                            System.out.println("00:00 time left!");
                             timer.cancel(); //stop timer if zero time left
 
                         } else if (ModelQuery.getBlackPlayer() == null && ModelQuery.getWhitePlayer() == null) {
@@ -254,7 +255,7 @@ public class StartNewGameController {
     public static Time setThinkingTime (int minutes, int seconds) {
         millis = minutes * 60 * 1000 + seconds * 1000;
         Time totalThinkingTime = new Time(millis);
-        
+
         ModelQuery.getWhitePlayer().setRemainingTime(totalThinkingTime);
         ModelQuery.getBlackPlayer().setRemainingTime(totalThinkingTime);
 
@@ -281,10 +282,11 @@ public class StartNewGameController {
         } else if (thinkingTimeIsSet && whitePlayerChooseName && blackPlayerChooseName && redPlayerChooseName && greenPlayerChooseName) {
             ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.ReadyToStart);
             ModelQuery.getWhitePlayer().setNextPlayer(ModelQuery.getBlackPlayer());
-        	ModelQuery.getBlackPlayer().setNextPlayer(ModelQuery.getRedPlayer());    
+        	ModelQuery.getBlackPlayer().setNextPlayer(ModelQuery.getRedPlayer());
         	ModelQuery.getRedPlayer().setNextPlayer(ModelQuery.getGreenPlayer());
             ModelQuery.getGreenPlayer().setNextPlayer(ModelQuery.getWhitePlayer());
         }
+
     }
 
     /**
@@ -365,7 +367,7 @@ public class StartNewGameController {
     public static boolean blackPlayerNameIsSet() {
         return blackPlayerChooseName;
     }
-    
+
     /**
      * @Author Fulin Huang & Mark Zhu
      * check if the red player set a name
@@ -375,7 +377,7 @@ public class StartNewGameController {
     public static boolean redPlayerNameIsSet() {
         return redPlayerChooseName;
     }
-    
+
     /**
      * @Author Fulin Huang & Mark Zhu
      * check if the green player set a name

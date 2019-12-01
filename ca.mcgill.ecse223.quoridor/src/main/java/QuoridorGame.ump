@@ -55,6 +55,7 @@ class Game {
 	0..1 gameAsBlack <@>- 0..1 Player blackPlayer;
 	0..1 gameAsRed <@>- 0..1 Player redPlayer;  
 	0..1 gameAsGreen <@>- 0..1 Player greenPlayer;
+	0..1 winner <@>- 0..1 Player winningPlayer;
 	boolean isFourPlayer;
 	//1 <@>- * Player players; // Add this for four player games
 }
@@ -74,6 +75,8 @@ class GamePosition {
 	0..1 -> * Wall greenWallsOnBoard;
 	0..1 -> * Wall redWallsInStock;
 	0..1 -> * Wall greenWallsInStock;
+	depend ca.mcgill.ecse223.quoridor.WallGraph;
+	lazy WallGraph wallGraph;
 }
 
 class Destination {

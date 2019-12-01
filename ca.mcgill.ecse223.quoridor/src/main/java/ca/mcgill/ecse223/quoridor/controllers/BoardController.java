@@ -90,7 +90,7 @@ public class BoardController {
 	            ModelQuery.getCurrentGame().getCurrentPosition().addGreenWallsInStock(wall);
 	        }
         }
-        
+        WallController.initGraph();
         
 	    return true;
 
