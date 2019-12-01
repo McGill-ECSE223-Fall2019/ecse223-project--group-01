@@ -2,6 +2,7 @@ package ca.mcgill.ecse223.quoridor.view;
 
 import ca.mcgill.ecse223.quoridor.controllers.*;
 import ca.mcgill.ecse223.quoridor.model.*;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
@@ -34,7 +35,7 @@ import static ca.mcgill.ecse223.quoridor.controllers.GameStatusController.checkG
 
 public class InitializeBoardController extends ViewController{
 
-    enum PlayerState {WALL, PAWN, IDLE, WHITEWON, BLACKWON};
+    enum PlayerState {WALL, PAWN, IDLE, WHITEWON, BLACKWON, REDWON, GREENWON};
     public PlayerState state = PlayerState.IDLE;
     public void handleResignGame(ActionEvent actionEvent) {
         ResignGameController.resign();
@@ -76,8 +77,6 @@ public class InitializeBoardController extends ViewController{
     public static boolean isWallDrop = false;
     public static boolean isPawnMoved = false;
     public String initialTime;
-    public static boolean whiteWon = false;
-    public static boolean blackWon = false;
     boolean pawnMoved = false;
     public  PlayerPosition playerPosition ;
     public static boolean validMoved = false;
@@ -354,7 +353,6 @@ public class InitializeBoardController extends ViewController{
 
                 	isWallDrop = false;
                 	isPawnMoved = false;
-
                 	StartNewGameController.resetTimeToSet();
                 	refresh();
                 }
@@ -607,14 +605,25 @@ public class InitializeBoardController extends ViewController{
             timeline.stop();
             state = PlayerState.WHITEWON; //Player will no longer able to place pawn or wall
             changePage("/fxml/EndScene.fxml");
-            whiteWon = false; //avoid refreshing page all the time
+
         }
         else if (ModelQuery.getCurrentGame().getGameStatus()== Game.GameStatus.BlackWon) {
             ModelQuery.getCurrentGame().setWinningPlayer(ModelQuery.getBlackPlayer());
             timeline.stop();
             state = PlayerState.BLACKWON;
             changePage("/fxml/EndScene.fxml");
-            blackWon = false;
+        }
+        else if (ModelQuery.getCurrentGame().getGameStatus() == Game.GameStatus.RedWon) {
+            ModelQuery.getCurrentGame().setWinningPlayer(ModelQuery.getRedPlayer());
+            timeline.stop();
+            state = PlayerState.REDWON;
+            changePage("/fxml/EndScene.fxml");
+        }
+        else if (ModelQuery.getCurrentGame().getGameStatus() == Game.GameStatus.GreenWon) {
+            ModelQuery.getCurrentGame().setWinningPlayer(ModelQuery.getGreenPlayer());
+            timeline.stop();
+            state = PlayerState.GREENWON;
+            changePage("/fxml/EndScene.fxml");
         }
     }
 

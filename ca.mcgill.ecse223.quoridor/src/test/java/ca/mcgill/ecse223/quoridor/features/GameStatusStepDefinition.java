@@ -105,10 +105,9 @@ public class GameStatusStepDefinition {
 
     @And ("The new position of {string} is {int}:{int}")
     public void theNewPositionOfPlayerIs(String arg0, int row, int col) {
-        rowVal = row;
-        colVal = col;
+        rowVal = 10 - row;
         player = arg0;
-        Tile tile = ModelQuery.getTile(row, col);
+        Tile tile = ModelQuery.getTile(rowVal, col);
         if (arg0.equals("white")) {
             ModelQuery.getCurrentGame().getCurrentPosition().getWhitePosition().setTile(tile);
         }

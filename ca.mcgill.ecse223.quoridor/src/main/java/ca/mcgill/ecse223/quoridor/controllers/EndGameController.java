@@ -3,6 +3,7 @@ package ca.mcgill.ecse223.quoridor.controllers;
 import ca.mcgill.ecse223.quoridor.model.Game;
 import ca.mcgill.ecse223.quoridor.model.Player;
 import ca.mcgill.ecse223.quoridor.model.Tile;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 
 import java.util.Date;
 
@@ -46,7 +47,6 @@ public class EndGameController {
 
     public static void checkWin() {
         Player player = ModelQuery.getPlayerToMove();
-        Player currentPlayer = ModelQuery.getPlayerToMove();
 
         Tile whiteTile = ModelQuery.getCurrentGame().getCurrentPosition().getWhitePosition().getTile();
         Tile blackTile = ModelQuery.getCurrentGame().getCurrentPosition().getBlackPosition().getTile();
@@ -54,20 +54,60 @@ public class EndGameController {
         Player whitePlayer = ModelQuery.getWhitePlayer();
         Player blackPlayer = ModelQuery.getBlackPlayer();
 
-        if (player.equals(whitePlayer) && ModelQuery.getWhitePlayer().getRemainingTime().getTime() > 0) {
-            if (whiteTile.getRow() == whitePlayer.getDestination().getTargetNumber()) {
-                ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.WhiteWon);
-            }
-        }else if (player.equals(blackPlayer) && ModelQuery.getBlackPlayer().getRemainingTime().getTime() > 0) {
+        if (!ModelQuery.isFourPlayer()) {
+            if (player.equals(whitePlayer) && ModelQuery.getWhitePlayer().getRemainingTime().getTime() > 0) {
+                if (whiteTile.getRow() == whitePlayer.getDestination().getTargetNumber()) {
+                    ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.WhiteWon);
+                }
+            }else if (player.equals(blackPlayer) && ModelQuery.getBlackPlayer().getRemainingTime().getTime() > 0) {
                 if (blackTile.getRow() == blackPlayer.getDestination().getTargetNumber()) {
                     ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.BlackWon);
                 }
-        } else if (StartNewGameController.timeToSet <= 0) {
-            if (player.equals(whitePlayer)) {
-                ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.BlackWon);
-            } else if (player.equals(blackPlayer)) {
-                ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.WhiteWon);
+            }
+            else if (StartNewGameController.timeToSet <= 0) {
+                if (player.equals(whitePlayer)) {
+                    ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.BlackWon);
+                } else if (player.equals(blackPlayer)) {
+                    ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.WhiteWon);
+                }
             }
         }
+        else {
+            Player redPlayer = ModelQuery.getRedPlayer();
+            Player greenPlayer = ModelQuery.getGreenPlayer();
+
+            Tile redTile = ModelQuery.getCurrentGame().getCurrentPosition().getRedPosition().getTile();
+            Tile greenTile = ModelQuery.getCurrentGame().getCurrentPosition().getGreenPosition().getTile();
+
+            if (player.equals(whitePlayer) && ModelQuery.getWhitePlayer().getRemainingTime().getTime() > 0) {
+                if (whiteTile.getRow() == whitePlayer.getDestination().getTargetNumber()) {
+                    ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.WhiteWon);
+                }
+            }else if (player.equals(blackPlayer) && ModelQuery.getBlackPlayer().getRemainingTime().getTime() > 0) {
+                if (blackTile.getRow() == blackPlayer.getDestination().getTargetNumber()) {
+                    ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.BlackWon);
+                }
+            }
+            else if (player.equals(redPlayer) && ModelQuery.getRedPlayer().getRemainingTime().getTime() > 0) {
+                if (redTile.getRow() == redPlayer.getDestination().getTargetNumber()) {
+                    ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.RedWon);
+                }
+            }
+            else if (player.equals(greenPlayer) && ModelQuery.getGreenPlayer().getRemainingTime().getTime() > 0) {
+                if (greenTile.getRow() == greenPlayer.getDestination().getTargetNumber()) {
+                    ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.GreenWon);
+                }
+            }
+            else if (StartNewGameController.timeToSet <= 0) {
+                if (player.equals(whitePlayer)) {
+                    ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.BlackWon);
+                } else if (player.equals(blackPlayer)) {
+                    ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.WhiteWon);
+                }
+            }
+
+        }
+
+
     }
 }
