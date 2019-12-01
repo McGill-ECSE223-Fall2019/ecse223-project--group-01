@@ -5,6 +5,7 @@ import ca.mcgill.ecse223.quoridor.WallGraph;
 import ca.mcgill.ecse223.quoridor.model.*;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class WallController {
@@ -293,7 +294,7 @@ public class WallController {
     }
 
     /**@author Tritin Truong
-     * This method if the current wall move candidate blocks player paths
+     * This method if the current wall move candidate blocks player paths given a certain wallMoveCandidate
      *
      * @return A list of players for which a path exists
      */
@@ -322,10 +323,121 @@ public class WallController {
                 }
             }
         }
+
         //remove the cut
         graph.addEdgeUndirected(cuts[0][0],cuts[0][1]);
         graph.addEdgeUndirected(cuts[1][0],cuts[1][1]);
+
         return res;
+    }
+
+    /**@author Tritin Truong
+     *
+     * This method return the optimal tile to go for the current player, in order to reach the end goal the fastest
+     * @return The target Tile
+     */
+    public static String findOptimalPath(){
+        Player player = ModelQuery.getPlayerToMove();
+        WallGraph graph = ModelQuery.getCurrentPosition().getWallGraph();
+        updateGraph();
+        PlayerPosition position = ModelQuery.getPlayerPositionOfPlayerToMove();
+        List<PlayerPosition> allPositions = ModelQuery.getAllPlayerPosition();
+
+        // exclude the current tile
+        allPositions.remove(position);
+
+        //setup graph for the other players
+        for(PlayerPosition pos: allPositions){
+            addEdgesForPawn(graph, pos.getTile());
+        }
+
+        // get possible moves
+        LinkedList<Integer> adjacents  = graph.getAdjacent(tileToIndex(position.getTile()));
+        int optimal_index = adjacents.get(0);
+        int shortest = Integer.MAX_VALUE;
+        int distance =0;
+        for(int tile_index : adjacents){
+            distance = minimumDistance(graph,player.getDestination(), indexToTile(tile_index));
+            if(distance<shortest){
+                optimal_index = tile_index;
+                shortest = distance;
+            }
+        }
+
+        // Storing the optimal tile as a string
+        Tile optimalTile =  indexToTile(optimal_index);
+        int row = optimalTile.getRow();
+        int col = optimalTile.getColumn();
+        char columnLetter = (char) (col + 96);
+        String bestTile = (columnLetter) + Integer.toString(row);
+
+        System.out.println(bestTile);
+
+        //resetting the graph for other players
+        for(PlayerPosition pos: allPositions){
+            removeEdgesForPawn(graph, pos.getTile());
+        }
+
+        return bestTile;
+    }
+
+    public static void updatePlayerDistances(){
+        WallGraph wallGraph = ModelQuery.getCurrentPosition().getWallGraph();
+        List<PlayerPosition> positions = ModelQuery.getAllPlayerPosition();
+        updateGraph();
+        // Storing the adjacency lists for each tile
+        for(PlayerPosition position : positions){
+            addEdgesForPawn(wallGraph, position.getTile());
+        }
+
+        int distance = 0;
+        for(PlayerPosition pos: positions){
+            Destination dest = pos.getPlayer().getDestination();
+            distance = minimumDistance(wallGraph, dest, pos.getTile());
+        }
+
+        for(PlayerPosition position : positions){
+            removeEdgesForPawn(wallGraph, position.getTile());
+        }
+    }
+
+    private static int minimumDistance(WallGraph wallGraph, Destination dest, Tile tile) {
+        int tile_index  = tileToIndex(tile);
+        int distance;
+        if(dest.getDirection().equals(Direction.Horizontal)){
+            distance = wallGraph.reachesDest(tile_index, dest.getTargetNumber(), -1);
+        }else{
+            distance = wallGraph.reachesDest(tile_index,-1, dest.getTargetNumber());
+        }
+        return distance;
+    }
+
+    private static void removeEdgesForPawn(WallGraph wallGraph, Tile source) {
+        LinkedList<Integer> adjacents =  wallGraph.getAdjacent(tileToIndex(source));
+        for(int i = 0; i< adjacents.size(); i++){
+            // re adding the neighbors
+            wallGraph.addEdge(adjacents.get(i), tileToIndex(source));
+            //removing the jumps
+            for(int k = i+1; k<adjacents.size(); k++){
+                wallGraph.cutEdgeUndirected(adjacents.get(i),adjacents.get(k));
+            }
+        }
+    }
+
+    private static void addEdgesForPawn(WallGraph wallGraph, Tile source) {
+        LinkedList<Integer> adjacents =  wallGraph.getAdjacent(tileToIndex(source));
+        for(int i = 0; i< adjacents.size(); i++){
+            //stopping the neighbhors from going in
+            wallGraph.cutEdge(adjacents.get(i), tileToIndex(source));
+            // putting the jumps
+            for(int k = i+1; k<adjacents.size(); k++){
+                wallGraph.addEdgeUndirected(adjacents.get(i),adjacents.get(k));
+            }
+        }
+    }
+
+    private static Tile indexToTile(int index){
+        return ModelQuery.getBoard().getTile(index);
     }
 
     private static int coordToIndex(int row,int col){

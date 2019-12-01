@@ -35,6 +35,9 @@ public class WallGraph {
         this.adj[v].removeFirstOccurrence(w);
     }
 
+    public LinkedList<Integer> getAdjacent(int root){
+        return adj[root];
+    }
     public int reachesDest(int s, int dest_row,int dest_col)
     {
         int row,col = 0;

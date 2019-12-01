@@ -370,8 +370,6 @@ public class InitializeBoardController extends ViewController{
                 Player currentPlayer = ModelQuery.getPlayerToMove();
 
                 if (isWallDrop || isPawnMoved) {
-                	timerForWhitePlayer.setText(initialTime);
-                	timerForBlackPlayer.setText(initialTime);
                     GameStatusController.checkWin();
                     checkStatus();
                 	isWallDrop = false;
@@ -758,6 +756,10 @@ public class InitializeBoardController extends ViewController{
 
         }
 
+        if(code.equals(KeyCode.H)){
+            showHint();
+        }
+
         if (state==PlayerState.PAWN){
             /*For handling pawn move*/
 
@@ -787,6 +789,16 @@ public class InitializeBoardController extends ViewController{
                 	pawnMoved = PawnController.movePawn("downright");
                 }
             refresh();
+        }
+    }
+
+    private void showHint(){
+        if(!ModelQuery.isFourPlayer()){
+            String bestTile = WallController.findOptimalPath();
+            String message = "HINT: Your shortest path is through " + bestTile;
+            AlertHelper.newPopUpWindow(Alert.AlertType.INFORMATION,"Hint",message);
+        }else{
+            AlertHelper.newPopUpWindow(Alert.AlertType.INFORMATION,"Hint","Hints are not supported for 4 player mode");
         }
     }
 
