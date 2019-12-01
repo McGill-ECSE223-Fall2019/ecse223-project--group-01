@@ -20,6 +20,11 @@ public class GameStatusStepDefinition {
     InitializeBoardController controller;
     private Button button;
 
+    /**
+     *
+     * @author Tritin Truong
+     * @param dataTable
+     */
     @Given("The following moves were executed:")
     public void theFollowingMovesWereExecuted(io.cucumber.datatable.DataTable dataTable) {
         List<Map<String, String>> valueMaps = dataTable.asMaps();
@@ -43,6 +48,12 @@ public class GameStatusStepDefinition {
         }
     }
 
+    /**
+     * @author Tritin Truong
+     * @param arg0 black/white player
+     * @param row row number
+     * @param col column number
+     */
     @And("The last move of {string} is pawn move to {int}:{int}")
     public void theLastMoveOfIsPawnMoveToRow(String arg0, int row, int col) {
 //        Getting the game
@@ -66,43 +77,52 @@ public class GameStatusStepDefinition {
         game.addMove(move);
     }
 
+    /**
+     * @author Tritin Truong, Fulin Huang
+     */
     @When("Checking of game result is initated")
     public void checkingOfGameResultIsInitated() {
         GameStatusController.checkGameStatus();
     }
 
+    /**
+     * @author Tritin Truong
+     * @param arg0 game status of the game
+     */
     @Then("Game result shall be {string}")
     public void gameResultShallBe(String arg0) {
         assertEquals(stringToStatus(arg0), ModelQuery.getCurrentGame().getGameStatus());
     }
-    /* Resign game */
-    /**
-     * @author Jason Lau
-     */
-
-    public Player playerToMove;
-    public Player winningPlayer;
-
 
     /* Identify Game Won */
     Player currentPlayer;
     String player;
     int rowVal;
-    int colVal;
+
+    /**
+     *
+     * @author Fulin Huang
+     * @param arg0 white/black player
+     */
     @Given("Player {string} has just completed his move")
     public void givenPlayerHasJustCompletedHisMove(String arg0) {
         if (arg0.equals("white")) {
             currentPlayer = ModelQuery.getWhitePlayer();
             ModelQuery.getCurrentPosition().setPlayerToMove(currentPlayer.getNextPlayer());
-//			PawnController.movePawn("left");
         }
         else if (arg0.equals("black")) {
             currentPlayer = ModelQuery.getBlackPlayer();
             ModelQuery.getCurrentPosition().setPlayerToMove(currentPlayer.getNextPlayer());
-//			PawnController.movePawn("left");
         }
     }
 
+    /**
+     * @author Fulin Huang
+     *
+     * @param arg0 black/white player
+     * @param row row number
+     * @param col column number
+     */
     @And ("The new position of {string} is {int}:{int}")
     public void theNewPositionOfPlayerIs(String arg0, int row, int col) {
         rowVal = 10 - row;
@@ -116,6 +136,10 @@ public class GameStatusStepDefinition {
         }
     }
 
+    /**
+     * @author Fulin Huang
+     * @param arg0 black/white player
+     */
     @And ("The clock of {string} is more than zero")
     public void theClockOfPlayerIsMoreThanZero(String arg0) {
         Time newThinkingTime = new Time(180);
@@ -127,27 +151,19 @@ public class GameStatusStepDefinition {
         }
     }
 
-//	@Then ("Game result shall be {string}")
-//	public void gameResultShallBe (String arg0) {
-//    	Quoridor quoridor = QuoridorApplication.getQuoridor();
-//    	if (arg0.equals("BlackWon")){
-//    		Assert.assertEquals(winningPlayer,quoridor.getCurrentGame().getBlackPlayer());
-//    	}
-//    	else if (arg0.equals("WhiteWon")){
-//    		Assert.assertEquals(winningPlayer,quoridor.getCurrentGame().getWhitePlayer());
-//    	}
-//    	if (rowVal != 0 && colVal != 0) {
-//			String result = EndGameController.checkPawnPosition(player, rowVal, colVal);
-//			assertEquals(arg0, result);
-//		}
-//	}
 
+    /**
+     * @author Fulin Huang
+     */
     @And ("The game shall no longer be running")
     public void theGameShallNoLongerBeRunning () {
         //TODO: GUI Step
     }
 
-
+    /**
+     * @author Fulin Huang
+     * @param arg0 black/white player
+     */
     @When ("The clock of {string} counts down to zero")
     public void theClockOfPlayerCountsDownToZero(String arg0) {
         player = arg0;
@@ -163,29 +179,44 @@ public class GameStatusStepDefinition {
     }
 
 
-
+    /**
+     * @author Fulin Huang
+     *
+     */
     @Then("The final result shall be displayed")
     public void theFinalResultShallBeDisplayed() {
         //TODO: GUI Step
 
     }
 
+    /**
+     * @author Fulin Huang
+     */
     @And("White's clock shall not be counting down")
     public void whiteSClockShallNotBeCountingDown() {
         //TODO: GUI Step
     }
 
+    /**
+     * @author Fulin Huang
+     */
     @And("Black's clock shall not be counting down")
     public void blackSClockShallNotBeCountingDown() {
         //TODO: GUI Step
     }
 
+    /**
+     * @author Fulin Huang
+     */
     @And("White shall be unable to move")
     public void whiteShallBeUnableToMove() {
         //TODO: GUI Step
 
     }
 
+    /**
+     * @author Fulin Huang
+     */
     @And("Black shall be unable to move")
     public void blackShallBeUnableToMove() {
         //TODO: GUI step
