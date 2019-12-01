@@ -797,9 +797,9 @@ public class InitializeBoardController extends ViewController{
         if(!ModelQuery.isFourPlayer()){
             String bestTile = WallController.findOptimalPath();
             String message = "HINT: Your shortest path is through " + bestTile;
-            AlertHelper.newPopUpWindow(Alert.AlertType.INFORMATION,grabWallBtn.getScene().getWindow(),"Hint",message);
+            AlertHelper.newPopUpWindow(Alert.AlertType.INFORMATION,"Hint",message);
         }else{
-            AlertHelper.newPopUpWindow(Alert.AlertType.INFORMATION,grabWallBtn.getScene().getWindow(),"Hint","Hints are not supported for 4 player mode");
+            AlertHelper.newPopUpWindow(Alert.AlertType.INFORMATION,"Hint","Hints are not supported for 4 player mode");
         }
     }
 

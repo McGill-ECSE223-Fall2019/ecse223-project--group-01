@@ -391,7 +391,6 @@ public class WallController {
         for(PlayerPosition pos: positions){
             Destination dest = pos.getPlayer().getDestination();
             distance = minimumDistance(wallGraph, dest, pos.getTile());
-            pos.getPlayer().setDistanceToEnd(distance);
         }
 
         for(PlayerPosition position : positions){
