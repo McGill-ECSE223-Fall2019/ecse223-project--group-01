@@ -182,7 +182,7 @@ public class PositionController {
                             return false;
                         }
 
-                        Tile pos = new Tile(playerCoord[1],playerCoord[0],loadGameBoard()); //using Position --> integer
+                        Tile pos = ModelQuery.getTile(playerCoord[1],playerCoord[0]); //using Position --> integer
                         whitePlayerPosition = new PlayerPosition(quoridor.getCurrentGame().getWhitePlayer(),pos);
 
 
@@ -207,7 +207,7 @@ public class PositionController {
                             return false;
                         }
 
-                        Tile pos = new Tile(playerCoord[1],playerCoord[0],loadGameBoard()); //using Position --> integer
+                        Tile pos = ModelQuery.getTile(playerCoord[1],playerCoord[0]); //using Position --> integer
                         blackPlayerPosition = new PlayerPosition(quoridor.getCurrentGame().getBlackPlayer(),pos);
 
 
@@ -280,7 +280,7 @@ public class PositionController {
                     }
 
                     Player whitePlayer = ModelQuery.getWhitePlayer();
-                    Tile wallTile = new Tile(whiteWalls.get(i)[1], whiteWalls.get(i)[0], ModelQuery.getBoard());
+                    Tile wallTile = ModelQuery.getTile(whiteWalls.get(i)[1], whiteWalls.get(i)[0]);
                     Game currentGame = ModelQuery.getCurrentGame();
 
                     Wall dropWall = ModelQuery.getCurrentGame().getCurrentPosition().getWhiteWallsInStock().get(i);
@@ -302,7 +302,7 @@ public class PositionController {
                     }
 
                     Player blackPlayer = ModelQuery.getBlackPlayer();
-                    Tile wallTile = new Tile(blackWalls.get(i)[1], blackWalls.get(i)[0], ModelQuery.getBoard());
+                    Tile wallTile = ModelQuery.getTile(blackWalls.get(i)[1], blackWalls.get(i)[0]);
                     Game currentGame = ModelQuery.getCurrentGame();
 
                     Wall dropWall = ModelQuery.getCurrentGame().getCurrentPosition().getBlackWallsInStock().get(i);

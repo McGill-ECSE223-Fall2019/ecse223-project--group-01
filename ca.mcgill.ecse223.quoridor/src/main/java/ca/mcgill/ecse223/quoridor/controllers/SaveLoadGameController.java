@@ -249,11 +249,11 @@ public class SaveLoadGameController {
 
                  BoardController.initializeBoard();
                 //White pawn will start at E9
-                Tile whiteDefaultPos = new Tile(9,5,ModelQuery.getBoard());
+                Tile whiteDefaultPos = ModelQuery.getTile(9,5);
                 whitePlayerPosition = new PlayerPosition(ModelQuery.getWhitePlayer(), whiteDefaultPos);
 
                 //Black pawn will start at E1
-                Tile blackDefaultPos = new Tile(1,5,ModelQuery.getBoard());
+                Tile blackDefaultPos = ModelQuery.getTile(1,5);
                 blackPlayerPosition = new PlayerPosition(ModelQuery.getBlackPlayer(), blackDefaultPos);
 
                 GamePosition gamePosition = new GamePosition(positions.size() + 1,whitePlayerPosition,blackPlayerPosition,ModelQuery.getWhitePlayer(),ModelQuery.getCurrentGame());
@@ -363,6 +363,12 @@ public class SaveLoadGameController {
                         //If statement is not executed, therefore somethign went wrong
                         return false;
                     }
+                    ModelQuery.getWhitePlayer().getStatemachine().exit();
+                    ModelQuery.getWhitePlayer().getStatemachine().enter();
+
+                    ModelQuery.getBlackPlayer().getStatemachine().exit();
+                    ModelQuery.getBlackPlayer().getStatemachine().enter();
+
                 }
             } catch (FileNotFoundException e) {
                 //File not found error
@@ -412,7 +418,7 @@ public class SaveLoadGameController {
 
         Player whitePlayer = ModelQuery.getWhitePlayer();
         Player blackPlayer = ModelQuery.getBlackPlayer();
-        Tile wallTile = new Tile(walls.get(index)[2], walls.get(index)[1], ModelQuery.getBoard());
+        Tile wallTile = ModelQuery.getTile(walls.get(index)[2],walls.get(index)[1]);
         Game currentGame = ModelQuery.getCurrentGame();
 
         WallMove wallmove;
