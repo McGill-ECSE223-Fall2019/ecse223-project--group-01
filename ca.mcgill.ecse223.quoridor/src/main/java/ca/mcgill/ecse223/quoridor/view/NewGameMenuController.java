@@ -1,9 +1,6 @@
 package ca.mcgill.ecse223.quoridor.view;
 
-import ca.mcgill.ecse223.quoridor.controllers.BoardController;
-import ca.mcgill.ecse223.quoridor.controllers.ModelQuery;
-import ca.mcgill.ecse223.quoridor.controllers.PositionController;
-import ca.mcgill.ecse223.quoridor.controllers.StartNewGameController;
+import ca.mcgill.ecse223.quoridor.controllers.*;
 import ca.mcgill.ecse223.quoridor.model.User;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -44,6 +41,7 @@ public class NewGameMenuController extends ViewController {
     public static String minS;
     public static String secS;
 
+    @SuppressWarnings("Duplicates")
     public void initialize() {
     	
         StartNewGameController.initializeGame(); 
@@ -254,6 +252,8 @@ public class NewGameMenuController extends ViewController {
             secS = seconds.getText();
             StartNewGameController.setTotalThinkingTime(Integer.parseInt(minutes.getText()), Integer.parseInt(seconds.getText()));
             BoardController.initializeBoard();
+            /* Playing the Battle music */
+            MusicController.playEpicMusic();
             changePage("/fxml/InitializeBoard.fxml");
         }
         // Display errors
@@ -271,6 +271,7 @@ public class NewGameMenuController extends ViewController {
         }
     }
 
+    @SuppressWarnings("Duplicates")
     public void handleLoadPosition(ActionEvent actionEvent) {
         // confirm button
         Window page = confirm.getScene().getWindow();

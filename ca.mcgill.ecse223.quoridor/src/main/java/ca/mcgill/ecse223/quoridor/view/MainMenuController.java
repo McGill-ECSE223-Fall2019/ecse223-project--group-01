@@ -1,5 +1,6 @@
 package ca.mcgill.ecse223.quoridor.view;
 
+import ca.mcgill.ecse223.quoridor.controllers.MusicController;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -9,11 +10,12 @@ public class MainMenuController extends ViewController{
 
     public Button Button12;
     public void handleNewGame(ActionEvent actionEvent) {
-
+        MusicController.playChooseYourChar();
         changePage("/fxml/SelectPlayerName.fxml");
     }
 
     public void handleLoadGame(ActionEvent actionEvent) {
+        MusicController.playChooseYourChar();
         changePage("/fxml/LoadGameMenu.fxml");
     }
 
