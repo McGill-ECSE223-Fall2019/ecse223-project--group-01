@@ -49,7 +49,7 @@ public class InitializeBoardController extends ViewController{
         if (result.get() == buttonTypeOne){
             handleSavePosition();
         } else if (result.get() == buttonTypeTwo) {
-            //add save game option
+            handleSaveGame();
         } else {
             // ... user chose CANCEL or closed the dialog
         }
@@ -851,7 +851,7 @@ public class InitializeBoardController extends ViewController{
         }
     }
 
-    public void handleSaveGame(ActionEvent actionEvent) {
+    public void handleSaveGame() {
         String filename;
         TextInputDialog textInput = new TextInputDialog();
 
