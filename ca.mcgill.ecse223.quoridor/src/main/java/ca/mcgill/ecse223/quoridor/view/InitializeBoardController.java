@@ -815,7 +815,7 @@ public class InitializeBoardController extends ViewController{
         }
     }
 
-    public void handleSavePosition(ActionEvent actionEvent) {
+    public void handleSavePosition() {
         String filename;
         TextInputDialog textInput = new TextInputDialog();
 
