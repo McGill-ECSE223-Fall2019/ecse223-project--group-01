@@ -6,12 +6,19 @@ import ca.mcgill.ecse223.quoridor.model.*;
 import ca.mcgill.ecse223.quoridor.model.Game.GameStatus;
 import ca.mcgill.ecse223.quoridor.model.Game.MoveMode;
 import ca.mcgill.ecse223.quoridor.view.InitializeBoardController;
+import ca.mcgill.ecse223.quoridor.view.Main;
+import ca.mcgill.ecse223.quoridor.view.ReplayModeController;
 import cucumber.api.PendingException;
 import io.cucumber.java.After;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
 import org.junit.Assert;
 
 import java.io.File;
@@ -23,8 +30,9 @@ import java.util.*;
 
 import static org.junit.Assert.*;
 
+import org.testfx.framework.junit.ApplicationTest;
 
-public class CucumberStepDefinitions {
+public class CucumberStepDefinitions extends ApplicationTest{
 
 	private boolean fileChanged;
 	private boolean displayError;
@@ -643,7 +651,7 @@ public class CucumberStepDefinitions {
 	 * @author Tritin Truong
 	 */
 	@When("I release the wall in my hand")
-	public void iReleaseTheWallInMyHand() {
+	public void iReleaseTheWallInMyHand() {	 
 		WallMove move = ModelQuery.getWallMoveCandidate();
 		Player player = ModelQuery.getWhitePlayer();
 		try{
@@ -709,7 +717,7 @@ public class CucumberStepDefinitions {
 	 * @author Tritin Truong
 	 */
 	@Given("The wall move candidate with {string} at position \\({int}, {int}) is invalid")
-	public void theWallMoveCandidateWithDirAtPositionRowColIsInvalid(String dir, int row, int col) {
+	public void theWallMoveCandidateWithDirAtPositionRowColIsInvalid(String dir, int row, int col) {	
 		Direction direction = this.stringToDirection(dir);
 		setupWallMoveCandidates(row, col, direction);
 	}
@@ -833,16 +841,16 @@ public class CucumberStepDefinitions {
 	 * @author Kate Ward
 	 */
 	@When("I initiate replay mode")
-	public void initiateReplayMode() {
-		
+	public void initiateReplayMode(Stage stage) throws Exception{
+	    /*Parent mainNode = FXMLLoader.load(ReplayModeController.class.getResource("ReplayMode.fxml"));
+	    stage.setScene(new Scene(mainNode));
+	    stage.show();
+	    stage.toFront();*/
 	}
 	
-	@Then("The game shall be in replay mode")
-	public void isReplayMode() {
-	}
 	
 	@Given("The game is in replay mode")
-	public void gameInReplayMode() {
+	public void gameIsInReplayMode() {
 		
 	}
 	
