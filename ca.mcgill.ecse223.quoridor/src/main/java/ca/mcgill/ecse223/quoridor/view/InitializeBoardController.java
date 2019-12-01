@@ -28,11 +28,31 @@ import javafx.util.Duration;
 import javafx.util.Pair;
 
 import java.util.List;
+import java.util.Optional;
 
 import static ca.mcgill.ecse223.quoridor.controllers.GameStatusController.checkGameStatus;
 
 
 public class InitializeBoardController extends ViewController{
+
+    public void handleSave(ActionEvent actionEvent) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation on saving the game");
+        alert.setContentText("Saving Game or Position?");
+
+        ButtonType buttonTypeOne = new ButtonType("Save Position");
+        ButtonType buttonTypeTwo = new ButtonType("Save Game");
+        ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == buttonTypeOne){
+            // ... user chose "One"
+        } else if (result.get() == buttonTypeTwo) {
+            handleSavePosition();
+        } else {
+            // ... user chose CANCEL or closed the dialog
+        }
+    }
 
     enum PlayerState {WALL, PAWN, IDLE, WHITEWON, BLACKWON};
     public PlayerState state = PlayerState.IDLE;

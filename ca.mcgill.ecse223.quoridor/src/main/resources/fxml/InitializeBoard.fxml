@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+   <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.PointLight?>
 <?import javafx.scene.control.Button?>
@@ -48,12 +48,7 @@
             <Font size="18.0" />
          </font>
       </Button>
-      <Button layoutX="444.0" layoutY="375.0" mnemonicParsing="false" onAction="#handleSavePosition" prefHeight="39.0" prefWidth="152.0" text="Save Position">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Button>
-      <Button layoutX="442.0" layoutY="377.0" mnemonicParsing="false" onAction="#handleResignGame" prefHeight="39.0" prefWidth="152.0" text="Resign">
+      <Button layoutX="444.0" layoutY="375.0" mnemonicParsing="false" onAction="#handleResignGame" prefHeight="39.0" prefWidth="152.0" text="Resign">
          <font>
             <Font size="18.0" />
          </font>
@@ -344,7 +339,7 @@
       <Text layoutX="331.0" layoutY="442.0" strokeType="OUTSIDE" strokeWidth="0.0" text="h" wrappingWidth="9.0" />
       <Text layoutX="379.0" layoutY="441.0" strokeType="OUTSIDE" strokeWidth="0.0" text="i" wrappingWidth="9.0" />
 
-      <Button layoutX="444.0" layoutY="327.0" mnemonicParsing="false" onAction="#handleGrabPawn" prefHeight="39.0" prefWidth="152.0" text="Pawn">
+      <Button layoutX="444.0" layoutY="327.0" mnemonicParsing="false" onAction="#handleSave" prefHeight="39.0" prefWidth="152.0" text="Save">
          <font>
             <Font size="18.0" />
          </font>
