@@ -1223,11 +1223,8 @@ public class CucumberStepDefinitions {
 		}
 
 		else if( arg0.equals("black")){
-
 			assertEquals(arg1, quoridor.getCurrentGame().getBlackPlayer().getUser().getName());
 		}
-
-
 	}
 
 	/**
@@ -1302,184 +1299,6 @@ public class CucumberStepDefinitions {
 	/************** Phase Two Features ***************/
 
 
-	/* Resign game */
-	/**
-	 * @author Jason Lau
-	 */
-
-	public Player playerToMove;
-	public Player winningPlayer;
-
-//		@Given("The player to move is {string}")
-//		public void nextPlayerToMove(String arg0){
-//			Quoridor quoridor = QuoridorApplication.getQuoridor();
-//			if(arg0.equals("white")){
-//				playerToMove = quoridor.getCurrentGame().getWhitePlayer();
-//			}
-//			else if(arg0.equals("black")){
-//				playerToMove = quoridor.getCurrentGame().getBlackPlayer();
-//			}
-//		}
-
-	@When("Player initates to resign")
-	public void playerInitatesToResign() {
-		try {
-			winningPlayer = playerToMove.getNextPlayer();
-			ResignGameController.setWinner(winningPlayer);
-
-		}
-		catch(UnsupportedOperationException e){
-			throw new PendingException();
-		}
-
-	}
-
-//		@Then("Game result shall be {string}")
-//		public void gameResultShallBe(String arg0) {
-//			Quoridor quoridor = QuoridorApplication.getQuoridor();
-//			if (arg0.equals("BlackWon")){
-//				Assert.assertEquals(winningPlayer,quoridor.getCurrentGame().getBlackPlayer());
-//			}
-//			else if (arg0.equals("WhiteWon")){
-//				Assert.assertEquals(winningPlayer,quoridor.getCurrentGame().getWhitePlayer());
-//			}
-//		}
-
-//	@And("The game shall no longer be running")
-//	public void theGameShallNoLongerBeRunning() {
-////        Assert.assertEquals();
-//	}
-
-
-	/* Identify Game Won */
-	Player currentPlayer;
-	String player;
-	int rowVal;
-	int colVal;
-    @Given("Player {string} has just completed his move")
-	public void givenPlayerHasJustCompletedHisMove(String arg0) {
-		if (arg0.equals("white")) {
-			currentPlayer = ModelQuery.getWhitePlayer();
-			PawnController.movePawn("left");
-		}
-		else if (arg0.equals("black")) {
-			currentPlayer = ModelQuery.getBlackPlayer();
-			PawnController.movePawn("left");
-		}
-	}
-
-	@And ("The new position of {string} is {int}:{int}")
-	public void theNewPositionOfPlayerIs(String arg0, int row, int col) {
-    	rowVal = row;
-    	colVal = col;
-    	player = arg0;
-		Tile tile = ModelQuery.getTile(row, col);
-		if (arg0.equals("white")) {
-			ModelQuery.getCurrentGame().getCurrentPosition().getWhitePosition().setTile(tile);
-		}
-		else if(arg0.equals("black")) {
-			ModelQuery.getCurrentGame().getCurrentPosition().getBlackPosition().setTile(tile);
-		}
-	}
-
-	@And ("The clock of {string} is more than zero")
-	public void theClockOfPlayerIsMoreThanZero(String arg0) {
-    	Time newThinkingTime = new Time(180);
-		if (arg0.equals("white")) {
-			ModelQuery.getWhitePlayer().setRemainingTime(newThinkingTime);
-		}
-		else if (arg0.equals("black")) {
-			ModelQuery.getBlackPlayer().setRemainingTime(newThinkingTime);
-		}
-	}
-
-	@When ("Checking of game result is initated")
-	public void checkOfGameResultIsInitiated() {
-		// TODO: GUI Step
-
-	}
-
-	@Then ("Game result shall be {string}")
-	public void gameResultShallBe (String arg0) {
-    	Quoridor quoridor = QuoridorApplication.getQuoridor();
-    	if (arg0.equals("BlackWon")){
-    		Assert.assertEquals(winningPlayer,quoridor.getCurrentGame().getBlackPlayer());
-    	}
-    	else if (arg0.equals("WhiteWon")){
-    		Assert.assertEquals(winningPlayer,quoridor.getCurrentGame().getWhitePlayer());
-    	}
-    	if (rowVal != 0 && colVal != 0) {
-			String result = EndGameController.checkPawnPosition(player, rowVal, colVal);
-			assertEquals(arg0, result);
-		}
-	}
-
-	@And ("The game shall no longer be running")
-	public void theGameShallNoLongerBeRunning () {
-		//TODO: GUI Step
-	}
-
-
-	@When ("The clock of {string} counts down to zero")
-	public void theClockOfPlayerCountsDownToZero(String arg0) {
-    	player = arg0;
-    	// Try setting the remaining time to zero
-		Time newThinkingTime = new Time(0);
-		if (player.equals("white")) {
-			ModelQuery.getWhitePlayer().setRemainingTime(newThinkingTime);
-		}
-		else if (player.equals("black")) {
-			ModelQuery.getBlackPlayer().setRemainingTime(newThinkingTime);
-		}
-		//TODO: GUI step
-	}
-
-	/* Report Final Result */
-	@When("The game is no longer running")
-	public void theGameIsNoLongerRunning() {
-		Quoridor quoridor = QuoridorApplication.getQuoridor();
-		ArrayList<Player> createUsersAndPlayers = createUsersAndPlayers("user1", "user2");
-		createAndInitializeGame(createUsersAndPlayers);
-		Player whitePlayer = quoridor.getCurrentGame().getWhitePlayer();
-		Player blackPlayer = quoridor.getCurrentGame().getBlackPlayer();
-		if (winningPlayer != null) {
-			if (winningPlayer.equals(whitePlayer)) {
-				ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.WhiteWon);
-			}
-			else if (winningPlayer.equals(blackPlayer)) {
-				ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.BlackWon);
-			}
-		}
-
-	}
-
-	@Then("The final result shall be displayed")
-	public void theFinalResultShallBeDisplayed() {
-		//TODO: GUI Step
-
-	}
-
-	@And("White's clock shall not be counting down")
-	public void whiteSClockShallNotBeCountingDown() {
-		//TODO: GUI Step
-	}
-
-	@And("Black's clock shall not be counting down")
-	public void blackSClockShallNotBeCountingDown() {
-		//TODO: GUI Step
-	}
-
-	@And("White shall be unable to move")
-	public void whiteShallBeUnableToMove() {
-		//TODO: GUI Step
-
-	}
-
-	@And("Black shall be unable to move")
-	public void blackShallBeUnableToMove() {
-		//TODO: GUI step
-
-	}
 
 
 	// ***********************************************
@@ -1522,7 +1341,7 @@ public class CucumberStepDefinitions {
 		}
 	}
 
-	private ArrayList<Player> createUsersAndPlayers(String userName1, String userName2) {
+	public ArrayList<Player> createUsersAndPlayers(String userName1, String userName2) {
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
 		User user1 = quoridor.addUser(userName1);
 		User user2 = quoridor.addUser(userName2);

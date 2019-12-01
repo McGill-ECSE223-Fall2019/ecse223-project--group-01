@@ -29,6 +29,8 @@ import javafx.util.Pair;
 
 import java.util.List;
 
+import static ca.mcgill.ecse223.quoridor.controllers.GameStatusController.checkGameStatus;
+
 
 public class InitializeBoardController extends ViewController{
 
@@ -76,6 +78,7 @@ public class InitializeBoardController extends ViewController{
     public String initialTime;
     public static boolean whiteWon = false;
     public static boolean blackWon = false;
+    boolean pawnMoved = false;
     public  PlayerPosition playerPosition ;
     public static boolean validMoved = false;
     public Rectangle rect1;
@@ -356,19 +359,9 @@ public class InitializeBoardController extends ViewController{
                 	refresh();
                 }
                 else if (StartNewGameController.timeOver()) {
-                    if(EndGameController.checkGameStatus(currentPlayer).equals("whiteWon")) {
-                        whiteWon = true;
-                    }
-                    else if (EndGameController.checkGameStatus(currentPlayer).equals("blackWon")) {
-                        blackWon = true;
-                    }
+                    checkGameStatus();
                     refresh();
-                }
-
-
-
-                } else {
-
+                }else{
                 //grey out the next player name & count down time for the current player
 	                if (currentPlayer.equals(ModelQuery.getWhitePlayer())) {
 	                    timerForWhitePlayer.setText(StartNewGameController.toTimeStr());
@@ -379,7 +372,6 @@ public class InitializeBoardController extends ViewController{
 	                } else if (currentPlayer.equals(ModelQuery.getGreenPlayer())) {
 	                	timerForGreenPlayer.setText(StartNewGameController.toTimeStr());
 	                }
-
                 }
             }
         };
@@ -517,13 +509,6 @@ public class InitializeBoardController extends ViewController{
         board.getChildren().add(rect80);
         board.getChildren().add(rect81);
 
-
-
-
-
-
-
-
         // update player turn
         if (position.getPlayerToMove().equals(white)) {
             whitePlayerName.setFill(Color.BLACK);
@@ -615,22 +600,21 @@ public class InitializeBoardController extends ViewController{
             placeWall(move, true);
         }
 
+        GameStatusController.checkGameStatus();
         // check if one of the player wins
-        if (whiteWon) {
+        if (ModelQuery.getCurrentGame().getGameStatus()== Game.GameStatus.WhiteWon) {
             ModelQuery.getCurrentGame().setWinningPlayer(ModelQuery.getWhitePlayer());
             timeline.stop();
             state = PlayerState.WHITEWON; //Player will no longer able to place pawn or wall
             changePage("/fxml/EndScene.fxml");
             whiteWon = false; //avoid refreshing page all the time
-
         }
-        else if (blackWon) {
+        else if (ModelQuery.getCurrentGame().getGameStatus()== Game.GameStatus.BlackWon) {
             ModelQuery.getCurrentGame().setWinningPlayer(ModelQuery.getBlackPlayer());
             timeline.stop();
             state = PlayerState.BLACKWON;
             changePage("/fxml/EndScene.fxml");
             blackWon = false;
-
         }
     }
 
@@ -675,15 +659,6 @@ public class InitializeBoardController extends ViewController{
         if (isWall) {
             rectangle.setFill(Color.GRAY);
         } else {
-            /*if (ModelQuery.getPlayerToMove().equals(ModelQuery.getWhitePlayer())) {
-            	rectangle.setFill(Color.web("#dde8f2"));
-            } else if (ModelQuery.getPlayerToMove().equals(ModelQuery.getBlackPlayer())){
-            	rectangle.setFill(Color.BLACK);
-            } else if (ModelQuery.getPlayerToMove().equals(ModelQuery.getRedPlayer())) {
-            	rectangle.setFill(Color.RED);
-            } else if (ModelQuery.getPlayerToMove().equals(ModelQuery.getGreenPlayer())) {
-            	rectangle.setFill(Color.LIGHTGREEN);
-            }    */
             rectangle.setFill(Color.DEEPSKYBLUE);
         }
 
@@ -761,7 +736,8 @@ public class InitializeBoardController extends ViewController{
         if (state==PlayerState.PAWN){
             /*For handling pawn move*/
 
-                if (code.equals(KeyCode.I)) {
+
+            if (code.equals(KeyCode.I)) {
                     pawnMoved = PawnController.movePawn("up");
                 }
                 else if (code.equals(KeyCode.K)) {

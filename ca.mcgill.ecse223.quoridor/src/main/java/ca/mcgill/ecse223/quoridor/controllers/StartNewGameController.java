@@ -212,10 +212,11 @@ public class StartNewGameController {
         timeToSet = millis;
         timer.scheduleAtFixedRate(new TimerTask() {
             public void run () {
+
                     Player currentPlayer;
                     try {
                         if (timeToSet == 0) {
-                        	//System.out.println("00:00 time left!");
+//                            System.out.println("00:00 time left!");
                             timer.cancel(); //stop timer if zero time left
 
                         } else if (ModelQuery.getBlackPlayer() == null && ModelQuery.getWhitePlayer() == null) {
@@ -285,6 +286,7 @@ public class StartNewGameController {
         	ModelQuery.getRedPlayer().setNextPlayer(ModelQuery.getGreenPlayer());
             ModelQuery.getGreenPlayer().setNextPlayer(ModelQuery.getWhitePlayer());
         }
+
     }
 
     /**

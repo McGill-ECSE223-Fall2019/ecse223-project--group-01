@@ -1,5 +1,6 @@
 package ca.mcgill.ecse223.quoridor.controllers;
 
+import ca.mcgill.ecse223.quoridor.model.Game;
 import ca.mcgill.ecse223.quoridor.model.Player;
 import ca.mcgill.ecse223.quoridor.model.Tile;
 
@@ -11,13 +12,6 @@ public class EndGameController {
 
     public static String checkPawnPosition(String player, int row, int col) {
         String result = "";
-
-        Player currentPlayer = ModelQuery.getPlayerToMove();
-        Player whitePlayer = ModelQuery.getWhitePlayer();
-        Player blackPlayer = ModelQuery.getBlackPlayer();
-
-        Tile whiteTile = ModelQuery.getCurrentGame().getCurrentPosition().getWhitePosition().getTile();
-        Tile blackTile = ModelQuery.getCurrentGame().getCurrentPosition().getBlackPosition().getTile();
 
         Date whiteTime = new Date();
         Date blackTime = new Date();
@@ -47,13 +41,11 @@ public class EndGameController {
             result = "whiteWon";
 
         }
-
         return result;
     }
 
-    public static String checkGameStatus(Player player) {
-        String result = "";
-
+    public static void checkWin() {
+        Player player = ModelQuery.getPlayerToMove();
         Player currentPlayer = ModelQuery.getPlayerToMove();
 
         Tile whiteTile = ModelQuery.getCurrentGame().getCurrentPosition().getWhitePosition().getTile();
@@ -61,31 +53,21 @@ public class EndGameController {
 
         Player whitePlayer = ModelQuery.getWhitePlayer();
         Player blackPlayer = ModelQuery.getBlackPlayer();
-        if (player.equals(whitePlayer) && StartNewGameController.timeToSet > 0) {
 
-            if (whiteTile.getRow() == 1 && whiteTile.getColumn() <= 9 && whiteTile.getColumn() >= 1) {
-                result = "whiteWon";
-            } else {
-                result = "pending";
+        if (player.equals(whitePlayer) && ModelQuery.getWhitePlayer().getRemainingTime().getTime() > 0) {
+            if (whiteTile.getRow() == whitePlayer.getDestination().getTargetNumber()) {
+                ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.WhiteWon);
+            }
+        }else if (player.equals(blackPlayer) && ModelQuery.getBlackPlayer().getRemainingTime().getTime() > 0) {
+                if (blackTile.getRow() == blackPlayer.getDestination().getTargetNumber()) {
+                    ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.BlackWon);
+                }
+        } else if (StartNewGameController.timeToSet <= 0) {
+            if (player.equals(whitePlayer)) {
+                ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.BlackWon);
+            } else if (player.equals(blackPlayer)) {
+                ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.WhiteWon);
             }
         }
-        else if (player.equals(blackPlayer) && StartNewGameController.timeToSet > 0) {
-            if (blackTile.getRow() == 9 && blackTile.getColumn() <= 9 && blackTile.getColumn() >= 1) {
-                result = "blackWon";
-            } else {
-                result = "pending";
-            }
-        }
-        else if (StartNewGameController.timeToSet <= 0) {
-            if (currentPlayer.equals(whitePlayer)) {
-                result = "blackWon";
-            }
-            else if (currentPlayer.equals(blackPlayer)) {
-                result = "whiteWon";
-            }
-        }
-
-        return result;
     }
-
 }
