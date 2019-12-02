@@ -10,7 +10,7 @@
       <Button fx:id="Button1" layoutX="225.0" layoutY="192.0" mnemonicParsing="false" onAction="#handleSaveGame" prefHeight="38.0" prefWidth="149.0" text="Save" />
       <Button fx:id="Button11" layoutX="225.0" layoutY="317.0" mnemonicParsing="false" onAction="#handleBackToMenu" prefHeight="38.0" prefWidth="149.0" text="Menu" />
       <Button fx:id="Button12" layoutX="225.0" layoutY="252.0" mnemonicParsing="false" onAction="#handlePlayAgain" prefHeight="38.0" prefWidth="149.0" text="Play Again" />
-      <Text fx:id="winnerPlayer" layoutX="212.0" layoutY="122.0" strokeType="OUTSIDE" strokeWidth="0.0" text="player">
+      <Text fx:id="winnerPlayer" layoutX="219.0" layoutY="121.0" strokeType="OUTSIDE" strokeWidth="0.0" text="player">
          <font>
             <Font size="60.0" />
          </font>
