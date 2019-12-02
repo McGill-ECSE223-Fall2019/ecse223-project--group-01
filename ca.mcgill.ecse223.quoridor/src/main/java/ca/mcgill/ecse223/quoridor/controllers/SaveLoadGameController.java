@@ -370,6 +370,7 @@ public class SaveLoadGameController {
                     ModelQuery.getBlackPlayer().getStatemachine().enter();
 
                 }
+                WallController.initGraph();
             } catch (FileNotFoundException e) {
                 //File not found error
                 e.printStackTrace();

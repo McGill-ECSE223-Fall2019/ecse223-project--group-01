@@ -43,17 +43,17 @@
             <Font size="20.0" />
          </font>
       </Text>
-      <Button layoutX="444.0" layoutY="281.0" mnemonicParsing="false" onAction="#handleBackStep" prefHeight="39.0" prefWidth="152.0" text="Back Step">
+      <Button layoutX="444.0" layoutY="278.0" mnemonicParsing="false" onAction="#handleBackStep" prefHeight="39.0" prefWidth="152.0" text="Back Step">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
-      <Button layoutX="444.0" layoutY="374.0" mnemonicParsing="false" onAction="#handleEndSkip" prefHeight="39.0" prefWidth="152.0" text="To End">
+      <Button layoutX="444.0" layoutY="362.0" mnemonicParsing="false" onAction="#handleEndSkip" prefHeight="39.0" prefWidth="152.0" text="To End">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
-      <Button layoutX="444.0" layoutY="420.0" mnemonicParsing="false" onAction="#handleBackToMenu" prefHeight="39.0" prefWidth="152.0" text="Back to Menu">
+      <Button layoutX="444.0" layoutY="445.0" mnemonicParsing="false" onAction="#handleBackToMenu" prefHeight="39.0" prefWidth="152.0" text="Back to Menu">
          <font>
             <Font size="18.0" />
          </font>
@@ -253,7 +253,12 @@
       <Text layoutX="331.0" layoutY="442.0" strokeType="OUTSIDE" strokeWidth="0.0" text="h" wrappingWidth="9.0" />
       <Text layoutX="379.0" layoutY="441.0" strokeType="OUTSIDE" strokeWidth="0.0" text="i" wrappingWidth="9.0" />
       
-      <Button layoutX="444.0" layoutY="327.0" mnemonicParsing="false" onAction="#handleStartSkip" prefHeight="39.0" prefWidth="152.0" text="To Beginning">
+      <Button layoutX="444.0" layoutY="320.0" mnemonicParsing="false" onAction="#handleStartSkip" prefHeight="39.0" prefWidth="152.0" text="To Beginning">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Button>
+      <Button layoutX="444.0" layoutY="403.0" mnemonicParsing="false" onAction="#handleResume" prefHeight="39.0" prefWidth="152.0" text="Resume">
          <font>
             <Font size="18.0" />
          </font>

@@ -21,26 +21,6 @@ public class SwitchPlayerController {
 	private static int id = 100;
 	
 	public static void switchActivePlayer() {
-		/*
-		Player whitePlayer = ModelQuery.getWhitePlayer();
-		Player blackPlayer = ModelQuery.getBlackPlayer();
-		Player redPlayer = ModelQuery.getRedPlayer();
-		Player greenPlayer = ModelQuery.getGreenPlayer();
-		
-		if (currentPlayer.equals(whitePlayer)) {
-			//ModelQuery.getWhitePlayer().setRemainingTime(new Time(ModelQuery.getWhitePlayer().getRemainingTime().getTime()-timeSpent.toMillis()));			
-			QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().setPlayerToMove(currentPlayer.getNextPlayer());
-		} else if (currentPlayer.equals(blackPlayer)) {
-			//ModelQuery.getBlackPlayer().setRemainingTime(new Time(ModelQuery.getBlackPlayer().getRemainingTime().getTime()-timeSpent.toMillis()));
-			QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().setPlayerToMove(currentPlayer.getNextPlayer());
-		} else if (currentPlayer.equals(redPlayer)) {
-			//ModelQuery.getBlackPlayer().setRemainingTime(new Time(ModelQuery.getRedPlayer().getRemainingTime().getTime()-timeSpent.toMillis()));
-			QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().setPlayerToMove(currentPlayer.getNextPlayer());
-		} else {
-			//ModelQuery.getBlackPlayer().setRemainingTime(new Time(ModelQuery.getGreenPlayer().getRemainingTime().getTime()-timeSpent.toMillis()));
-			QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().setPlayerToMove(currentPlayer.getNextPlayer());
-		}
-		*/
 		
 		//record current gamestate
 		ModelQuery.getCurrentGame().addPosition(deepCopyPosition());
@@ -121,19 +101,6 @@ public class SwitchPlayerController {
 			
 			blackWallBoard++;
 		}
-		/*for(Wall whiteWall: ModelQuery.getCurrentPosition().getWhiteWallsInStock()) {
-			Wall wallClone = new Wall(id*40+wallCounter++, whiteClone);
-			wallClone.setMove(whiteWall.getMove());
-			wallClone.setOwner(whiteClone);
-			clone.addWhiteWallsInStock(wallClone);
-		}
-		
-		for(Wall blackWall: ModelQuery.getCurrentPosition().getBlackWallsInStock()) {
-			Wall wallClone = new Wall(id*40+wallCounter++, blackClone);
-			//wallClone.setMove(blackWall.getMove());
-			wallClone.setOwner(ModelQuery.getBlackPlayer());
-			clone.addBlackWallsInStock(wallClone);
-		}*/
 		
 		if(ModelQuery.isFourPlayer()) {
 			redPlayerPos = new PlayerPosition(ModelQuery.getCurrentGame().getRedPlayer(), current.getRedPosition().getTile());

@@ -109,8 +109,6 @@ public class ReplayModeController extends ViewController{
 
         }
 
-        //start the clock once the game is initiated
-        StartNewGameController.startTheClock();
 
         //record the time set per turn
         initialTime = StartNewGameController.toTimeStr();
@@ -124,50 +122,10 @@ public class ReplayModeController extends ViewController{
     	}
 
         state = PlayerState.IDLE;
-        switchTimer();
-    }
-
-    public void switchTimer() {
-
-        // update timerLabel
-        //timerForWhitePlayer.setText(StartNewGameController.toTimeStr());
-        timeline = new Timeline();
-        timeline.setCycleCount(Timeline.INDEFINITE);
-
-        EventHandler onFinished = new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {
-                Player currentPlayer = ModelQuery.getPlayerToMove();
-                if ((StartNewGameController.timeOver()) || isWallDrop || pawnMoved ) {
-                	isWallDrop = false;
-                	pawnMoved = false;
-
-                	refresh();
-                	StartNewGameController.resetTimeToSet();
-
-                } else {
-
-                //grey out the next player name & count down time for the current player
-	                if (currentPlayer.equals(ModelQuery.getWhitePlayer())) {
-	                    timerForWhitePlayer.setText(StartNewGameController.toTimeStr());
-	                } else if (currentPlayer.equals(ModelQuery.getBlackPlayer())){
-	                    timerForBlackPlayer.setText(StartNewGameController.toTimeStr());
-	                } else if (currentPlayer.equals(ModelQuery.getRedPlayer())) {
-	                	timerForRedPlayer.setText(StartNewGameController.toTimeStr());
-	                } else if (currentPlayer.equals(ModelQuery.getGreenPlayer())) {
-	                	timerForGreenPlayer.setText(StartNewGameController.toTimeStr());
-	                }
-
-                }
-            }
-        };
-
-        timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(0.25), onFinished));
-        timeline.playFromStart();
-        if (timeline != null) {
-            timeline.stop();
-        }
         refresh();
+        //switchTimer();
     }
+
 
 
     public void createNewWall(ActionEvent actionEvent) {
@@ -404,6 +362,10 @@ public class ReplayModeController extends ViewController{
 		refresh();
 	}
 	
+	@FXML
+	public void handleResume(ActionEvent actionEvent) {	
+		changePage("/fxml/InitializeBoard.fxml");
+	}
    
     
     private Pair<Integer, Integer> convertPawnToCanvas(int row, int col) {
