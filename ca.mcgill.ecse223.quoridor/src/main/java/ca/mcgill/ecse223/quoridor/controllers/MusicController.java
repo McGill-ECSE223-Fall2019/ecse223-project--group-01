@@ -75,7 +75,7 @@ public class MusicController {
     }
     public static void playChooseYourChar(){
         try{
-            File musicPath = new File(".\\src\\main\\resources\\music\\ChooseYourChar.wav");
+            File musicPath = new File("./src/main/resources/music/ChooseYourChar.wav");
             if(musicPath.exists()){
                 AudioInputStream audioInput = AudioSystem.getAudioInputStream(musicPath);
                 chooseYourChar = AudioSystem.getClip();
