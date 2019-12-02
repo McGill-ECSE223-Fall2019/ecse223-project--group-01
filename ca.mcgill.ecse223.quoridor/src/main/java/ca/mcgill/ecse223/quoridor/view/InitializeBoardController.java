@@ -36,7 +36,7 @@ public class InitializeBoardController extends ViewController{
     public PlayerState state = PlayerState.IDLE;
     public void handleResignGame(ActionEvent actionEvent) {
         ResignGameController.resign();
-        refresh();
+        checkStatus();
     }
 
 
@@ -277,9 +277,7 @@ public class InitializeBoardController extends ViewController{
 
             }
         }
-
         refresh();
-
     }
 
     public void checkStatus () {
