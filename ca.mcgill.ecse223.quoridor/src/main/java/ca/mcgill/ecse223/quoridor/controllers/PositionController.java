@@ -81,7 +81,7 @@ public class PositionController {
 
             listOfWalls = ModelQuery.getBlackWallsOnBoard();
             for(int i = 0; i < listOfWalls.size(); i++){
-               String wallPosition = writeWallInfo(i, listOfWalls);
+                String wallPosition = writeWallInfo(i, listOfWalls);
                 output.append(wallPosition);
             }
         }
@@ -118,12 +118,13 @@ public class PositionController {
         }
 
         else{ //Something went wrong
+            isPositionValid = false;
             return false;
         }
         output.append("\n");
         output.close();
         return true;
-       }
+    }
 
     /**
      * Attempts to load a specified savefile in a filesystem.
@@ -141,6 +142,9 @@ public class PositionController {
 
         StartNewGameController.whitePlayerChoosesAUsername(whiteUser);
         StartNewGameController.blackPlayerChooseAUsername(blackUser);
+
+        SetNextPlayers();
+        loadGameBoard();
 
         PlayerPosition whitePlayerPosition = null;
         PlayerPosition blackPlayerPosition = null;
@@ -219,6 +223,7 @@ public class PositionController {
                         }
                     }
                     else { //Faulty savePosition file
+                        isPositionValid = false;
                         return false;
                     }
 
@@ -227,16 +232,16 @@ public class PositionController {
 
                 GamePosition gameposition = new GamePosition(positions.size()+1, whitePlayerPosition, blackPlayerPosition, quoridor.getCurrentGame().getWhitePlayer(), quoridor.getCurrentGame());
                 if(ModelQuery.isFourPlayer()) {
-                	gameposition.setRedPosition(redPlayerPosition);
-                	gameposition.setGreenPosition(greenPlayerPosition);
+                    gameposition.setRedPosition(redPlayerPosition);
+                    gameposition.setGreenPosition(greenPlayerPosition);
                 }
-                
+
                 quoridor.getCurrentGame().setCurrentPosition(gameposition);
                 quoridor.getCurrentGame().getCurrentPosition().setWhitePosition(whitePlayerPosition);
                 quoridor.getCurrentGame().getCurrentPosition().setBlackPosition(blackPlayerPosition);
                 if(ModelQuery.isFourPlayer()) {
-                	ModelQuery.getCurrentGame().getCurrentPosition().setRedPosition(redPlayerPosition);
-                	ModelQuery.getCurrentGame().getCurrentPosition().setGreenPosition(greenPlayerPosition);
+                    ModelQuery.getCurrentGame().getCurrentPosition().setRedPosition(redPlayerPosition);
+                    ModelQuery.getCurrentGame().getCurrentPosition().setGreenPosition(greenPlayerPosition);
                 }
 
                 PawnController.initPawnSM(quoridor.getCurrentGame().getWhitePlayer(), whitePlayerPosition);
@@ -246,6 +251,7 @@ public class PositionController {
                     PawnController.initPawnSM(quoridor.getCurrentGame().getGreenPlayer(), greenPlayerPosition);
                 }
                 if(!ValidatePositionController.validateOverlappingPawns()){
+                    isPositionValid = false;
                     return false;
                 }
 
@@ -314,12 +320,13 @@ public class PositionController {
 
 
                 if(playerTurn == null){ //incase while loop was not executed
+                    isPositionValid = false;
                     return false;
                 }
 
                 else{ //switch the current turn to the player
                     if(ModelQuery.getPlayerToMove() != playerTurn)
-                    SwitchPlayerController.switchActivePlayer();
+                        SwitchPlayerController.switchActivePlayer();
                 }
 
                 bufferedReader.close();
@@ -454,6 +461,12 @@ public class PositionController {
             return false;
         }
         return true;
+    }
+
+    private static void SetNextPlayers(){
+        ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.ReadyToStart);
+        ModelQuery.getWhitePlayer().setNextPlayer(ModelQuery.getBlackPlayer());
+        ModelQuery.getBlackPlayer().setNextPlayer(ModelQuery.getWhitePlayer());
     }
 
     public static Board loadGameBoard() {

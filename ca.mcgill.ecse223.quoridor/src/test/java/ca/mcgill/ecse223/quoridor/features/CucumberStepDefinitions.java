@@ -398,11 +398,9 @@ public class CucumberStepDefinitions {
 	@When("I initiate to load a saved game {string}")
 	public void iInitiateToLoadASavedGame(String filename) {
 		try {
-			SaveLoadGameController.fileLoad(filename, "white", "black");
+			LoadGameOrPosition(filename);
 		}catch(java.lang.UnsupportedOperationException e) {
 			throw new PendingException();
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 	}
 
