@@ -41,7 +41,6 @@ public class InitializeBoardController extends ViewController{
 
 
 
-
     @FXML
     private AnchorPane board;
     public Text whitePlayerName;

@@ -61,7 +61,7 @@ public class LoadGameController extends ViewController{
             existingBlackChoices.getItems().add(user.getName());
         }
 
-
+ 
     }
 
     public void handleBackToMenu(ActionEvent actionEvent) {
