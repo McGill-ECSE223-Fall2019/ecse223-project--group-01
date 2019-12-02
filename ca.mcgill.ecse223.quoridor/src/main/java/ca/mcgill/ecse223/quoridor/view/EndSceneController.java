@@ -1,29 +1,29 @@
 package ca.mcgill.ecse223.quoridor.view;
 
 import ca.mcgill.ecse223.quoridor.controllers.ModelQuery;
+import ca.mcgill.ecse223.quoridor.controllers.MusicController;
 import ca.mcgill.ecse223.quoridor.controllers.SaveLoadGameController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
+import javax.swing.*;
+
+@SuppressWarnings("Duplicates")
 public class EndSceneController extends ViewController{
 
     @FXML
     public Text winnerPlayer;
-    public AnchorPane anchorpane;
 
     public void initialize() {
         String winnerName = ModelQuery.getCurrentGame().getWinningPlayer().getUser().getName();
-        winnerPlayer.setText(winnerName + " Wins!");
+        winnerPlayer.setText(winnerName);
         winnerPlayer.setTextAlignment(TextAlignment.CENTER);
-        winnerPlayer.setX(anchorpane.getWidth()/2);
-        winnerPlayer.setY(3 * anchorpane.getHeight()/4);
-
+        MusicController.playEndGameMusic();
     }
 
     @FXML
@@ -59,14 +59,16 @@ public class EndSceneController extends ViewController{
             Alert errorAlert = new Alert(Alert.AlertType.ERROR);
             errorAlert.setContentText("Missing file name");
         }
-
     }
 
     public void handlePlayAgain (ActionEvent actionEvent) {
+        MusicController.playChooseYourChar();
+        MusicController.playMainMenu();
         changePage("/fxml/SelectPlayerName.fxml");
     }
 
     public void handleBackToMenu(ActionEvent actionEvent) {
+        MusicController.playMainMenu();
         changePage("/fxml/Menu.fxml");
     }
 

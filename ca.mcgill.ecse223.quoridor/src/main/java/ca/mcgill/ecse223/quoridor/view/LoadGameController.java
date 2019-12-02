@@ -8,7 +8,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-
+import javafx.stage.Window;
 
 import java.io.File;
 import java.io.IOException;
@@ -61,7 +61,7 @@ public class LoadGameController extends ViewController{
             existingBlackChoices.getItems().add(user.getName());
         }
 
- 
+
     }
 
     public void handleBackToMenu(ActionEvent actionEvent) {

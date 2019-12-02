@@ -20,9 +20,8 @@ public class MainMenuController extends ViewController{
     }
 
     public void handleQuitGame(ActionEvent actionEvent) {
-
-
         AlertHelper.newPopUpWindow(Alert.AlertType.CONFIRMATION, "Alert", "Are you sure you want to quit the game?");
+        MusicController.stopAllMusic();
         // popUpWindow("/fxml/QuitTheGame.fxml");
     }
 }

@@ -28,9 +28,30 @@ import javafx.util.Duration;
 import javafx.util.Pair;
 
 import java.util.List;
+import java.util.Optional;
 
 
 public class InitializeBoardController extends ViewController{
+
+    public void handleSave(ActionEvent actionEvent) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmation on saving the game");
+        alert.setContentText("Saving Game or Position?");
+
+        ButtonType buttonTypeOne = new ButtonType("Save Position");
+        ButtonType buttonTypeTwo = new ButtonType("Save Game");
+        ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+        alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo, buttonTypeCancel);
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == buttonTypeOne){
+            handleSavePosition();
+        } else if (result.get() == buttonTypeTwo) {
+            handleSaveGame();
+        } else {
+            // ... user chose CANCEL or closed the dialog
+        }
+    }
 
     enum PlayerState {WALL, PAWN, IDLE, WHITEWON, BLACKWON, REDWON, GREENWON};
     public PlayerState state = PlayerState.IDLE;
@@ -608,7 +629,7 @@ public class InitializeBoardController extends ViewController{
         // update wall positions
         ModelQuery.getCurrentGame();
         List<Wall> walls = ModelQuery.getAllWallsOnBoard();
-        
+
         for (Wall wall : walls) {
             placeWall(wall.getMove(), false);
         }
@@ -829,7 +850,7 @@ public class InitializeBoardController extends ViewController{
         }
     }
 
-    public void handleSavePosition(ActionEvent actionEvent) {
+    public void handleSavePosition() {
         String filename;
         TextInputDialog textInput = new TextInputDialog();
 
@@ -862,8 +883,8 @@ public class InitializeBoardController extends ViewController{
             errorAlert.setContentText("Missing file name");
         }
     }
-    
-    public void handleSaveGame(ActionEvent actionEvent) {
+
+    public void handleSaveGame() {
         String filename;
         TextInputDialog textInput = new TextInputDialog();
 
@@ -896,7 +917,6 @@ public class InitializeBoardController extends ViewController{
             errorAlert.setContentText("Missing file name");
         }
     }
-
 
     public static void showStage(String message){
         Stage newStage = new Stage();

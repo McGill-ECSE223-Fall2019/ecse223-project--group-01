@@ -59,8 +59,8 @@ public class CucumberStepDefinitions {
 		QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().setPlayerToMove(currentPlayer);
 	}
 
-	
-	
+
+
 	@Given("The following walls exist:")
 	public void theFollowingWallsExist(io.cucumber.datatable.DataTable dataTable) {
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
@@ -123,7 +123,7 @@ public class CucumberStepDefinitions {
 		game.setWhitePlayer(players.get(0));
 		game.setBlackPlayer(players.get(1));
 	}
-	
+
 
 	// ***********************************************
 	// Scenario and scenario outline step definitions
@@ -814,7 +814,7 @@ public class CucumberStepDefinitions {
 		} catch (UnsupportedOperationException e) {
 			throw new PendingException();
 		}
-	} 
+	}
 
 
 	/**
@@ -825,7 +825,7 @@ public class CucumberStepDefinitions {
 		// TODO GUI step
 	}
 
-	
+
 	/**
 	 * @author Kevin Li
 	 */
@@ -833,7 +833,7 @@ public class CucumberStepDefinitions {
 	public void theGameShallBeInReplayMode() {
 
 	}
-	
+
 	/*
 	 * Scenario: Enter replay mode, Step forward, Step backward, Jump to start, Jump to final
 	 * @author Kate Ward
@@ -850,11 +850,11 @@ public class CucumberStepDefinitions {
 		}
 		//throw new RuntimeException("far " + createUsersAndPlayers.get(1).getWalls());
 	}
-	
+
 	@Given("The following moves have been played in game:")
 	public void theFollowingMovesHaveBeenPlayedInGame(io.cucumber.datatable.DataTable dataTable) {
 		List<Tile> ti = new ArrayList<>();
-		
+
 		Quoridor quoridor = QuoridorApplication.getQuoridor();
 		//throw new RuntimeException("ff");
 		List<Map<String, String>> valueMaps = dataTable.asMaps();
@@ -862,8 +862,8 @@ public class CucumberStepDefinitions {
 		// keys: mv, rnd, mov
 		Player[] players = { quoridor.getCurrentGame().getWhitePlayer(), quoridor.getCurrentGame().getBlackPlayer() };
 		Player curr = players[0];
-		
-		
+
+
 		for(Map<String, String> map: valueMaps) {
 			curr = ModelQuery.getCurrentPosition().getPlayerToMove();
 			Integer mvNum = Integer.decode(map.get("mv"));
@@ -890,13 +890,13 @@ public class CucumberStepDefinitions {
 				index = (mv.charAt(1) - 49) * 9 + 7;
 			} else if(mv.charAt(0)=='i'){
 				index = (mv.charAt(1) - 49) * 9 + 8;
-			} 
-			
+			}
+
 			Tile tile = ModelQuery.getBoard().getTile(index);
 			ti.add(tile);
 			if(mv.length()==2) {
-				move = new JumpMove(mvNum, rnd, curr, tile, ModelQuery.getCurrentGame()); 
-				
+				move = new JumpMove(mvNum, rnd, curr, tile, ModelQuery.getCurrentGame());
+
 				if(curr.equals(ModelQuery.getWhitePlayer())) {
 					ModelQuery.getCurrentPosition().setWhitePosition(new PlayerPosition(ModelQuery.getWhitePlayer(),tile));
 				} else {
@@ -915,7 +915,7 @@ public class CucumberStepDefinitions {
 				}
 				Wall wall = new Wall(wallId++, curr);
 				move = new WallMove(mvNum, rnd, curr, tile, ModelQuery.getCurrentGame(), direction, wall);
-				
+
 				if(curr.equals(ModelQuery.getWhitePlayer())) {
 					ModelQuery.getCurrentPosition().removeWhiteWallsInStock(wall);
 					ModelQuery.getCurrentPosition().addWhiteWallsOnBoard(wall);
@@ -928,7 +928,7 @@ public class CucumberStepDefinitions {
 		}
 		ModelQuery.getCurrentGame().getPosition(0).setWhitePosition(new PlayerPosition(ModelQuery.getWhitePlayer(),ModelQuery.getBoard().getTile(76)));
 		ModelQuery.getCurrentGame().getPosition(0).setBlackPosition(new PlayerPosition(ModelQuery.getBlackPlayer(),ModelQuery.getBoard().getTile(4)));
-		
+
 		List<PlayerPosition> lis = new ArrayList<>();
 		List<Integer> row = new ArrayList<>();
 		for(GamePosition pos:ModelQuery.getCurrentGame().getPositions()){
@@ -942,7 +942,7 @@ public class CucumberStepDefinitions {
 		}
 		//throw new RuntimeException("x " + row);
 	}
-	
+
 	@When("I initiate replay mode")
 	public void iInitiateReplayMode() {
 		
@@ -960,90 +960,90 @@ public class CucumberStepDefinitions {
 		}
 		//throw new RuntimeException("far " + createUsersAndPlayers.get(1).getWalls());
 	}
-	
+
 	@And("The game does not have a final result")
 	public void theGameDoesNotHaveAFinalResult() {
-		
+
 	}
-	
+
 	int index; //keeps track of current
-	
+
 	@And("The next move is {int}.{int}")
 	public void theNextMoveIs(int mov, int rnd) {
 		List<GamePosition> listPos = ModelQuery.getCurrentGame().getPositions();
 		index = (mov-1)*2+rnd-1;
-		
+
 		if(rnd==1) {
 			ModelQuery.getCurrentPosition().setPlayerToMove(ModelQuery.getWhitePlayer());
 		} else {
 			ModelQuery.getCurrentPosition().setPlayerToMove(ModelQuery.getBlackPlayer());
 		}
-		
+
 		assertEquals((mov-1)*2+rnd,index+1);
 		//GamePosition pos = listPos.get(index);
 		//throw new RuntimeException("f\n "+listPos.get(1).getWhitePosition().getTile());
 		//throw new RuntimeException("\n "+ModelQuery.getBoard().getTile(67));
 	}
-	
+
 	@When("Step backward is initiated")
 	public void stepBackwardsInitiated() {
 		index--;
 		if(index<0) index = 0;
 	}
-	
+
 	@When("Step forward is initiated")
 	public void stepForwardsInitiated() {
 		index++;
 	}
-	
+
 	@Then("The next move shall be {int}.{int}")
 	public void nextMoveShallBe(int mov, int rnd) {
 		//assertEquals((mov-1)*2+rnd,index);
 	}
-	
+
 	@And("White player's position shall be \\({int},{int})")
 	public void whitePlayerPositionShallBe(int row, int col) {
 		//throw new RuntimeException("\n "+ModelQuery.getCurrentGame().getPositions().get(3).getWhitePosition().getTile().getRow());
 		assertEquals(row,ModelQuery.getCurrentGame().getPositions().get(index).getWhitePosition().getTile().getRow());
 		assertEquals(col,ModelQuery.getCurrentGame().getPositions().get(index).getWhitePosition().getTile().getColumn());
 	}
-	
+
 	@And("Black player's position shall be \\({int},{int})")
 	public void blackPlayerPositionShallBe(int row, int col) {
 		assertEquals(row,ModelQuery.getCurrentGame().getPositions().get(index).getBlackPosition().getTile().getRow());
 		assertEquals(col,ModelQuery.getCurrentGame().getPositions().get(index).getBlackPosition().getTile().getColumn());
 	}
-	
+
 	@And("White has {int} on stock")
 	public void whiteHasNumWallsOnStock(int num) {
 		assertEquals(num,ModelQuery.getCurrentGame().getPositions().get(index).getWhiteWallsInStock().size());
 	}
-	
+
 	@And("Black has {int} on stock")
 	public void blackHasNumWallsOnStock(int num) {
 		assertEquals(num,ModelQuery.getCurrentGame().getPositions().get(index).getBlackWallsInStock().size());
 	}
-	
+
 	@When("I initiate to continue game")
 	public void iInitiateToContinueGame() {
-		 
+
 	}
-	
+
 	@And("The remaining moves of the game shall be removed")
 	public void theRemainingMovesOfTheGameShallBeRemoved() {
-		
+
 	}
-	
+
 	@And("I shall be notified that finished games cannot be continued")
 	public void iShallBeNotifiedThatFinishedGamesCannotBeContinued() {
-		
+
 	}
-	
+
 	@And("Jump to start position is initiated")
 	public void jumpToStartInitiated() {
 		index = 0;
 	}
-	
+
 	@And("Jump to final position is initiated")
 	public void jumpToFinalInitiated() {
 		index = ModelQuery.getCurrentGame().getPositions().size()-1;
