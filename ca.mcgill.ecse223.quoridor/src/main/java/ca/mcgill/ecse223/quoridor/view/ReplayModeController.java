@@ -363,9 +363,7 @@ public class ReplayModeController extends ViewController{
 	}
 	
 	@FXML
-	public void handleResume(ActionEvent actionEvent) {
-		StartNewGameController.setTotalThinkingTime(1, 30);
-		
+	public void handleResume(ActionEvent actionEvent) {	
 		changePage("/fxml/InitializeBoard.fxml");
 	}
    

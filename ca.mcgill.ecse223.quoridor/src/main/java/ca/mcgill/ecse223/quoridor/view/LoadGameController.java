@@ -150,6 +150,7 @@ public class LoadGameController extends ViewController{
                 else{
                     /* Playing the Battle music */
                     MusicController.playEpicMusic();
+                    StartNewGameController.setTotalThinkingTime(1, 30);
                     changePage("/fxml/InitializeBoard.fxml");
                 }
             } catch (IOException e) {
@@ -246,6 +247,7 @@ public class LoadGameController extends ViewController{
                 else{
                     /* Playing the Battle music */
                     MusicController.playEpicMusic();
+                    StartNewGameController.setTotalThinkingTime(1, 30);
                     changePage("/fxml/ReplayMode.fxml");
                 }
             } catch (IOException e) {
