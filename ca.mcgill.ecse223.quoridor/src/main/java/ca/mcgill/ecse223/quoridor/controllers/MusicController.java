@@ -94,7 +94,7 @@ public class MusicController {
 
     public static void playEndGameMusic(){
         try{
-            File musicPath = new File(".\\src\\main\\resources\\music\\Game.wav");
+            File musicPath = new File("./src/main/resources/music/Game.wav");
             if(clip != null)
                 clip.stop();
             if(musicPath.exists()){
