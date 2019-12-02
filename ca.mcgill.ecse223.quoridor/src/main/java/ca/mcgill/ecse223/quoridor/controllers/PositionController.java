@@ -118,6 +118,7 @@ public class PositionController {
         }
 
         else{ //Something went wrong
+            isPositionValid = false;
             return false;
         }
         output.append("\n");
@@ -141,6 +142,8 @@ public class PositionController {
 
         StartNewGameController.whitePlayerChoosesAUsername(whiteUser);
         StartNewGameController.blackPlayerChooseAUsername(blackUser);
+
+        SetNextPlayers();
 
         PlayerPosition whitePlayerPosition = null;
         PlayerPosition blackPlayerPosition = null;
@@ -219,6 +222,7 @@ public class PositionController {
                         }
                     }
                     else { //Faulty savePosition file
+                        isPositionValid = false;
                         return false;
                     }
 
@@ -246,6 +250,7 @@ public class PositionController {
                     PawnController.initPawnSM(quoridor.getCurrentGame().getGreenPlayer(), greenPlayerPosition);
                 }
                 if(!ValidatePositionController.validateOverlappingPawns()){
+                    isPositionValid = false;
                     return false;
                 }
 
@@ -314,6 +319,7 @@ public class PositionController {
 
 
                 if(playerTurn == null){ //incase while loop was not executed
+                    isPositionValid = false;
                     return false;
                 }
 
@@ -454,6 +460,12 @@ public class PositionController {
             return false;
         }
         return true;
+    }
+
+    private static void SetNextPlayers(){
+        ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.ReadyToStart);
+        ModelQuery.getWhitePlayer().setNextPlayer(ModelQuery.getBlackPlayer());
+        ModelQuery.getBlackPlayer().setNextPlayer(ModelQuery.getWhitePlayer());
     }
 
     public static Board loadGameBoard() {

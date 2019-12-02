@@ -10,7 +10,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Window;
-import jdk.javadoc.internal.tool.Start;
 
 import java.io.File;
 import java.io.IOException;
