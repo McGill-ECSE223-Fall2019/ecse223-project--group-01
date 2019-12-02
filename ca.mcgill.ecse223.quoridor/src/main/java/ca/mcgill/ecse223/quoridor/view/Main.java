@@ -1,10 +1,13 @@
 package ca.mcgill.ecse223.quoridor.view;
 
+import ca.mcgill.ecse223.quoridor.controllers.MusicController;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.awt.*;
 import java.net.URL;
@@ -29,6 +32,15 @@ public class Main extends Application{
         stage.setScene(new Scene(root,600,400));
         stage.show();
         currentStage = stage;
+        /* Playing the Battle music */
+        MusicController.playMainMenu();
+        stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent event) {
+                MusicController.stopAllMusic();
+                stage.close();
+            }
+        });
     }
 
     public static void setCurrentStage(Stage aStage) {

@@ -3,6 +3,7 @@ package ca.mcgill.ecse223.quoridor.controllers;
 import ca.mcgill.ecse223.quoridor.model.*;
 import ca.mcgill.ecse223.quoridor.statemachine.defaultsm.DefaultSMStatemachine;
 import ca.mcgill.ecse223.quoridor.statemachine.defaultsm.IDefaultSMStatemachine;
+import ca.mcgill.ecse223.quoridor.view.InitializeBoardController;
 
 import java.util.List;
 
@@ -174,16 +175,6 @@ public class PawnController {
             private boolean isPathValidJump(Tile source, Tile dest, Tile enemyTile) {
                 return isPawnBlocking(enemyTile) && !isWallBlocking(source, enemyTile) && !isWallBlocking(enemyTile, dest) && !isPawnBlocking(dest);
             }
-
-            @Override
-            public long pawnGetRow() {
-                return position.getTile().getRow();
-            }
-
-            @Override
-            public long pawnGetCol() {
-                return position.getTile().getColumn();
-            }
         };
 
         statemachine.setInternalOperationCallback(internalCallback);
@@ -239,12 +230,42 @@ public class PawnController {
 
         if (sm.getSCIPawn().isRaisedMoveCompleted()) {
             Tile target = ModelQuery.getTile((int) sm.getSCIPawn().getTargetRow(), (int) sm.getSCIPawn().getTargetCol());
+            Tile source = playerPosition.getTile();
+
+            // Creating the move
+            Move newMove = createPawnMove(target,source);
+            ModelQuery.getCurrentGame().addMove(newMove);
+
+            // Update the player position
             playerPosition.setTile(target);
             SwitchPlayerController.switchActivePlayer();
+            InitializeBoardController.isPawnMoved = true;
+
             return true;
         } else {
             return false;
         }
     }
 
+    private static Move createPawnMove(Tile target,Tile source){
+        int movesSize = ModelQuery.getMoves().size();
+        int moveNum;
+        int roundNum;
+        if (movesSize>0) {
+            roundNum = ModelQuery.getMoves().get(movesSize-1).getRoundNumber()+1;
+            moveNum = roundNum/2;
+        }
+        else {
+            moveNum = 0;
+            roundNum = 0;
+        }
+
+        Move newMove = null;
+        if( Math.abs(target.getRow()-source.getRow())<=1 && Math.abs(target.getColumn()-source.getColumn())<=1 ) {
+            newMove = new StepMove(moveNum,roundNum,ModelQuery.getPlayerToMove(),target,ModelQuery.getCurrentGame());
+        }else{
+            newMove = new JumpMove(moveNum,roundNum,ModelQuery.getPlayerToMove(),target,ModelQuery.getCurrentGame());
+        }
+        return newMove;
+    }
 }

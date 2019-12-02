@@ -22,6 +22,18 @@ public class ModelQuery {
     public static Player getBlackPlayer(){
         return QuoridorApplication.getQuoridor().getCurrentGame().getBlackPlayer();
     }
+    
+    public static Player getRedPlayer() {
+    	return QuoridorApplication.getQuoridor().getCurrentGame().getRedPlayer();
+    }
+    
+    public static Player getGreenPlayer() {
+    	return QuoridorApplication.getQuoridor().getCurrentGame().getGreenPlayer();
+    }
+    
+    public static boolean isFourPlayer() { //TODO
+    	return QuoridorApplication.getQuoridor().getCurrentGame().getIsFourPlayer();
+    }
 
     public static Board getBoard(){
         return QuoridorApplication.getQuoridor().getBoard();
@@ -49,10 +61,19 @@ public class ModelQuery {
     }
 
     public static List<Wall> getAllWallsOnBoard(){
-        List<Wall> whiteWalls = ModelQuery.getWhiteWallsOnBoard();
-        List<Wall> blackWalls = ModelQuery.getBlackWallsOnBoard();
-
         List<Wall> placedWalls = new ArrayList<>();
+        
+    	List<Wall> whiteWalls = ModelQuery.getWhiteWallsOnBoard();
+        List<Wall> blackWalls = ModelQuery.getBlackWallsOnBoard();
+        List<Wall> redWalls;
+        List<Wall> greenWalls;
+        if (isFourPlayer()) {
+            redWalls = ModelQuery.getRedWallsOnBoard();
+            greenWalls = ModelQuery.getGreenWallsOnBoard();
+        	placedWalls.addAll(redWalls);
+        	placedWalls.addAll(greenWalls);
+        }
+
         placedWalls.addAll(whiteWalls);
         placedWalls.addAll(blackWalls);
 
@@ -66,6 +87,14 @@ public class ModelQuery {
     public static List<Wall> getBlackWallsOnBoard(){
         return QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getBlackWallsOnBoard();
     }
+    
+    public static List<Wall> getRedWallsOnBoard(){
+        return QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getRedWallsOnBoard();
+    }
+    
+    public static List<Wall> getGreenWallsOnBoard(){
+        return QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getGreenWallsOnBoard();
+    }
 
     public static GamePosition getCurrentPosition(){
         return QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition();
@@ -73,9 +102,13 @@ public class ModelQuery {
 
     public static List<PlayerPosition> getAllPlayerPosition(){
         List<PlayerPosition> positions = new ArrayList<>();
-        positions.add(QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getBlackPosition());
         positions.add(QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getWhitePosition());
-        return positions;
+        positions.add(QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getBlackPosition());
+        if(isFourPlayer()) {
+        	positions.add(QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getRedPosition());
+        	positions.add(QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getGreenPosition());
+        }
+        return positions; 
     }
 
     public static PlayerPosition getWhitePosition(){
@@ -85,15 +118,32 @@ public class ModelQuery {
     public static PlayerPosition getBlackPosition(){
         return QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getBlackPosition();
     }
+    
+    public static PlayerPosition getRedPosition(){
+        return QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getRedPosition();
+    }
+    
+    public static PlayerPosition getGreenPosition(){
+        return QuoridorApplication.getQuoridor().getCurrentGame().getCurrentPosition().getGreenPosition();
+    }
 
     public static PlayerPosition getPlayerPositionOfPlayerToMove(){
         if (ModelQuery.getPlayerToMove().equals(ModelQuery.getWhitePlayer())) {
             return ModelQuery.getWhitePosition();
         } else if (ModelQuery.getPlayerToMove().equals(ModelQuery.getBlackPlayer())) {
             return ModelQuery.getBlackPosition();
+        } else if (ModelQuery.getPlayerToMove().equals(ModelQuery.getRedPlayer())) {
+        	return ModelQuery.getRedPosition();
+        } else if (ModelQuery.getPlayerToMove().equals(ModelQuery.getGreenPlayer())) {
+        	return ModelQuery.getGreenPosition();
         }
         else{
             return null;
         }
+    }
+
+    public static Move getLastPlayedMove(){
+        int size = ModelQuery.getMoves().size();
+        return ModelQuery.getMoves().get(size-1);
     }
 }

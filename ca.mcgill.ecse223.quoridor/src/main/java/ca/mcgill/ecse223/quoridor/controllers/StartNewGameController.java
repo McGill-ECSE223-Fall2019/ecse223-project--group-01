@@ -13,10 +13,17 @@ public class StartNewGameController {
     private static Game game;
     private static boolean whitePlayerChooseName = false;
     private static boolean blackPlayerChooseName = false;
+    private static boolean redPlayerChooseName = false;
+    private static boolean greenPlayerChooseName = false;
     private static boolean thinkingTimeIsSet = false;
     private static long millis;
     private static Timer timer;
-    private static long timeToSet;
+    public static long timeToSet;
+    public static long whiteTimeToSet;
+    public static long blackTimeToSet;
+    public static long greenTimeToSet;
+    public static long redTimeToSet;
+    public static long timetoUpdate;
 
 
     public StartNewGameController(){};
@@ -34,9 +41,11 @@ public class StartNewGameController {
         }
         whitePlayerChooseName=false;
         blackPlayerChooseName=false;
+        redPlayerChooseName = false;
+        greenPlayerChooseName = false;
         thinkingTimeIsSet=false;
         Quoridor quoridor = QuoridorApplication.getQuoridor();
-        game = new Game(Game.GameStatus.Initializing, Game.MoveMode.PlayerMove, quoridor);
+        game = new Game(Game.GameStatus.Initializing, Game.MoveMode.PlayerMove, false, quoridor);
     }
 
     /**
@@ -59,11 +68,11 @@ public class StartNewGameController {
             whitePlayerChooseName = true;
         }
         int tempThinkingTime = 90;
-        Player player = new Player(new Time(tempThinkingTime), white_user, 9, Direction.Horizontal);
+        Player player = new Player(new Time(tempThinkingTime), white_user, 1, Direction.Horizontal);
         ModelQuery.getCurrentGame().setWhitePlayer(player); //set White player
         ModelQuery.getWhitePlayer().setUser(white_user);
 
-        isReadyToStart(); //check if white and black player chose name and if total thinking time is set
+        isReadyToStart(); //check if players chose name and if total thinking time is set
     }
 
     /**
@@ -84,12 +93,92 @@ public class StartNewGameController {
             blackPlayerChooseName = true;
         }
         int tempThinkingTime = 90;
-        Player player = new Player(new Time(tempThinkingTime), black_user, 1, Direction.Vertical);
+        Player player = new Player(new Time(tempThinkingTime), black_user, 9, Direction.Horizontal);
         ModelQuery.getCurrentGame().setBlackPlayer(player);
         ModelQuery.getBlackPlayer().setUser(black_user);
 
-        isReadyToStart();  //check if white and black player chose name and if total thinking time is set
+        isReadyToStart();  //check if players chose name and if total thinking time is set
     }
+
+    /**
+     * @Author Fulin Huang & Mark Zhu
+     *
+     * Red player chooses a username by either creating a new game or
+     * by choosing from an existing name list.
+     *
+     * @param username name of the red user
+     */
+    public static void redPlayerChooseAUsername(String username) {
+        User red_user = null;
+        if (usernameExists(username)) {
+            red_user = UserController.selectExistingUsername(username);
+            redPlayerChooseName = true;
+        } else {
+            red_user = UserController.newUsername(username);
+            redPlayerChooseName = true;
+        }
+        int tempThinkingTime = 90;
+        Player player = new Player(new Time(tempThinkingTime), red_user, 9, Direction.Vertical);
+        ModelQuery.getCurrentGame().setRedPlayer(player);
+        ModelQuery.getRedPlayer().setUser(red_user);
+
+        isReadyToStart();  //check if players chose name and if total thinking time is set
+    }
+
+    /**
+     * @Author Fulin Huang & Mark Zhu
+     *
+     * Green player chooses a username by either creating a new game or
+     * by choosing from an existing name list.
+     *
+     * @param username name of the green user
+     */
+    public static void greenPlayerChooseAUsername(String username) {
+        User green_user = null;
+        if (usernameExists(username)) {
+            green_user = UserController.selectExistingUsername(username);
+            greenPlayerChooseName = true;
+        } else {
+            green_user = UserController.newUsername(username);
+            greenPlayerChooseName = true;
+        }
+        int tempThinkingTime = 90;
+        Player player = new Player(new Time(tempThinkingTime), green_user, 1, Direction.Vertical);
+        ModelQuery.getCurrentGame().setGreenPlayer(player);
+        ModelQuery.getGreenPlayer().setUser(green_user);
+
+        isReadyToStart();  //check if players chose name and if total thinking time is set
+    }
+
+    /**
+     * @Author Fulin Huang & Mark Zhu
+     *
+     * Creates a dummy red player and green player in case of 2player mode
+     *
+     */
+    /*public static void playerDummies() {
+    	User dummyUser;
+    	if(usernameExists("")) {
+        	dummyUser = UserController.selectExistingUsername("");
+    	} else {
+    		dummyUser = UserController.newUsername("");
+    	}
+
+
+        User red_user = dummyUser;
+        int tempThinkingTime = 90;
+        Player redDummy = new Player(new Time(tempThinkingTime), red_user, 1, Direction.Vertical, ModelQuery.getCurrentGame());
+        ModelQuery.getCurrentGame().setRedPlayer(redDummy);
+        ModelQuery.getRedPlayer().setUser(red_user);
+
+        User green_user = dummyUser;
+        Player greenDummy = new Player(new Time(tempThinkingTime), green_user, 1, Direction.Vertical, ModelQuery.getCurrentGame());
+        ModelQuery.getCurrentGame().setGreenPlayer(greenDummy);
+        ModelQuery.getRedPlayer().setUser(green_user);
+
+        isReadyToStart();  //check if players chose name and if total thinking time is set
+    }/*
+
 
     /**
      * @Author Fulin Huang
@@ -104,6 +193,7 @@ public class StartNewGameController {
     public static void setTotalThinkingTime (int minutes, int seconds) {
         //total thinking time is able to set only if players are existed
         if (whitePlayerChooseName && blackPlayerChooseName) {
+
             setThinkingTime(minutes, seconds);   //set total thinking time
             thinkingTimeIsSet = true;
         }
@@ -125,24 +215,52 @@ public class StartNewGameController {
         int period = 1000;
         timer = new Timer();
         timeToSet = millis;
+        whiteTimeToSet = millis;
+        blackTimeToSet = millis;
+        if (ModelQuery.isFourPlayer()) {
+            greenTimeToSet = millis;
+            redTimeToSet = millis;
+        }
         timer.scheduleAtFixedRate(new TimerTask() {
             public void run () {
 
                     Player currentPlayer;
                     try {
-                        if (timeToSet == 0) {
+                        if (!ModelQuery.isFourPlayer() && (whiteTimeToSet == 0 || blackTimeToSet == 0 ) ) {
 //                            System.out.println("00:00 time left!");
                             timer.cancel(); //stop timer if zero time left
 
-                        } else if (ModelQuery.getBlackPlayer() == null && ModelQuery.getWhitePlayer() == null) {
+                        }
+                        else if (ModelQuery.isFourPlayer() && ( whiteTimeToSet == 0||greenTimeToSet == 0 || redTimeToSet == 0)){
+                            timer.cancel(); //stop timer if zero time left
+
+                        }
+                        else if (!ModelQuery.isFourPlayer() && (ModelQuery.getBlackPlayer() == null && ModelQuery.getWhitePlayer() == null)) {
                             timer.cancel();
                         }
                         else {
                             currentPlayer = ModelQuery.getPlayerToMove();
                             timeToSet = timeToSet - 1000; // time to set in milliseconds
-                            Date date = new Date();
-                            long currentMillis = date.getTime();
-                            Time newThinkingTime = new Time(timeToSet + currentMillis);
+                            Time newThinkingTime = null;
+                            if (currentPlayer.equals(ModelQuery.getWhitePlayer())) {
+                                whiteTimeToSet = whiteTimeToSet - 1000;
+                                newThinkingTime = new Time(whiteTimeToSet);
+                            }
+                            else if (currentPlayer.equals(ModelQuery.getBlackPlayer())) {
+                                blackTimeToSet = blackTimeToSet - 1000;
+                                newThinkingTime = new Time(blackTimeToSet);
+                            }
+                            if (ModelQuery.isFourPlayer()) {
+                                if (currentPlayer.equals(ModelQuery.getGreenPlayer())){
+                                    greenTimeToSet = greenTimeToSet - 1000;
+                                    newThinkingTime = new Time(greenTimeToSet);
+                                }
+                                else if (currentPlayer.equals(ModelQuery.getRedPlayer())) {
+                                    redTimeToSet = redTimeToSet - 1000;
+                                    newThinkingTime = new Time(redTimeToSet);
+                                }
+                            }
+//                            Time newThinkingTime = new Time(timeToSet);
                             currentPlayer.setRemainingTime(newThinkingTime);
                         }
                     } catch (Exception e) {
@@ -171,11 +289,15 @@ public class StartNewGameController {
      */
     public static Time setThinkingTime (int minutes, int seconds) {
         millis = minutes * 60 * 1000 + seconds * 1000;
-        Date date = new Date();
-        long currentMillis = date.getTime();
-        Time totalThinkingTime = new Time(millis+currentMillis);
+        Time totalThinkingTime = new Time(millis);
+
         ModelQuery.getWhitePlayer().setRemainingTime(totalThinkingTime);
         ModelQuery.getBlackPlayer().setRemainingTime(totalThinkingTime);
+
+        if(ModelQuery.isFourPlayer()) {
+        	ModelQuery.getRedPlayer().setRemainingTime(totalThinkingTime);
+        	ModelQuery.getGreenPlayer().setRemainingTime(totalThinkingTime);
+        }
         return totalThinkingTime;
     }
 
@@ -188,10 +310,16 @@ public class StartNewGameController {
      *
      */
     public static void isReadyToStart(){
-        if(whitePlayerChooseName && blackPlayerChooseName & thinkingTimeIsSet){
+        if(thinkingTimeIsSet && whitePlayerChooseName && blackPlayerChooseName && !redPlayerChooseName && !greenPlayerChooseName){
             ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.ReadyToStart);
             ModelQuery.getWhitePlayer().setNextPlayer(ModelQuery.getBlackPlayer());
             ModelQuery.getBlackPlayer().setNextPlayer(ModelQuery.getWhitePlayer());
+        } else if (thinkingTimeIsSet && whitePlayerChooseName && blackPlayerChooseName && redPlayerChooseName && greenPlayerChooseName) {
+            ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.ReadyToStart);
+            ModelQuery.getWhitePlayer().setNextPlayer(ModelQuery.getBlackPlayer());
+        	ModelQuery.getBlackPlayer().setNextPlayer(ModelQuery.getRedPlayer());
+        	ModelQuery.getRedPlayer().setNextPlayer(ModelQuery.getGreenPlayer());
+            ModelQuery.getGreenPlayer().setNextPlayer(ModelQuery.getWhitePlayer());
         }
 
     }
@@ -223,9 +351,33 @@ public class StartNewGameController {
      * @return a string that indicates the remaining time
      */
     public static String toTimeStr() {
-        long minutes = TimeUnit.MILLISECONDS.toMinutes(timeToSet);
-        long seconds = TimeUnit.MILLISECONDS.toSeconds(timeToSet) -
-                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(timeToSet));
+        Player currentPlayer = ModelQuery.getPlayerToMove();
+        if (!ModelQuery.isFourPlayer() ) {
+            if (currentPlayer.equals(ModelQuery.getWhitePlayer())) {
+                timetoUpdate = whiteTimeToSet;
+            }
+            else if (currentPlayer.equals(ModelQuery.getBlackPlayer())) {
+                timetoUpdate = blackTimeToSet;
+            }
+        }
+        else {
+            if (currentPlayer.equals(ModelQuery.getWhitePlayer())) {
+                timetoUpdate = whiteTimeToSet;
+            }
+            else if (currentPlayer.equals(ModelQuery.getBlackPlayer())) {
+                timetoUpdate = blackTimeToSet;
+            }
+            else if (currentPlayer.equals(ModelQuery.getGreenPlayer())) {
+                timetoUpdate = greenTimeToSet;
+            }
+            else if (currentPlayer.equals(ModelQuery.getRedPlayer())) {
+                timetoUpdate = redTimeToSet;
+            }
+        }
+
+        long minutes = TimeUnit.MILLISECONDS.toMinutes(timetoUpdate);
+        long seconds = TimeUnit.MILLISECONDS.toSeconds(timetoUpdate) -
+                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(timetoUpdate));
         StringBuilder sb = new StringBuilder();
         if (minutes < 10) {
             sb.append(0).append(minutes);
@@ -276,6 +428,26 @@ public class StartNewGameController {
     }
 
     /**
+     * @Author Fulin Huang & Mark Zhu
+     * check if the red player set a name
+     *
+     * @return a boolean to indicate if the red player set a name
+     */
+    public static boolean redPlayerNameIsSet() {
+        return redPlayerChooseName;
+    }
+
+    /**
+     * @Author Fulin Huang & Mark Zhu
+     * check if the green player set a name
+     *
+     * @return a boolean to indicate if the green player set a name
+     */
+    public static boolean greenPlayerNameIsSet() {
+        return greenPlayerChooseName;
+    }
+
+    /**
      * @Author Fulin Huang
      * check if the total thinking time is set
      *
@@ -298,19 +470,42 @@ public class StartNewGameController {
     }
     
     /**
-     * @Author Mark Zhu
+     * @Author Mark Zhu, Fulin Huang
      * Resets timeToThink between rounds
      */
     public static void resetTimeToSet() {
-        timeToSet = millis;
+        //timeToSet = millis;
+        Player currentPlayer = ModelQuery.getPlayerToMove();
+        if (currentPlayer.equals(ModelQuery.getWhitePlayer())) {
+            whiteTimeToSet = currentPlayer.getRemainingTime().getTime();
+        }
+        else if (currentPlayer.equals(ModelQuery.getBlackPlayer())) {
+            blackTimeToSet = currentPlayer.getRemainingTime().getTime();
+        }
+
+        if (ModelQuery.isFourPlayer()) {
+            if (currentPlayer.equals(ModelQuery.getGreenPlayer())) {
+                greenTimeToSet = currentPlayer.getRemainingTime().getTime();
+            }
+            else if (currentPlayer.equals(ModelQuery.getRedPlayer())) {
+                redTimeToSet = currentPlayer.getRemainingTime().getTime();
+            }
+        }
+//    	timeToSet = ModelQuery.getPlayerToMove().getRemainingTime().getTime();
     }
     
     /**
-     * @Author Mark Zhu
+     * @Author Mark Zhu, Fulin Huang
      * returns whether or not the timer has run out
      * @returns true if the timer has run out, false otherwise
      */
     public static boolean timeOver() {
-        return timeToSet==0;
+        if (!ModelQuery.isFourPlayer()) {
+            return whiteTimeToSet==0 || blackTimeToSet == 0;
+        }
+        else {
+            return  whiteTimeToSet==0 || blackTimeToSet == 0 || greenTimeToSet == 0 || redTimeToSet == 0;
+        }
+
     }
 }

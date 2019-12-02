@@ -83,6 +83,17 @@ public class DefaultSMStatemachine implements IDefaultSMStatemachine {
 			runCycle();
 		}
 		
+		private boolean verticalTransitioned;
+		
+		
+		public boolean isRaisedVerticalTransitioned() {
+			return verticalTransitioned;
+		}
+		
+		protected void raiseVerticalTransitioned() {
+			verticalTransitioned = true;
+		}
+		
 		private boolean moveCompleted;
 		
 		
@@ -127,6 +138,7 @@ public class DefaultSMStatemachine implements IDefaultSMStatemachine {
 		}
 		protected void clearOutEvents() {
 		
+		verticalTransitioned = false;
 		moveCompleted = false;
 		}
 		
@@ -309,43 +321,43 @@ public class DefaultSMStatemachine implements IDefaultSMStatemachine {
 	}
 	
 	private boolean check_main_region_PawnState_Vertical__choice_0_tr0_tr0() {
-		return (operationCallback.pawnGetRow()>=3 && operationCallback.pawnGetRow()<=7);
+		return (sCIPawn.getTargetRow()>=3 && sCIPawn.getTargetRow()<=7);
 	}
 	
 	private boolean check_main_region_PawnState_Vertical__choice_0_tr1_tr1() {
-		return operationCallback.pawnGetRow()==1;
+		return sCIPawn.getTargetRow()==1;
 	}
 	
 	private boolean check_main_region_PawnState_Vertical__choice_0_tr2_tr2() {
-		return operationCallback.pawnGetRow()==2;
+		return sCIPawn.getTargetRow()==2;
 	}
 	
 	private boolean check_main_region_PawnState_Vertical__choice_0_tr3_tr3() {
-		return operationCallback.pawnGetRow()==8;
+		return sCIPawn.getTargetRow()==8;
 	}
 	
 	private boolean check_main_region_PawnState_Vertical__choice_0_tr4_tr4() {
-		return operationCallback.pawnGetRow()==9;
+		return sCIPawn.getTargetRow()==9;
 	}
 	
 	private boolean check_main_region_PawnState_Horizontal__choice_0_tr0_tr0() {
-		return operationCallback.pawnGetCol()==1;
+		return sCIPawn.getTargetCol()==1;
 	}
 	
 	private boolean check_main_region_PawnState_Horizontal__choice_0_tr1_tr1() {
-		return (operationCallback.pawnGetCol()>=3 && operationCallback.pawnGetCol()<=7);
+		return (sCIPawn.getTargetCol()>=3 && sCIPawn.getTargetCol()<=7);
 	}
 	
 	private boolean check_main_region_PawnState_Horizontal__choice_0_tr2_tr2() {
-		return operationCallback.pawnGetCol()==2;
+		return sCIPawn.getTargetCol()==2;
 	}
 	
 	private boolean check_main_region_PawnState_Horizontal__choice_0_tr3_tr3() {
-		return operationCallback.pawnGetCol()==8;
+		return sCIPawn.getTargetCol()==8;
 	}
 	
 	private boolean check_main_region_PawnState_Horizontal__choice_0_tr4_tr4() {
-		return operationCallback.pawnGetCol()==9;
+		return sCIPawn.getTargetCol()==9;
 	}
 	
 	private void effect_main_region_PawnState_Vertical__choice_0_tr0() {
@@ -757,13 +769,13 @@ public class DefaultSMStatemachine implements IDefaultSMStatemachine {
 				
 				react_main_region_PawnState_Vertical__choice_0();
 			} else {
-				if (((sCIPawn.downRight) && ((operationCallback.isValidJump("downright") && !isStateActive(State.main_region_PawnState_Horizontal_Right))))) {
+				if (((sCIPawn.downRight) && (operationCallback.isValidJump("downright")))) {
 					exitSequence_main_region_PawnState_Vertical_Top();
 					sCIPawn.operationCallback.movePawn("down", 1);
 					
 					react_main_region_PawnState_Vertical__choice_0();
 				} else {
-					if (((sCIPawn.downLeft) && ((operationCallback.isValidJump("downleft") && !isStateActive(State.main_region_PawnState_Horizontal_Left))))) {
+					if (((sCIPawn.downLeft) && (operationCallback.isValidJump("downleft")))) {
 						exitSequence_main_region_PawnState_Vertical_Top();
 						sCIPawn.operationCallback.movePawn("down", 1);
 						
@@ -794,13 +806,13 @@ public class DefaultSMStatemachine implements IDefaultSMStatemachine {
 				
 				react_main_region_PawnState_Vertical__choice_0();
 			} else {
-				if (((sCIPawn.upLeft) && ((operationCallback.isValidJump("upleft") && !isStateActive(State.main_region_PawnState_Horizontal_Left))))) {
+				if (((sCIPawn.upLeft) && (operationCallback.isValidJump("upleft")))) {
 					exitSequence_main_region_PawnState_Vertical_Almost_Top();
 					sCIPawn.operationCallback.movePawn("up", 1);
 					
 					react_main_region_PawnState_Vertical__choice_0();
 				} else {
-					if (((sCIPawn.upRight) && ((operationCallback.isValidJump("upright") && !isStateActive(State.main_region_PawnState_Horizontal_Right))))) {
+					if (((sCIPawn.upRight) && (operationCallback.isValidJump("upright")))) {
 						exitSequence_main_region_PawnState_Vertical_Almost_Top();
 						sCIPawn.operationCallback.movePawn("up", 1);
 						
@@ -812,13 +824,13 @@ public class DefaultSMStatemachine implements IDefaultSMStatemachine {
 							
 							react_main_region_PawnState_Vertical__choice_0();
 						} else {
-							if (((sCIPawn.downLeft) && ((operationCallback.isValidJump("downleft") && !isStateActive(State.main_region_PawnState_Horizontal_Left))))) {
+							if (((sCIPawn.downLeft) && (operationCallback.isValidJump("downleft")))) {
 								exitSequence_main_region_PawnState_Vertical_Almost_Top();
 								sCIPawn.operationCallback.movePawn("down", 1);
 								
 								react_main_region_PawnState_Vertical__choice_0();
 							} else {
-								if (((sCIPawn.downRight) && ((operationCallback.isValidJump("downright") && !isStateActive(State.main_region_PawnState_Horizontal_Right))))) {
+								if (((sCIPawn.downRight) && (operationCallback.isValidJump("downright")))) {
 									exitSequence_main_region_PawnState_Vertical_Almost_Top();
 									sCIPawn.operationCallback.movePawn("down", 1);
 									
@@ -852,13 +864,13 @@ public class DefaultSMStatemachine implements IDefaultSMStatemachine {
 				
 				react_main_region_PawnState_Vertical__choice_0();
 			} else {
-				if (((sCIPawn.upLeft) && ((operationCallback.isValidJump("upleft") && !isStateActive(State.main_region_PawnState_Horizontal_Left))))) {
+				if (((sCIPawn.upLeft) && (operationCallback.isValidJump("upleft")))) {
 					exitSequence_main_region_PawnState_Vertical_Almost_Bottom();
 					sCIPawn.operationCallback.movePawn("up", 1);
 					
 					react_main_region_PawnState_Vertical__choice_0();
 				} else {
-					if (((sCIPawn.upRight) && ((operationCallback.isValidJump("upright") && !isStateActive(State.main_region_PawnState_Horizontal_Right))))) {
+					if (((sCIPawn.upRight) && (operationCallback.isValidJump("upright")))) {
 						exitSequence_main_region_PawnState_Vertical_Almost_Bottom();
 						sCIPawn.operationCallback.movePawn("up", 1);
 						
@@ -876,13 +888,13 @@ public class DefaultSMStatemachine implements IDefaultSMStatemachine {
 								
 								react_main_region_PawnState_Vertical__choice_0();
 							} else {
-								if (((sCIPawn.downLeft) && ((operationCallback.isValidJump("downleft") && !isStateActive(State.main_region_PawnState_Horizontal_Left))))) {
+								if (((sCIPawn.downLeft) && (operationCallback.isValidJump("downleft")))) {
 									exitSequence_main_region_PawnState_Vertical_Almost_Bottom();
 									sCIPawn.operationCallback.movePawn("down", 1);
 									
 									react_main_region_PawnState_Vertical__choice_0();
 								} else {
-									if (((sCIPawn.downRight) && ((operationCallback.isValidJump("downright") && !isStateActive(State.main_region_PawnState_Horizontal_Right))))) {
+									if (((sCIPawn.downRight) && (operationCallback.isValidJump("downright")))) {
 										exitSequence_main_region_PawnState_Vertical_Almost_Bottom();
 										sCIPawn.operationCallback.movePawn("down", 1);
 										
@@ -910,13 +922,13 @@ public class DefaultSMStatemachine implements IDefaultSMStatemachine {
 				
 				react_main_region_PawnState_Vertical__choice_0();
 			} else {
-				if (((sCIPawn.upLeft) && ((operationCallback.isValidJump("upleft") && !isStateActive(State.main_region_PawnState_Horizontal_Left))))) {
+				if (((sCIPawn.upLeft) && (operationCallback.isValidJump("upleft")))) {
 					exitSequence_main_region_PawnState_Vertical_Bottom();
 					sCIPawn.operationCallback.movePawn("up", 1);
 					
 					react_main_region_PawnState_Vertical__choice_0();
 				} else {
-					if (((sCIPawn.upRight) && ((operationCallback.isValidJump("upright") && !isStateActive(State.main_region_PawnState_Horizontal_Right))))) {
+					if (((sCIPawn.upRight) && (operationCallback.isValidJump("upright")))) {
 						exitSequence_main_region_PawnState_Vertical_Bottom();
 						sCIPawn.operationCallback.movePawn("up", 1);
 						
@@ -941,7 +953,7 @@ public class DefaultSMStatemachine implements IDefaultSMStatemachine {
 		boolean did_transition = try_transition;
 		
 		if (try_transition) {
-			if (((sCIPawn.upLeft) && ((operationCallback.isValidJump("upleft") && !isStateActive(State.main_region_PawnState_Horizontal_Left))))) {
+			if (((sCIPawn.upLeft) && (operationCallback.isValidJump("upleft")))) {
 				exitSequence_main_region_PawnState_Vertical_Mid();
 				sCIPawn.operationCallback.movePawn("up", 1);
 				
@@ -953,7 +965,7 @@ public class DefaultSMStatemachine implements IDefaultSMStatemachine {
 					
 					react_main_region_PawnState_Vertical__choice_0();
 				} else {
-					if (((sCIPawn.upRight) && ((operationCallback.isValidJump("upright") && !isStateActive(State.main_region_PawnState_Horizontal_Right))))) {
+					if (((sCIPawn.upRight) && (operationCallback.isValidJump("upright")))) {
 						exitSequence_main_region_PawnState_Vertical_Mid();
 						sCIPawn.operationCallback.movePawn("up", 1);
 						
@@ -971,13 +983,13 @@ public class DefaultSMStatemachine implements IDefaultSMStatemachine {
 								
 								react_main_region_PawnState_Vertical__choice_0();
 							} else {
-								if (((sCIPawn.downLeft) && ((operationCallback.isValidJump("downleft") && !isStateActive(State.main_region_PawnState_Horizontal_Left))))) {
+								if (((sCIPawn.downLeft) && (operationCallback.isValidJump("downleft")))) {
 									exitSequence_main_region_PawnState_Vertical_Mid();
 									sCIPawn.operationCallback.movePawn("down", 1);
 									
 									react_main_region_PawnState_Vertical__choice_0();
 								} else {
-									if (((sCIPawn.downRight) && ((operationCallback.isValidJump("downright") && !isStateActive(State.main_region_PawnState_Horizontal_Right))))) {
+									if (((sCIPawn.downRight) && (operationCallback.isValidJump("downright")))) {
 										exitSequence_main_region_PawnState_Vertical_Mid();
 										sCIPawn.operationCallback.movePawn("down", 1);
 										
@@ -1012,13 +1024,13 @@ public class DefaultSMStatemachine implements IDefaultSMStatemachine {
 				
 				react_main_region_PawnState_Horizontal__choice_0();
 			} else {
-				if (((sCIPawn.downRight) && ((operationCallback.isValidJump("downright") && !isStateActive(State.main_region_PawnState_Vertical_Bottom))))) {
+				if (((sCIPawn.downRight) && (operationCallback.isValidJump("downright")))) {
 					exitSequence_main_region_PawnState_Horizontal_Left();
 					sCIPawn.operationCallback.movePawn("right", 1);
 					
 					react_main_region_PawnState_Horizontal__choice_0();
 				} else {
-					if (((sCIPawn.upRight) && ((operationCallback.isValidJump("upright") && !isStateActive(State.main_region_PawnState_Vertical_Top))))) {
+					if (((sCIPawn.upRight) && (operationCallback.isValidJump("upright")))) {
 						exitSequence_main_region_PawnState_Horizontal_Left();
 						sCIPawn.operationCallback.movePawn("right", 1);
 						
@@ -1052,13 +1064,13 @@ public class DefaultSMStatemachine implements IDefaultSMStatemachine {
 				
 				react_main_region_PawnState_Horizontal__choice_0();
 			} else {
-				if (((sCIPawn.upLeft) && ((operationCallback.isValidJump("upleft") && !isStateActive(State.main_region_PawnState_Vertical_Top))))) {
+				if (((sCIPawn.upLeft) && (operationCallback.isValidJump("upleft")))) {
 					exitSequence_main_region_PawnState_Horizontal_Almost_Left();
 					sCIPawn.operationCallback.movePawn("left", 1);
 					
 					react_main_region_PawnState_Horizontal__choice_0();
 				} else {
-					if (((sCIPawn.downLeft) && ((operationCallback.isValidJump("downleft") && !isStateActive(State.main_region_PawnState_Vertical_Bottom))))) {
+					if (((sCIPawn.downLeft) && (operationCallback.isValidJump("downleft")))) {
 						exitSequence_main_region_PawnState_Horizontal_Almost_Left();
 						sCIPawn.operationCallback.movePawn("left", 1);
 						
@@ -1070,13 +1082,13 @@ public class DefaultSMStatemachine implements IDefaultSMStatemachine {
 							
 							react_main_region_PawnState_Horizontal__choice_0();
 						} else {
-							if (((sCIPawn.upRight) && ((operationCallback.isValidJump("upright") && !isStateActive(State.main_region_PawnState_Vertical_Top))))) {
+							if (((sCIPawn.upRight) && (operationCallback.isValidJump("upright")))) {
 								exitSequence_main_region_PawnState_Horizontal_Almost_Left();
 								sCIPawn.operationCallback.movePawn("right", 1);
 								
 								react_main_region_PawnState_Horizontal__choice_0();
 							} else {
-								if (((sCIPawn.downRight) && ((operationCallback.isValidJump("downright") && !isStateActive(State.main_region_PawnState_Vertical_Bottom))))) {
+								if (((sCIPawn.downRight) && (operationCallback.isValidJump("downright")))) {
 									exitSequence_main_region_PawnState_Horizontal_Almost_Left();
 									sCIPawn.operationCallback.movePawn("right", 1);
 									
@@ -1113,13 +1125,13 @@ public class DefaultSMStatemachine implements IDefaultSMStatemachine {
 				
 				react_main_region_PawnState_Horizontal__choice_0();
 			} else {
-				if (((sCIPawn.upLeft) && ((operationCallback.isValidJump("upleft") && !isStateActive(State.main_region_PawnState_Vertical_Top))))) {
+				if (((sCIPawn.upLeft) && (operationCallback.isValidJump("upleft")))) {
 					exitSequence_main_region_PawnState_Horizontal_Almost_Right();
 					sCIPawn.operationCallback.movePawn("left", 1);
 					
 					react_main_region_PawnState_Horizontal__choice_0();
 				} else {
-					if (((sCIPawn.downLeft) && ((operationCallback.isValidJump("downleft") && !isStateActive(State.main_region_PawnState_Vertical_Bottom))))) {
+					if (((sCIPawn.downLeft) && (operationCallback.isValidJump("downleft")))) {
 						exitSequence_main_region_PawnState_Horizontal_Almost_Right();
 						sCIPawn.operationCallback.movePawn("left", 1);
 						
@@ -1137,13 +1149,13 @@ public class DefaultSMStatemachine implements IDefaultSMStatemachine {
 								
 								react_main_region_PawnState_Horizontal__choice_0();
 							} else {
-								if (((sCIPawn.upRight) && ((operationCallback.isValidJump("upright") && !isStateActive(State.main_region_PawnState_Vertical_Top))))) {
+								if (((sCIPawn.upRight) && (operationCallback.isValidJump("upright")))) {
 									exitSequence_main_region_PawnState_Horizontal_Almost_Right();
 									sCIPawn.operationCallback.movePawn("right", 1);
 									
 									react_main_region_PawnState_Horizontal__choice_0();
 								} else {
-									if (((sCIPawn.downRight) && ((operationCallback.isValidJump("downright") && !isStateActive(State.main_region_PawnState_Vertical_Bottom))))) {
+									if (((sCIPawn.downRight) && (operationCallback.isValidJump("downright")))) {
 										exitSequence_main_region_PawnState_Horizontal_Almost_Right();
 										sCIPawn.operationCallback.movePawn("right", 1);
 										
@@ -1174,13 +1186,13 @@ public class DefaultSMStatemachine implements IDefaultSMStatemachine {
 				
 				react_main_region_PawnState_Horizontal__choice_0();
 			} else {
-				if (((sCIPawn.upLeft) && ((operationCallback.isValidJump("upleft") && !isStateActive(State.main_region_PawnState_Vertical_Top))))) {
+				if (((sCIPawn.upLeft) && (operationCallback.isValidJump("upleft")))) {
 					exitSequence_main_region_PawnState_Horizontal_Right();
 					sCIPawn.operationCallback.movePawn("left", 1);
 					
 					react_main_region_PawnState_Horizontal__choice_0();
 				} else {
-					if (((sCIPawn.downLeft) && ((operationCallback.isValidJump("downleft") && !isStateActive(State.main_region_PawnState_Vertical_Bottom))))) {
+					if (((sCIPawn.downLeft) && (operationCallback.isValidJump("downleft")))) {
 						exitSequence_main_region_PawnState_Horizontal_Right();
 						sCIPawn.operationCallback.movePawn("left", 1);
 						
@@ -1208,7 +1220,7 @@ public class DefaultSMStatemachine implements IDefaultSMStatemachine {
 		boolean did_transition = try_transition;
 		
 		if (try_transition) {
-			if (((sCIPawn.upLeft) && ((operationCallback.isValidJump("upleft") && !isStateActive(State.main_region_PawnState_Vertical_Top))))) {
+			if (((sCIPawn.upLeft) && (operationCallback.isValidJump("upleft")))) {
 				exitSequence_main_region_PawnState_Horizontal_Mid();
 				sCIPawn.operationCallback.movePawn("left", 1);
 				
@@ -1220,7 +1232,7 @@ public class DefaultSMStatemachine implements IDefaultSMStatemachine {
 					
 					react_main_region_PawnState_Horizontal__choice_0();
 				} else {
-					if (((sCIPawn.downLeft) && ((operationCallback.isValidJump("downleft") && !isStateActive(State.main_region_PawnState_Vertical_Bottom))))) {
+					if (((sCIPawn.downLeft) && (operationCallback.isValidJump("downleft")))) {
 						exitSequence_main_region_PawnState_Horizontal_Mid();
 						sCIPawn.operationCallback.movePawn("left", 1);
 						
@@ -1238,13 +1250,13 @@ public class DefaultSMStatemachine implements IDefaultSMStatemachine {
 								
 								react_main_region_PawnState_Horizontal__choice_0();
 							} else {
-								if (((sCIPawn.upRight) && ((operationCallback.isValidJump("upright") && !isStateActive(State.main_region_PawnState_Vertical_Top))))) {
+								if (((sCIPawn.upRight) && (operationCallback.isValidJump("upright")))) {
 									exitSequence_main_region_PawnState_Horizontal_Mid();
 									sCIPawn.operationCallback.movePawn("right", 1);
 									
 									react_main_region_PawnState_Horizontal__choice_0();
 								} else {
-									if (((sCIPawn.downRight) && ((operationCallback.isValidJump("downright") && !isStateActive(State.main_region_PawnState_Vertical_Bottom))))) {
+									if (((sCIPawn.downRight) && (operationCallback.isValidJump("downright")))) {
 										exitSequence_main_region_PawnState_Horizontal_Mid();
 										sCIPawn.operationCallback.movePawn("right", 1);
 										

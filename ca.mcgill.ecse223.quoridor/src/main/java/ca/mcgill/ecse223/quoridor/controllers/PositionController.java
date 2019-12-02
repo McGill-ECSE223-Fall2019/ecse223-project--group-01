@@ -12,6 +12,7 @@ import java.util.List;
  * for the save position feature and the load position feature for Quoridor gameplay.
  * @author Kevin
  */
+@SuppressWarnings("Duplicates")
 public class PositionController {
 
     public static boolean isPositionValid = true;
@@ -80,7 +81,7 @@ public class PositionController {
 
             listOfWalls = ModelQuery.getBlackWallsOnBoard();
             for(int i = 0; i < listOfWalls.size(); i++){
-               String wallPosition = writeWallInfo(i, listOfWalls);
+                String wallPosition = writeWallInfo(i, listOfWalls);
                 output.append(wallPosition);
             }
         }
@@ -117,12 +118,13 @@ public class PositionController {
         }
 
         else{ //Something went wrong
+            isPositionValid = false;
             return false;
         }
         output.append("\n");
         output.close();
         return true;
-       }
+    }
 
     /**
      * Attempts to load a specified savefile in a filesystem.
@@ -132,7 +134,7 @@ public class PositionController {
      * @throws java.lang.UnsupportedOperationException
      */
     public static boolean loadGame(String filename, String whiteUser, String blackUser) throws java.lang.UnsupportedOperationException, IOException {
-        File saveFile = new File("./" + filename);
+        File saveFile = new File(saveLocation + filename);
         Quoridor quoridor = QuoridorApplication.getQuoridor();
 
         //Make game running
@@ -141,8 +143,13 @@ public class PositionController {
         StartNewGameController.whitePlayerChoosesAUsername(whiteUser);
         StartNewGameController.blackPlayerChooseAUsername(blackUser);
 
+        SetNextPlayers();
+        loadGameBoard();
+
         PlayerPosition whitePlayerPosition = null;
         PlayerPosition blackPlayerPosition = null;
+        PlayerPosition redPlayerPosition = null;
+        PlayerPosition greenPlayerPosition = null;
         List<GamePosition> positions = ModelQuery.getCurrentGame().getPositions();
 
 
@@ -179,7 +186,7 @@ public class PositionController {
                             return false;
                         }
 
-                        Tile pos = new Tile(playerCoord[1],playerCoord[0],loadGameBoard()); //using Position --> integer
+                        Tile pos = ModelQuery.getTile(playerCoord[1],playerCoord[0]); //using Position --> integer
                         whitePlayerPosition = new PlayerPosition(quoridor.getCurrentGame().getWhitePlayer(),pos);
 
 
@@ -204,7 +211,7 @@ public class PositionController {
                             return false;
                         }
 
-                        Tile pos = new Tile(playerCoord[1],playerCoord[0],loadGameBoard()); //using Position --> integer
+                        Tile pos = ModelQuery.getTile(playerCoord[1],playerCoord[0]); //using Position --> integer
                         blackPlayerPosition = new PlayerPosition(quoridor.getCurrentGame().getBlackPlayer(),pos);
 
 
@@ -216,6 +223,7 @@ public class PositionController {
                         }
                     }
                     else { //Faulty savePosition file
+                        isPositionValid = false;
                         return false;
                     }
 
@@ -223,13 +231,27 @@ public class PositionController {
                 }
 
                 GamePosition gameposition = new GamePosition(positions.size()+1, whitePlayerPosition, blackPlayerPosition, quoridor.getCurrentGame().getWhitePlayer(), quoridor.getCurrentGame());
+                if(ModelQuery.isFourPlayer()) {
+                    gameposition.setRedPosition(redPlayerPosition);
+                    gameposition.setGreenPosition(greenPlayerPosition);
+                }
+
                 quoridor.getCurrentGame().setCurrentPosition(gameposition);
                 quoridor.getCurrentGame().getCurrentPosition().setWhitePosition(whitePlayerPosition);
                 quoridor.getCurrentGame().getCurrentPosition().setBlackPosition(blackPlayerPosition);
+                if(ModelQuery.isFourPlayer()) {
+                    ModelQuery.getCurrentGame().getCurrentPosition().setRedPosition(redPlayerPosition);
+                    ModelQuery.getCurrentGame().getCurrentPosition().setGreenPosition(greenPlayerPosition);
+                }
 
-                PawnController.initPawnSM(quoridor.getCurrentGame().getBlackPlayer(), blackPlayerPosition);
                 PawnController.initPawnSM(quoridor.getCurrentGame().getWhitePlayer(), whitePlayerPosition);
+                PawnController.initPawnSM(quoridor.getCurrentGame().getBlackPlayer(), blackPlayerPosition);
+                if(ModelQuery.isFourPlayer()) {
+                    PawnController.initPawnSM(quoridor.getCurrentGame().getRedPlayer(), redPlayerPosition);
+                    PawnController.initPawnSM(quoridor.getCurrentGame().getGreenPlayer(), greenPlayerPosition);
+                }
                 if(!ValidatePositionController.validateOverlappingPawns()){
+                    isPositionValid = false;
                     return false;
                 }
 
@@ -264,14 +286,14 @@ public class PositionController {
                     }
 
                     Player whitePlayer = ModelQuery.getWhitePlayer();
-                    Tile wallTile = new Tile(whiteWalls.get(i)[1], whiteWalls.get(i)[0], ModelQuery.getBoard());
+                    Tile wallTile = ModelQuery.getTile(whiteWalls.get(i)[1], whiteWalls.get(i)[0]);
                     Game currentGame = ModelQuery.getCurrentGame();
 
                     Wall dropWall = ModelQuery.getCurrentGame().getCurrentPosition().getWhiteWallsInStock().get(i);
 
                     WallMove wallmove = new WallMove(moveNum, roundNum,whitePlayer, wallTile, currentGame, wallDir, dropWall);
 
-                   loadWall(wallmove,ModelQuery.getWhitePlayer());
+                    loadWall(wallmove,ModelQuery.getWhitePlayer());
                 }
 
                 for(int i = 0; i < blackWalls.size(); i++){
@@ -286,7 +308,7 @@ public class PositionController {
                     }
 
                     Player blackPlayer = ModelQuery.getBlackPlayer();
-                    Tile wallTile = new Tile(blackWalls.get(i)[1], blackWalls.get(i)[0], ModelQuery.getBoard());
+                    Tile wallTile = ModelQuery.getTile(blackWalls.get(i)[1], blackWalls.get(i)[0]);
                     Game currentGame = ModelQuery.getCurrentGame();
 
                     Wall dropWall = ModelQuery.getCurrentGame().getCurrentPosition().getBlackWallsInStock().get(i);
@@ -298,12 +320,13 @@ public class PositionController {
 
 
                 if(playerTurn == null){ //incase while loop was not executed
+                    isPositionValid = false;
                     return false;
                 }
 
                 else{ //switch the current turn to the player
                     if(ModelQuery.getPlayerToMove() != playerTurn)
-                    SwitchPlayerController.switchActivePlayer();
+                        SwitchPlayerController.switchActivePlayer();
                 }
 
                 bufferedReader.close();
@@ -328,7 +351,7 @@ public class PositionController {
      * @param direction     the direction of the wall
      * @return              the save format of the direction
      */
-    private static String convertWallDir(Direction direction){
+    public static String convertWallDir(Direction direction){
         switch(direction){
             case Horizontal:
                 return "h";
@@ -361,7 +384,7 @@ public class PositionController {
      * @return int[]            [0] COLUMN
      *                          [1] ROW
      */
-    private static int[] posToInt(String playerPosition){
+    public static int[] posToInt(String playerPosition){
         //.Note [0]: always a letter, [1]: always a number
         char[] char_arr = playerPosition.toCharArray();
 
@@ -398,7 +421,7 @@ public class PositionController {
      * @param listOfWalls   the list of walls
      * @return              String that will have the appropriate save format
      */
-    private static String writeWallInfo(int index, List<Wall> listOfWalls){
+    public static String writeWallInfo(int index, List<Wall> listOfWalls){
         Wall wall = listOfWalls.get(index);
         Tile wallTile = wall.getMove().getTargetTile(); //gets the coordinate of the wall
         String orientation = convertWallDir(wall.getMove().getWallDirection()); //gets the orientation of the wall
@@ -411,7 +434,7 @@ public class PositionController {
         return wallPosition;
     }
 
-    private static boolean loadWall(WallMove move, Player player){
+    public static boolean loadWall(WallMove move, Player player){
         ModelQuery.getCurrentGame().addMove(move);
         ModelQuery.getCurrentGame().setWallMoveCandidate(null);
 
@@ -433,14 +456,20 @@ public class PositionController {
      * @return          true if it is within the board range
      *                  false if it is outside of the board
      */
-    private static boolean validatePositionInRange(int row, int col){
+    public static boolean validatePositionInRange(int row, int col){
         if (row < 1 || row > 9 || col < 1 || col > 9) {
             return false;
         }
         return true;
     }
 
-    private static Board loadGameBoard() {
+    private static void SetNextPlayers(){
+        ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.ReadyToStart);
+        ModelQuery.getWhitePlayer().setNextPlayer(ModelQuery.getBlackPlayer());
+        ModelQuery.getBlackPlayer().setNextPlayer(ModelQuery.getWhitePlayer());
+    }
+
+    public static Board loadGameBoard() {
         Quoridor quoridor = QuoridorApplication.getQuoridor();
         Board board;
         if (quoridor.getBoard() == null) {

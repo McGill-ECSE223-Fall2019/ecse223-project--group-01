@@ -31,10 +31,25 @@ public class ValidatePositionController {
 	 * @return whether or not the pawn locations are allowed (true if valid, false if invalid)
 	 */
 	public static boolean validateOverlappingPawns() {
+		boolean valid = true;
+		
 		PlayerPosition whitePosition = ModelQuery.getCurrentGame().getCurrentPosition().getWhitePosition();
 		PlayerPosition blackPosition = ModelQuery.getCurrentGame().getCurrentPosition().getBlackPosition();
+		if(whitePosition.getTile().equals(blackPosition.getTile())) {
+			valid = false;
+		}
 		
-		return !whitePosition.getTile().equals(blackPosition.getTile());
+		if(ModelQuery.isFourPlayer()) {
+			PlayerPosition redPosition = ModelQuery.getCurrentGame().getCurrentPosition().getRedPosition();
+			PlayerPosition greenPosition = ModelQuery.getCurrentGame().getCurrentPosition().getGreenPosition();
+			if(whitePosition.getTile().equals(redPosition.getTile()) || whitePosition.getTile().equals(greenPosition.getTile()) ||
+					blackPosition.getTile().equals(redPosition.getTile()) || blackPosition.getTile().equals(greenPosition.getTile()) ||
+					redPosition.getTile().equals(greenPosition.getTile())) {
+				valid = false;
+			}
+		}
+		
+		return valid;
 	}
 	
 	/**

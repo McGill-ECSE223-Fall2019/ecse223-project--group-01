@@ -1,9 +1,9 @@
 package ca.mcgill.ecse223.quoridor.view;
 
-import ca.mcgill.ecse223.quoridor.controllers.BoardController;
-import ca.mcgill.ecse223.quoridor.controllers.PositionController;
-import ca.mcgill.ecse223.quoridor.controllers.StartNewGameController;
+import ca.mcgill.ecse223.quoridor.controllers.*;
 import ca.mcgill.ecse223.quoridor.model.User;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -21,26 +21,40 @@ public class NewGameMenuController extends ViewController {
     @FXML
     public TextField whitePlayerName;
     public TextField blackPlayerName;
+    public TextField redPlayerName;
+    public TextField greenPlayerName;
     public TextField minutes;
     public TextField seconds;
     public Button confirm;
+    public ChoiceBox<String> existingWhiteChoices; 
     public ChoiceBox<String> existingBlackChoices;
-    public ChoiceBox<String> existingWhiteChoices;
+    public ChoiceBox<String> existingRedChoices;
+    public ChoiceBox<String> existingGreenChoices;
     public ChoiceDialog<String> existingSavedPosition;
     List<String> saveFiles;
     public String saveLocation = ".\\";
+    
+    public RadioButton twoPlayer;
+    public RadioButton fourPlayer;
+    public ToggleGroup numberPlayers;
 
     public static String minS;
     public static String secS;
 
+    @SuppressWarnings("Duplicates")
     public void initialize() {
-
-        StartNewGameController.initializeGame();
+    	
+        StartNewGameController.initializeGame(); 
         List<User> existingUsers = StartNewGameController.existedUsers();
-
-        existingBlackChoices.setOnAction(e -> blackPlayerName.setText(""));
-
+        
         existingWhiteChoices.setOnAction(e -> whitePlayerName.setText(""));
+        existingBlackChoices.setOnAction(e -> blackPlayerName.setText(""));
+        existingRedChoices.setOnAction(e -> blackPlayerName.setText(""));
+        existingGreenChoices.setOnAction(e -> whitePlayerName.setText(""));
+        
+        //redPlayerName.setText(numPlayers.getSelectedToggle().toString());
+        
+        
 
         whitePlayerName.textProperty().addListener((observable, oldValue, newValue) -> {
             if(newValue!=null){
@@ -53,11 +67,56 @@ public class NewGameMenuController extends ViewController {
                 existingBlackChoices.setValue(null);
             }
         });
+        
+        redPlayerName.textProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue!=null){
+                existingRedChoices.setValue(null);
+            }
+        });
+
+        greenPlayerName.textProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue!=null){
+                existingGreenChoices.setValue(null);
+            }
+        });
+
 
         for (User user : existingUsers) {
+        	existingWhiteChoices.getItems().add(user.getName());
             existingBlackChoices.getItems().add(user.getName());
-            existingWhiteChoices.getItems().add(user.getName());
+            existingRedChoices.getItems().add(user.getName());
+            existingGreenChoices.getItems().add(user.getName());
         }
+        
+        
+		redPlayerName.setEditable(false);
+		greenPlayerName.setEditable(false);
+		existingRedChoices.setDisable(false);
+		existingGreenChoices.setDisable(false);
+		redPlayerName.setStyle("-fx-background-color: grey;");
+		greenPlayerName.setStyle("-fx-background-color: grey;");
+        numberPlayers.selectedToggleProperty().addListener(new ChangeListener<Toggle>()  
+        { 
+            public void changed(ObservableValue<? extends Toggle> ob,  
+                                                    Toggle o, Toggle n) 
+            { 
+            	if(numberPlayers.getSelectedToggle().equals(twoPlayer)) {
+            		redPlayerName.setEditable(false);
+            		greenPlayerName.setEditable(false);
+            		existingRedChoices.setDisable(true);
+            		existingGreenChoices.setDisable(true);
+            		redPlayerName.setStyle("-fx-background-color: grey;");
+            		greenPlayerName.setStyle("-fx-background-color: grey;");
+            	} else {
+            		redPlayerName.setEditable(true);
+            		greenPlayerName.setEditable(true);
+            		existingRedChoices.setDisable(false);
+            		existingGreenChoices.setDisable(false);
+            		redPlayerName.setStyle("-fx-background-color: white;");
+            		greenPlayerName.setStyle("-fx-background-color: white;");
+            	}
+            } 
+        }); 
 
     }
 
@@ -72,6 +131,8 @@ public class NewGameMenuController extends ViewController {
         String error = "";
         String whiteName;
         String blackName;
+        String redName = "";
+        String greenName = "";
 
 
         // confirm that all fields have been set
@@ -94,17 +155,21 @@ public class NewGameMenuController extends ViewController {
             readyTostart = false;
         }
 
-        //validate both players do not have the same name
-        if (!blackPlayerName.getText().equals("") & !whitePlayerName.getText().equals("")) {
-            if (blackPlayerName.getText().equals(whitePlayerName.getText())) {
-                error += "Players should not have the same name \n";
+        if (numberPlayers.getSelectedToggle().equals(fourPlayer)) {
+            if (redPlayerName.getText().equals("") && existingRedChoices.getValue() == null) {
+                error += "Red name not set \n";
+                readyTostart = false;
+            } else if (!redPlayerName.getText().equals("") && StartNewGameController.usernameExists(redPlayerName.getText())) {
+                error += "Red username already exists \n";
                 readyTostart = false;
             }
-        }
 
-        if (existingBlackChoices.getValue() != null && existingWhiteChoices.getValue() != null) {
-            if (existingBlackChoices.getValue().equals(existingWhiteChoices.getValue())) {
-                error += "Players should not choose the same name \n";
+            //validate black player name
+            if (greenPlayerName.getText().equals("") && existingGreenChoices.getValue() == null) {
+                error += "Green player name not set \n";
+                readyTostart = false;
+            } else if (!greenPlayerName.getText().equals("") && StartNewGameController.usernameExists(greenPlayerName.getText())) {
+                error += "Green username already exists \n";
                 readyTostart = false;
             }
         }
@@ -126,39 +191,72 @@ public class NewGameMenuController extends ViewController {
 
         // All good begin initialization process
         if (readyTostart) {
-
             //setup names
-            if(blackPlayerName.getText().equals("")){
-                blackName = existingBlackChoices.getValue();
-            }
-            else{
-                blackName = blackPlayerName.getText();
-            }
             if(whitePlayerName.getText().equals("")){
                 whiteName = existingWhiteChoices.getValue();
             }
             else{
                 whiteName = whitePlayerName.getText();
             }
-
-            // Validate both player's name
-            if(whiteName.equals(blackName)){
-                error+= "Players may not have the same name!";
-                readyTostart = false;
+            if(blackPlayerName.getText().equals("")){
+                blackName = existingBlackChoices.getValue();
+            }
+            else{
+                blackName = blackPlayerName.getText();
+            }
+            
+            if(numberPlayers.getSelectedToggle().equals(fourPlayer)) {
+                if(redPlayerName.getText().equals("")){
+                    redName = existingRedChoices.getValue();
+                }
+                else{
+                    redName = redPlayerName.getText();
+                }
+                if(blackPlayerName.getText().equals("")){
+                    greenName = existingGreenChoices.getValue();
+                }
+                else{
+                    greenName = greenPlayerName.getText();
+                }
             }
 
 
-            StartNewGameController.initializeGame();
-            StartNewGameController.blackPlayerChooseAUsername(blackName);
-            StartNewGameController.whitePlayerChoosesAUsername(whiteName);
+            // Validate both player's name
+            if(numberPlayers.getSelectedToggle().equals(twoPlayer)) {
+            	if(whiteName.equals(blackName)){
+            		error+= "Players may not have the same name!";
+                	readyTostart = false;
+            	}
+            } else if(numberPlayers.getSelectedToggle().equals(fourPlayer)) {
+            	if(whiteName.equals(blackName)|| whiteName.equals(redName) || whiteName.equals(greenName) || 
+            			blackName.equals(redName) || blackName.equals(greenName) || redName.equals(greenName)) {
+            		error+= "Players may not have the same name!";
+            		readyTostart = false;
+            	}
+            }
 
+            StartNewGameController.initializeGame();
+            if(numberPlayers.getSelectedToggle().equals(fourPlayer)) {
+            	ModelQuery.getCurrentGame().setIsFourPlayer(true);
+            }
+            
+            //setup user-player connections
+            StartNewGameController.whitePlayerChoosesAUsername(whiteName); 
+            StartNewGameController.blackPlayerChooseAUsername(blackName);
+            if(numberPlayers.getSelectedToggle().equals(fourPlayer)) { 
+            	StartNewGameController.redPlayerChooseAUsername(redName);
+            	StartNewGameController.greenPlayerChooseAUsername(greenName);
+            }
+            
             minS = minutes.getText();
             secS = seconds.getText();
             StartNewGameController.setTotalThinkingTime(Integer.parseInt(minutes.getText()), Integer.parseInt(seconds.getText()));
             BoardController.initializeBoard();
+            /* Playing the Battle music */
+            MusicController.playEpicMusic();
             changePage("/fxml/InitializeBoard.fxml");
         }
-        // Display erros
+        // Display errors
         else {
             AlertHelper.showAlert(Alert.AlertType.ERROR, page, "Error", error);
         }
@@ -173,6 +271,7 @@ public class NewGameMenuController extends ViewController {
         }
     }
 
+    @SuppressWarnings("Duplicates")
     public void handleLoadPosition(ActionEvent actionEvent) {
         // confirm button
         Window page = confirm.getScene().getWindow();
@@ -267,8 +366,10 @@ public class NewGameMenuController extends ViewController {
                     errorAlert.setContentText("The saved positions were unable to be loaded");
                     errorAlert.showAndWait();
                 }
-                else
+                else{
+                    MusicController.playEpicMusic();
                     changePage("/fxml/InitializeBoard.fxml");
+                }
             } catch (IOException e) {
                 Alert errorAlert = new Alert(Alert.AlertType.ERROR);
                 errorAlert.setHeaderText("Error in loading Position");

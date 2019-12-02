@@ -11,49 +11,49 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#handleKeyPressed" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ca.mcgill.ecse223.quoridor.view.InitializeBoardController">
    <children>
-      <Text fx:id="blackPlayerName" layoutX="55.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PLAYER 1" wrappingWidth="107.151118046875">
+      <Text fx:id="whitePlayerName" layoutX="35.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PLAYER 1" wrappingWidth="107.151118046875">
          <font>
             <Font size="20.0" />
          </font>
       </Text>
-      <Circle layoutX="34.0" layoutY="22.0" radius="8.0" stroke="BLACK" strokeType="INSIDE" />
-      <Rectangle arcHeight="5.0" arcWidth="5.0" height="33.0" layoutX="173.0" layoutY="5.0" stroke="BLACK" strokeType="INSIDE" width="9.0" />
-      <Text layoutX="194.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="x" wrappingWidth="35.151102788085936">
+      <Circle fill="#dde8f2" layoutX="26.0" layoutY="23.0" radius="8.0" stroke="BLACK" strokeType="INSIDE" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#dde8f2" height="33.0" layoutX="133.0" layoutY="6.0" stroke="BLACK" strokeType="INSIDE" width="9.0" />
+      <Text layoutX="142.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="x" wrappingWidth="35.151102788085936">
          <font>
             <Font size="20.0" />
          </font>
       </Text>
-      <Text fx:id="blackNumOfWalls" layoutX="211.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="10" wrappingWidth="35.151102788085936">
+      <Text fx:id="whiteNumOfWalls" layoutX="157.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="10" wrappingWidth="35.151102788085936">
          <font>
             <Font size="20.0" />
          </font>
       </Text>
-      <Text layoutX="427.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Remaining Time" wrappingWidth="166.4844615527344">
+      <Text layoutX="420.0" layoutY="62.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Remaining Time" wrappingWidth="166.4844615527344">
          <font>
             <Font size="20.0" />
          </font>
       </Text>
-      <Text fx:id="blackPlayerName1" layoutX="413.0" layoutY="98.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" text="PLAYER 1" wrappingWidth="107.151118046875">
+      <Text fx:id="whitePlayerName1" layoutX="413.0" layoutY="98.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" text="PLAYER 1" wrappingWidth="107.151118046875">
          <font>
             <Font size="20.0" />
          </font>
       </Text>
-      <Text fx:id="whitePlayerName1" layoutX="413.0" layoutY="135.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PLAYER 2" wrappingWidth="107.151118046875">
+      <Text fx:id="blackPlayerName1" layoutX="413.0" layoutY="135.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PLAYER 2" wrappingWidth="107.151118046875">
          <font>
             <Font size="20.0" />
          </font>
       </Text>
-      <Button layoutX="442.0" layoutY="216.0" mnemonicParsing="false" onAction="#handleRotate" prefHeight="39.0" prefWidth="152.0" text="Rotate Wall (R)">
+      <Button fx:id="rotateWallBtn" layoutX="427.0" layoutY="280.0" mnemonicParsing="false" onAction="#handleRotate" prefHeight="39.0" prefWidth="152.0" text="Rotate Wall">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
-      <Button layoutX="442.0" layoutY="322.0" mnemonicParsing="false" onAction="#handleSavePosition" prefHeight="39.0" prefWidth="152.0" text="Save Position">
+      <Button layoutX="427.0" layoutY="409.0" mnemonicParsing="false" onAction="#handleResignGame" prefHeight="39.0" prefWidth="152.0" text="Resign">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
-      <Button layoutX="442.0" layoutY="377.0" mnemonicParsing="false" onAction="#handleBackToMenu" prefHeight="39.0" prefWidth="152.0" text="Back to Menu">
+      <Button fx:id="backBtn" layoutX="427.0" layoutY="451.0" mnemonicParsing="false" onAction="#handleBackToMenu" prefHeight="39.0" prefWidth="152.0" text="Back to Menu">
          <font>
             <Font size="18.0" />
          </font>
@@ -143,42 +143,182 @@
             <Rectangle arcHeight="5.0" arcWidth="5.0" cache="true" disable="true" fill="WHITE" height="34.0" layoutX="344.0" layoutY="346.0" smooth="false" stroke="#ffffffc9" strokeType="INSIDE" width="34.0" />
             <Rectangle arcHeight="5.0" arcWidth="5.0" cache="true" disable="true" fill="WHITE" height="34.0" smooth="false" stroke="#ffffffc9" strokeType="INSIDE" width="34.0" />
             <Circle fill="WHITE" layoutX="189.0" layoutY="363.0" radius="10.0" smooth="false" stroke="#ffffffc9" strokeType="INSIDE" />
-            <AnchorPane fx:id="board" prefHeight="380.0" prefWidth="378.0" />
+            <AnchorPane fx:id="board" prefHeight="380.0" prefWidth="378.0">
+               <children>
+                  <Rectangle fx:id="rect1" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect2" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="43.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect4" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="129.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect5" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="172.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect6" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="215.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect7" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="258.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect8" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="301.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect9" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="344.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect10" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutY="43.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect11" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="43.0" layoutY="43.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect12" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="86.0" layoutY="43.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect13" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="129.0" layoutY="43.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect14" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="172.0" layoutY="43.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect15" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="215.0" layoutY="43.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect16" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="258.0" layoutY="43.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect17" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="301.0" layoutY="43.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect18" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="344.0" layoutY="43.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect19" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutY="86.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect20" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="43.0" layoutY="86.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect21" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="86.0" layoutY="86.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect22" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="129.0" layoutY="86.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect23" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="172.0" layoutY="86.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect24" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="215.0" layoutY="86.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect25" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="258.0" layoutY="86.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect26" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="301.0" layoutY="86.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect27" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="344.0" layoutY="86.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect28" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutY="129.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect29" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="43.0" layoutY="129.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect30" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="86.0" layoutY="129.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect31" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="129.0" layoutY="129.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect32" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="172.0" layoutY="129.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect33" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="215.0" layoutY="129.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect34" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="258.0" layoutY="129.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect35" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="301.0" layoutY="129.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect36" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="344.0" layoutY="129.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect37" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutY="172.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect38" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="43.0" layoutY="172.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect39" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="86.0" layoutY="172.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect40" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="129.0" layoutY="172.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect41" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="172.0" layoutY="172.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect42" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="215.0" layoutY="172.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect43" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="258.0" layoutY="172.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect44" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="301.0" layoutY="172.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect45" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="344.0" layoutY="172.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect46" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutY="215.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect47" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="43.0" layoutY="215.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect48" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="86.0" layoutY="215.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect49" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="129.0" layoutY="215.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect50" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="172.0" layoutY="215.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect51" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="215.0" layoutY="215.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect52" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="258.0" layoutY="215.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect53" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="301.0" layoutY="215.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect54" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="344.0" layoutY="215.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect55" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutY="258.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect56" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="43.0" layoutY="258.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect57" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="86.0" layoutY="258.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect58" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="129.0" layoutY="258.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect59" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="172.0" layoutY="258.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect60" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="215.0" layoutY="258.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect61" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="258.0" layoutY="258.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect62" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="301.0" layoutY="258.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect63" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="344.0" layoutY="258.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect64" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutY="301.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect65" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="43.0" layoutY="301.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect66" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="86.0" layoutY="301.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect67" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="129.0" layoutY="301.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect68" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="172.0" layoutY="301.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect69" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="215.0" layoutY="301.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect70" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="258.0" layoutY="301.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect71" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="301.0" layoutY="301.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect72" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="344.0" layoutY="301.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect73" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutY="344.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect74" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="43.0" layoutY="344.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect75" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="86.0" layoutY="344.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect76" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="129.0" layoutY="344.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect77" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="172.0" layoutY="344.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect78" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="215.0" layoutY="344.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect79" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="258.0" layoutY="344.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect80" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="301.0" layoutY="344.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect81" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="344.0" layoutY="344.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+                  <Rectangle fx:id="rect3" arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="34.0" layoutX="86.0" onMouseClicked="#handle" opacity="0.0" stroke="BLACK" strokeType="INSIDE" width="34.0" />
+               </children>
+            </AnchorPane>
          </children>
+
+
       </AnchorPane>
-      <Button layoutX="442.0" layoutY="163.0" mnemonicParsing="false" onAction="#createNewWall" prefHeight="39.0" prefWidth="152.0" text="Wall">
+      <Button fx:id="grabWallBtn" layoutX="427.0" layoutY="238.0" mnemonicParsing="false" onAction="#createNewWall" prefHeight="39.0" prefWidth="152.0" text="Wall">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
-      <Label fx:id="timerForBlackPlayer" layoutX="533.0" layoutY="79.0" prefHeight="23.0" prefWidth="61.0" style="-fx-border-color: #000000;" text="   11:30" textAlignment="CENTER">
+      <Label fx:id="timerForWhitePlayer" layoutX="533.0" layoutY="79.0" prefHeight="23.0" prefWidth="61.0" style="-fx-border-color: #000000;" text="   11:30" textAlignment="CENTER">
          <font>
             <Font size="15.0" />
          </font>
       </Label>
-      <Label fx:id="timerForWhitePlayer" layoutX="533.0" layoutY="116.0" prefHeight="23.0" prefWidth="61.0" style="-fx-border-color: #000000;" text="   12:30" textAlignment="CENTER">
+      <Label fx:id="timerForBlackPlayer" layoutX="533.0" layoutY="116.0" prefHeight="23.0" prefWidth="61.0" style="-fx-border-color: #000000;" text="   12:30" textAlignment="CENTER">
          <font>
             <Font size="15.0" />
          </font>
       </Label>
-      <Text fx:id="whitePlayerName" layoutX="55.0" layoutY="478.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PLAYER 2" wrappingWidth="107.151118046875">
+      <Text fx:id="blackPlayerName" layoutX="35.0" layoutY="477.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PLAYER 2" wrappingWidth="107.151118046875">
          <font>
             <Font size="20.0" />
          </font>
       </Text>
-      <Circle fill="WHITE" layoutX="34.0" layoutY="470.0" radius="8.0" stroke="BLACK" strokeType="INSIDE" />
-      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="33.0" layoutX="175.0" layoutY="453.0" stroke="BLACK" strokeType="INSIDE" width="9.0" />
-      <Text layoutX="196.0" layoutY="477.0" strokeType="OUTSIDE" strokeWidth="0.0" text="x" wrappingWidth="35.151102788085936">
+      <Circle layoutX="26.0" layoutY="470.0" radius="8.0" stroke="BLACK" strokeType="INSIDE" />
+      <Rectangle arcHeight="5.0" arcWidth="5.0" height="33.0" layoutX="133.0" layoutY="454.0" stroke="BLACK" strokeType="INSIDE" width="9.0" />
+      <Text layoutX="142.0" layoutY="477.0" strokeType="OUTSIDE" strokeWidth="0.0" text="x" wrappingWidth="35.151102788085936">
          <font>
             <Font size="20.0" />
          </font>
       </Text>
-      <Text fx:id="whiteNumOfWalls" layoutX="213.0" layoutY="478.0" strokeType="OUTSIDE" strokeWidth="0.0" text="10" wrappingWidth="35.151102788085936">
+      <Text fx:id="blackNumOfWalls" layoutX="159.0" layoutY="477.0" strokeType="OUTSIDE" strokeWidth="0.0" text="10" wrappingWidth="35.151102788085936">
          <font>
             <Font size="20.0" />
          </font>
       </Text>
       <PointLight fx:id="whitePlayerLight" color="CHARTREUSE" layoutX="249.0" layoutY="30.0" lightOn="true" />
+      <Text fx:id="greenPlayerName1" layoutX="413.0" layoutY="203.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PLAYER 4" wrappingWidth="107.151118046875">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
+      <Text fx:id="redPlayerName1" layoutX="413.0" layoutY="170.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PLAYER 3" wrappingWidth="107.151118046875">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
+      <Label fx:id="timerForGreenPlayer" layoutX="533.0" layoutY="185.0" prefHeight="23.0" prefWidth="61.0" style="-fx-border-color: #000000;" text="   14:30" textAlignment="CENTER">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <Label fx:id="timerForRedPlayer" layoutX="533.0" layoutY="150.0" prefHeight="23.0" prefWidth="61.0" style="-fx-border-color: #000000;" text="   13:30" textAlignment="CENTER">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <Circle fx:id="c1" fill="RED" layoutX="241.0" layoutY="23.0" radius="8.0" stroke="BLACK" strokeType="INSIDE" />
+      <Circle fx:id="c2" fill="LIGHTGREEN" layoutX="241.0" layoutY="471.0" radius="8.0" stroke="BLACK" strokeType="INSIDE" />
+      <Text fx:id="redPlayerName" layoutX="249.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PLAYER 3" wrappingWidth="107.151118046875">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
+      <Text fx:id="greenPlayerName" layoutX="249.0" layoutY="478.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PLAYER 4" wrappingWidth="107.151118046875">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
+      <Text layoutX="356.0" layoutY="477.0" strokeType="OUTSIDE" strokeWidth="0.0" text="x" wrappingWidth="35.151102788085936" fx:id="x2">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
+      <Text layoutX="356.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" text="x" wrappingWidth="35.151102788085936" fx:id="x1">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
+      <Rectangle fx:id="r2" arcHeight="5.0" arcWidth="5.0" fill="LIGHTGREEN" height="33.0" layoutX="347.0" layoutY="454.0" stroke="BLACK" strokeType="INSIDE" width="9.0" />
+      <Rectangle fx:id="r1" arcHeight="5.0" arcWidth="5.0" fill="RED" height="33.0" layoutX="346.0" layoutY="5.0" stroke="BLACK" strokeType="INSIDE" width="9.0" />
+      <Text fx:id="greenNumOfWalls" layoutX="370.0" layoutY="478.0" strokeType="OUTSIDE" strokeWidth="0.0" text="10" wrappingWidth="35.151102788085936">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
+      <Text fx:id="redNumOfWalls" layoutX="370.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="10" wrappingWidth="35.151102788085936">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
 
       <Text layoutX="9.0" layoutY="68.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1" wrappingWidth="9.0" />
       <Text layoutX="10.0" layoutY="112.0" strokeType="OUTSIDE" strokeWidth="0.0" text="2" wrappingWidth="9.0" />
@@ -198,12 +338,16 @@
       <Text layoutX="290.0" layoutY="441.0" strokeType="OUTSIDE" strokeWidth="0.0" text="g" wrappingWidth="9.0" />
       <Text layoutX="331.0" layoutY="442.0" strokeType="OUTSIDE" strokeWidth="0.0" text="h" wrappingWidth="9.0" />
       <Text layoutX="379.0" layoutY="441.0" strokeType="OUTSIDE" strokeWidth="0.0" text="i" wrappingWidth="9.0" />
-
-      <Button layoutX="442.0" layoutY="268.0" mnemonicParsing="false" onAction="#handleGrabPawn" prefHeight="39.0" prefWidth="152.0" text="Pawn">
+      <Button layoutX="427.0" layoutY="325.0" mnemonicParsing="false" onAction="#handleGrabPawn" prefHeight="39.0" prefWidth="152.0" text="Pawn">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
-
+      <Button layoutX="427.0" layoutY="369.0" mnemonicParsing="false" onAction="#handleSave" prefHeight="39.0" prefWidth="152.0" text="Save Game">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Button>
+      <Button layoutX="477.0" layoutY="9.0" mnemonicParsing="false" onAction="#displayHelp" text="HELP" />
    </children>
 </AnchorPane>
