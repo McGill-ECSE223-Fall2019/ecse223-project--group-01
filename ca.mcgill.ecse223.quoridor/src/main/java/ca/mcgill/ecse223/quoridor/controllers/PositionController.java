@@ -144,6 +144,7 @@ public class PositionController {
         StartNewGameController.blackPlayerChooseAUsername(blackUser);
 
         SetNextPlayers();
+        loadGameBoard();
 
         PlayerPosition whitePlayerPosition = null;
         PlayerPosition blackPlayerPosition = null;
