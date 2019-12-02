@@ -28,7 +28,7 @@
             <Font size="20.0" />
          </font>
       </Text>
-      <Text layoutX="427.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Remaining Time" wrappingWidth="166.4844615527344">
+      <Text layoutX="420.0" layoutY="62.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Remaining Time" wrappingWidth="166.4844615527344">
          <font>
             <Font size="20.0" />
          </font>
@@ -43,17 +43,17 @@
             <Font size="20.0" />
          </font>
       </Text>
-      <Button fx:id="rotateWallBtn" layoutX="444.0" layoutY="254.0" mnemonicParsing="false" onAction="#handleRotate" prefHeight="39.0" prefWidth="152.0" text="Rotate Wall (R)">
+      <Button fx:id="rotateWallBtn" layoutX="427.0" layoutY="280.0" mnemonicParsing="false" onAction="#handleRotate" prefHeight="39.0" prefWidth="152.0" text="Rotate Wall">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
-      <Button layoutX="444.0" layoutY="375.0" mnemonicParsing="false" onAction="#handleResignGame" prefHeight="39.0" prefWidth="152.0" text="Resign">
+      <Button layoutX="427.0" layoutY="409.0" mnemonicParsing="false" onAction="#handleResignGame" prefHeight="39.0" prefWidth="152.0" text="Resign">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
-      <Button fx:id="backBtn" layoutX="444.0" layoutY="438.0" mnemonicParsing="false" onAction="#handleBackToMenu" prefHeight="39.0" prefWidth="152.0" text="Back to Menu">
+      <Button fx:id="backBtn" layoutX="427.0" layoutY="451.0" mnemonicParsing="false" onAction="#handleBackToMenu" prefHeight="39.0" prefWidth="152.0" text="Back to Menu">
          <font>
             <Font size="18.0" />
          </font>
@@ -232,7 +232,7 @@
 
 
       </AnchorPane>
-      <Button fx:id="grabWallBtn" layoutX="444.0" layoutY="215.0" mnemonicParsing="false" onAction="#createNewWall" prefHeight="39.0" prefWidth="152.0" text="Wall">
+      <Button fx:id="grabWallBtn" layoutX="427.0" layoutY="238.0" mnemonicParsing="false" onAction="#createNewWall" prefHeight="39.0" prefWidth="152.0" text="Wall">
          <font>
             <Font size="18.0" />
          </font>
@@ -338,15 +338,16 @@
       <Text layoutX="290.0" layoutY="441.0" strokeType="OUTSIDE" strokeWidth="0.0" text="g" wrappingWidth="9.0" />
       <Text layoutX="331.0" layoutY="442.0" strokeType="OUTSIDE" strokeWidth="0.0" text="h" wrappingWidth="9.0" />
       <Text layoutX="379.0" layoutY="441.0" strokeType="OUTSIDE" strokeWidth="0.0" text="i" wrappingWidth="9.0" />
-      <Button layoutX="444.0" layoutY="293.0" mnemonicParsing="false" onAction="#handleGrabPawn" prefHeight="39.0" prefWidth="152.0" text="Pawn">
+      <Button layoutX="427.0" layoutY="325.0" mnemonicParsing="false" onAction="#handleGrabPawn" prefHeight="39.0" prefWidth="152.0" text="Pawn">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
-      <Button layoutX="444.0" layoutY="372.0" mnemonicParsing="false" onAction="#handleSaveGame" prefHeight="39.0" prefWidth="152.0" text="Save Game">
+      <Button layoutX="427.0" layoutY="369.0" mnemonicParsing="false" onAction="#handleSave" prefHeight="39.0" prefWidth="152.0" text="Save Game">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
+      <Button layoutX="477.0" layoutY="9.0" mnemonicParsing="false" onAction="#displayHelp" text="HELP" />
    </children>
 </AnchorPane>

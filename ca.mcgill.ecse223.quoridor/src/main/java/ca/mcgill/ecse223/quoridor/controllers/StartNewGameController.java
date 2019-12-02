@@ -118,7 +118,7 @@ public class StartNewGameController {
             redPlayerChooseName = true;
         }
         int tempThinkingTime = 90;
-        Player player = new Player(new Time(tempThinkingTime), red_user, 1, Direction.Vertical);
+        Player player = new Player(new Time(tempThinkingTime), red_user, 9, Direction.Vertical);
         ModelQuery.getCurrentGame().setRedPlayer(player);
         ModelQuery.getRedPlayer().setUser(red_user);
 

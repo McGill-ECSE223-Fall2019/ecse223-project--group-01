@@ -60,7 +60,12 @@ public class InitializeBoardController extends ViewController{
         checkStatus();
     }
 
-
+    public void displayHelp(ActionEvent actionEvent){
+        String message  = "Moving the walls: press 1 to grab a wall and use WASD to move it. Place the wall with E, rotate with R.\n" +
+                "Moving the pawn: press 2 to control the pawn, move the pawn with IJKL for steps, or just click on the target tile.\n" +
+                "Getting hints: Press H to get a hint on where to move next.";
+        AlertHelper.newPopUpWindow(Alert.AlertType.INFORMATION, "INFO", message);
+    }
 
     @FXML
     private AnchorPane board;

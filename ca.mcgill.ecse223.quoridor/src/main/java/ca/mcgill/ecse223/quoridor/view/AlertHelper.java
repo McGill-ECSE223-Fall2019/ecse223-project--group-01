@@ -2,9 +2,7 @@ package ca.mcgill.ecse223.quoridor.view;
 import javafx.application.Platform;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.stage.Stage;
 import javafx.stage.Window;
 
 import java.util.Optional;
@@ -26,6 +24,7 @@ public class AlertHelper {
         alert.setHeaderText(null);
         alert.setTitle(title);
         alert.setContentText(message);
+        alert.getDialogPane().setMinHeight(200);
 
         Optional<ButtonType> result = alert.showAndWait();
         if(alertType.equals(AlertType.CONFIRMATION)) {

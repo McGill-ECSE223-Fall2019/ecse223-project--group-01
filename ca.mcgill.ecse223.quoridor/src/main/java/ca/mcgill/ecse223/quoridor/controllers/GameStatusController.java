@@ -101,22 +101,23 @@ public class GameStatusController {
                 ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.GreenWon);
             }
 
-            else if (player.getNextPlayer().equals(whitePlayer) && ModelQuery.getWhitePlayer().getRemainingTime().getTime() > 0) {
+            if ( ModelQuery.getWhitePlayer().getRemainingTime().getTime() > 0) {
                 if (whiteTile.getRow() == whitePlayer.getDestination().getTargetNumber()) {
                     ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.WhiteWon);
                 }
-            }else if (player.getNextPlayer().equals(blackPlayer) && ModelQuery.getBlackPlayer().getRemainingTime().getTime() > 0) {
+            }
+            if ( ModelQuery.getBlackPlayer().getRemainingTime().getTime() > 0) {
                 if (blackTile.getRow() == blackPlayer.getDestination().getTargetNumber()) {
                     ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.BlackWon);
                 }
             }
-            else if (player.getNextPlayer().equals(redPlayer) && ModelQuery.getRedPlayer().getRemainingTime().getTime() > 0) {
-                if (redTile.getRow() == redPlayer.getDestination().getTargetNumber()) {
+            if (ModelQuery.getRedPlayer().getRemainingTime().getTime() > 0) {
+                if (redTile.getColumn() == redPlayer.getDestination().getTargetNumber()) {
                     ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.RedWon);
                 }
             }
-            else if (player.getNextPlayer().equals(greenPlayer) && ModelQuery.getGreenPlayer().getRemainingTime().getTime() > 0) {
-                if (greenTile.getRow() == greenPlayer.getDestination().getTargetNumber()) {
+            if (ModelQuery.getGreenPlayer().getRemainingTime().getTime() > 0) {
+                if (greenTile.getColumn() == greenPlayer.getDestination().getTargetNumber()) {
                     ModelQuery.getCurrentGame().setGameStatus(Game.GameStatus.GreenWon);
                 }
             }
