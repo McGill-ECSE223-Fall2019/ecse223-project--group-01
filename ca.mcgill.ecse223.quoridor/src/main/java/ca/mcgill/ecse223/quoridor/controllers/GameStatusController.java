@@ -10,6 +10,13 @@ public class GameStatusController {
         checkWin();
     }
 
+    /**@author Tritin Truong
+     *
+     * This methods checks the if the last moves are a threefold repetition
+     * If they are then a draw is triggered
+     *
+     * @return if the game is a draw
+     */
     public static boolean checkDraw(){
         List<Move> moves = ModelQuery.getCurrentGame().getMoves();
 
@@ -53,6 +60,11 @@ public class GameStatusController {
         }
     }
 
+    /**@author Fulin Huang
+     *
+     * This methods checks if any player has won the game
+     * If they have, then the game status is updated
+     */
     public static void checkWin() {
         Player player = ModelQuery.getPlayerToMove();
 

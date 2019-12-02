@@ -151,7 +151,7 @@ public class SaveLoadGameController {
         return true;
     }
 
-    /**
+    /**@author Kevin LI
      * Attempts to load a specified saved game.
      * @param filename  the name of the savefile
      * @return true     the game loads correctly
@@ -391,7 +391,7 @@ public class SaveLoadGameController {
 
     //.Helper methods
 
-    /**
+    /**@author Kevin LI
      * This helper method will set up the important parts of the game
      * @param whiteUser     The White player
      * @param blackUser     The Black player
@@ -402,7 +402,7 @@ public class SaveLoadGameController {
         StartNewGameController.blackPlayerChooseAUsername(blackUser);
     }
 
-    /**
+    /**@author Kevin LI
      * This helper method will move the wall at a given position
      * @param walls
      * @param index
@@ -442,7 +442,7 @@ public class SaveLoadGameController {
         return true;
     }
 
-    /**
+    /**@author Kevin LI
      * This helper method will read the new and old move sets and determine
      * the direction in movement performed by the pawn
      * @param oldMove   Array of the move coordinates
@@ -481,7 +481,7 @@ public class SaveLoadGameController {
         }
     }
 
-    /**
+    /**@author Kevin LI
      * This helper method will convert the coordinates for wall move into board coordinate string [ColumnRowOrientation]
      * @param col   this is the column coordinate
      * @param row   this is the row coordinate
@@ -494,7 +494,7 @@ public class SaveLoadGameController {
         return String.valueOf(columnLetter)+Integer.toString(row)+orientation;
     }
 
-    /**
+    /**@author Kevin LI
      * This helper method will convert the coordinates for mvoe pawn into board coordinate string [ColumnRow]
      * @param col   this is the column coordinate
      * @param row   this is the row coordinate
@@ -505,7 +505,7 @@ public class SaveLoadGameController {
         return String.valueOf(columnLetter)+Integer.toString(row);
     }
 
-    /**
+    /**@author Kevin LI
      * This helper method will convert a integer move number into a string
      * @param moveNum   this is the move number
      * @return          String that represents the moven umber
@@ -514,7 +514,7 @@ public class SaveLoadGameController {
         return Integer.toString(moveNum);
     }
 
-    /**
+    /**@author Kevin LI
      * This helper method will convert all the move information and move number into a saveGame template
      * @param moveNum       the move Number
      * @param whiteMove     White player move, either move pawn or drop wall
