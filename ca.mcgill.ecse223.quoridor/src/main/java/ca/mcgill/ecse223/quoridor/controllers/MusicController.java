@@ -11,7 +11,7 @@ public class MusicController {
     private static Clip chooseYourChar;
     public static void playMainMenu(){
         try {
-            File musicPath = new File("MainMenu.wav");
+            File musicPath = new File("./src/main/resources/music/MainMenu.wav");
             if(clip != null) {
                 clip.stop();
                 clip.close();
@@ -33,7 +33,7 @@ public class MusicController {
     }
     public static void playEpicMusic(){
         try{
-            File musicPath = new File("BattleTheme.wav");
+            File musicPath = new File("./src/main/resources/music/BattleTheme.wav");
             if(clip != null) {
                 clip.stop();
                 clip.close();
@@ -55,7 +55,7 @@ public class MusicController {
     }
     public static void playBossBattle(){
         try{
-            File musicPath = new File("megalovania.wav");
+            File musicPath = new File("./src/main/resources/music/megalovania.wav");
             if(clip != null)
                 clip.stop();
             if(musicPath.exists()){
@@ -75,7 +75,7 @@ public class MusicController {
     }
     public static void playChooseYourChar(){
         try{
-            File musicPath = new File("ChooseYourChar.wav");
+            File musicPath = new File("./src/main/resources/music/ChooseYourChar.wav");
             if(musicPath.exists()){
                 AudioInputStream audioInput = AudioSystem.getAudioInputStream(musicPath);
                 chooseYourChar = AudioSystem.getClip();
