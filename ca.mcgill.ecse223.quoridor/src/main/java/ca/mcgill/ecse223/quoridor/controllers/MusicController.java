@@ -11,7 +11,7 @@ public class MusicController {
     private static Clip chooseYourChar;
     public static void playMainMenu(){
         try {
-            File musicPath = new File(".\\src\\main\\resources\\music\\MainMenu.wav");
+            File musicPath = new File("./src/main/resources/music/MainMenu.wav");
             if(clip != null) {
                 clip.stop();
                 clip.close();
@@ -33,7 +33,7 @@ public class MusicController {
     }
     public static void playEpicMusic(){
         try{
-            File musicPath = new File(".\\src\\main\\resources\\music\\BattleTheme.wav");
+            File musicPath = new File("./src/main/resources/music/BattleTheme.wav");
             if(clip != null) {
                 clip.stop();
                 clip.close();
@@ -55,7 +55,7 @@ public class MusicController {
     }
     public static void playBossBattle(){
         try{
-            File musicPath = new File(".\\src\\main\\resources\\music\\megalovania.wav");
+            File musicPath = new File("./src/main/resources/music/megalovania.wav");
             if(clip != null)
                 clip.stop();
             if(musicPath.exists()){
