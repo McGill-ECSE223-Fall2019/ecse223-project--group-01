@@ -26,16 +26,16 @@ public class PawnController {
             Tile source = position.getTile();
             switch (side) {
                 case "up":
-                    statemachine.getSCIPawn().setTargetRow(source.getRow() - travel);
+                    statemachine.getSCIPawn().setTargetRow(source.getRow() - (long)travel);
                     break;
                 case "right":
-                    statemachine.getSCIPawn().setTargetCol(source.getColumn() + travel);
+                    statemachine.getSCIPawn().setTargetCol(source.getColumn() + (long)travel);
                     break;
                 case "down":
-                    statemachine.getSCIPawn().setTargetRow(source.getRow() + travel);
+                    statemachine.getSCIPawn().setTargetRow(source.getRow() + (long)travel);
                     break;
                 case "left":
-                    statemachine.getSCIPawn().setTargetCol(source.getColumn() - travel);
+                    statemachine.getSCIPawn().setTargetCol(source.getColumn() - (long)travel);
                     break;
                 default:
                     break;
