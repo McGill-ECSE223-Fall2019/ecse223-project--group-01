@@ -9,6 +9,15 @@ import java.util.List;
 
 public class PawnController {
 
+    static final String UP = "up";
+    static final String RIGHT = "right";
+    static final String DOWN = "down";
+    static final String LEFT = "left";
+    static final String UPRIGHT = "upright";
+    static final String UPLEFT = "upleft";
+    static final String DOWNRIGHT = "downright";
+    static final String DOWNLEFT = "downleft";
+
     /**
      * @author Tritin Truong, Kevin Li, Jason Lau
      * @param player
@@ -25,17 +34,17 @@ public class PawnController {
             int travel = (int) dist;
             Tile source = position.getTile();
             switch (side) {
-                case "up":
-                    statemachine.getSCIPawn().setTargetRow(source.getRow() - travel);
+                case UP:
+                    statemachine.getSCIPawn().setTargetRow(source.getRow() - (long)travel);
                     break;
-                case "right":
-                    statemachine.getSCIPawn().setTargetCol(source.getColumn() + travel);
+                case RIGHT:
+                    statemachine.getSCIPawn().setTargetCol(source.getColumn() + (long)travel);
                     break;
-                case "down":
-                    statemachine.getSCIPawn().setTargetRow(source.getRow() + travel);
+                case DOWN:
+                    statemachine.getSCIPawn().setTargetRow(source.getRow() + (long)travel);
                     break;
-                case "left":
-                    statemachine.getSCIPawn().setTargetCol(source.getColumn() - travel);
+                case LEFT:
+                    statemachine.getSCIPawn().setTargetCol(source.getColumn() - (long)travel);
                     break;
                 default:
                     break;
@@ -50,16 +59,16 @@ public class PawnController {
 
                 // gets 2 tiles, the starting tile, and the destination tile
                 switch (side) {
-                    case "up":
+                    case UP:
                         dest = ModelQuery.getTile(source.getRow() - 1, source.getColumn());
                         return !isWallBlocking(source, dest) && !isPawnBlocking(dest);
-                    case "right":
+                    case RIGHT:
                         dest = ModelQuery.getTile(source.getRow(), source.getColumn() + 1);
                         return !isWallBlocking(source, dest) && !isPawnBlocking(dest);
-                    case "down":
+                    case DOWN:
                         dest = ModelQuery.getTile(source.getRow() + 1, source.getColumn());
                         return !isWallBlocking(source, dest) && !isPawnBlocking(dest);
-                    case "left":
+                    case LEFT:
                         dest = ModelQuery.getTile(source.getRow(), source.getColumn() - 1);
                         return !isWallBlocking(source, dest) && !isPawnBlocking(dest);
                 }
@@ -131,38 +140,38 @@ public class PawnController {
                 Tile enemyTile2;
 
                 switch (side) {
-                    case "up":
+                    case UP:
                         dest = ModelQuery.getTile(source.getRow() - 2, source.getColumn());
                         enemyTile1 = ModelQuery.getTile(source.getRow() - 1, source.getColumn());
                         return isPathValidJump(source, dest, enemyTile1);
-                    case "right":
+                    case RIGHT:
                         dest = ModelQuery.getTile(source.getRow(), source.getColumn() + 2);
                         enemyTile1 = ModelQuery.getTile(source.getRow(), source.getColumn() + 1);
                         return isPathValidJump(source, dest, enemyTile1);
-                    case "down":
+                    case DOWN:
                         dest = ModelQuery.getTile(source.getRow() + 2, source.getColumn());
                         enemyTile1 = ModelQuery.getTile(source.getRow() + 1, source.getColumn());
                         return isPathValidJump(source, dest, enemyTile1);
-                    case "left":
+                    case LEFT:
                         dest = ModelQuery.getTile(source.getRow(), source.getColumn() - 2);
                         enemyTile1 = ModelQuery.getTile(source.getRow(), source.getColumn() - 1);
                         return isPathValidJump(source, dest, enemyTile1);
-                    case "upright":
+                    case UPRIGHT:
                         dest = ModelQuery.getTile(source.getRow() - 1, source.getColumn() + 1);
                         enemyTile1 = ModelQuery.getTile(source.getRow(), source.getColumn() + 1);
                         enemyTile2 = ModelQuery.getTile(source.getRow() - 1, source.getColumn());
                         return isPathValidJump(source, dest, enemyTile1) || isPathValidJump(source, dest, enemyTile2);
-                    case "upleft":
+                    case UPLEFT:
                         dest = ModelQuery.getTile(source.getRow() - 1, source.getColumn() - 1);
                         enemyTile1 = ModelQuery.getTile(source.getRow(), source.getColumn() - 1);
                         enemyTile2 = ModelQuery.getTile(source.getRow() - 1, source.getColumn());
                         return isPathValidJump(source, dest, enemyTile1) || isPathValidJump(source, dest, enemyTile2);
-                    case "downright":
+                    case DOWNRIGHT:
                         dest = ModelQuery.getTile(source.getRow() + 1, source.getColumn() + 1);
                         enemyTile1 = ModelQuery.getTile(source.getRow(), source.getColumn() + 1);
                         enemyTile2 = ModelQuery.getTile(source.getRow() + 1, source.getColumn());
                         return isPathValidJump(source, dest, enemyTile1) || isPathValidJump(source, dest, enemyTile2);
-                    case "downleft":
+                    case DOWNLEFT:
                         dest = ModelQuery.getTile(source.getRow() + 1, source.getColumn() - 1);
                         enemyTile1 = ModelQuery.getTile(source.getRow(), source.getColumn() - 1);
                         enemyTile2 = ModelQuery.getTile(source.getRow() + 1, source.getColumn());
@@ -200,28 +209,28 @@ public class PawnController {
         sm.getSCIPawn().setTargetCol(playerPosition.getTile().getColumn());
 
         switch (side) {
-            case "up":
+            case UP:
                 sm.getSCIPawn().raiseUp();
                 break;
-            case "upright":
+            case UPRIGHT:
                 sm.getSCIPawn().raiseUpRight();
                 break;
-            case "right":
+            case RIGHT:
                 sm.getSCIPawn().raiseRight();
                 break;
-            case "downright":
+            case DOWNRIGHT:
                 sm.getSCIPawn().raiseDownRight();
                 break;
-            case "down":
+            case DOWN:
                 sm.getSCIPawn().raiseDown();
                 break;
-            case "downleft":
+            case DOWNLEFT:
                 sm.getSCIPawn().raiseDownLeft();
                 break;
-            case "left":
+            case LEFT:
                 sm.getSCIPawn().raiseLeft();
                 break;
-            case "upleft":
+            case UPLEFT:
                 sm.getSCIPawn().raiseUpLeft();
                 break;
             default:
